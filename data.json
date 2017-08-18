@@ -1,0 +1,22 @@
+{
+  "code": 0,
+  "msg": "",
+  "data": [
+    {
+      " clubId ": 123,
+      " clubView ": "a.jpg",
+      " clubName ": " 乒乓球协会",
+      " description ": "这是乒乓球协会的描述",
+      " menbers ": 100,
+      " likeNumber ": 20
+    },
+    {
+      " clubId ": 124,
+      " clubView ": "b.jpg",
+      " clubName ": " 羽毛球协会",
+      " description ": "这是羽毛球协会的描述",
+      " menbers ": 101,
+      " likeNumber ": 21
+    }
+  ]
+}
