@@ -10,7 +10,7 @@
 /* 通用容器，定义页面宽度 具有五个级别 */
 .wps { width: 880px; margin: 0 auto; }
 .wpu { width: 940px; margin: 0 auto; }
-.wpn { width: 1220px; margin: 0 auto; }  	/* 4 列 * 300 */
+.wpn { width: 1020px; margin: 0 auto; }  	/* 4 列 * 300 */
 .wpm { width: 1480px; margin: 0 auto; }  	/* 5 列 * 300 */
 .wpw { width: 1780px; margin: 0 auto; } 	/* 6 列 * 300 */
 .wpv { width: 0px; margin: 0 auto; }
