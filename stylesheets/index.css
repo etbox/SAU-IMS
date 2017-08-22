@@ -10,7 +10,7 @@
 /* 通用容器，定义页面宽度 具有五个级别 */
 .wps { width: 880px; margin: 0 auto; }
 .wpu { width: 940px; margin: 0 auto; }
-.wpn { width: 1180px; margin: 0 auto; }  	/* 4 列 * 300 */
+.wpn { width: 1220px; margin: 0 auto; }  	/* 4 列 * 300 */
 .wpm { width: 1480px; margin: 0 auto; }  	/* 5 列 * 300 */
 .wpw { width: 1780px; margin: 0 auto; } 	/* 6 列 * 300 */
 .wpv { width: 0px; margin: 0 auto; }
@@ -86,12 +86,21 @@
 * {
   padding: 0;
   margin: 0;
-  background-color: #e4e8ec;
+  /*background-color: #e4e8ec;*/
 }
 
 html {
   height: 1140px;
+  min-width: 1280px;
+
   margin: 0 auto;
+	font-family: "Microsoft Yahei", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	line-height: 1.5;
+	color: #34495e;   /*黑蓝色*/
+	-webkit-font-smoothing: antialiased;
+  	-moz-osx-font-smoothing: grayscale;
+  	-moz-font-feature-settings: "liga","kern";
 }
 
 a, a:active, a:link, a:hover, a:visited {
@@ -101,4 +110,8 @@ a, a:active, a:link, a:hover, a:visited {
 
 .ta {
   text-align: center;
+}
+
+ul, ol {
+  list-style:none;
 }

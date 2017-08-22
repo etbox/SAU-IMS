@@ -7,15 +7,36 @@
  * update:
  */
 
+/*列表标题*/
+.clublist {
+  padding-top: 15px;
+}
+.clubHead {
+  color: #37a2fe;
+  font-size: 20px;
+}
+.xiangyun {
+  padding:0 20px;
+}
+.flipx {
+     -moz-transform:scaleX(-1);
+     -webkit-transform:scaleX(-1);
+     -o-transform:scaleX(-1);
+     transform:scaleX(-1);
+     /*IE*/
+     filter:FlipH;
+ }
+
 
 /*作品展示*/
 
-.post-works {
+/*.post-works {
   margin-left: -20px;
-}
+}*/
 
 .post-works li {
   width: 180px;
+  height: 205px;
   margin-left: 20px;
 }
 
@@ -53,11 +74,12 @@
   position: absolute;
   z-index: 1;
   top: -16px;
-  right: -14px;
+  right: -12px;
   bottom: 0;
-  left: -14px;
+  left: -12px;
   background-color: #fff;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
 }
 
 .post .shade:after {
@@ -67,7 +89,8 @@
   right: -1px;
   bottom: -1px;
   left: -1px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(0, 0, 0, 0.075);
+  border-radius: 5px;
 }
 
 
@@ -102,7 +125,7 @@
 .post .info {
   position: relative;
   z-index: 2;
-  padding: 5px 0 20px 0;
+  padding: 5px 0 0;
   height: 75px;
   overflow: hidden;
 }
