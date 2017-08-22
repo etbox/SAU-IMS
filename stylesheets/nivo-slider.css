@@ -13,7 +13,7 @@
 .nivoSlider {
 	position:relative;
 	width:980px;
-	height:400px;
+	height:450px;
 	margin: 0 auto;
 }
 .nivoSlider img {
@@ -21,6 +21,7 @@
 	top:0px;
 	left:0px;
 	max-width: none;
+  padding-top: 50px;
 }
 .nivo-main-image {
 	display: block !important;
