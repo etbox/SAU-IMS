@@ -13,7 +13,7 @@
 .nivoSlider {
 	position:relative;
 	width:980px;
-	height:450px;
+	height:400px;
 	margin: 0 auto;
 }
 .nivoSlider img {
@@ -21,7 +21,6 @@
 	top:0px;
 	left:0px;
 	max-width: none;
-  padding-top: 50px;
 }
 .nivo-main-image {
 	display: block !important;
@@ -78,11 +77,17 @@
 .slider-wrapper:hover .nivo-directionNav a { opacity: 1; }
 
 .nivo-prevNav {
-	background: url("../images/slide-btnl.jpg") no-repeat center center;
+	background: url("../images/slide-btnr.png") no-repeat center center;
 	left: -65px;
+  -moz-transform:scaleX(-1);
+  -webkit-transform:scaleX(-1);
+  -o-transform:scaleX(-1);
+  transform:scaleX(-1);
+  /*IE*/
+  filter:FlipH;
 }
 .nivo-nextNav {
-	background: url("../images/slide-btnr.jpg") no-repeat center center;
+	background: url("../images/slide-btnr.png") no-repeat center center;
 	right: -65px;
 }
 /* Control nav styles (e.g. 1,2,3...) */

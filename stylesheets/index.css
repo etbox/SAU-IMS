@@ -103,6 +103,10 @@ html {
   	-moz-font-feature-settings: "liga","kern";
 }
 
+body {
+  background-color: #e4e8ec;
+}
+
 a, a:active, a:link, a:hover, a:visited {
   text-decoration: none;
   color: white;
