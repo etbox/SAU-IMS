@@ -3,20 +3,20 @@
   "msg": "",
   "data": [
     {
-      " clubId ": 123,
-      " clubView ": "a.jpg",
-      " clubName ": " 乒乓球协会",
-      " description ": "这是乒乓球协会的描述",
-      " menbers ": 100,
-      " likeNumber ": 20
+      "clubId": 123,
+      "clubView": "摄影协会.png",
+      "clubName": "摄影协会",
+      "description": "定格光影，留住光阴",
+      "menbers": 65,
+      "likeNumber": 32
     },
     {
-      " clubId ": 124,
-      " clubView ": "b.jpg",
-      " clubName ": " 羽毛球协会",
-      " description ": "这是羽毛球协会的描述",
-      " menbers ": 101,
-      " likeNumber ": 21
+      "clubId": 124,
+      "clubView": "棋牌社.png",
+      "clubName": "棋牌社",
+      "description": "人生是棋局，谁人为棋子",
+      "menbers": 65,
+      "likeNumber": 32
     }
   ]
 }
