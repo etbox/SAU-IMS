@@ -8,17 +8,17 @@
  */
 
 $(function(){
-	// 滑过显示阴影框
-	$(document).on('mouseenter', '.post li', function(){
-		$(this).find('.shade')
-			.stop()
-			.animate({ opacity : '1'}, 100);
-	});
-	$(document).on('mouseleave', '.post li', function(){
-		$(this).find('.user').removeClass('on');
-		$(this).find('.shade')
-			.stop()
-			.animate({ opacity : '0'}, 100);
-	});
+  // 滑过显示阴影框
+  $(document).on('mouseenter', '.post li', function(){
+    $(this).find('.shade')
+      .stop()
+      .animate({ opacity : '1'}, 100);
+  });
+  $(document).on('mouseleave', '.post li', function(){
+    $(this).find('.user').removeClass('on');
+    $(this).find('.shade')
+      .stop()
+      .animate({ opacity : '0'}, 100);
+  });
 
 });

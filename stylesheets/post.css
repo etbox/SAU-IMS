@@ -102,6 +102,8 @@
 }
 
 .post li .cover img {
+  width: 180px;
+  height: 105px;
   -webkit-transform: scale(1);
   -moz-transform: scale(1);
   -ms-transform: scale(1);
