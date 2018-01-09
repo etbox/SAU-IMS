@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fekpal.dao.MessageDao">
+    <cache/>
+
+    <select id="getMessageByMessageId" parameterType="int" resultMap="messageResult">
+        select * from message where message_id = #{messageId}
+    </select>
+
+    <select id="getMessagesByUserId" resultMap="messageResult">
+        select * from message where user_id = #{arg0} limit #{arg1},#{arg2}
+    </select>
+
+    <select id="findMessageByMessageTitle" resultMap="messageResult">
+        select * from message
+        where message_title like concat('%',#{arg0},'%') and user_id = #{arg1}
+        limit #{arg2},#{arg3}
+    </select>
+
+    <insert id="addMessage" parameterType="Message" useGeneratedKeys="true" keyProperty="messageId" keyColumn="message_id">
+        insert into message
+        (user_id,message_title, message_content, release_time, message_type, message_annex, release_name)
+        values (#{userId},#{messageTitle},#{messageContent},#{releaseTime},#{messageType},#{messageAnnex},#{releaseName})
+    </insert>
+
+    <update id="updateMessage" parameterType="Message">
+        update message set
+        message_state = #{messageState}
+        where message_id = #{messageId} and user_id = #{userId}
+    </update>
+
+    <resultMap id="messageResult" type="Message">
+        <id property="messageId" column="message_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="messageTitle" column="message_title"/>
+        <result property="messageContent" column="message_content"/>
+        <result property="releaseTime" column="release_time"/>
+        <result property="releaseName" column="release_name"/>
+        <result property="messageType" column="message_type"/>
+        <result property="messageAnnex" column="message_annex"/>
+        <result property="messageState" column="message_state"/>
+    </resultMap>
+</mapper>

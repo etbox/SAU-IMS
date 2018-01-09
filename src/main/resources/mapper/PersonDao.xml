@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fekpal.dao.PersonDao">
+    <cache/>
+
+    <select id="getPersonByPersonId" parameterType="int" resultMap="personResult">
+      select * from person_info where person_id = #{personId}
+    </select>
+
+    <select id="getPersonByNickName" parameterType="String" resultMap="personResult">
+        select * from person_info where nickname = #{nickname}
+    </select>
+
+    <select id="getPersonByUserId" parameterType="int" resultMap="personResult">
+        select * from person_info where user_id = #{userId}
+    </select>
+
+    <select id="hadNickName" parameterType="String" resultType="boolean">
+        select count(*) from person_info where nickname = #{nickname}
+    </select>
+
+    <insert id="addPerson" parameterType="Person" useGeneratedKeys="true" keyProperty="personId" keyColumn="person_id">
+        insert into person_info (user_id,  nickname)
+        values(#{userId},#{nickname})
+    </insert>
+
+
+    <update id="updatePerson" parameterType="Person">
+        update person_info set
+        real_name = #{realName},
+        nickname = #{nickname},
+        gender = #{gender},
+        birthday = #{birthday},
+        description = #{description},
+        address = #{address},
+        department = #{department},
+        major = #{major},
+        student_id = #{studentId},
+        person_logo = #{logo}
+        where person_id = #{personId}
+    </update>
+
+
+    <select id="loadAllPerson" resultMap="personResult">
+        select * from person_info limit #{arg0},#{arg1}
+    </select>
+
+    <resultMap id="personResult" type="Person">
+        <id property="personId" column="person_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="loginIp" column="login_ip"/>
+        <result property="loginTime" column="login_time"/>
+        <result property="userKey" column="user_key"/>
+        <result property="registerIp" column="register_ip"/>
+        <result property="registerTime" column="register_time"/>
+        <result property="userState" column="user_state"/>
+        <result property="realName" column="real_name"/>
+        <result property="studentId" column="student_id"/>
+        <result property="logo" column="person_logo"/>
+        <result property="gender" column="gender"/>
+        <result property="nickname" column="nickname"/>
+        <result property="birthday" column="birthday"/>
+        <result property="address" column="address"/>
+        <result property="description" column="description"/>
+        <result property="department" column="department"/>
+        <result property="major" column="major"/>
+    </resultMap>
+</mapper>

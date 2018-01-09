@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--配置类别名-->
+    <!--
+    <settings>
+        <setting name="logImpl" value="STDOUT_LOGGING"/>
+    </settings>
+    -->
+    <typeAliases>
+        <typeAlias type="com.fekpal.domain.Role" alias="Role"/>
+        <typeAlias type="com.fekpal.domain.Authority" alias="Authority"/>
+        <typeAlias type="com.fekpal.domain.Resource" alias="Resource"/>
+        <typeAlias type="com.fekpal.domain.User" alias="User"/>
+        <typeAlias type="com.fekpal.domain.Sau" alias="Sau"/>
+        <typeAlias type="com.fekpal.domain.Club" alias="Club"/>
+        <typeAlias type="com.fekpal.domain.Person" alias="Person"/>
+        <typeAlias type="com.fekpal.domain.Department" alias="Department"/>
+        <typeAlias type="com.fekpal.domain.Major" alias="Major"/>
+        <typeAlias type="com.fekpal.domain.AnniversaryAudit" alias="AnniversaryAudit"/>
+        <typeAlias type="com.fekpal.domain.Message" alias="Message"/>
+        <typeAlias type="com.fekpal.domain.MessageRelease" alias="MessageRelease"/>
+        <typeAlias type="com.fekpal.domain.ClubMember" alias="ClubMember"/>
+        <typeAlias type="com.fekpal.domain.ClubAudit" alias="ClubAudit"/>
+    </typeAliases>
+
+    <!--映射文件-->
+    <mappers>
+        <mapper resource="mapper/RoleDao.xml"/>
+        <mapper resource="mapper/UserDao.xml"/>
+        <mapper resource="mapper/ClubDao.xml"/>
+        <mapper resource="mapper/SauDao.xml/"/>
+        <mapper resource="mapper/PersonDao.xml"/>
+        <mapper resource="mapper/DepartmentDao.xml"/>
+        <mapper resource="mapper/AnniversaryAuditDao.xml"/>
+        <mapper resource="mapper/ClubAuditDao.xml"/>
+        <mapper resource="mapper/ClubMemberDao.xml"/>
+        <mapper resource="mapper/MessageDao.xml"/>
+        <mapper resource="mapper/MessageReleaseDao.xml"/>
+        <mapper resource="mapper/LikeClubDao.xml"/>
+    </mappers>
+</configuration>

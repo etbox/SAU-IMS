@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fekpal.dao.LikeClubDao">
+    <cache/>
+
+    <insert id="addLikeClub">
+        insert into club_like (person_id,club_id)
+        values(#{arg0},#{arg1})
+    </insert>
+
+    <select id="loadAllLikeByPersonId" parameterType="int" resultType="int">
+        select club_id from club_like where  person_id = #{personId}
+    </select>
+
+</mapper>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fekpal.dao.DepartmentDao">
+    <cache/>
+
+    <select id="getDepartmentByDepartmentId" parameterType="int" resultMap="departmentResult">
+        select *
+        from deparment d
+        inner join major m on d.department_id = m.department_id
+        where d.department_id = #{departmentId}
+    </select>
+
+    <select id="loadAllDepartment" parameterType="int" resultMap="departmentResult">
+        select *
+        from deparment d
+        inner join major m on d.department_id = m.department_id
+    </select>
+
+    <resultMap id="departmentResult" type="Department">
+        <id property="departmentId" column="department_id"/>
+        <result property="departmentName" column="department_name"/>
+        <result property="departmentAvailable" column="department_available"/>
+        <collection property="majorList" ofType="Major">
+            <id property="majorId" column="major_id"/>
+            <result property="majorName" column="major_name"/>
+            <result property="majorAvailable" column="major_available"/>
+        </collection>
+    </resultMap>
+</mapper>

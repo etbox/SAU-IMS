@@ -1,15 +1,9 @@
 package com.fekpal.domain;
 
-import javax.persistence.*;
 import java.sql.Timestamp;
-import java.util.List;
 
-@Entity
-@Table(name = "user")
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "user_id")
+public class User extends BasePOJO {
+
     private int userId;
 
     private String userName;
@@ -20,54 +14,29 @@ public class User {
 
     private String email;
 
-    private String key;
-    private String roleName;
+    private String userKey;
 
-    private String personLogo;
-
-    public String getPersonLogo() {
-        return personLogo;
-    }
-
-    public void setPersonLogo(String personLogo) {
-        this.personLogo = personLogo;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
-
-    @Column(name = "login_ip")
     private String loginIp;
 
-    @Column(name = "login_time")
     private Timestamp loginTime;
 
-    @Column(name = "register_ip")
     private String registerIp;
 
-    @Column(name = "register_time")
     private Timestamp registerTime;
+
+    private String logo;
 
     private int authority;
 
-    @Column(name = "user_state")
     private int userState;
 
-   // @ManyToMany(mappedBy = "likeList",cascade = CascadeType.ALL)
-    //private List<Club>
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
 
     public int getUserId() {
         return userId;
@@ -77,11 +46,11 @@ public class User {
         this.userId = userId;
     }
 
-    public String getuserName() {
+    public String getUserName() {
         return userName;
     }
 
-    public void setuserName(String userName) {
+    public void setUserName(String userName) {
         this.userName = userName;
     }
 
@@ -109,12 +78,12 @@ public class User {
         this.email = email;
     }
 
-    public String getKey() {
-        return key;
+    public String getUserKey() {
+        return userKey;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setUserKey(String userKey) {
+        this.userKey = userKey;
     }
 
     public String getLoginIp() {

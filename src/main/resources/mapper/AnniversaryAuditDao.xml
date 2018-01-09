@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fekpal.dao.AnniversaryAuditDao">
+    <cache/>
+
+    <sql id="re">
+        select *
+        from anniversary_audit a
+        inner join club_info c on a.club_id = c.club_id
+    </sql>
+
+    <select id="getAnnByAnnId" parameterType="int" resultMap="annResult">
+        <include refid="re"/>
+        where a.id = #{annId}
+    </select>
+
+    <select id="getAnnByClubId" resultMap="annResult">
+        <include refid="re"/>
+        where a.club_id = #{arg0}
+        order by a.audit_state desc, a.submit_time desc
+        limit #{arg1},#{arg2}
+    </select>
+
+    <select id="getAnnAuditingByClubId" parameterType="int" resultMap="annResult">
+        <include refid="re"/>
+        where a.club_id = #{clubId} and a.audit_state = 2
+    </select>
+
+    <select id="findAnnByClubName" resultMap="annResult">
+        <include refid="re"/>
+        where c.club_name like concat('%',#{arg0},'%')
+        order by a.submit_time desc
+        limit #{arg1},#{arg2}
+    </select>
+
+    <insert id="addAnniversaryAudit" parameterType="AnniversaryAudit" useGeneratedKeys="true" keyProperty="id"
+            keyColumn="id">
+        insert anniversary_audit(club_id,file_name,submit_time,submit_description)
+        values(#{club.clubId},#{fileName},#{submitTime},#{submitDescription})
+    </insert>
+
+    <update id="updateAnniversaryAudit" parameterType="AnniversaryAudit">
+        update anniversary_audit set
+        audit_result = #{auditResult},
+        audit_state = #{auditState},
+        audit_time = #{auditTime}
+        where id = #{id}
+    </update>
+
+    <select id="loadAllAnniversaryAudit" resultMap="annResult">
+        <include refid="re"/>
+        order by a.submit_time desc
+        limit #{arg0},#{arg1}
+    </select>
+
+    <select id="getAnniversaryAuditByState" resultMap="annResult">
+        <include refid="re"/>
+        where a.audit_state = #{arg0}
+        order by a.submit_time desc
+        limit #{arg1},#{arg2}
+    </select>
+
+    <resultMap id="annResult" type="AnniversaryAudit">
+        <id property="id" column="id"/>
+        <result property="fileName" column="file_name"/>
+        <result property="auditState" column="audit_state"/>
+        <result property="auditTime" column="audit_time"/>
+        <result property="auditResult" column="audit_result"/>
+        <result property="submitTime" column="submit_time"/>
+        <result property="submitDescription" column="submit_description"/>
+
+        <association property="club" javaType="Club">
+            <id property="clubId" column="club_id"/>
+            <result property="userId" column="user_id"/>
+            <result property="clubName" column="club_name"/>
+            <result property="foundTime" column="found_time"/>
+            <result property="adminName" column="admin_name"/>
+            <result property="clubLogo" column="club_logo"/>
+        </association>
+    </resultMap>
+</mapper>

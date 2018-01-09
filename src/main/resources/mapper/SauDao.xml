@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fekpal.dao.SauDao">
+    <cache/>
+
+    <select id="getSauByUserId" parameterType="User" resultMap="sauResult">
+        select * from sau_info where user_id = #{userId}
+    </select>
+
+    <select id="getSauBySauId" parameterType="int" resultMap="sauResult">
+        select * from sau_info where sau_id = #{sauId}
+    </select>
+
+    <insert id="addSau" parameterType="Sau" useGeneratedKeys="true" keyProperty="sauId" keyColumn="sau_id">
+        insert into sau_info (user_id)
+        values (#{userId})
+    </insert>
+
+    <update id="updateSau" parameterType="Sau">
+        update sau_info set
+        sau_name = #{sauName},
+        admin_name = #{adminName},
+        found_time=#{foundTime},
+        sau_logo = #{logo},
+        description = #{description},
+        members = #{members}
+        where sau_id = #{sauId}
+    </update>
+
+    <select id="loadAllSau" resultMap="sauResult">
+        select * from sau_info
+    </select>
+
+    <resultMap id="sauResult" type="Sau">
+        <id property="sauId" column="sau_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <result property="loginIp" column="login_ip"/>
+        <result property="loginTime" column="login_time"/>
+        <result property="userKey" column="user_key"/>
+        <result property="registerIp" column="register_ip"/>
+        <result property="registerTime" column="register_time"/>
+        <result property="userState" column="user_state"/>
+        <result property="sauName" column="sau_name"/>
+        <result property="foundTime" column="found_time"/>
+        <result property="adminName" column="admin_name"/>
+        <result property="logo" column="sau_logo"/>
+        <result property="description" column="description"/>
+        <result property="members" column="members"/>
+    </resultMap>
+</mapper>
