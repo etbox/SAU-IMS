@@ -3,10 +3,8 @@
 <svg version="1.1" id="图层_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 288 288" style="enable-background:new 0 0 288 288;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:#FF0000;}
+	.st0{fill:#37A2FE;stroke:#3FA9F5;stroke-width:30;stroke-miterlimit:10;}
 </style>
-<g id="心">
-	<path class="st0" d="M198,45c-29.8,0-54,24.4-54,54.6C144,69.4,119.8,45,90,45S36,69.4,36,99.6c0,75.1,108,81.9,108,143.4
-		c0-61.4,108-61.4,108-143.4C252,69.4,227.8,45,198,45z"/>
-</g>
+<line class="st0" x1="36" y1="144" x2="252" y2="144"/>
+<line class="st0" x1="144" y1="36" x2="144" y2="252"/>
 </svg>
