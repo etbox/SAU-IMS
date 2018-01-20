@@ -13,7 +13,7 @@ import java.io.*;
  * word文档转html
  */
 
-public class WordToHTML {
+public class WordToHTMLTool {
 
 
     /**
@@ -65,7 +65,7 @@ public class WordToHTML {
 
     public static void main(String[] args) {
         try {
-            new WordToHTML().convert("D:/00.docx", "D:/ac/00.html", "D:/ac/image/", "image/");
+            new WordToHTMLTool().convert("D:/00.docx", "D:/ac/00.html", "D:/ac/image/", "image/");
         } catch (Exception e) {
             e.printStackTrace();
         }

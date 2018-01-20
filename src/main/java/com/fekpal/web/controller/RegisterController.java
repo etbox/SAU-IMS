@@ -9,6 +9,7 @@ import com.fekpal.domain.json.PersonRegisterMsg;
 import com.fekpal.service.ClubAuditService;
 import com.fekpal.service.UserService;
 import com.fekpal.tool.*;
+import com.fekpal.tool.captcha.Captcha;
 import com.fekpal.tool.email.EmailTool;
 import com.fekpal.web.controller.clubAdmin.ClubAnnRegisterController;
 import org.apache.commons.mail.EmailException;
@@ -69,7 +70,7 @@ public class RegisterController {
         }
 
         //从工具类中得到邮箱验证码
-        String captcha = ValidateCodeTool.getCaptcha();
+        String captcha = new Captcha().getCode();
         //把验证码，邮箱，时间发入到session中去
         session.setAttribute("emailCaptcha", captcha);
         session.setAttribute("email", email);
@@ -150,7 +151,7 @@ public class RegisterController {
                 //调用service层检验将社团信息存入数据库
                 Club club = new Club();
                 Timestamp time = new Timestamp(new Date().getTime());
-                String ip = LoginController.getIpAddress(request);
+                String ip = IpTool.getUserIP(request);
 
                 club.setUserName(userName);
                 club.setPassword(password);
@@ -234,7 +235,7 @@ public class RegisterController {
                 //调用service层检验将社团信息存入数据库
                 Person person = new Person();
                 Timestamp time = new Timestamp(new Date().getTime());
-                String ip = LoginController.getIpAddress(request);
+                String ip = IpTool.getUserIP(request);
 
                 person.setUserName(personRegisterMsg.getUserName());
                 person.setPassword(MD5Tool.md5(personRegisterMsg.getPassword()));

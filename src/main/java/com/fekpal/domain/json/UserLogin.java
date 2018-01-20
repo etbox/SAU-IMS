@@ -1,5 +1,6 @@
 package com.fekpal.domain.json;
 
+import com.fekpal.domain.BasePOJO;
 import org.springframework.stereotype.Component;
 
 /**
@@ -7,12 +8,12 @@ import org.springframework.stereotype.Component;
  * Created by hasee on 2017/8/16.
  */
 @Component
-public class UserLogin {
+public class UserLogin extends BasePOJO{
 
     private String userName;
 
     private String password;
-    //验证码
+
     private String captcha;
 
     public UserLogin() {
@@ -40,14 +41,5 @@ public class UserLogin {
 
     public void setCaptcha(String captcha) {
         this.captcha = captcha;
-    }
-
-    @Override
-    public String toString() {
-        return "UserLogin{" +
-                "userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", captcha='" + captcha + '\'' +
-                '}';
     }
 }

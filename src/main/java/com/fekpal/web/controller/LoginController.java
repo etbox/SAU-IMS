@@ -7,12 +7,11 @@ import com.fekpal.service.UserService;
 import com.fekpal.tool.JsonObject;
 
 import com.fekpal.tool.MD5Tool;
-import com.fekpal.tool.ValidateCodeTool;
+import com.fekpal.tool.captcha.Captcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -129,38 +128,17 @@ public class LoginController {
      * @param session  HttpSession
      */
     @RequestMapping(value = "/login/code", method = RequestMethod.GET)
-    public void captchaCode(HttpServletResponse response, HttpSession session) {
+    public void captcha(HttpServletResponse response, HttpSession session) {
         try {
             //生成一张随机验证码图片，并写出到浏览器
             OutputStream out = response.getOutputStream();
-            String code = ValidateCodeTool.genNewCode(out);
+            Captcha captcha=new Captcha();
+            captcha.createCaptchaImg(out);
+            String code=captcha.getCode();
             //把sCode共享给用户登录时使用
             session.setAttribute("code", code);
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * 用来获取用户的登陆的IP地址
-     *
-     * @param request 用户的请求
-     * @return 返回IP地址
-     */
-    public static String getIpAddress(HttpServletRequest request) {
-
-        String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip;
     }
 }

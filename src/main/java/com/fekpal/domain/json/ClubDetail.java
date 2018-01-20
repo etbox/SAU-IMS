@@ -1,12 +1,14 @@
 package com.fekpal.domain.json;
 
+import com.fekpal.domain.BasePOJO;
+
 import java.util.Date;
 
 /**
  * 这是社团详细信息的实体类
  * Created by hasee on 2017/8/15.
  */
-public class ClubDetail {
+public class ClubDetail extends BasePOJO{
 
     private int clubId;
 

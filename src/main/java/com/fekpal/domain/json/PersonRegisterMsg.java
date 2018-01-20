@@ -1,22 +1,19 @@
 package com.fekpal.domain.json;
 
+import com.fekpal.domain.BasePOJO;
+
 /**
  * Created by hasee on 2017/8/18.
  */
-public class PersonRegisterMsg {
-    private String userName;
-    private String password;
-    private String captcha;
-    public PersonRegisterMsg(){}
+public class PersonRegisterMsg extends BasePOJO{
 
-    @Override
-    public String toString() {
-        return "PersonRegisterMsg{" +
-                "userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", captcha='" + captcha + '\'' +
-                '}';
-    }
+    private String userName;
+
+    private String password;
+    
+    private String captcha;
+
+    public PersonRegisterMsg(){}
 
     public String getUserName() {
         return userName;

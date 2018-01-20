@@ -1,19 +1,28 @@
 package com.fekpal.domain.json;
 
+import com.fekpal.domain.BasePOJO;
+
 import java.util.Date;
 
 /**
  * 消息列表的中的消息对象
  * Created by hasee on 2017/8/22.
  */
-public class NewMsgListDomain {
+public class NewMsgListDomain extends BasePOJO{
+
     private int messageId;
+
     private String messageTitle;
+
     private Date sendTime;
+
     private String sendName;
+
     private int readFlag;
 
-    public NewMsgListDomain(){}
+    public NewMsgListDomain(){
+    }
+
     public int getMessageId() {
         return messageId;
     }
@@ -52,16 +61,5 @@ public class NewMsgListDomain {
 
     public void setReadFlag(int readFlag) {
         this.readFlag = readFlag;
-    }
-
-    @Override
-    public String toString() {
-        return "NewMsgListDomain{" +
-                "messageId=" + messageId +
-                ", messageTitle='" + messageTitle + '\'' +
-                ", sendTime='" + sendTime + '\'' +
-                ", sendName='" + sendName + '\'' +
-                ", readFlag=" + readFlag +
-                '}';
     }
 }

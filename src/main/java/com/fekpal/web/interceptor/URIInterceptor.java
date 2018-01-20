@@ -1,7 +1,7 @@
 package com.fekpal.web.interceptor;
 
 import com.fekpal.domain.User;
-import com.fekpal.tool.role.RoleManager;
+import com.fekpal.tool.authority.RoleManager;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -29,7 +29,7 @@ public class URIInterceptor implements HandlerInterceptor {
         User user = (User) session.getAttribute("userCode");
 
         //用户请求的资源路径访问是否与用户自身的权限对应，不符合将重定向到404页面
-        if (!RoleManager.haveAuthority(user, uri)) {
+        if (!RoleManager.haveAuthority(user.getAuthority(), uri)) {
             request.getRequestDispatcher("/page404.html").forward(request, response);
             return false;
         }

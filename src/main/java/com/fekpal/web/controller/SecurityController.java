@@ -4,6 +4,7 @@ import com.fekpal.cons.ResponseCode;
 import com.fekpal.domain.User;
 import com.fekpal.service.UserService;
 import com.fekpal.tool.*;
+import com.fekpal.tool.captcha.Captcha;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -60,7 +61,7 @@ public class SecurityController {
         }
 
         //从工具类中得到邮箱验证码
-        String captcha = ValidateCodeTool.getCaptcha();
+        String captcha = new Captcha().getCode();
         //把验证码，邮箱，时间发入到session中去
         session.setAttribute("emailCaptcha", captcha);
         session.setAttribute("email", email);
@@ -159,7 +160,7 @@ public class SecurityController {
         }
 
         //从工具类中得到邮箱验证码
-        String captcha = ValidateCodeTool.getCaptcha();
+        String captcha = new Captcha().getCode();
         //把验证码，邮箱，时间发入到session中去
         session.setAttribute("emailCaptcha", captcha);
         session.setAttribute("email", email);

@@ -1,23 +1,29 @@
 package com.fekpal.domain.json;
 
+import com.fekpal.domain.BasePOJO;
+
 import java.util.Date;
 
 /**
  * 校社联中心信息的实体（目前这个类没有用，先留着）
  * Created by hasee on 2017/8/20.
  */
-public class SauCenterMsg {
+public class SauCenterMsg extends BasePOJO{
+
     private String clubName ;
+
     private String description ;
+
     private String adminName ;
+
     private String email ;
+
     private String captcha ;
+
     private Date foundTime;
 
     public SauCenterMsg(){
-
     }
-
 
     public String getClubName() {
         return clubName;
@@ -65,17 +71,5 @@ public class SauCenterMsg {
 
     public void setFoundTime(Date foundTime) {
         this.foundTime = foundTime;
-    }
-
-    @Override
-    public String toString() {
-        return "SauCenterMsg{" +
-                "clubName='" + clubName + '\'' +
-                ", description='" + description + '\'' +
-                ", adminName='" + adminName + '\'' +
-                ", email='" + email + '\'' +
-                ", captcha='" + captcha + '\'' +
-                ", foundTime=" + foundTime +
-                '}';
     }
 }

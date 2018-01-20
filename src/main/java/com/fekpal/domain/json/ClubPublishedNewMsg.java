@@ -1,5 +1,7 @@
 package com.fekpal.domain.json;
 
+import com.fekpal.domain.BasePOJO;
+
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -8,11 +10,16 @@ import java.util.Map;
  * 校社联发布新消息的实体类
  * Created by hasee on 2017/8/26.
  */
-public class ClubPublishedNewMsg {
+public class ClubPublishedNewMsg extends BasePOJO{
+
     private String messageTitle;
+
     private String messageContent;
+
     private Date sendTime;
+
     private List<Map<String,Integer>> publishedObject;
+
     public ClubPublishedNewMsg(){}
 
     public String getMessageTitle() {
@@ -45,15 +52,5 @@ public class ClubPublishedNewMsg {
 
     public void setPublishedObject(List<Map<String,Integer>> publishedObject) {
         this.publishedObject = publishedObject;
-    }
-
-    @Override
-    public String toString() {
-        return "SauPublishedNewMsg{" +
-                "messageTitle='" + messageTitle + '\'' +
-                ", messageContent='" + messageContent + '\'' +
-                ", sendTime=" + sendTime +
-                ", publishedObject=" + publishedObject +
-                '}';
     }
 }

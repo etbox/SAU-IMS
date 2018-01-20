@@ -1,6 +1,4 @@
-package com.fekpal.tool.role;
-
-import com.fekpal.cons.ObjectAvailable;
+package com.fekpal.tool.authority;
 
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +7,18 @@ import java.util.Map;
 /**
  * Created by APone on 2017/9/14.
  */
-class RoleUrlMap {
+class RolePathMapper {
+
+    /**
+     * 无效的
+     */
+    private static final int UNAVAIABLE = 0;
+
+    /**
+     * 有效的
+     */
+    private static final int AVAILABLE = 1;
+
 
     private Map<Integer, Map<String, Integer>> roleMap = new HashMap<>();
 
@@ -19,12 +28,12 @@ class RoleUrlMap {
      * @param authority int
      * @param urls      List
      */
-    void addUrls(int authority, List<String> urls) {
+    void insertPaths(int authority, List<String> urls) {
         Map<String, Integer> map = new HashMap<>();
 
         //将角色的所有路径全部注入到map里，有效性为有效
         for (String url : urls) {
-            map.put(url, ObjectAvailable.AVAILABLE);
+            map.put(url, AVAILABLE);
         }
 
         roleMap.put(authority, map);
@@ -36,7 +45,7 @@ class RoleUrlMap {
      * @param authority int
      * @return Map
      */
-    private Map<String, Integer> getUrls(int authority) {
+    private Map<String, Integer> getPaths(int authority) {
         return roleMap.get(authority);
     }
 
@@ -48,7 +57,7 @@ class RoleUrlMap {
      * @return boolean
      */
     boolean checkUrl(int authority, String url) {
-        Map<String, Integer> map = getUrls(authority);
+        Map<String, Integer> map = getPaths(authority);
         //权限类型正确且含有正确的路径则返回真
         return map != null && map.containsKey(url);
     }
