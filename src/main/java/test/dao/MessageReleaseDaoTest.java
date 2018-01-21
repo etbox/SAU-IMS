@@ -1,7 +1,7 @@
 package test.dao;
 
 import com.fekpal.cons.MessageType;
-import com.fekpal.cons.ObjectAvailable;
+import com.fekpal.cons.AvailableState;
 import com.fekpal.dao.MessageDao;
 import com.fekpal.dao.MessageReleaseDao;
 import com.fekpal.dao.UserDao;
@@ -76,7 +76,7 @@ public class MessageReleaseDaoTest extends BaseDaoTest {
         System.out.println(list.size());
 
         MessageRelease temp1 = new MessageRelease();
-        temp1.setAvailable(ObjectAvailable.UNAVAIABLE);
+        temp1.setAvailable(AvailableState.UNAVAIABLE);
         temp1.setReadFlag(MessageType.HAVE_READ);
         List<Integer> list1 = new ArrayList<>();
         list1.add(messageRelease.getId());

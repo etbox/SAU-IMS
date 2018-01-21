@@ -132,9 +132,9 @@ public class LoginController {
         try {
             //生成一张随机验证码图片，并写出到浏览器
             OutputStream out = response.getOutputStream();
-            Captcha captcha=new Captcha();
+            Captcha captcha = new Captcha();
             captcha.createCaptchaImg(out);
-            String code=captcha.getCode();
+            String code = captcha.getCode();
             //把sCode共享给用户登录时使用
             session.setAttribute("code", code);
         } catch (IOException e) {

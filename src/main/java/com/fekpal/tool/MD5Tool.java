@@ -8,7 +8,6 @@ import java.security.NoSuchAlgorithmException;
 /**
  * MD5加密工具类
  *
- * @author APPle
  */
 public class MD5Tool {
 
@@ -25,9 +24,8 @@ public class MD5Tool {
             //2）进行加密
             byte[] byteArray = md.digest(password.getBytes());
 
-            StringBuffer sb = new StringBuffer();
+            StringBuilder sb = new StringBuilder();
             for (byte b : byteArray) {
-
                 sb.append(numToHex(b));
             }
             return sb.toString();

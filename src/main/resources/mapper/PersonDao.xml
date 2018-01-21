@@ -27,7 +27,6 @@
         values(#{userId},#{nickname})
     </insert>
 
-
     <update id="updatePerson" parameterType="Person">
         update person_info set
         real_name = #{realName},

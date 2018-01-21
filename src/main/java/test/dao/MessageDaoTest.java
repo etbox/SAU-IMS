@@ -1,6 +1,6 @@
 package test.dao;
 
-import com.fekpal.cons.ObjectAvailable;
+import com.fekpal.cons.AvailableState;
 import com.fekpal.dao.MessageDao;
 import com.fekpal.dao.UserDao;
 import com.fekpal.domain.Message;
@@ -55,7 +55,7 @@ public class MessageDaoTest extends BaseDaoTest {
         System.out.println(messageList.size());
 
         message = messageDao.getMessagesByUserId(user.getUserId(), 0, 2).get(0);
-        message.setMessageState(ObjectAvailable.UNAVAIABLE);
+        message.setMessageState(AvailableState.UNAVAIABLE);
         messageDao.updateMessage(message);
         message = messageDao.getMessageByMessageId(message.getMessageId());
         System.out.println(message);

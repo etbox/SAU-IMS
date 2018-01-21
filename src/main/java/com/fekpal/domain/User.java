@@ -2,6 +2,9 @@ package com.fekpal.domain;
 
 import java.sql.Timestamp;
 
+/**
+ * 用户实体类，所有的其他角色必须继承该类
+ */
 public class User extends BasePOJO {
 
     private int userId;

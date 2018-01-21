@@ -7,25 +7,31 @@ import org.apache.poi.xwpf.converter.xhtml.XHTMLOptions;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 
 import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by APone on 2017/8/14.
  * word文档转html
  */
 
-public class WordToHTMLTool {
+public class WordFileUtils {
+
+    private static final String regex = "";
+
+    private static final Pattern pattern = Pattern.compile(regex);
 
 
     /**
-     * 转化为网页文件docx版,注意命名唯一性
+     * 转化为网页文件docx版,注意命名唯一性,存放路径必须存在,可能会存在异常，属于极个别现象
      *
-     * @param wordFileName  String word文件的路径 如 X:/xxx/xxx.docx
-     * @param htmlFileName  String 网页文件的路径 如 X:/xxx/xxx.html
-     * @param htmlImageName String 图片文件夹路径 如 X:/xxx/image/
-     * @param imageBaseURL  String 网页中图片的路径 如 image/
+     * @param wordFileName  String word文件的存放路径 如 X:/xxx/xxx.docx
+     * @param htmlFileName  String 网页文件的存放路径 如 X:/xxx/xxx.html
+     * @param htmlImageName String 图片文件夹的存放路径 如 X:/xxx/image/
+     * @param imageBaseURL  String 网页中图片的路径，主要用于在网页中显示图片 如 image/
      * @return boolean
      */
-    public boolean convert(String wordFileName, String htmlFileName, String htmlImageName, String imageBaseURL) {
+    public static boolean convertToHTML(String wordFileName, String htmlFileName, String htmlImageName, String imageBaseURL) {
 
         OutputStreamWriter outputStreamWriter = null;
         try {
@@ -63,9 +69,24 @@ public class WordToHTMLTool {
         }
     }
 
+    /**
+     * 判断该文件是否为word文档（格式为docx）
+     * 例如*.docx正确 *docx.docx错误
+     *
+     * @param fileName 文件名
+     * @return boolean
+     */
+    public static boolean isVaild(String fileName) {
+        if (StringUtils.isEmpty(fileName)) {
+            return false;
+        }
+        Matcher matcher = pattern.matcher(fileName);
+        return matcher.matches();
+    }
+
     public static void main(String[] args) {
         try {
-            new WordToHTMLTool().convert("D:/00.docx", "D:/ac/00.html", "D:/ac/image/", "image/");
+            convertToHTML("D:/00.docx", "D:/ac/00.html", "D:/ac/image/", "image/");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -2,6 +2,9 @@ package com.fekpal.domain;
 
 import java.sql.Timestamp;
 
+/**
+ * 普通用户实体类
+ */
 public class Person extends User {
 
     private int personId;

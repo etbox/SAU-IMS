@@ -7,6 +7,7 @@ import java.util.Calendar;
  */
 
 public class TimeTool {
+
     /**
      *   获取时间  返回毫秒级时间
      * @return 返回毫秒级时间

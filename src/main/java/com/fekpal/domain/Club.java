@@ -2,6 +2,9 @@ package com.fekpal.domain;
 
 import java.sql.Timestamp;
 
+/**
+ * 社团用户实体类
+ */
 public class Club extends User {
 
     private int clubId;

@@ -2,6 +2,9 @@ package com.fekpal.domain;
 
 import java.sql.Timestamp;
 
+/**
+ * 校社联用户实体类
+ */
 public class Sau extends User {
 
     private int sauId;

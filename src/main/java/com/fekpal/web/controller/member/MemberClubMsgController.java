@@ -1,6 +1,6 @@
 package com.fekpal.web.controller.member;
 
-import com.fekpal.cons.ObjectAvailable;
+import com.fekpal.cons.AvailableState;
 import com.fekpal.cons.ResponseCode;
 import com.fekpal.domain.Club;
 import com.fekpal.domain.ClubMember;
@@ -72,9 +72,9 @@ public class MemberClubMsgController {
             clubMsgMap.put("likeNumber", club.getLikeNumber());
 
             if (joinList.contains(club.getClubId())) {
-                clubMsgMap.put("like", ObjectAvailable.AVAILABLE);
+                clubMsgMap.put("like", AvailableState.AVAILABLE);
             } else {
-                clubMsgMap.put("like", ObjectAvailable.UNAVAIABLE);
+                clubMsgMap.put("like", AvailableState.UNAVAIABLE);
             }
 
             //将对象放入返回json数据中

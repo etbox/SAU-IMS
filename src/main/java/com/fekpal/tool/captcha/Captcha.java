@@ -1,5 +1,7 @@
 package com.fekpal.tool.captcha;
 
+import com.fekpal.tool.StringUtils;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -40,6 +42,7 @@ public class Captcha {
             '3', '4', '5', '6', '7', '8', '9'};
 
     public Captcha() {
+        this(120,50,5,3);
     }
 
     /**
@@ -103,8 +106,8 @@ public class Captcha {
             green = random.nextInt(255);
             blue = random.nextInt(255);
             g.setColor(new Color(red, green, blue));
-            String strRand = code.substring(i, i + 1);
-            g.drawString(strRand, (i + 1) * x, codeY);
+            char[] str = code.toCharArray();
+            g.drawString(String.valueOf(str[i]), (i + 1) * x, codeY);
             // 将产生的四个随机数组合在一起。
         }
 
@@ -120,8 +123,6 @@ public class Captcha {
             g.setColor(new Color(red, green, blue));
             g.drawLine(xs, ys, xe, ye);
         }
-
-
     }
 
     /**
@@ -148,21 +149,10 @@ public class Captcha {
     }
 
     public String getCode() {
-        if (code == null || code.isEmpty()) {
+        if (StringUtils.isEmpty(code)) {
             createRandomCaptcha();
         }
         return code;
-    }
-
-    public static void main(String[] args) {
-        Captcha captcha = new Captcha(120, 40, 5, 100);
-        try {
-            String path = "\\" + new Date().getTime() + ".png";
-            System.out.println(captcha.getCode() + " >" + path);
-            captcha.createCaptchaImg(path);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 }
 

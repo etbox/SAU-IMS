@@ -1,6 +1,6 @@
 package com.fekpal.web.controller;
 
-import com.fekpal.cons.ObjectAvailable;
+import com.fekpal.cons.AvailableState;
 import com.fekpal.cons.ResponseCode;
 import com.fekpal.domain.Message;
 import com.fekpal.domain.MessageRelease;
@@ -93,7 +93,7 @@ public class NewMsgController {
             //根据userId和消息id在数据库中做相应删除操作
             MessageRelease release = new MessageRelease();
             release.setReceiveId(userId);
-            release.setAvailable(ObjectAvailable.UNAVAIABLE);
+            release.setAvailable(AvailableState.UNAVAIABLE);
             messageService.updateRcvMessage(release, messages);
             out.println("用户id为：" + userId + "。要删除的id是:(list)" + messages);
         }

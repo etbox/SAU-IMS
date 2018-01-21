@@ -1,12 +1,13 @@
 package com.fekpal.tool;
 
-import org.apache.commons.lang3.StringUtils;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class IpTool {
+/**
+ * ip工具类
+ */
+public class IPUtils {
 
     private final static String ERROR_IP = "127.0.0.1";
 
@@ -53,7 +54,6 @@ public class IpTool {
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getHeader("x-forwarded-for");
         }
-
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
             if ("0:0:0:0:0:0:0:1".equals(ip)) {
@@ -84,7 +84,6 @@ public class IpTool {
         if (StringUtils.isEmpty(ip)) {
             return false;
         }
-
         Matcher matcher = pattern.matcher(ip);
         return matcher.matches();
     }

@@ -1,7 +1,7 @@
 package com.fekpal.web.controller.clubAdmin;
 
 import com.fekpal.cons.MessageType;
-import com.fekpal.cons.ObjectAvailable;
+import com.fekpal.cons.AvailableState;
 import com.fekpal.domain.*;
 import com.fekpal.domain.json.ClubPublishedNewMsg;
 import com.fekpal.service.*;
@@ -86,7 +86,7 @@ public class ClubMsgPublicController {
 
         for (Message message : lists) {
 
-            if (message.getMessageState() == ObjectAvailable.AVAILABLE) {
+            if (message.getMessageState() == AvailableState.AVAILABLE) {
                 Map<String, Object> msgMap = new LinkedHashMap<>();
                 msgMap.put("messageId", message.getMessageId());
                 msgMap.put("messageTitle", message.getMessageTitle());
@@ -254,7 +254,7 @@ public class ClubMsgPublicController {
 
         User user = (User) session.getAttribute("userCode");
         Message message = new Message();
-        message.setMessageState(ObjectAvailable.UNAVAIABLE);
+        message.setMessageState(AvailableState.UNAVAIABLE);
         message.setUserId(user.getUserId());
 
         //从要删除的消息id的map集合中得到要删除的消息id，并将它们放入list集合中
@@ -293,7 +293,7 @@ public class ClubMsgPublicController {
         //创建消息列表的list集合，并将消息装入list集合，并返回
         List<Map<String, Object>> msgList = new ArrayList<>();
         for (Message message : lists) {
-            if (message.getMessageState() == ObjectAvailable.AVAILABLE) {
+            if (message.getMessageState() == AvailableState.AVAILABLE) {
                 Map<String, Object> msgMap = new LinkedHashMap<>();
                 msgMap.put("messageId", message.getMessageId());
                 msgMap.put("messageTitle", message.getMessageTitle());

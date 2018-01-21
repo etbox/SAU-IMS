@@ -1,6 +1,6 @@
 package com.fekpal.web.controller;
 
-import com.fekpal.cons.ObjectAvailable;
+import com.fekpal.cons.AvailableState;
 import com.fekpal.cons.SystemRole;
 import com.fekpal.domain.Club;
 import com.fekpal.domain.ClubAudit;
@@ -10,7 +10,7 @@ import com.fekpal.service.ClubAuditService;
 import com.fekpal.service.UserService;
 import com.fekpal.tool.*;
 import com.fekpal.tool.captcha.Captcha;
-import com.fekpal.tool.email.EmailTool;
+import com.fekpal.tool.msg.email.EmailSender;
 import com.fekpal.web.controller.clubAdmin.ClubAnnRegisterController;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
@@ -31,10 +30,9 @@ import java.util.*;
 @Controller
 public class RegisterController {
 
-/*
     @Autowired
-    private MailHtmlTool mailHtmlTool;//邮箱发送工具
-*/
+    private EmailSender emailSender;
+
     @Autowired
     private UserService userService;
 
@@ -77,11 +75,8 @@ public class RegisterController {
         session.setAttribute("time", TimeTool.getTime());
 
         try {
-            /*
-            mailHtmlTool.sendHtml(email, "校社联管理系统发给您的验证码", "您的邮箱验证码是：<br/>"
-                    + captcha + "<br/><br/>" + "验证码十分钟内有效");
-                    */
-            EmailTool.sendSimpleTextEmail();
+            String msg = "您的邮箱验证码是：\n\t" + captcha + "\n验证码十分钟内有效";
+            emailSender.sendMsg("校社联管理系统发给您的验证码", msg, email);
             returnData.setStateCode(1, "验证码发送成功!");
 
         } catch (EmailException e) {
@@ -151,7 +146,7 @@ public class RegisterController {
                 //调用service层检验将社团信息存入数据库
                 Club club = new Club();
                 Timestamp time = new Timestamp(new Date().getTime());
-                String ip = IpTool.getUserIP(request);
+                String ip = IPUtils.getUserIP(request);
 
                 club.setUserName(userName);
                 club.setPassword(password);
@@ -163,7 +158,7 @@ public class RegisterController {
                 club.setLoginIp(ip);
                 club.setLoginTime(time);
                 club.setAuthority(SystemRole.CLUB);
-                club.setUserState(ObjectAvailable.AUDITING);
+                club.setUserState(AvailableState.AUDITING);
 
                 club.setAdminName(realName);
                 club.setClubName(clubName);
@@ -173,7 +168,7 @@ public class RegisterController {
                 userService.addNewClub(club);
 
                 //将文件存入服务器中的与本项目同目录的//MySAUImages/clubRegister文件夹中
-                List<String> files= FileUploadTool.fileHandle(file, request,"clubRegister");
+                List<String> files = FileUploadTool.fileHandle(file, request, "clubRegister");
                 ClubAudit audit = new ClubAudit();
                 audit.setClub(club);
                 audit.setSendTime(time);
@@ -235,7 +230,7 @@ public class RegisterController {
                 //调用service层检验将社团信息存入数据库
                 Person person = new Person();
                 Timestamp time = new Timestamp(new Date().getTime());
-                String ip = IpTool.getUserIP(request);
+                String ip = IPUtils.getUserIP(request);
 
                 person.setUserName(personRegisterMsg.getUserName());
                 person.setPassword(MD5Tool.md5(personRegisterMsg.getPassword()));
@@ -246,7 +241,7 @@ public class RegisterController {
                 person.setRegisterTime(time);
                 person.setLoginIp(ip);
                 person.setLoginTime(time);
-                person.setUserState(ObjectAvailable.AVAILABLE);
+                person.setUserState(AvailableState.AVAILABLE);
                 person.setAuthority(SystemRole.PERSON);
 
                 person.setNickname(personRegisterMsg.getUserName());

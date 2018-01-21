@@ -91,11 +91,20 @@
         <listener-class>org.springframework.web.util.WebAppRootListener</listener-class>
     </listener>
 
+    <!--监听spring框架内存泄漏-->
+    <listener>
+        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+    </listener>
 
-    <!-- 通过错误码来配置error-page ,配置了当系统发生404错误时，跳转到错误处理页面NotFound.jsp。 -->
+    <!--spring监听请求-->
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+
+    <!-- 通过错误码来配置error-page ,配置了当系统发生404错误时，跳转到错误处理页面。 -->
     <error-page>
         <error-code>404</error-code>
-        <location>/page404.html</location>
+        <location>/</location>
     </error-page>
 
 </web-app>

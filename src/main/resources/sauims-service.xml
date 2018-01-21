@@ -17,9 +17,6 @@
     <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
           p:dataSource-ref="dataSource"/>
 
-    <!--响应数据对象-->
-    <bean id="returnData" class="com.fekpal.tool.JsonObject" scope="prototype"/>
-
     <!--使用声明式事务-->
     <tx:annotation-driven transaction-manager="txManager"/>
 
