@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 #login{
   position: absolute;
@@ -8,23 +9,36 @@
   display:none;
 
 }
+=======
+>>>>>>> front-end
 #back {
   position: absolute;
   top: 0px;
   /*背景灰色*/
   display: block;
+<<<<<<< HEAD
  /*position: fixed; */
   width: 100%;
   height: 1300px;
   background-color: #000;
   opacity: 0.3; 
   z-index:999;
+=======
+  /* position: fixed; */
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  opacity: 0.3;
+>>>>>>> front-end
 }
 
 #LoginBoard {
   /*登陆界面主面板*/
   position: relative;
+<<<<<<< HEAD
   margin: 0px auto;
+=======
+>>>>>>> front-end
   background-color: white;
   display: block;
   height: 370px;
@@ -36,8 +50,11 @@
   -webkit-box-shadow: 2px 2px 5px #333333;
   box-shadow: 2px 2px 5px #333333;
   /*阴影*/
+<<<<<<< HEAD
   z-index:1000;
 
+=======
+>>>>>>> front-end
 }
 
 .top {
@@ -72,7 +89,11 @@
   width: 50px;
   height: 30px;
   left: 22%;
+<<<<<<< HEAD
   top: -12px;
+=======
+  top: 3px;
+>>>>>>> front-end
   font-size: 15px;
   font-family: "微软雅黑";
   color: gray;
@@ -83,7 +104,11 @@
   width: 250px;
   height: 40px;
   left: 20%;
+<<<<<<< HEAD
   top: 15px;
+=======
+  top: 25px;
+>>>>>>> front-end
   background-color: #D0D0D0;
   border: 0;
   border-radius: 5px;
@@ -97,7 +122,11 @@
   width: 50px;
   height: 25px;
   left: 22%;
+<<<<<<< HEAD
   top: -32px;
+=======
+  top: -7px;
+>>>>>>> front-end
   font-size: 15px;
   font-family: "微软雅黑";
   color: gray;
@@ -108,7 +137,11 @@
   width: 100px;
   height: 40px;
   left: 20%;
+<<<<<<< HEAD
   top: -19px;
+=======
+  top: 21px;
+>>>>>>> front-end
   background-color: #D0D0D0;
   border: 0;
   border-radius: 5px;
@@ -118,8 +151,13 @@
 
 #RemPsw {
   position: relative;
+<<<<<<< HEAD
   left: -18%;
   top: 40px;
+=======
+  left: 1%;
+  top: 65px;
+>>>>>>> front-end
   border-color: #D0D0D0;
 }
 
@@ -127,8 +165,13 @@
   position: relative;
   width: 65px;
   height: 25px;
+<<<<<<< HEAD
   left: 25%;
   top: -23px;
+=======
+  left: 24%;
+  top: 31.5px;
+>>>>>>> front-end
   font-size: 15px;
   font-family: "微软雅黑";
   color: black;
@@ -152,7 +195,11 @@
   font-size: 16px;
   color: white;
   left: 20%;
+<<<<<<< HEAD
   top: -5px;
+=======
+  top: 45px;
+>>>>>>> front-end
   position: relative;
   text-decoration: none;
   /*超链接无下划线*/
@@ -172,7 +219,11 @@
   position: absolute;
   font-size: 20px;
   left: 95%;
+<<<<<<< HEAD
   top: 10px;
+=======
+  top: 15px;
+>>>>>>> front-end
 }
 
 #nameNotNull {
@@ -180,7 +231,11 @@
   position: absolute;
   font-size: 20px;
   left: 75%;
+<<<<<<< HEAD
   top: 92px;
+=======
+  top: 96px;
+>>>>>>> front-end
   font-size: 15px;
   color: red;
   display: none;
@@ -191,7 +246,11 @@
   position: absolute;
   font-size: 20px;
   left: 75%;
+<<<<<<< HEAD
   top: 157px;
+=======
+  top: 158px;
+>>>>>>> front-end
   font-size: 15px;
   color: red;
   display: none;
@@ -237,18 +296,27 @@
 }
 
 #forgetPsw {
+<<<<<<< HEAD
   
+=======
+>>>>>>> front-end
   position: absolute;
   width: 100px;
   height: 20px;
   left: 45%;
   top: 261px;
+<<<<<<< HEAD
   color: blue;
   font-size: 15px;
 
+=======
+>>>>>>> front-end
 }
 
 #forgetPsw a {
   text-decoration: none;
+<<<<<<< HEAD
   color: blue;
+=======
+>>>>>>> front-end
 }

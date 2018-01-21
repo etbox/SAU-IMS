@@ -1,20 +1,33 @@
 function showLog() { /*把登陆界面显示出来*/
+<<<<<<< HEAD
   var target0 = document.getElementById('login');
   var target = document.getElementById('back');
   var target1 = document.getElementById('LoginBoard');
   var target2 = document.getElementById('x');
   target0.style.display = 'block';
+=======
+
+  var target = document.getElementById('back');
+  var target1 = document.getElementById('LoginBoard');
+  var target2 = document.getElementById('x');
+>>>>>>> front-end
   target.style.display = 'block';
   target1.style.display = 'block';
   target2.style.display = 'block';
 }
 
 function hiddenLog() { /*隐藏界面*/
+<<<<<<< HEAD
   var target0 = document.getElementById('login');
   var target = document.getElementById('back');
   var target1 = document.getElementById('LoginBoard');
   var target2 = document.getElementById('x');
    target0.style.display = 'none';
+=======
+  var target = document.getElementById('back');
+  var target1 = document.getElementById('LoginBoard');
+  var target2 = document.getElementById('x');
+>>>>>>> front-end
   target.style.display = 'none';
   target1.style.display = 'none';
   target2.style.display = 'none';
@@ -57,14 +70,22 @@ function checkPassword(obj) {
     notok.style.display = 'block';
     notokimg.style.display = 'block';
     notokimg.style.left = '68%';
+<<<<<<< HEAD
     notokimg.style.top = '160px';
+=======
+    notokimg.style.top = '156px';
+>>>>>>> front-end
     // obj.focus();
   } else {
     notok.style.display = 'none';
     notokimg.style.display = 'none';
     okimg.style.display = 'block';
     okimg.style.left = '68%';
+<<<<<<< HEAD
     okimg.style.top = '160px';
+=======
+    okimg.style.top = '157px';
+>>>>>>> front-end
   }
 }
 
