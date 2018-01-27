@@ -1,5 +1,6 @@
 (function() {
   'use strict';
+  var $ = window.jQuery;
 
   function showLog() { /*把登陆界面显示出来*/
     var target0 = document.getElementById('login');
@@ -74,6 +75,7 @@
 
 
   function sendLoginData() {
+    'use strict';
     var formData = {};
     var url = 'login/go';
     // var $formElement = $('#LoginBoard');
@@ -100,6 +102,7 @@
   }
 
   function addHandler(id, action, func) {
+    'use strict';
     var domID = document.querySelector(`#${id}`);
     domID.addEventListener(action, function(event) {
       event.preventDefault();
@@ -108,6 +111,7 @@
   }
 
   function init() {
+    'use strict';
     addHandler('logNum', 'blur', checkUserName);
     addHandler('psw', 'blur', checkPassword);
     addHandler('x', 'click', hiddenLog);
