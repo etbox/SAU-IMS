@@ -1,9 +1,8 @@
 package test.dao;
 
-import com.fekpal.cons.ClubRole;
-import com.fekpal.dao.ClubDao;
+import com.fekpal.dao.user.ClubDao;
 import com.fekpal.dao.ClubMemberDao;
-import com.fekpal.dao.PersonDao;
+import com.fekpal.dao.user.PersonDao;
 import com.fekpal.domain.ClubMember;
 import com.fekpal.domain.Person;
 import org.junit.Assert;

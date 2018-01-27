@@ -1,7 +1,5 @@
 package com.fekpal.domain;
 
-import java.util.List;
-
 public class Major extends BasePOJO {
 
     private int majorId;
@@ -33,6 +31,5 @@ public class Major extends BasePOJO {
     public void setMajorAvailable(int majorAvailable) {
         this.majorAvailable = majorAvailable;
     }
-
 
 }

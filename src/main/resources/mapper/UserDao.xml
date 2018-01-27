@@ -3,28 +3,53 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.fekpal.dao.UserDao">
+<mapper namespace="com.fekpal.dao.user.UserDao">
     <cache/>
 
-    <select id="getUserByUserId" parameterType="int" resultMap="userResult">
-      select * from user where user_id = #{id}
+    <sql id="info">
+        select * from user
+    </sql>
+
+    <select id="get" parameterType="int" resultMap="userResult">
+        <include refid="info"/>
+        where user_id = #{id}
     </select>
 
-    <select id="getUserByUserName" parameterType="String" resultMap="userResult">
-      select * from user where user_name = #{userName}
+    <select id="getByUserName" parameterType="String" resultMap="userResult">
+        <include refid="info"/>
+        where user_name = #{userName}
     </select>
 
-    <select id="getUserByIdentity" resultMap="userResult">
-      select * from user where user_name = #{arg0} and password = #{arg1}
+    <select id="getByIdentity" resultMap="userResult">
+        <include refid="info"/>
+        where user_name = #{arg0} and password = #{arg1}
     </select>
 
-    <select id="getUserByEmail" parameterType="String" resultMap="userResult">
-      select * from user where email = #{email}
+    <select id="getByEmail" parameterType="String" resultMap="userResult">
+        <include refid="info"/>
+        where email = #{email}
+    </select>
+
+    <select id="getByPhone" parameterType="String" resultMap="userResult">
+        <include refid="info"/>
+        where phone = #{phone}
     </select>
 
     <insert id="add" parameterType="User" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
-    insert into user(user_name,password,email,phone,user_key,login_ip, login_time,register_ip,register_time,authority,user_state)
-    values (#{userName},#{password},#{email},#{phone},#{userKey},#{loginIp},#{loginTime},#{registerIp},#{registerTime},#{authority},#{userState})
+        insert into user(
+        user_name, password,
+        email, phone,
+        user_key, login_ip,
+        login_time, register_ip,
+        register_time, authority,
+        user_state)
+        values (
+        #{userName}, #{password},
+        #{email}, #{phone},
+        #{userKey}, #{loginIp},
+        #{loginTime}, #{registerIp},
+        #{registerTime}, #{authority},
+        #{userState})
     </insert>
 
     <update id="update" parameterType="User">
@@ -38,16 +63,34 @@
         where user_id = #{userId}
     </update>
 
+    <update id="delete" parameterType="int">
+        update user set
+        user_state = 0
+        where user_id = #{id}
+    </update>
+
+    <sql id="exit">
+        select count(*) from user
+    </sql>
+
     <select id="isExit" parameterType="String" resultType="boolean" useCache="false">
-        select count(*) from user where user_name = #{userName}
+        <include refid="exit"/>
+        where user_name = #{userName}
     </select>
 
     <select id="exitEmail" parameterType="String" resultType="boolean" useCache="false">
-        select count(*) from user where email = #{email}
+        <include refid="exit"/>
+        where email = #{email}
+    </select>
+
+    <select id="exitPhone" parameterType="String" resultType="boolean" useCache="false">
+        <include refid="exit"/>
+        where phone = #{phone}
     </select>
 
     <select id="loadAll" resultMap="userResult">
-        select * from user
+        <include refid="info"/>
+        limit #{arg0}, #{arg1}
     </select>
 
     <resultMap id="userResult" type="User">

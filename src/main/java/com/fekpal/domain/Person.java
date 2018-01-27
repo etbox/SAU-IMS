@@ -27,6 +27,12 @@ public class Person extends User {
 
     private String studentId;
 
+    private int personState;
+
+    public String getNickname() {
+        return nickname;
+    }
+
     public int getPersonId() {
         return personId;
     }

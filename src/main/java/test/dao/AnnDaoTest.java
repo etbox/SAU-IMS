@@ -2,7 +2,7 @@ package test.dao;
 
 import com.fekpal.cons.AuditState;
 import com.fekpal.dao.AnniversaryAuditDao;
-import com.fekpal.dao.ClubDao;
+import com.fekpal.dao.user.ClubDao;
 import com.fekpal.domain.AnniversaryAudit;
 import org.junit.Assert;
 import org.junit.Before;

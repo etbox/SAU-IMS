@@ -19,6 +19,16 @@ public class Sau extends User {
 
     private int members;
 
+    private int sauState;
+
+    public int getSauState() {
+        return sauState;
+    }
+
+    public void setSauState(int sauState) {
+        this.sauState = sauState;
+    }
+
     public int getSauId() {
         return sauId;
     }

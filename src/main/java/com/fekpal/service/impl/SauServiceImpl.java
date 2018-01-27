@@ -1,6 +1,6 @@
 package com.fekpal.service.impl;
 
-import com.fekpal.dao.SauDao;
+import com.fekpal.dao.user.SauDao;
 import com.fekpal.domain.Sau;
 import com.fekpal.service.SauService;
 import org.springframework.beans.factory.annotation.Autowired;

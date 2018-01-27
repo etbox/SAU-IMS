@@ -2,6 +2,10 @@ package com.fekpal.service.impl;
 
 import com.fekpal.cons.SystemRole;
 import com.fekpal.dao.*;
+import com.fekpal.dao.user.ClubDao;
+import com.fekpal.dao.user.PersonDao;
+import com.fekpal.dao.user.SauDao;
+import com.fekpal.dao.user.UserDao;
 import com.fekpal.domain.*;
 import com.fekpal.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

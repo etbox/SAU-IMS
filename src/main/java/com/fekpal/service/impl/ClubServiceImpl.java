@@ -1,6 +1,6 @@
 package com.fekpal.service.impl;
 
-import com.fekpal.dao.ClubDao;
+import com.fekpal.dao.user.ClubDao;
 import com.fekpal.domain.Club;
 import com.fekpal.service.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;

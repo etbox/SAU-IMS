@@ -2,7 +2,7 @@ package test.dao;
 
 import com.fekpal.cons.AvailableState;
 import com.fekpal.dao.MessageDao;
-import com.fekpal.dao.UserDao;
+import com.fekpal.dao.user.UserDao;
 import com.fekpal.domain.Message;
 import org.junit.Assert;
 import org.junit.Before;

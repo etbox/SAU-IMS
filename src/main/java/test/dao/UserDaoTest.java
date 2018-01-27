@@ -1,6 +1,6 @@
 package test.dao;
 
-import com.fekpal.dao.UserDao;
+import com.fekpal.dao.user.UserDao;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

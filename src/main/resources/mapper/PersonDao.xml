@@ -3,31 +3,70 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.fekpal.dao.PersonDao">
+<mapper namespace="com.fekpal.dao.user.PersonDao">
     <cache/>
 
-    <select id="getPersonByPersonId" parameterType="int" resultMap="personResult">
-      select * from person_info where person_id = #{personId}
+    <sql id="allInfo">
+        select * from person_info pi
+        inner join user_info u on pi.user_id = u.user_id
+    </sql>
+
+    <sql id="info">
+        select * from person_info
+    </sql>
+
+    <select id="get" parameterType="int" resultMap="personResult">
+        <include refid="allInfo"/>
+        where person_id = #{id}
     </select>
 
-    <select id="getPersonByNickName" parameterType="String" resultMap="personResult">
-        select * from person_info where nickname = #{nickname}
+    <select id="getByUserId" parameterType="int" resultMap="personResult">
+        <include refid="allInfo"/>
+        where user_id = #{id}
     </select>
 
-    <select id="getPersonByUserId" parameterType="int" resultMap="personResult">
-        select * from person_info where user_id = #{userId}
+    <select id="getInfo" parameterType="int" resultMap="personResult">
+        <include refid="info"/>
+        where person_id = #{id}
     </select>
 
-    <select id="hadNickName" parameterType="String" resultType="boolean">
-        select count(*) from person_info where nickname = #{nickname}
+    <select id="getInfoByUserId" parameterType="int" resultMap="personResult">
+        <include refid="info"/>
+        where user_id = #{id}
     </select>
 
-    <insert id="addPerson" parameterType="Person" useGeneratedKeys="true" keyProperty="personId" keyColumn="person_id">
-        insert into person_info (user_id,  nickname)
-        values(#{userId},#{nickname})
+    <select id="getByNickName" parameterType="String" resultMap="personResult">
+        <include refid="info"/>
+        where nickname = #{nickname}
+    </select>
+
+    <sql id="exit">
+        select count(*) from person_info
+    </sql>
+
+    <select id="isExit" parameterType="String" resultType="boolean">
+        <include refid="exit"/>
+        where nickname = #{nickname}
+    </select>
+
+    <insert id="add" parameterType="Person" useGeneratedKeys="true" keyProperty="personId" keyColumn="person_id">
+        insert into person_info (
+        user_id, real_name,
+        nickname, gender,
+        birthday, description,
+        address, department,
+        major, student_id,
+        person_logo, person_state)
+        values(
+        #{userId}, #{realName},
+        #{nickname}, #{gender},
+        #{birthday}, #{description}
+        #{address}, #{department},
+        #{major}, #{studentId},
+        #{logo}, #{personState})
     </insert>
 
-    <update id="updatePerson" parameterType="Person">
+    <update id="update" parameterType="Person">
         update person_info set
         real_name = #{realName},
         nickname = #{nickname},
@@ -42,9 +81,15 @@
         where person_id = #{personId}
     </update>
 
+    <update id="delete" parameterType="int">
+        update person_info set
+        person_state = 0
+        where person_id = #{id}
+    </update>
 
-    <select id="loadAllPerson" resultMap="personResult">
-        select * from person_info limit #{arg0},#{arg1}
+    <select id="loadAll" resultMap="personResult">
+        <include refid="info"/>
+        limit #{arg0}, #{arg1}
     </select>
 
     <resultMap id="personResult" type="Person">
@@ -67,5 +112,6 @@
         <result property="description" column="description"/>
         <result property="department" column="department"/>
         <result property="major" column="major"/>
+        <result property="personState" column="person_state"/>
     </resultMap>
 </mapper>

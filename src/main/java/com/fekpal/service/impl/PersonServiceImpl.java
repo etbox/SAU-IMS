@@ -1,7 +1,7 @@
 package com.fekpal.service.impl;
 
 import com.fekpal.dao.LikeClubDao;
-import com.fekpal.dao.PersonDao;
+import com.fekpal.dao.user.PersonDao;
 import com.fekpal.domain.Person;
 import com.fekpal.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;

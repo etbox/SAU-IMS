@@ -3,23 +3,55 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.fekpal.dao.SauDao">
+<mapper namespace="com.fekpal.dao.user.SauDao">
     <cache/>
 
-    <select id="getSauByUserId" parameterType="User" resultMap="sauResult">
-        select * from sau_info where user_id = #{userId}
+    <sql id="allInfo">
+        select *
+        from sau_info si
+        inner join user u on si.user_id = u.user_id
+    </sql>
+
+    <sql id="info">
+        select * from sau_info
+    </sql>
+
+    <select id="get" parameterType="int" resultMap="sauResult">
+        <include refid="allInfo"/>
+        where sau_id = #{id}
     </select>
 
-    <select id="getSauBySauId" parameterType="int" resultMap="sauResult">
-        select * from sau_info where sau_id = #{sauId}
+    <select id="getByUserId" parameterType="User" resultMap="sauResult">
+        <include refid="allInfo"/>
+        where user_id = #{id}
     </select>
 
-    <insert id="addSau" parameterType="Sau" useGeneratedKeys="true" keyProperty="sauId" keyColumn="sau_id">
-        insert into sau_info (user_id)
-        values (#{userId})
+    <select id="getInfo" parameterType="int" resultMap="sauResult">
+        <include refid="info"/>
+        where sau_id = #{id}
+    </select>
+
+    <select id="getInfoByUserId" parameterType="int" resultMap="sauResult">
+        <include refid="info"/>
+        where user_id = #{id}
+    </select>
+
+    <insert id="add" parameterType="Sau" useGeneratedKeys="true" keyProperty="sauId" keyColumn="sau_id">
+        insert into sau_info (
+        sau_id, user_id,
+        sau_name, found_time,
+        description, admin_name,
+        sau_logo, members,
+        sau_state)
+        values (
+        #{sauId}, #{userId}
+        #{sauName}, #{foundTime}
+        #{description}, #{adminName}
+        #{logo}, #{members}
+        #{sauState})
     </insert>
 
-    <update id="updateSau" parameterType="Sau">
+    <update id="update" parameterType="Sau">
         update sau_info set
         sau_name = #{sauName},
         admin_name = #{adminName},
@@ -27,11 +59,19 @@
         sau_logo = #{logo},
         description = #{description},
         members = #{members}
+        sau_state = #{sau_state}
         where sau_id = #{sauId}
     </update>
 
-    <select id="loadAllSau" resultMap="sauResult">
-        select * from sau_info
+    <update id="delete" parameterType="int">
+        update sau_info set
+        sau_state = 0
+        where sau_id = #{id}
+    </update>
+
+    <select id="loadAll" resultMap="sauResult">
+        <include refid="info"/>
+        limit #{arg0}, #{arg1}
     </select>
 
     <resultMap id="sauResult" type="Sau">
@@ -50,5 +90,6 @@
         <result property="logo" column="sau_logo"/>
         <result property="description" column="description"/>
         <result property="members" column="members"/>
+        <result property="sauState" column="sau_state"/>
     </resultMap>
 </mapper>

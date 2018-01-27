@@ -4,7 +4,7 @@ import com.fekpal.cons.MessageType;
 import com.fekpal.cons.AvailableState;
 import com.fekpal.dao.MessageDao;
 import com.fekpal.dao.MessageReleaseDao;
-import com.fekpal.dao.UserDao;
+import com.fekpal.dao.user.UserDao;
 import com.fekpal.domain.MessageRelease;
 import org.junit.Assert;
 import org.junit.Before;

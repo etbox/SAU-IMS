@@ -1,17 +1,15 @@
 package test.dao;
 
-import com.fekpal.dao.ClubDao;
+import com.fekpal.dao.user.ClubDao;
 import com.fekpal.dao.LikeClubDao;
-import com.fekpal.dao.PersonDao;
-import com.fekpal.dao.UserDao;
+import com.fekpal.dao.user.PersonDao;
+import com.fekpal.dao.user.UserDao;
 import com.fekpal.domain.Person;
-import com.fekpal.domain.User;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import static test.dao.Domain.club;

@@ -1,7 +1,7 @@
 package test.dao;
 
-import com.fekpal.dao.SauDao;
-import com.fekpal.dao.UserDao;
+import com.fekpal.dao.user.SauDao;
+import com.fekpal.dao.user.UserDao;
 import com.fekpal.domain.Sau;
 import org.junit.Assert;
 import org.junit.Before;

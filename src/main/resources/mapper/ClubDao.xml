@@ -3,32 +3,72 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.fekpal.dao.ClubDao">
+<mapper namespace="com.fekpal.dao.user.ClubDao">
     <cache/>
 
-    <select id="getClubByClubId" parameterType="int" resultMap="clubResult">
-      select * from club_info where club_id = #{clubId}
+    <sql id="allInfo">
+        select * from club_info ci
+        inner join user u on ci.user_id = u.user_id
+    </sql>
+
+    <sql id="info">
+        select * from club_info
+    </sql>
+
+    <select id="get" parameterType="int" resultMap="clubResult">
+        <include refid="allInfo"/>
+        where club_id = #{id}
     </select>
 
-    <select id="getClubByClubName" parameterType="String" resultMap="clubResult">
-      select * from club_info where club_name = #{clubName}
+    <select id="getByUserId" parameterType="int" resultMap="clubResult">
+        <include refid="allInfo"/>
+        where user_id = #{id}
     </select>
 
-    <select id="getClubByUserId" parameterType="int" resultMap="clubResult">
-      select * from club_info where user_id = #{userId}
+    <select id="getInfo" parameterType="int" resultMap="clubResult">
+        <include refid="info"/>
+        where club_id = {id}
     </select>
 
-    <select id="findClubByClubName" resultMap="clubResult">
-      select * from club_info where club_name like concat('%',#{arg0},'%') limit #{arg1},#{arg2}
+    <select id="getInfoByUserId" parameterType="int" resultMap="clubResult">
+        <include refid="info"/>
+        where user_id = #{id}
     </select>
 
-    <select id="hadClubName" parameterType="String" resultType="boolean">
-      select count(*) from club_info where club_name = #{clubName}
+    <select id="getByClubName" parameterType="String" resultMap="clubResult">
+        <include refid="info"/>
+        where club_name = #{clubName}
+    </select>
+
+    <select id="findByClubName" resultMap="clubResult">
+        <include refid="info"/>
+        where club_name like concat('%',#{arg0},'%') limit #{arg1},#{arg2}
+    </select>
+
+    <sql id="exit">
+        select count(*) from club_info
+    </sql>
+
+    <select id="isExit" parameterType="String" resultType="boolean">
+        <include refid="exit"/>
+        where club_name = #{clubName}
     </select>
 
     <insert id="add" parameterType="Club" useGeneratedKeys="true" keyProperty="clubId" keyColumn="club_id">
-      insert into club_info (user_id, club_name, found_time, admin_name,club_type)
-      values (#{userId},#{clubName},#{foundTime},#{adminName},#{clubType})
+        insert into club_info (
+        user_id, club_name,
+        found_time, decription,
+        admin_name, club_type,
+        club_logo, club_view,
+        like_number, members
+        club_state)
+        values (
+        #{userId}, #{clubName},
+        #{foundTime}, #{description},
+        #{adminName}, #{clubType}
+        #{logo}, #{clubView}
+        #{likeNumber}, #{members}
+        #{clubState})
     </insert>
 
     <update id="update" parameterType="Club">
@@ -40,17 +80,25 @@
         admin_name = #{adminName},
         description = #{description},
         members = #{members}
+        club_state = #{clubState}
         where club_id = #{clubId}
     </update>
 
-    <update id="updateLikeNumber" parameterType="int">
+    <update id="delete" parameterType="int">
+        update club_info set
+        club_state = 0
+        where club_id = #{id}
+    </update>
+
+    <update id="updateLikeClick" parameterType="int">
         update club_info set
         like_number = like_number + 1
-        where club_id = #{clubId}
+        where club_id = #{id}
     </update>
 
     <select id="loadAll" resultMap="clubResult" useCache="false">
-        select * from club_info limit #{arg0},#{arg1}
+        <include refid="info"/>
+        limit #{arg0}, #{arg1}
     </select>
 
     <resultMap id="clubResult" type="Club">
@@ -71,5 +119,6 @@
         <result property="clubView" column="club_view"/>
         <result property="likeNumber" column="like_number"/>
         <result property="members" column="members"/>
+        <result property="clubState" column="club_state"/>
     </resultMap>
 </mapper>

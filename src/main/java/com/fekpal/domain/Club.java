@@ -25,6 +25,16 @@ public class Club extends User {
 
     private int members;
 
+    private int clubState;
+
+    public int getClubState() {
+        return clubState;
+    }
+
+    public void setClubState(int clubState) {
+        this.clubState = clubState;
+    }
+
     public int getClubId() {
         return clubId;
     }
