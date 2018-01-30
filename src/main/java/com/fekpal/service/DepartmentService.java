@@ -1,6 +1,6 @@
 package com.fekpal.service;
 
-import com.fekpal.domain.Department;
+import com.fekpal.domain.pojo.Department;
 
 import java.util.List;
 

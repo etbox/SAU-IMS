@@ -1,7 +1,7 @@
 package com.fekpal.service.impl;
 
 import com.fekpal.dao.AnniversaryAuditDao;
-import com.fekpal.domain.AnniversaryAudit;
+import com.fekpal.domain.pojo.AnniversaryAudit;
 import com.fekpal.service.AnniversaryAuditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

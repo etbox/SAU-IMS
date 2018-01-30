@@ -1,9 +1,9 @@
 package com.fekpal.service.impl;
 
-import com.fekpal.dao.MessageDao;
-import com.fekpal.dao.MessageReleaseDao;
-import com.fekpal.domain.Message;
-import com.fekpal.domain.MessageRelease;
+import com.fekpal.dao.message.MessageDao;
+import com.fekpal.dao.message.MessageReleaseDao;
+import com.fekpal.domain.pojo.Message;
+import com.fekpal.domain.pojo.MessageRelease;
 import com.fekpal.service.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

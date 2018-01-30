@@ -1,4 +1,6 @@
-package com.fekpal.domain;
+package com.fekpal.domain.pojo;
+
+import com.fekpal.domain.BasePOJO;
 
 import java.sql.Timestamp;
 
@@ -27,19 +29,9 @@ public class User extends BasePOJO {
 
     private Timestamp registerTime;
 
-    private String logo;
-
     private int authority;
 
     private int userState;
-
-    public String getLogo() {
-        return logo;
-    }
-
-    public void setLogo(String logo) {
-        this.logo = logo;
-    }
 
     public int getUserId() {
         return userId;

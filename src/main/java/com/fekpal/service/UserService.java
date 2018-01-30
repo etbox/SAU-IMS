@@ -1,9 +1,9 @@
 package com.fekpal.service;
 
-import com.fekpal.domain.Club;
-import com.fekpal.domain.Person;
-import com.fekpal.domain.Sau;
-import com.fekpal.domain.User;
+import com.fekpal.domain.pojo.Club;
+import com.fekpal.domain.pojo.Person;
+import com.fekpal.domain.pojo.Sau;
+import com.fekpal.domain.pojo.User;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ public interface UserService {
      * @param userId int
      * @return User
      */
-    User getUserByUserId(int userId);
+    User getByUserId(int userId);
 
     /**
      * 根据用户名称获得用户
@@ -28,7 +28,7 @@ public interface UserService {
      * @param userName String
      * @return User
      */
-    User getUserByUserName(String userName);
+    User getByUserName(String userName);
 
     /**
      * 根据用户名和密码获得用户
@@ -37,7 +37,7 @@ public interface UserService {
      * @param password String
      * @return User
      */
-    User getUserByUserNameAndPassword(String userName, String password);
+    User getByUserNameAndPwd(String userName, String password);
 
     /**
      * 根据邮箱获得用户
@@ -45,7 +45,7 @@ public interface UserService {
      * @param email String
      * @return User
      */
-    User getUserByEmail(String email);
+    User getByEmail(String email);
 
     /**
      * 添加普通成员
@@ -81,7 +81,7 @@ public interface UserService {
      * @param userName String
      * @return boolean
      */
-    boolean checkSameAccount(String userName);
+    boolean isExitAccount(String userName);
 
     /**
      * 判断是否存在相同的邮箱
@@ -89,7 +89,7 @@ public interface UserService {
      * @param email String
      * @return boolean
      */
-    boolean checkSameEmail(String email);
+    boolean isExitEmail(String email);
 
     /**
      * 获取所有系统用户

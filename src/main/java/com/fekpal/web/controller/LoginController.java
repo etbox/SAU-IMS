@@ -1,7 +1,7 @@
 package com.fekpal.web.controller;
 
 import com.fekpal.cons.SystemRole;
-import com.fekpal.domain.User;
+import com.fekpal.domain.pojo.User;
 import com.fekpal.domain.json.UserLogin;
 import com.fekpal.service.UserService;
 import com.fekpal.tool.JsonObject;
@@ -74,12 +74,12 @@ public class LoginController {
 
 
         //如果得到的用户为空的话，表示找不到该用户
-        if (!userService.checkSameAccount(userName)) {
+        if (!userService.isExitAccount(userName)) {
             returnData.setStateCode(1, "该用户找不到，请重新输入");
             return returnData.getMap();
         }
 
-        User user = userService.getUserByUserNameAndPassword(userName, MD5Tool.md5(userLogin.getPassword()));
+        User user = userService.getByUserNameAndPwd(userName, MD5Tool.md5(userLogin.getPassword()));
 
         if (user != null) {
 
@@ -87,7 +87,7 @@ public class LoginController {
             session.removeAttribute("code");
 
             //登陆成功,从service中得到用户信息对象
-            user = userService.getUserByUserId(user.getUserId());
+            user = userService.getByUserId(user.getUserId());
 
             //把用户信息放到一个map集合中去，然后返回
             Map<String, Object> userMap = new LinkedHashMap<>();

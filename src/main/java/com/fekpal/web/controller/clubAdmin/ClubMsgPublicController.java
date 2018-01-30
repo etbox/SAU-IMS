@@ -2,8 +2,11 @@ package com.fekpal.web.controller.clubAdmin;
 
 import com.fekpal.cons.MessageType;
 import com.fekpal.cons.AvailableState;
-import com.fekpal.domain.*;
 import com.fekpal.domain.json.ClubPublishedNewMsg;
+import com.fekpal.domain.pojo.Club;
+import com.fekpal.domain.pojo.Message;
+import com.fekpal.domain.pojo.Person;
+import com.fekpal.domain.pojo.User;
 import com.fekpal.service.*;
 import com.fekpal.tool.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;

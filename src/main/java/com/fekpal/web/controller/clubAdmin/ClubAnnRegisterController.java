@@ -1,7 +1,7 @@
 package com.fekpal.web.controller.clubAdmin;
 
 import com.fekpal.cons.ResponseCode;
-import com.fekpal.domain.User;
+import com.fekpal.domain.pojo.User;
 import com.fekpal.service.AnniversaryAuditService;
 import com.fekpal.tool.JsonObject;
 import com.fekpal.tool.FileUploadTool;

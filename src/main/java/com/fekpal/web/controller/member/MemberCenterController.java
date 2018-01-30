@@ -1,8 +1,8 @@
 package com.fekpal.web.controller.member;
 
-import com.fekpal.domain.ClubMember;
-import com.fekpal.domain.Person;
-import com.fekpal.domain.User;
+import com.fekpal.domain.pojo.ClubMember;
+import com.fekpal.domain.pojo.Person;
+import com.fekpal.domain.pojo.User;
 import com.fekpal.service.ClubMemberService;
 import com.fekpal.service.PersonService;
 import com.fekpal.tool.JsonObject;

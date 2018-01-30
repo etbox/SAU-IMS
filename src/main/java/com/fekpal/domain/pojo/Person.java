@@ -1,4 +1,4 @@
-package com.fekpal.domain;
+package com.fekpal.domain.pojo;
 
 import java.sql.Timestamp;
 
@@ -28,6 +28,16 @@ public class Person extends User {
     private String studentId;
 
     private int personState;
+
+    private String logo;
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
 
     public String getNickname() {
         return nickname;

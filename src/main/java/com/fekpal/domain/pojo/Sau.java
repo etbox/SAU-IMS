@@ -1,11 +1,13 @@
-package com.fekpal.domain;
+package com.fekpal.domain.pojo;
+
+import com.fekpal.domain.BasePOJO;
 
 import java.sql.Timestamp;
 
 /**
  * 校社联用户实体类
  */
-public class Sau extends User {
+public class Sau extends BasePOJO {
 
     private int sauId;
 
@@ -20,6 +22,16 @@ public class Sau extends User {
     private int members;
 
     private int sauState;
+
+    private String logo;
+
+    public String getLogo() {
+        return logo;
+    }
+
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
 
     public int getSauState() {
         return sauState;

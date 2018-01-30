@@ -1,7 +1,7 @@
 package com.fekpal.dao;
 
-import com.fekpal.domain.ClubMember;
-import com.fekpal.domain.Person;
+import com.fekpal.domain.pojo.ClubMember;
+import com.fekpal.domain.pojo.Person;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

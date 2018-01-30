@@ -1,6 +1,6 @@
-package com.fekpal.dao;
+package com.fekpal.dao.message;
 
-import com.fekpal.domain.MessageRelease;
+import com.fekpal.domain.pojo.MessageRelease;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

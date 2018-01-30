@@ -2,10 +2,10 @@ package test.dao;
 
 import com.fekpal.cons.MessageType;
 import com.fekpal.cons.AvailableState;
-import com.fekpal.dao.MessageDao;
-import com.fekpal.dao.MessageReleaseDao;
+import com.fekpal.dao.message.MessageDao;
+import com.fekpal.dao.message.MessageReleaseDao;
 import com.fekpal.dao.user.UserDao;
-import com.fekpal.domain.MessageRelease;
+import com.fekpal.domain.pojo.MessageRelease;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,8 +32,8 @@ public class MessageReleaseDaoTest extends BaseDaoTest {
 
     @Before
     public void init() {
-        userDao.add(user);
-        userDao.add(anUser);
+        userDao.insert(user);
+        userDao.insert(anUser);
 
         message.setUserId(anUser.getUserId());
         message1.setUserId(anUser.getUserId());

@@ -3,8 +3,8 @@ package test.dao;
 import com.fekpal.dao.user.ClubDao;
 import com.fekpal.dao.ClubMemberDao;
 import com.fekpal.dao.user.PersonDao;
-import com.fekpal.domain.ClubMember;
-import com.fekpal.domain.Person;
+import com.fekpal.domain.pojo.ClubMember;
+import com.fekpal.domain.pojo.Person;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -32,8 +32,8 @@ public class ClubMemberDaoTest extends BaseDaoTest {
 
     @Before
     public void init() {
-        personDao.add(person);
-        clubDao.add(club);
+        personDao.insert(person);
+        clubDao.insert(club);
         clubMember.setClub(club);
         clubMember.setPerson(person);
         clubMemberDao.addClubMember(clubMember);

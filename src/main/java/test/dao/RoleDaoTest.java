@@ -1,9 +1,9 @@
 package test.dao;
 
 import com.fekpal.dao.RoleDao;
-import com.fekpal.domain.Authority;
-import com.fekpal.domain.Resource;
-import com.fekpal.domain.Role;
+import com.fekpal.domain.pojo.Authority;
+import com.fekpal.domain.pojo.Resource;
+import com.fekpal.domain.pojo.Role;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

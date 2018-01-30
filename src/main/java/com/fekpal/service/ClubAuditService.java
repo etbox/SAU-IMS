@@ -1,6 +1,6 @@
 package com.fekpal.service;
 
-import com.fekpal.domain.ClubAudit;
+import com.fekpal.domain.pojo.ClubAudit;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package com.fekpal.web.controller;
 
 import com.fekpal.cons.ResponseCode;
-import com.fekpal.domain.User;
+import com.fekpal.domain.pojo.User;
 import com.fekpal.service.UserService;
 import com.fekpal.tool.*;
 import com.fekpal.tool.captcha.Captcha;
@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
@@ -55,7 +54,7 @@ public class SecurityController {
             return returnData.getMap();
         }
 
-        if (!userService.checkSameEmail(email)) {
+        if (!userService.isExitEmail(email)) {
             returnData.setStateCode(1, "邮箱不存在");
             return returnData.getMap();
         }
@@ -113,7 +112,7 @@ public class SecurityController {
                 //获取邮箱
                 String email = session.getAttribute("email").toString();
                 //获取用户原信息并修改密码，更新数据库
-                User user = userService.getUserByEmail(email);
+                User user = userService.getByEmail(email);
                 user.setPassword(newPassword);
                 userService.updateUserInfo(user);
                 session.setAttribute("userCode", user);

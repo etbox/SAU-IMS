@@ -1,8 +1,8 @@
 package com.fekpal.service.impl;
 
 import com.fekpal.dao.ClubMemberDao;
-import com.fekpal.domain.ClubMember;
-import com.fekpal.domain.Person;
+import com.fekpal.domain.pojo.ClubMember;
+import com.fekpal.domain.pojo.Person;
 import com.fekpal.service.ClubMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

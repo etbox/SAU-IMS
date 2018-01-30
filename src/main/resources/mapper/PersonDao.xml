@@ -6,50 +6,36 @@
 <mapper namespace="com.fekpal.dao.user.PersonDao">
     <cache/>
 
-    <sql id="allInfo">
-        select * from person_info pi
-        inner join user_info u on pi.user_id = u.user_id
-    </sql>
-
-    <sql id="info">
+    <select id="selectByPrimaryKey" parameterType="int" resultMap="result">
         select * from person_info
-    </sql>
-
-    <select id="get" parameterType="int" resultMap="personResult">
-        <include refid="allInfo"/>
         where person_id = #{id}
     </select>
 
-    <select id="getByUserId" parameterType="int" resultMap="personResult">
-        <include refid="allInfo"/>
-        where user_id = #{id}
+    <select id="selectFirstByExample" resultMap="result">
+        select * from person_info
+        <where>
+            ${ex.sqlSegment}
+        </where>
+        limit 1
     </select>
 
-    <select id="getInfo" parameterType="int" resultMap="personResult">
-        <include refid="info"/>
-        where person_id = #{id}
+    <select id="selectByExample" resultMap="result">
+        select * from person_info
+        <where>
+            ${ex.sqlSegment}
+            and person_id >= #{offset}
+        </where>
+        limit #{limit}
     </select>
 
-    <select id="getInfoByUserId" parameterType="int" resultMap="personResult">
-        <include refid="info"/>
-        where user_id = #{id}
-    </select>
-
-    <select id="getByNickName" parameterType="String" resultMap="personResult">
-        <include refid="info"/>
-        where nickname = #{nickname}
-    </select>
-
-    <sql id="exit">
+    <select id="countByExample" resultType="int">
         select count(*) from person_info
-    </sql>
-
-    <select id="isExit" parameterType="String" resultType="boolean">
-        <include refid="exit"/>
-        where nickname = #{nickname}
+        <where>
+            ${ex.sqlSegment}
+        </where>
     </select>
 
-    <insert id="add" parameterType="Person" useGeneratedKeys="true" keyProperty="personId" keyColumn="person_id">
+    <insert id="insert" parameterType="Person" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
         insert into person_info (
         user_id, real_name,
         nickname, gender,
@@ -66,7 +52,12 @@
         #{logo}, #{personState})
     </insert>
 
-    <update id="update" parameterType="Person">
+    <insert id="insertRecords" parameterType="List" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+        <foreach collection="records" item="item" separator=",">
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="Person">
         update person_info set
         real_name = #{realName},
         nickname = #{nickname},
@@ -77,33 +68,129 @@
         department = #{department},
         major = #{major},
         student_id = #{studentId},
-        person_logo = #{logo}
+        person_logo = #{logo},
+        person_state = #{personState}
         where person_id = #{personId}
     </update>
 
-    <update id="delete" parameterType="int">
+    <update id="updateByPrimaryKeySelective" parameterType="Person">
+        update person_info set
+        <set>
+            <if test="realName != null">
+                real_name = #{realName},
+            </if>
+            <if test="nickname != null">
+                nickname = #{nickname},
+            </if>
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
+            <if test="birthday != null">
+                birthday = #{birthday},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="address != null">
+                address = #{address},
+            </if>
+            <if test="department != null">
+                department = #{department},
+            </if>
+            <if test="major != null">
+                major = #{major},
+            </if>
+            <if test="studentId != null">
+                student_id = #{studentId},
+            </if>
+            <if test="logo != null">
+                person_logo = #{logo},
+            </if>
+            <if test="personState != null">
+                person_state = #{personState},
+            </if>
+        </set>
+        where person_id = #{personId}
+    </update>
+
+    <update id="updateByExample">
+        update person_info set
+        real_name = #{obj.realName},
+        nickname = #{obj.nickname},
+        gender = #{obj.gender},
+        birthday = #{obj.birthday},
+        description = #{obj.description},
+        address = #{obj.address},
+        department = #{obj.department},
+        major = #{obj.major},
+        student_id = #{obj.studentId},
+        person_logo = #{obj.logo},
+        person_state = #{obj.personState}
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </update>
+
+    <update id="updateByExampleSelective">
+        update person_info set
+        <set>
+            <if test="realName != null">
+                real_name = #{obj.realName},
+            </if>
+            <if test="nickname != null">
+                nickname = #{obj.nickname},
+            </if>
+            <if test="gender != null">
+                gender = #{obj.gender},
+            </if>
+            <if test="birthday != null">
+                birthday = #{obj.birthday},
+            </if>
+            <if test="description != null">
+                description = #{obj.description},
+            </if>
+            <if test="address != null">
+                address = #{obj.address},
+            </if>
+            <if test="department != null">
+                department = #{obj.department},
+            </if>
+            <if test="major != null">
+                major = #{obj.major},
+            </if>
+            <if test="studentId != null">
+                student_id = #{obj.studentId},
+            </if>
+            <if test="logo != null">
+                person_logo = #{obj.logo},
+            </if>
+            <if test="personState != null">
+                person_state = #{obj.personState},
+            </if>
+        </set>
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </update>
+
+    <update id="deleteByPrimaryKey" parameterType="int">
         update person_info set
         person_state = 0
         where person_id = #{id}
     </update>
 
-    <select id="loadAll" resultMap="personResult">
-        <include refid="info"/>
-        limit #{arg0}, #{arg1}
-    </select>
+    <update id="deleteByExample">
+        update person_info set
+        person_state = 0
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </update>
 
-    <resultMap id="personResult" type="Person">
+    <resultMap id="result" type="Person">
         <id property="personId" column="person_id"/>
         <result property="userId" column="user_id"/>
-        <result property="userName" column="user_name"/>
-        <result property="loginIp" column="login_ip"/>
-        <result property="loginTime" column="login_time"/>
-        <result property="userKey" column="user_key"/>
-        <result property="registerIp" column="register_ip"/>
-        <result property="registerTime" column="register_time"/>
-        <result property="userState" column="user_state"/>
         <result property="realName" column="real_name"/>
-        <result property="studentId" column="student_id"/>
         <result property="logo" column="person_logo"/>
         <result property="gender" column="gender"/>
         <result property="nickname" column="nickname"/>
@@ -112,6 +199,7 @@
         <result property="description" column="description"/>
         <result property="department" column="department"/>
         <result property="major" column="major"/>
+        <result property="studentId" column="student_id"/>
         <result property="personState" column="person_state"/>
     </resultMap>
 </mapper>

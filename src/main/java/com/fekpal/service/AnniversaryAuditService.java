@@ -1,6 +1,6 @@
 package com.fekpal.service;
 
-import com.fekpal.domain.AnniversaryAudit;
+import com.fekpal.domain.pojo.AnniversaryAudit;
 
 import java.util.List;
 

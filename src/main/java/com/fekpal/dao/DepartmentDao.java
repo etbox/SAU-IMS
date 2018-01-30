@@ -1,6 +1,6 @@
 package com.fekpal.dao;
 
-import com.fekpal.domain.Department;
+import com.fekpal.domain.pojo.Department;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

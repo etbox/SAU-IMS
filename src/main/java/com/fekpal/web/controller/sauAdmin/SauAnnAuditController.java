@@ -2,8 +2,8 @@ package com.fekpal.web.controller.sauAdmin;
 
 import com.fekpal.cons.ResponseCode;
 import com.fekpal.cons.WebPath;
-import com.fekpal.domain.AnniversaryAudit;
-import com.fekpal.domain.User;
+import com.fekpal.domain.pojo.AnniversaryAudit;
+import com.fekpal.domain.pojo.User;
 import com.fekpal.service.AnniversaryAuditService;
 import com.fekpal.service.ClubService;
 import com.fekpal.service.SauService;

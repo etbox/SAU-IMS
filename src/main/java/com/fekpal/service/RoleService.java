@@ -1,6 +1,6 @@
 package com.fekpal.service;
 
-import com.fekpal.domain.Role;
+import com.fekpal.domain.pojo.Role;
 
 import java.util.List;
 

@@ -2,9 +2,9 @@ package com.fekpal.web.controller;
 
 import com.fekpal.cons.AvailableState;
 import com.fekpal.cons.SystemRole;
-import com.fekpal.domain.Club;
-import com.fekpal.domain.ClubAudit;
-import com.fekpal.domain.Person;
+import com.fekpal.domain.pojo.Club;
+import com.fekpal.domain.pojo.ClubAudit;
+import com.fekpal.domain.pojo.Person;
 import com.fekpal.domain.json.PersonRegisterMsg;
 import com.fekpal.service.ClubAuditService;
 import com.fekpal.service.UserService;
@@ -54,7 +54,7 @@ public class RegisterController {
     public Map<String, Object> sendEmailCaptcha(HttpSession session, @RequestParam(value = "email") String email) {
 
         //链接数据库判断邮箱是否已经存在
-        if (userService.checkSameEmail(email)) {
+        if (userService.isExitEmail(email)) {
             returnData.setStateCode(1, "邮箱已被绑定，请重新输入");
             return returnData.getMap();
         }
@@ -138,7 +138,7 @@ public class RegisterController {
                 session.invalidate();
 
                 //检验用户名是否重复
-                if (userService.checkSameAccount(userName)) {
+                if (userService.isExitAccount(userName)) {
                     returnData.setStateCode(1, "用户名已存在");
                     return returnData.getMap();
                 }
@@ -222,7 +222,7 @@ public class RegisterController {
                 session.invalidate();
 
                 //检验用户名是否重复
-                if (userService.checkSameEmail(personRegisterMsg.getUserName())) {
+                if (userService.isExitEmail(personRegisterMsg.getUserName())) {
                     returnData.setStateCode(1, "邮箱已存在");
                     return returnData.getMap();
                 }

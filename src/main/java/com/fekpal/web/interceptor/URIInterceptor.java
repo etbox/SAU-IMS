@@ -1,6 +1,6 @@
 package com.fekpal.web.interceptor;
 
-import com.fekpal.domain.User;
+import com.fekpal.domain.pojo.User;
 import com.fekpal.tool.authority.RoleManager;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;

@@ -1,9 +1,9 @@
 package com.fekpal.web.controller.clubAdmin;
 
 import com.fekpal.cons.ResponseCode;
-import com.fekpal.domain.Club;
-import com.fekpal.domain.ClubMember;
-import com.fekpal.domain.User;
+import com.fekpal.domain.pojo.Club;
+import com.fekpal.domain.pojo.ClubMember;
+import com.fekpal.domain.pojo.User;
 import com.fekpal.service.ClubMemberService;
 import com.fekpal.service.ClubService;
 import com.fekpal.tool.JsonObject;

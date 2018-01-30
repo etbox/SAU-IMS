@@ -1,7 +1,7 @@
 package com.fekpal.service.impl;
 
 import com.fekpal.dao.user.SauDao;
-import com.fekpal.domain.Sau;
+import com.fekpal.domain.pojo.Sau;
 import com.fekpal.service.SauService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,22 +20,22 @@ public class SauServiceImpl implements SauService {
 
     @Override
     public Sau getSauByUserId(int userId) {
-        return sauDao.getSauByUserId(userId);
+        return sauDao.selectByPrimaryKey(userId);
     }
 
     @Override
     public Sau getSauBySauId(int sauId) {
-        return sauDao.getSauBySauId(sauId);
+        return sauDao.selectByPrimaryKey(sauId);
     }
 
     @Override
     public void updateSauInfo(Sau sau) {
-        sauDao.update(sau);
+        sauDao.updateByPrimaryKey(sau);
     }
 
     @Override
     public List<Sau> loadAllSau() {
-        return sauDao.loadAll(0,50);
+        return null;
     }
 
     @Override

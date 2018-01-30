@@ -1,7 +1,6 @@
 package com.fekpal.dao;
 
-import com.fekpal.domain.AnniversaryAudit;
-import com.fekpal.domain.Club;
+import com.fekpal.domain.pojo.AnniversaryAudit;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

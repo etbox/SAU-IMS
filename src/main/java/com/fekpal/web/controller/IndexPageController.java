@@ -1,6 +1,6 @@
 package com.fekpal.web.controller;
 
-import com.fekpal.domain.Club;
+import com.fekpal.domain.pojo.Club;
 import com.fekpal.domain.json.ClubDetail;
 import com.fekpal.domain.json.ClubListMsg;
 import com.fekpal.service.ClubService;

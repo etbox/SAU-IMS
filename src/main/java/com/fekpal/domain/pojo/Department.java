@@ -1,5 +1,7 @@
-package com.fekpal.domain;
+package com.fekpal.domain.pojo;
 
+
+import com.fekpal.domain.BasePOJO;
 
 import java.util.List;
 

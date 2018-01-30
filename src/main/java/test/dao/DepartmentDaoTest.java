@@ -1,8 +1,8 @@
 package test.dao;
 
 import com.fekpal.dao.DepartmentDao;
-import com.fekpal.domain.Department;
-import com.fekpal.domain.Major;
+import com.fekpal.domain.pojo.Department;
+import com.fekpal.domain.pojo.Major;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

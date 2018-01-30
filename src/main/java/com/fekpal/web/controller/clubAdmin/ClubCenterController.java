@@ -1,7 +1,7 @@
 package com.fekpal.web.controller.clubAdmin;
 
-import com.fekpal.domain.Club;
-import com.fekpal.domain.User;
+import com.fekpal.domain.pojo.Club;
+import com.fekpal.domain.pojo.User;
 import com.fekpal.service.ClubService;
 import com.fekpal.tool.*;
 import org.springframework.beans.factory.annotation.Autowired;

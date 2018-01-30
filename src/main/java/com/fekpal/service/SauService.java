@@ -1,6 +1,6 @@
 package com.fekpal.service;
 
-import com.fekpal.domain.Sau;
+import com.fekpal.domain.pojo.Sau;
 
 import java.util.List;
 

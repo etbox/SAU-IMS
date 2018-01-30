@@ -1,7 +1,7 @@
 package com.fekpal.service.impl;
 
 import com.fekpal.dao.ClubAuditDao;
-import com.fekpal.domain.ClubAudit;
+import com.fekpal.domain.pojo.ClubAudit;
 import com.fekpal.service.ClubAuditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

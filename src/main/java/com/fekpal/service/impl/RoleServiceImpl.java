@@ -1,7 +1,7 @@
 package com.fekpal.service.impl;
 
 import com.fekpal.dao.RoleDao;
-import com.fekpal.domain.Role;
+import com.fekpal.domain.pojo.Role;
 import com.fekpal.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

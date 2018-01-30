@@ -1,6 +1,6 @@
 package com.fekpal.service;
 
-import com.fekpal.domain.Person;
+import com.fekpal.domain.pojo.Person;
 
 import java.util.List;
 

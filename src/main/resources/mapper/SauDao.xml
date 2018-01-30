@@ -6,52 +6,54 @@
 <mapper namespace="com.fekpal.dao.user.SauDao">
     <cache/>
 
-    <sql id="allInfo">
-        select *
-        from sau_info si
-        inner join user u on si.user_id = u.user_id
-    </sql>
-
-    <sql id="info">
+    <select id="selectByPrimaryKey" parameterType="int" resultMap="result">
         select * from sau_info
-    </sql>
-
-    <select id="get" parameterType="int" resultMap="sauResult">
-        <include refid="allInfo"/>
         where sau_id = #{id}
     </select>
 
-    <select id="getByUserId" parameterType="User" resultMap="sauResult">
-        <include refid="allInfo"/>
-        where user_id = #{id}
+    <select id="selectFirstByExample" resultMap="result">
+        select * from sau_info
+        <where>
+            ${ex.sqlSegment}
+        </where>
+        limit 1
     </select>
 
-    <select id="getInfo" parameterType="int" resultMap="sauResult">
-        <include refid="info"/>
-        where sau_id = #{id}
+    <select id="selectByExample" resultMap="result">
+        select * from sau_info
+        <where>
+            ${ex.sqlSegment}
+            and sau_id >= #{offset}
+        </where>
+        limit #{limit}
     </select>
 
-    <select id="getInfoByUserId" parameterType="int" resultMap="sauResult">
-        <include refid="info"/>
-        where user_id = #{id}
+    <select id="countByExample" resultType="int">
+        select count(*) from sau_info
+        <where>
+            ${ex.sqlSegment}
+        </where>
     </select>
 
-    <insert id="add" parameterType="Sau" useGeneratedKeys="true" keyProperty="sauId" keyColumn="sau_id">
+    <insert id="insert" parameterType="Sau" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
         insert into sau_info (
-        sau_id, user_id,
-        sau_name, found_time,
-        description, admin_name,
-        sau_logo, members,
-        sau_state)
+        user_id, sau_name,
+        found_time, description,
+        admin_name, sau_logo,
+        members, sau_state)
         values (
-        #{sauId}, #{userId}
-        #{sauName}, #{foundTime}
-        #{description}, #{adminName}
-        #{logo}, #{members}
-        #{sauState})
+        #{userId}, #{sauName},
+        #{foundTime}, #{description},
+        #{adminName}, #{logo},
+        #{members}, #{sauState})
     </insert>
 
-    <update id="update" parameterType="Sau">
+    <insert id="insertRecords" parameterType="List" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+        <foreach collection="records" item="item" separator=",">
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="Sau">
         update sau_info set
         sau_name = #{sauName},
         admin_name = #{adminName},
@@ -59,31 +61,99 @@
         sau_logo = #{logo},
         description = #{description},
         members = #{members}
-        sau_state = #{sau_state}
+        sau_state = #{sauState}
         where sau_id = #{sauId}
     </update>
 
-    <update id="delete" parameterType="int">
+    <update id="updateByPrimaryKeySelective" parameterType="Sau">
+        update sau_info set
+        <set>
+            <if test="sauName != null">
+                sau_name = #{sauName},
+            </if>
+            <if test="adminName != null">
+                admin_name = #{adminName},
+            </if>
+            <if test="foundTime != null">
+                found_time=#{foundTime},
+            </if>
+            <if test="logo != null">
+                sau_logo = #{logo},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="members != null">
+                members = #{members},
+            </if>
+            <if test="sauState != null">
+                sau_state = #{sauState},
+            </if>
+        </set>
+        where sau_id = #{sauId}
+    </update>
+
+    <update id="updateByExample">
+        update sau_info set
+        sau_name = #{obj.sauName},
+        admin_name = #{obj.adminName},
+        found_time = #{obj.foundTime},
+        sau_logo = #{obj.logo},
+        description = #{obj.description},
+        members = #{obj.members}
+        sau_state = #{obj.sauState}
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </update>
+
+    <update id="updateByExampleSelective">
+        update sau_info set
+        <set>
+            <if test="sauName != null">
+                sau_name = #{obj.sauName},
+            </if>
+            <if test="adminName != null">
+                admin_name = #{obj.adminName},
+            </if>
+            <if test="foundTime != null">
+                found_time=#{obj.foundTime},
+            </if>
+            <if test="logo != null">
+                sau_logo = #{obj.logo},
+            </if>
+            <if test="description != null">
+                description = #{obj.description},
+            </if>
+            <if test="members != null">
+                members = #{obj.members},
+            </if>
+            <if test="sauState != null">
+                sau_state = #{obj.sauState},
+            </if>
+        </set>
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </update>
+
+    <update id="deleteByPrimaryKey" parameterType="int">
         update sau_info set
         sau_state = 0
         where sau_id = #{id}
     </update>
 
-    <select id="loadAll" resultMap="sauResult">
-        <include refid="info"/>
-        limit #{arg0}, #{arg1}
-    </select>
+    <update id="deleteByExample">
+        update sau_info set
+        sau_state = 0
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </update>
 
-    <resultMap id="sauResult" type="Sau">
+    <resultMap id="result" type="Sau">
         <id property="sauId" column="sau_id"/>
         <result property="userId" column="user_id"/>
-        <result property="userName" column="user_name"/>
-        <result property="loginIp" column="login_ip"/>
-        <result property="loginTime" column="login_time"/>
-        <result property="userKey" column="user_key"/>
-        <result property="registerIp" column="register_ip"/>
-        <result property="registerTime" column="register_time"/>
-        <result property="userState" column="user_state"/>
         <result property="sauName" column="sau_name"/>
         <result property="foundTime" column="found_time"/>
         <result property="adminName" column="admin_name"/>

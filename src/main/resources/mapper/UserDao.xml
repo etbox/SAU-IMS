@@ -6,36 +6,36 @@
 <mapper namespace="com.fekpal.dao.user.UserDao">
     <cache/>
 
-    <sql id="info">
+    <select id="selectByPrimaryKey" parameterType="int" resultMap="result">
         select * from user
-    </sql>
-
-    <select id="get" parameterType="int" resultMap="userResult">
-        <include refid="info"/>
         where user_id = #{id}
     </select>
 
-    <select id="getByUserName" parameterType="String" resultMap="userResult">
-        <include refid="info"/>
-        where user_name = #{userName}
+    <select id="selectFirstByExample" resultMap="result">
+        select * from user
+        <where>
+            ${ex.sqlSegment}
+        </where>
+        limit 1
     </select>
 
-    <select id="getByIdentity" resultMap="userResult">
-        <include refid="info"/>
-        where user_name = #{arg0} and password = #{arg1}
+    <select id="selectByExample" resultMap="result">
+        select * from user
+        <where>
+            ${ex.sqlSegment}
+            and user_id >= #{offset}
+        </where>
+        limit #{limit}
     </select>
 
-    <select id="getByEmail" parameterType="String" resultMap="userResult">
-        <include refid="info"/>
-        where email = #{email}
+    <select id="countByExample" resultType="int">
+        select count(*) from user
+        <where>
+            ${ex.sqlSegment}
+        </where>
     </select>
 
-    <select id="getByPhone" parameterType="String" resultMap="userResult">
-        <include refid="info"/>
-        where phone = #{phone}
-    </select>
-
-    <insert id="add" parameterType="User" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+    <insert id="insert" parameterType="User" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
         insert into user(
         user_name, password,
         email, phone,
@@ -52,7 +52,12 @@
         #{userState})
     </insert>
 
-    <update id="update" parameterType="User">
+    <insert id="insertRecords" parameterType="List" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+        <foreach collection="records" item="item" separator=",">
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="User">
         update user set
         password = #{password},
         email = #{email},
@@ -63,37 +68,86 @@
         where user_id = #{userId}
     </update>
 
-    <update id="delete" parameterType="int">
+    <update id="updateByPrimaryKeySelective" parameterType="User">
+        update user set
+        <set>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="email != null">
+                email = #{email},
+            </if>
+            <if test="phone != null">
+                phone = #{phone},
+            </if>
+            <if test="loginIp != null">
+                login_ip = #{loginIp},
+            </if>
+            <if test="loginTime != null">
+                login_time = #{loginTime},
+            </if>
+            <if test="userState != null">
+                user_state = #{userState},
+            </if>
+        </set>
+        where user_id = #{userId}
+    </update>
+
+    <update id="updateByExample">
+        update user set
+        password = #{obj.password},
+        email = #{obj.email},
+        phone = #{obj.phone},
+        login_ip = #{obj.loginIp},
+        login_time = #{obj.loginTime},
+        user_state = #{obj.userState}
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </update>
+
+    <update id="updateByExampleSelective">
+        update user set
+        <set>
+            <if test="password != null">
+                password = #{obj.password},
+            </if>
+            <if test="email != null">
+                email = #{obj.email},
+            </if>
+            <if test="phone != null">
+                phone = #{obj.phone},
+            </if>
+            <if test="loginIp != null">
+                login_ip = #{obj.loginIp},
+            </if>
+            <if test="loginTime != null">
+                login_time = #{obj.loginTime},
+            </if>
+            <if test="userState != null">
+                user_state = #{obj.userState},
+            </if>
+        </set>
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </update>
+
+    <update id="deleteByPrimaryKey" parameterType="int">
         update user set
         user_state = 0
         where user_id = #{id}
     </update>
 
-    <sql id="exit">
-        select count(*) from user
-    </sql>
+    <update id="deleteByExample">
+        update user set
+        user_state = 0
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </update>
 
-    <select id="isExit" parameterType="String" resultType="boolean" useCache="false">
-        <include refid="exit"/>
-        where user_name = #{userName}
-    </select>
-
-    <select id="exitEmail" parameterType="String" resultType="boolean" useCache="false">
-        <include refid="exit"/>
-        where email = #{email}
-    </select>
-
-    <select id="exitPhone" parameterType="String" resultType="boolean" useCache="false">
-        <include refid="exit"/>
-        where phone = #{phone}
-    </select>
-
-    <select id="loadAll" resultMap="userResult">
-        <include refid="info"/>
-        limit #{arg0}, #{arg1}
-    </select>
-
-    <resultMap id="userResult" type="User">
+    <resultMap id="result" type="User">
         <id property="userId" column="user_id"/>
         <result property="userName" column="user_name"/>
         <result property="loginIp" column="login_ip"/>

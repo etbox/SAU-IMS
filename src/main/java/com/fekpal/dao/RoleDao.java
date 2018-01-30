@@ -1,6 +1,6 @@
 package com.fekpal.dao;
 
-import com.fekpal.domain.Role;
+import com.fekpal.domain.pojo.Role;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

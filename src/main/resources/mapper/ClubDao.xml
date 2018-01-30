@@ -6,55 +6,36 @@
 <mapper namespace="com.fekpal.dao.user.ClubDao">
     <cache/>
 
-    <sql id="allInfo">
-        select * from club_info ci
-        inner join user u on ci.user_id = u.user_id
-    </sql>
-
-    <sql id="info">
+    <select id="selectByPrimaryKey" parameterType="int" resultMap="result">
         select * from club_info
-    </sql>
-
-    <select id="get" parameterType="int" resultMap="clubResult">
-        <include refid="allInfo"/>
         where club_id = #{id}
     </select>
 
-    <select id="getByUserId" parameterType="int" resultMap="clubResult">
-        <include refid="allInfo"/>
-        where user_id = #{id}
+    <select id="selectFirstByExample" resultMap="result">
+        select * from club_info
+        <where>
+            ${ex.sqlSegment}
+        </where>
+        limit 1
     </select>
 
-    <select id="getInfo" parameterType="int" resultMap="clubResult">
-        <include refid="info"/>
-        where club_id = {id}
+    <select id="selectByExample" resultMap="result">
+        select * from club_info
+        <where>
+            ${ex.sqlSegment}
+            and club_id >= #{offset}
+        </where>
+        limit #{limit}
     </select>
 
-    <select id="getInfoByUserId" parameterType="int" resultMap="clubResult">
-        <include refid="info"/>
-        where user_id = #{id}
-    </select>
-
-    <select id="getByClubName" parameterType="String" resultMap="clubResult">
-        <include refid="info"/>
-        where club_name = #{clubName}
-    </select>
-
-    <select id="findByClubName" resultMap="clubResult">
-        <include refid="info"/>
-        where club_name like concat('%',#{arg0},'%') limit #{arg1},#{arg2}
-    </select>
-
-    <sql id="exit">
+    <select id="countByExample" resultType="int">
         select count(*) from club_info
-    </sql>
-
-    <select id="isExit" parameterType="String" resultType="boolean">
-        <include refid="exit"/>
-        where club_name = #{clubName}
+        <where>
+            ${ex.sqlSegment}
+        </where>
     </select>
 
-    <insert id="add" parameterType="Club" useGeneratedKeys="true" keyProperty="clubId" keyColumn="club_id">
+    <insert id="insert" parameterType="Club" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
         insert into club_info (
         user_id, club_name,
         found_time, decription,
@@ -66,51 +47,141 @@
         #{userId}, #{clubName},
         #{foundTime}, #{description},
         #{adminName}, #{clubType}
-        #{logo}, #{clubView}
-        #{likeNumber}, #{members}
+        #{logo}, #{clubView},
+        #{likeNumber}, #{members},
         #{clubState})
     </insert>
 
-    <update id="update" parameterType="Club">
+    <insert id="insertRecords" parameterType="List" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+        <foreach collection="records" item="item" separator=",">
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="Club">
         update club_info set
         club_name = #{clubName},
-        club_logo = #{logo},
-        club_type = #{clubType},
-        club_view = #{clubView},
-        admin_name = #{adminName},
+        found_time = #{foundTime},
         description = #{description},
-        members = #{members}
+        admin_name = #{adminName},
+        club_type = #{clubType},
+        club_logo = #{logo},
+        club_view = #{clubView},
+        like_number = #{likeNumber},
+        members = #{members},
         club_state = #{clubState}
         where club_id = #{clubId}
     </update>
 
-    <update id="delete" parameterType="int">
+    <update id="updateByPrimaryKeySelective" parameterType="Club">
+        update club_info set
+        <set>
+            <if test="clubName != null">
+                club_name = #{clubName},
+            </if>
+            <if test="foundTime != null">
+                found_time = #{foundTime},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="adminName != null">
+                admin_name = #{adminName},
+            </if>
+            <if test="clubType != null">
+                club_type = #{clubType},
+            </if>
+            <if test="logo != null">
+                club_logo = #{logo},
+            </if>
+            <if test="clubView != null">
+                club_view = #{clubView},
+            </if>
+            <if test="likeNumber != null">
+                like_number = #{likeNumber},
+            </if>
+            <if test="members != null">
+                members = #{members},
+            </if>
+            <if test="clubState != null">
+                club_state = #{clubState},
+            </if>
+        </set>
+        where club_id = #{clubId}
+    </update>
+
+    <update id="updateByExample">
+        update club_info set
+        club_name = #{obj.clubName},
+        found_time = #{obj.foundTime},
+        description = #{obj.description},
+        admin_name = #{obj.adminName},
+        club_type = #{obj.clubType},
+        club_logo = #{obj.logo},
+        club_view = #{obj.clubView},
+        like_number = #{obj.likeNumber},
+        members = #{obj.members},
+        club_state = #{obj.clubState}
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </update>
+
+    <update id="updateByExampleSelective">
+        update club_info set
+        <set>
+            <if test="clubName != null">
+                club_name = #{obj.clubName},
+            </if>
+            <if test="foundTime != null">
+                found_time = #{obj.foundTime},
+            </if>
+            <if test="description != null">
+                description = #{obj.description},
+            </if>
+            <if test="adminName != null">
+                admin_name = #{obj.adminName},
+            </if>
+            <if test="clubType != null">
+                club_type = #{obj.clubType},
+            </if>
+            <if test="logo != null">
+                club_logo = #{obj.logo},
+            </if>
+            <if test="clubView != null">
+                club_view = #{obj.clubView},
+            </if>
+            <if test="likeNumber != null">
+                like_number = #{obj.likeNumber},
+            </if>
+            <if test="members != null">
+                members = #{obj.members},
+            </if>
+            <if test="clubState != null">
+                club_state = #{obj.clubState},
+            </if>
+        </set>
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </update>
+
+    <update id="deleteByPrimaryKey" parameterType="int">
         update club_info set
         club_state = 0
         where club_id = #{id}
     </update>
 
-    <update id="updateLikeClick" parameterType="int">
+    <update id="deleteByExample">
         update club_info set
-        like_number = like_number + 1
-        where club_id = #{id}
+        club_state = 0
+        <where>
+            ${ex.sqlSegment}
+        </where>
     </update>
 
-    <select id="loadAll" resultMap="clubResult" useCache="false">
-        <include refid="info"/>
-        limit #{arg0}, #{arg1}
-    </select>
-
-    <resultMap id="clubResult" type="Club">
+    <resultMap id="result" type="Club">
         <id property="clubId" column="club_id"/>
         <result property="userId" column="user_id"/>
-        <result property="userName" column="user_name"/>
-        <result property="loginIp" column="login_ip"/>
-        <result property="loginTime" column="login_time"/>
-        <result property="userKey" column="user_key"/>
-        <result property="registerIp" column="register_ip"/>
-        <result property="registerTime" column="register_time"/>
-        <result property="userState" column="user_state"/>
         <result property="clubName" column="club_name"/>
         <result property="foundTime" column="found_time"/>
         <result property="adminName" column="admin_name"/>

@@ -2,7 +2,7 @@ package test.dao;
 
 import com.fekpal.cons.MessageType;
 import com.fekpal.cons.SystemRole;
-import com.fekpal.domain.*;
+import com.fekpal.domain.pojo.*;
 
 import java.sql.Timestamp;
 
@@ -49,8 +49,8 @@ public class Domain {
         user.setUserState(1);
 
         anUser.setUserName("小仙女");
-        anUser.setPassword("123456");
-        anUser.setEmail("zjboy@163.com");
+        anUser.setPassword("1236");
+        anUser.setEmail("zy@163.com");
         anUser.setPhone("12345678901");
         anUser.setUserKey("123456");
         anUser.setLoginTime(Timestamp.valueOf("1996-02-01 01:02:01"));

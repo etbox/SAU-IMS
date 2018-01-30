@@ -2,9 +2,9 @@ package com.fekpal.web.controller;
 
 import com.fekpal.cons.AvailableState;
 import com.fekpal.cons.ResponseCode;
-import com.fekpal.domain.Message;
-import com.fekpal.domain.MessageRelease;
-import com.fekpal.domain.User;
+import com.fekpal.domain.pojo.Message;
+import com.fekpal.domain.pojo.MessageRelease;
+import com.fekpal.domain.pojo.User;
 import com.fekpal.domain.json.NewMsgListDomain;
 import com.fekpal.service.MessageService;
 import com.fekpal.tool.JsonObject;

@@ -1,9 +1,9 @@
 package test.dao;
 
 import com.fekpal.cons.AvailableState;
-import com.fekpal.dao.MessageDao;
+import com.fekpal.dao.message.MessageDao;
 import com.fekpal.dao.user.UserDao;
-import com.fekpal.domain.Message;
+import com.fekpal.domain.pojo.Message;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,7 +27,7 @@ public class MessageDaoTest extends BaseDaoTest {
 
     @Before
     public void init() {
-        userDao.add(user);
+        userDao.insert(user);
         message.setUserId(user.getUserId());
         messageDao.addMessage(message);
     }

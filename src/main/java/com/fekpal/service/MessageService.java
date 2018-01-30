@@ -1,7 +1,7 @@
 package com.fekpal.service;
 
-import com.fekpal.domain.Message;
-import com.fekpal.domain.MessageRelease;
+import com.fekpal.domain.pojo.Message;
+import com.fekpal.domain.pojo.MessageRelease;
 
 import java.util.List;
 

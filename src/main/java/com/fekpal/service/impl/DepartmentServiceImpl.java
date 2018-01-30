@@ -1,7 +1,7 @@
 package com.fekpal.service.impl;
 
 import com.fekpal.dao.DepartmentDao;
-import com.fekpal.domain.Department;
+import com.fekpal.domain.pojo.Department;
 import com.fekpal.service.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,6 @@
-package com.fekpal.domain;
+package com.fekpal.domain.pojo;
+
+import com.fekpal.domain.BasePOJO;
 
 public class Major extends BasePOJO {
 

@@ -2,10 +2,10 @@ package com.fekpal.web.controller.member;
 
 import com.fekpal.cons.AvailableState;
 import com.fekpal.cons.ResponseCode;
-import com.fekpal.domain.Club;
-import com.fekpal.domain.ClubMember;
-import com.fekpal.domain.Person;
-import com.fekpal.domain.User;
+import com.fekpal.domain.pojo.Club;
+import com.fekpal.domain.pojo.ClubMember;
+import com.fekpal.domain.pojo.Person;
+import com.fekpal.domain.pojo.User;
 import com.fekpal.domain.json.ClubDetail;
 import com.fekpal.service.ClubMemberService;
 import com.fekpal.service.ClubService;

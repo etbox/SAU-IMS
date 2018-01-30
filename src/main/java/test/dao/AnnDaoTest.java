@@ -3,7 +3,7 @@ package test.dao;
 import com.fekpal.cons.AuditState;
 import com.fekpal.dao.AnniversaryAuditDao;
 import com.fekpal.dao.user.ClubDao;
-import com.fekpal.domain.AnniversaryAudit;
+import com.fekpal.domain.pojo.AnniversaryAudit;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,7 +28,7 @@ public class AnnDaoTest extends BaseDaoTest {
 
     @Before
     public void init() {
-        clubDao.add(club);
+        clubDao.insert(club);
         anniversaryAuditDao.addAnniversaryAudit(anniversaryAudit);
     }
 

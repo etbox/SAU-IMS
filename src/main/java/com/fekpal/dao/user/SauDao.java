@@ -1,6 +1,8 @@
 package com.fekpal.dao.user;
 
-import com.fekpal.domain.Sau;
+import com.fekpal.dao.BaseDao;
+import com.fekpal.domain.ExampleWrapper;
+import com.fekpal.domain.pojo.Sau;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -9,6 +11,6 @@ import org.springframework.stereotype.Repository;
  * 主要用于对校社联用户的增删查改
  */
 @Repository
-public interface SauDao extends BaseUserDao<Sau> {
+public interface SauDao extends BaseDao<Sau, ExampleWrapper<Sau>> {
 
 }

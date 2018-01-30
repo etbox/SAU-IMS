@@ -1,7 +1,6 @@
-package com.fekpal.dao;
+package com.fekpal.dao.message;
 
-import com.fekpal.domain.Message;
-import com.fekpal.domain.User;
+import com.fekpal.domain.pojo.Message;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

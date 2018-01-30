@@ -2,7 +2,7 @@ package com.fekpal.service.impl;
 
 import com.fekpal.dao.LikeClubDao;
 import com.fekpal.dao.user.PersonDao;
-import com.fekpal.domain.Person;
+import com.fekpal.domain.pojo.Person;
 import com.fekpal.service.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,56 +14,8 @@ import java.util.List;
  * PersonService实现类
  */
 @Service
-public class PersonServiceImpl implements PersonService {
+public interface PersonServiceImpl extends PersonService {
 
-    @Autowired
-    private PersonDao personDao;
 
-    @Autowired
-    private LikeClubDao likeClubDao;
 
-    @Override
-    public Person getPersonByPersonId(int personId) {
-        return personDao.getPersonByPersonId(personId);
-    }
-
-    @Override
-    public Person getPersonByNickName(String nickName) {
-        return personDao.getPersonByNickName(nickName);
-    }
-
-    @Override
-    public Person getPersonByUserId(int userId) {
-        return personDao.getPersonByUserId(userId);
-    }
-
-    @Override
-    public boolean checkSameNickName(String nickName) {
-        return personDao.exitNickName(nickName);
-    }
-
-    @Override
-    public void updatePerson(Person person) {
-        personDao.update(person);
-    }
-
-    @Override
-    public void addLikeClub(int personId, int clubId) {
-        likeClubDao.addLikeClub(personId, clubId);
-    }
-
-    @Override
-    public List<Integer> loadAllLikeByPersonId(int personId) {
-        return likeClubDao.loadAllLikeByPersonId(personId);
-    }
-
-    @Override
-    public List<Person> loadAllPerson(int start, int count) {
-        return personDao.loadAll(start, count);
-    }
-
-    @Override
-    public Person getPersonAllInfoByUserId(int userId) {
-        return null;
-    }
 }
