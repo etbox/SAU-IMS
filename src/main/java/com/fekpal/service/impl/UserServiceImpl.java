@@ -21,22 +21,8 @@ import java.util.List;
  * UserService实现类
  */
 @Service
-public class UserServiceImpl  {
+public class UserServiceImpl{
 
-    @Autowired
-    private UserDao userDao;
-
-    @Autowired
-    private PersonDao personDao;
-
-    @Autowired
-    private ClubDao clubDao;
-
-    @Autowired
-    private SauDao sauDao;
-
-    @Autowired
-    private ClubAuditDao clubAuditDao;
 
 
 }

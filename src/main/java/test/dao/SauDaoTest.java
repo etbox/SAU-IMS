@@ -27,36 +27,26 @@ public class SauDaoTest extends BaseDaoTest {
     @Before
     public void init() {
         userDao.insert(user);
-        sau.setUserId(user.getUserId());
         sauDao.insert(sau);
     }
 
     @Test
-    public void testSauDao() {
-        /*
-        sau = sauDao.getSauBySauId(sau.getSauId());
-        Assert.assertNotNull(sau);
-        System.out.println(sau);
-        sau = sauDao.getSauBySauId(0);
-        Assert.assertNull(sau);
+    public void select(){
 
+    }
 
-        sau = sauDao.getSauByUserId(user.getUserId());
-        Assert.assertNotNull(sau);
-        System.out.println(sau);
-        sau = sauDao.getSauByUserId(0);
-        Assert.assertNull(sau);
+    @Test
+    public void update(){
 
-        List<Sau> sauList = sauDao.loadAll(0,50);
-        System.out.println(sauList.size());
-        System.out.println(sauList);
+    }
 
-        sau = sauDao.getSauByUserId(user.getUserId());
-        sau.setMembers(sau.getMembers() + 1);
-        sau.setAdminName("陈彦军");
-        sauDao.update(sau);
-        sau = sauDao.getSauBySauId(sau.getSauId());
-        System.out.println(sau);
-        */
+    @Test
+    public void delete(){
+
+    }
+
+    @Test
+    public void count(){
+
     }
 }

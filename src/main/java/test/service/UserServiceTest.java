@@ -1,9 +1,12 @@
 package test.service;
 
 import com.fekpal.service.UserService;
+import com.fekpal.web.session.HttpSessionLocal;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.servlet.http.HttpSession;
 
 import static test.dao.Domain.person;
 import static test.dao.Domain.user;
@@ -13,12 +16,10 @@ import static test.dao.Domain.user;
  */
 public class UserServiceTest extends BaseServiceTest{
 
-    @Autowired
-    private UserService userService;
 
     @Before
     public void init() {
-        userService.addNewPerson(person);
+
     }
 
     @Test

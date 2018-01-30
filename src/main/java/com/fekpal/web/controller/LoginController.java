@@ -94,7 +94,7 @@ public class LoginController {
             userMap.put("role", SystemRole.ROLE_NAME[user.getAuthority()]);
             userMap.put("userId", user.getUserId());
             userMap.put("userName", user.getUserName());
-            userMap.put("userLogo", user.getLogo());
+            userMap.put("userLogo", null);
             returnData.setData(userMap);
 
             //如果Service校验通过，将用户身份记录到session
