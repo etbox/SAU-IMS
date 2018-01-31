@@ -25,7 +25,6 @@ public class UserDaoTest extends BaseDaoTest {
 
     @Test
     public void select(){
-
     }
 
     @Test

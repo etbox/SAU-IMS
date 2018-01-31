@@ -1,51 +1,40 @@
 package com.fekpal.service;
 
 import com.fekpal.domain.pojo.Sau;
+import com.fekpal.domain.pojo.User;
 
 import java.util.List;
 
 /**
  * Created by APone on 2017/9/5.
  * SauService接口
+ * 该接口主要提功增删查改校社联信息
  */
-public interface SauService {
+public interface SauService extends BaseService<Sau> {
 
     /**
-     * 根据校社联用户id获取校社联信息
+     * 根据校社联用户的用户身份id获取校社联记录信息
      *
-     * @param userId int
-     * @return Sau
+     * @param id int 用户身份id
+     * @return 校社联信息记录
      */
-    Sau getSauByUserId(int userId);
-
+    Sau selectByUserId(int id);
 
     /**
-     * 根据校社联id获取校社联
+     * 插入新的校社联用户信息以及用户身份信息
+     * 只有插入数等于2才成功，其他一律错误
+     * @param user 用户身份信息
+     * @param sau 校社联用户信息
+     * @return 插入数量
+     */
+    int insertInfo(User user, Sau sau);
+
+    /**
+     * 获得所有的校社联记录，分页获取
      *
-     * @param sauId int
-     * @return Sau
+     * @param offset 跳过读数
+     * @param limit  读取数
+     * @return 校社联信息记录集
      */
-    Sau getSauBySauId(int sauId);
-
-
-    /**
-     * 更新校社联信息
-     *
-     * @param sau Sau
-     */
-    void updateSauInfo(Sau sau);
-
-    /**
-     * 获得所有的校社联
-     *
-     * @return List
-     */
-    List<Sau> loadAllSau();
-
-    /**
-     * 根据社团id获得社团所有信息（包括用户层）
-     * @param userId int
-     * @return CLub
-     */
-    Sau getSauAllInfoByUserId(int userId);
+    List<Sau> loadAllSau(int offset, int limit);
 }

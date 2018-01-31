@@ -1,7 +1,9 @@
 package test.service;
 
+import com.fekpal.domain.pojo.User;
 import com.fekpal.service.UserService;
 import com.fekpal.web.session.HttpSessionLocal;
+import com.fekpal.web.session.SessionNullException;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,5 @@ public class UserServiceTest extends BaseServiceTest{
 
     @Test
     public void test() {
-
     }
 }

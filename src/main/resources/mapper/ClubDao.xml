@@ -41,6 +41,7 @@
         found_time, decription,
         admin_name, club_type,
         club_logo, club_view,
+        contact_email, contact_number,
         like_number, members
         club_state)
         values (
@@ -48,6 +49,7 @@
         #{foundTime}, #{description},
         #{adminName}, #{clubType}
         #{logo}, #{clubView},
+        #{contactEmail}, #{contactNumber},
         #{likeNumber}, #{members},
         #{clubState})
     </insert>
@@ -66,6 +68,8 @@
         club_type = #{clubType},
         club_logo = #{logo},
         club_view = #{clubView},
+        contact_email = #{contactEmail},
+        contact_number = #{contactNumber},
         like_number = #{likeNumber},
         members = #{members},
         club_state = #{clubState}
@@ -96,6 +100,12 @@
             <if test="clubView != null">
                 club_view = #{clubView},
             </if>
+            <if test="contactEmail != null">
+                contact_email = #{obj.contactEmail},
+            </if>
+            <if test="contactNumber != null">
+                contact_number = #{obj.contactNumber},
+            </if>
             <if test="likeNumber != null">
                 like_number = #{likeNumber},
             </if>
@@ -118,6 +128,8 @@
         club_type = #{obj.clubType},
         club_logo = #{obj.logo},
         club_view = #{obj.clubView},
+        contact_email = #{obj.contactEmail},
+        contact_number = #{obj.contactNumber},
         like_number = #{obj.likeNumber},
         members = #{obj.members},
         club_state = #{obj.clubState}
@@ -149,6 +161,12 @@
             </if>
             <if test="clubView != null">
                 club_view = #{obj.clubView},
+            </if>
+            <if test="contactEmail != null">
+                contact_email = #{obj.contactEmail},
+            </if>
+            <if test="contactNumber != null">
+                contact_number = #{obj.contactNumber},
             </if>
             <if test="likeNumber != null">
                 like_number = #{obj.likeNumber},
@@ -188,6 +206,8 @@
         <result property="clubType" column="club_type"/>
         <result property="logo" column="club_logo"/>
         <result property="clubView" column="club_view"/>
+        <result property="contactEmail" column="contact_email"/>
+        <result property="contactNumber" column="contact_number"/>
         <result property="likeNumber" column="like_number"/>
         <result property="members" column="members"/>
         <result property="clubState" column="club_state"/>

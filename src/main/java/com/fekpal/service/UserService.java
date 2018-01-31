@@ -1,8 +1,5 @@
 package com.fekpal.service;
 
-import com.fekpal.domain.pojo.Club;
-import com.fekpal.domain.pojo.Person;
-import com.fekpal.domain.pojo.Sau;
 import com.fekpal.domain.pojo.User;
 
 import java.util.List;
@@ -10,17 +7,9 @@ import java.util.List;
 /**
  * Created by APone on 2017/8/25.
  * UserService接口
+ * 该接口主要提功增删查改所有角色的基本身份信息
  */
-public interface UserService {
-
-
-    /**
-     * 根据用户id获得用户
-     *
-     * @param userId int
-     * @return User
-     */
-    User getByUserId(int userId);
+public interface UserService extends BaseService<User>{
 
     /**
      * 根据用户名称获得用户
@@ -28,7 +17,7 @@ public interface UserService {
      * @param userName String
      * @return User
      */
-    User getByUserName(String userName);
+    User selectByUserName(String userName);
 
     /**
      * 根据用户名和密码获得用户
@@ -37,7 +26,7 @@ public interface UserService {
      * @param password String
      * @return User
      */
-    User getByUserNameAndPwd(String userName, String password);
+    User selectByUserNameAndPwd(String userName, String password);
 
     /**
      * 根据邮箱获得用户
@@ -45,35 +34,7 @@ public interface UserService {
      * @param email String
      * @return User
      */
-    User getByEmail(String email);
-
-    /**
-     * 添加普通成员
-     *
-     * @param person Person
-     */
-    void addNewPerson(Person person);
-
-    /**
-     * 添加社团成员
-     *
-     * @param club Club
-     */
-    void addNewClub(Club club);
-
-    /**
-     * 添加校社联成员
-     *
-     * @param sau  Sau
-     */
-    void addNewSau(Sau sau);
-
-    /**
-     * 修改用户认证信息
-     *
-     * @param user User
-     */
-    void updateUserInfo(User user);
+    User selectByEmail(String email);
 
     /**
      * 判断是否存在相同用户名称
@@ -92,8 +53,17 @@ public interface UserService {
     boolean isExitEmail(String email);
 
     /**
+     * 用户身份信息登录
+     * @param userName String 用户名
+     * @param password String 密码
+     * @return 是否登录正确
+     */
+    boolean login(String userName,String password);
+
+    /**
      * 获取所有系统用户
+     *
      * @return List
      */
-    List<User> loadAllUser();
+    List<User> loadAllUser(Integer offset, Integer limit);
 }

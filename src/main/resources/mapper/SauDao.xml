@@ -40,11 +40,13 @@
         user_id, sau_name,
         found_time, description,
         admin_name, sau_logo,
+        contact_email, contact_number,
         members, sau_state)
         values (
         #{userId}, #{sauName},
         #{foundTime}, #{description},
         #{adminName}, #{logo},
+        #{contactEmail}, #{contactNumber},
         #{members}, #{sauState})
     </insert>
 
@@ -59,6 +61,8 @@
         admin_name = #{adminName},
         found_time=#{foundTime},
         sau_logo = #{logo},
+        contact_email = #{contactEmail},
+        contact_number = #{contactNumber},
         description = #{description},
         members = #{members}
         sau_state = #{sauState}
@@ -80,6 +84,12 @@
             <if test="logo != null">
                 sau_logo = #{logo},
             </if>
+            <if test="contactEmail != null">
+                contact_email = #{obj.contactEmail},
+            </if>
+            <if test="contactNumber != null">
+                contact_number = #{obj.contactNumber},
+            </if>
             <if test="description != null">
                 description = #{description},
             </if>
@@ -99,6 +109,8 @@
         admin_name = #{obj.adminName},
         found_time = #{obj.foundTime},
         sau_logo = #{obj.logo},
+        contact_email = #{obj.contactEmail},
+        contact_number = #{obj.contactNumber},
         description = #{obj.description},
         members = #{obj.members}
         sau_state = #{obj.sauState}
@@ -121,6 +133,12 @@
             </if>
             <if test="logo != null">
                 sau_logo = #{obj.logo},
+            </if>
+            <if test="contactEmail != null">
+                contact_email = #{obj.contactEmail},
+            </if>
+            <if test="contactNumber != null">
+                contact_number = #{obj.contactNumber},
             </if>
             <if test="description != null">
                 description = #{obj.description},
@@ -158,6 +176,8 @@
         <result property="foundTime" column="found_time"/>
         <result property="adminName" column="admin_name"/>
         <result property="logo" column="sau_logo"/>
+        <result property="contactEmail" column="contact_email"/>
+        <result property="contactNumber" column="contact_number"/>
         <result property="description" column="description"/>
         <result property="members" column="members"/>
         <result property="sauState" column="sau_state"/>

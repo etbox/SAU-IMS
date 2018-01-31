@@ -29,6 +29,26 @@ public class Club extends User {
 
     private String logo;
 
+    private String contactEmail;
+
+    private String contactNumber;
+
+    public String getContactEmail() {
+        return contactEmail;
+    }
+
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
+    public String getContactNumber() {
+        return contactNumber;
+    }
+
+    public void setContactNumber(String contactNumber) {
+        this.contactNumber = contactNumber;
+    }
+
     public String getLogo() {
         return logo;
     }

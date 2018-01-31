@@ -13,8 +13,7 @@ public class ExampleWrapper<Record> extends EntityWrapper<Record> implements Ser
     //参数别名常量，用于mybatis
     public static final String PARAM_NAME = "ex";
 
-    public ExampleWrapper(Record entity) {
-        super(entity);
+    public ExampleWrapper() {
         super.setParamAlias(PARAM_NAME);
     }
 

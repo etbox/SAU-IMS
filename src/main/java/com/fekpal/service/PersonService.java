@@ -1,22 +1,16 @@
 package com.fekpal.service;
 
 import com.fekpal.domain.pojo.Person;
+import com.fekpal.domain.pojo.User;
 
 import java.util.List;
 
 /**
  * Created by APone on 2017/9/5.
  * PersonService接口
+ * 该接口主要提功增删查改普通信息
  */
-public interface PersonService {
-
-    /**
-     * 根据社团id获得个人
-     *
-     * @param personId int
-     * @return Person
-     */
-    Person getPersonByPersonId(int personId);
+public interface PersonService extends BaseService<Person> {
 
     /**
      * 根据昵称获得个人
@@ -24,15 +18,24 @@ public interface PersonService {
      * @param nickName String
      * @return Person
      */
-    Person getPersonByNickName(String nickName);
+    Person selectByNickName(String nickName);
 
     /**
      * 根据用户id获得个人
      *
-     * @param userId int
+     * @param id int
      * @return Person
      */
-    Person getPersonByUserId(int userId);
+    Person selectByUserId(int id);
+
+    /**
+     * 插入新的普通用户信息以及用户身份信息
+     * 只有插入数等于2才成功，其他一律错误
+     * @param user 用户身份信息
+     * @param person 普通户信息
+     * @return 插入数量
+     */
+    int insertInfo(User user, Person person);
 
     /**
      * 是否有相同的昵称
@@ -40,14 +43,7 @@ public interface PersonService {
      * @param nickName String
      * @return boolean
      */
-    boolean checkSameNickName(String nickName);
-
-    /**
-     * 更新个人
-     *
-     * @param person Person
-     */
-    void updatePerson(Person person);
+    boolean isExitNickName(String nickName);
 
     /**
      * 添加喜爱社团
@@ -60,10 +56,10 @@ public interface PersonService {
     /**
      * 获得所有喜爱的社团id
      *
-     * @param personId int
+     * @param id int
      * @return List
      */
-    List<Integer> loadAllLikeByPersonId(int personId);
+    List<Integer> loadAllLikeByPersonId(int id);
 
     /**
      * 获得所有个人
@@ -73,11 +69,4 @@ public interface PersonService {
      * @return List
      */
     List<Person> loadAllPerson(int start, int count);
-
-    /**
-     * 根据社团id获得社团所有信息（包括用户层）
-     * @param userId int
-     * @return CLub
-     */
-    Person getPersonAllInfoByUserId(int userId);
 }
