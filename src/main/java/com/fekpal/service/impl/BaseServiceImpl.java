@@ -1,6 +1,7 @@
 package com.fekpal.service.impl;
 
 import com.fekpal.service.BaseService;
+import org.apache.log4j.Logger;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -11,6 +12,8 @@ import java.util.List;
  * 实现服务层通用操作接口的抽象类
  */
 public abstract class BaseServiceImpl<Mapper, Record> implements BaseService<Record> {
+
+    protected Logger logger = Logger.getLogger(this.getClass());
 
     public Mapper mapper;
 

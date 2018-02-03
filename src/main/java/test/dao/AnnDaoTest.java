@@ -14,6 +14,7 @@ import java.util.List;
 
 import static test.dao.Domain.anniversaryAudit;
 import static test.dao.Domain.club;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 
 /**
  * Created by APone on 2017/8/26.
@@ -34,7 +35,6 @@ public class AnnDaoTest extends BaseDaoTest {
 
     @Test
     public void testAnnDao() {
-
         System.out.println(anniversaryAudit);
 
         AnniversaryAudit anniversaryAudit1 = anniversaryAuditDao.getAnnAuditingByClubId(anniversaryAudit.getClub().getClubId());

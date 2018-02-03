@@ -37,6 +37,17 @@
         <url-pattern>*.jpeg</url-pattern>
     </servlet-mapping>
 
+
+    <!--监听session-->
+    <filter>
+        <filter-name>springSessionRepositoryFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSessionRepositoryFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <!-- 注册spring核心编码过滤器-->
     <filter>
         <filter-name>CharacterEncodingFilter</filter-name>

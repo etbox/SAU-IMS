@@ -16,6 +16,11 @@ import java.util.List;
 @Service
 public class UserServiceImpl extends BaseServiceImpl<UserDao, User> implements UserService {
 
+    @Override
+    public boolean login(String userName, String password) {
+        return false;
+    }
+
     @Autowired
     UserDao userDao;
 

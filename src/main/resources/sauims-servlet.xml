@@ -21,6 +21,35 @@
         <property name="defaultEncoding" value="UTF-8"/>
     </bean>
 
+    <!--spring-session配置，代替传统的session，数据存储在redis-->
+    <bean id="redisHttpSessionConfiguration"
+          class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration">
+        <property name="maxInactiveIntervalInSeconds" value="600"/>
+    </bean>
+
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig"
+          p:maxIdle="${redis.jedis.pool.maxIdle}"
+          p:maxTotal="${redis.jedis.pool.maxTotal}"
+          p:maxWaitMillis="${redis.jedis.pool.maxWait}"
+          p:testOnReturn="true"
+          p:testOnBorrow="true"/>
+
+    <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          p:hostName="${redis.hostname}"
+          p:port="${redis.port}"
+          p:password="${redis.password}"
+          p:timeout="${redis.timeout}"
+          p:usePool="true"
+          p:poolConfig-ref="jedisPoolConfig"/>
+
+    <!--Redis客户端连接池-->
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool"
+          c:host="${redis.hostname}"
+          c:port="${redis.port}"
+          c:password="${redis.password}"
+          c:timeout="${redis.timeout}"
+          c:poolConfig-ref="jedisPoolConfig"/>
+
     <!---  json数据返回的配置-->
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
     <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">

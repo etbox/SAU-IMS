@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
  * Created by APone on 2017/9/5.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:/sauims-dao.xml", "classpath:/sauims-service.xml"})
+@ContextConfiguration(locations = {"classpath:/sauims-*.xml"})
 @Rollback
 @Transactional(transactionManager = "txManager")
 public class BaseServiceTest {

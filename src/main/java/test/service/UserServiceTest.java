@@ -7,6 +7,8 @@ import com.fekpal.web.session.SessionNullException;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 import javax.servlet.http.HttpSession;
 
@@ -18,13 +20,20 @@ import static test.dao.Domain.user;
  */
 public class UserServiceTest extends BaseServiceTest{
 
+    @Autowired
+    JedisPool jedisPool;
+
+    Jedis jedis;
 
     @Before
     public void init() {
-
+        jedis=jedisPool.getResource();
+        jedis.set("test","hello redis");
     }
 
     @Test
     public void test() {
+        System.out.println(jedis.get("test"));
+        jedis.del("test");
     }
 }
