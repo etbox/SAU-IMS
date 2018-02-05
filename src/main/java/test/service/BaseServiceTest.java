@@ -13,6 +13,5 @@ import org.springframework.transaction.annotation.Transactional;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:/sauims-*.xml"})
 @Rollback
-@Transactional(transactionManager = "txManager")
 public class BaseServiceTest {
 }

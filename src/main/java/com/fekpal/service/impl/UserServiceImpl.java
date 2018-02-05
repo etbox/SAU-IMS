@@ -22,9 +22,6 @@ import java.util.List;
 @Service
 public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implements UserService {
 
-    @Autowired
-    UserMapper userMapper;
-
     HttpSession session;
 
     /**

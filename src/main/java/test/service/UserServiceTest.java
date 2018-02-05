@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * Created by APone on 2017/9/5.
  */
-public class UserServiceTest extends BaseServiceTest{
+public class UserServiceTest extends BaseServiceTest {
 
     @Autowired
     private UserService userService;
@@ -26,13 +26,14 @@ public class UserServiceTest extends BaseServiceTest{
 
     @Before
     public void init() {
-        List<User> list= new ArrayList<>();
-        list.add(Model.user);
-        userService.insertLoop(list);
+        userService.insert(Model.user);
     }
 
     @Test
     public void test() {
         System.out.println(userService.selectByPrimaryKey(Model.user.getUserId()));
+        //Model.user.setPassword("I am cortana");
+        //userService.updateByPrimaryKey(Model.user);
+        //System.out.println(userService.selectByEmail(Model.user.getEmail()));
     }
 }
