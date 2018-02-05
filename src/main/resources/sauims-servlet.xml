@@ -24,7 +24,8 @@
     <!--spring-session配置，代替传统的session，数据存储在redis-->
     <bean id="redisHttpSessionConfiguration"
           class="org.springframework.session.data.redis.config.annotation.web.http.RedisHttpSessionConfiguration">
-        <property name="maxInactiveIntervalInSeconds" value="600"/>
+        <!-- session 过期时间,30分钟-->
+        <property name="maxInactiveIntervalInSeconds" value="1800"/>
     </bean>
 
     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig"
@@ -35,6 +36,7 @@
           p:testOnBorrow="true"/>
 
     <bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
+          destroy-method="destroy"
           p:hostName="${redis.hostname}"
           p:port="${redis.port}"
           p:password="${redis.password}"
@@ -61,7 +63,7 @@
     </bean>
 
     <!--响应数据对象-->
-    <bean id="returnData" class="com.fekpal.tool.JsonObject" scope="request">
+    <bean id="returnData" class="com.fekpal.common.json.JsonObject" scope="request">
         <aop:scoped-proxy/>
     </bean>
 
@@ -81,7 +83,7 @@
         <aop:scoped-proxy/>
     </bean>
 
-    <bean id="emailSender" class="com.fekpal.tool.msg.email.EmailSender" scope="request"
+    <bean id="emailSender" class="com.fekpal.common.utils.msg.email.EmailSender" scope="request"
           p:simpleEmail-ref="simpleEmail">
         <aop:scoped-proxy/>
     </bean>

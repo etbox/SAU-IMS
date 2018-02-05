@@ -1,15 +1,10 @@
 package com.fekpal.web.controller.sauAdmin;
 
-import com.fekpal.cons.ResponseCode;
-import com.fekpal.domain.json.SauPublishedNewMsg;
-import com.fekpal.tool.JsonObject;
+import com.fekpal.web.model.SauPublishedNewMsg;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import java.util.*;
-
-import static java.lang.System.out;
 
 /**
  * 消息发布的控制类

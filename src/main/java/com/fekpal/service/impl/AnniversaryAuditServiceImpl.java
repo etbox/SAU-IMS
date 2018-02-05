@@ -1,8 +1,8 @@
 package com.fekpal.service.impl;
 
-import com.fekpal.dao.AnniversaryAuditDao;
-import com.fekpal.domain.pojo.AnniversaryAudit;
-import com.fekpal.service.AnniversaryAuditService;
+import com.fekpal.dao.mapper.AnniversaryAuditMapper;
+import com.fekpal.dao.model.AnniversaryAudit;
+import com.fekpal.api.AnniversaryAuditService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ import java.util.List;
 public class AnniversaryAuditServiceImpl implements AnniversaryAuditService {
 
     @Autowired
-    private AnniversaryAuditDao auditDao;
+    private AnniversaryAuditMapper auditDao;
 
     @Override
     public AnniversaryAudit getAnnByAnnId(int annId) {

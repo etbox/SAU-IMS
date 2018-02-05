@@ -1,23 +1,13 @@
 package com.fekpal.web.controller;
 
-import com.fekpal.cons.AvailableState;
-import com.fekpal.cons.ResponseCode;
-import com.fekpal.domain.pojo.Message;
-import com.fekpal.domain.pojo.MessageRelease;
-import com.fekpal.domain.pojo.User;
-import com.fekpal.domain.json.NewMsgListDomain;
-import com.fekpal.service.MessageService;
-import com.fekpal.tool.JsonObject;
+import com.fekpal.api.MessageService;
+import com.fekpal.common.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.*;
-
-import static java.lang.System.out;
 
 /**
  * 新消息的控制类

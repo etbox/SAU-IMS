@@ -1,10 +1,10 @@
 package com.fekpal.web.controller;
 
-import com.fekpal.domain.pojo.Club;
-import com.fekpal.domain.json.ClubDetail;
-import com.fekpal.domain.json.ClubListMsg;
-import com.fekpal.service.ClubService;
-import com.fekpal.tool.JsonObject;
+import com.fekpal.dao.model.Club;
+import com.fekpal.web.model.ClubDetail;
+import com.fekpal.web.model.ClubListMsg;
+import com.fekpal.api.ClubService;
+import com.fekpal.common.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +32,7 @@ public class IndexPageController {
     /**
      * 得到社团列表信息
      *
-     * @return 社团列表信息（json数据）
+     * @return 社团列表信息json
      */
     @ResponseBody
     @RequestMapping(value = "/club")
@@ -70,7 +70,7 @@ public class IndexPageController {
     @RequestMapping(value = "/club/{clubId}")
     public Map<String, Object> getClubDetail(@PathVariable("clubId") Integer clubId) {
 
-        Club club = clubService.selectInfoByPrimaryId(clubId);
+        Club club = clubService.selectByPrimaryKey(clubId);
         ClubDetail club1 = new ClubDetail();
 
         club1.setClubId(club.getClubId());
@@ -78,7 +78,7 @@ public class IndexPageController {
         club1.setClubLogo(club.getLogo());
         club1.setClubName(club.getClubName());
         club1.setDescription(club.getDescription());
-        club1.setEmail(club.getEmail());
+        club1.setEmail(club.getContactEmail());
         club1.setFoundTime(new Date(club.getFoundTime().getTime()));
         club1.setMembers(club.getMembers());
         returnData.setData(club);

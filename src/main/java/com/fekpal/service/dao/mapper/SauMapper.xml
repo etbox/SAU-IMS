@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fekpal.dao.mapper.SauMapper">
+    <cache/>
+
+    <select id="selectByPrimaryKey" parameterType="int" resultMap="result">
+        select * from sau_info
+        where sau_id = #{id}
+    </select>
+
+    <select id="selectFirstByExample" resultMap="result">
+        select * from sau_info
+        <where>
+            ${ex.sqlSegment}
+        </where>
+        limit 1
+    </select>
+
+    <select id="selectByExample" resultMap="result">
+        select * from sau_info
+        <where>
+            ${ex.sqlSegment}
+            and sau_id >= #{offset}
+        </where>
+        limit #{limit}
+    </select>
+
+    <select id="countByExample" resultType="int">
+        select count(*) from sau_info
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="Sau" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+        insert into sau_info (
+        user_id, sau_name,
+        found_time, description,
+        admin_name, sau_logo,
+        contact_email, contact_number,
+        members, sau_state)
+        values (
+        #{userId}, #{sauName},
+        #{foundTime}, #{description},
+        #{adminName}, #{logo},
+        #{contactEmail}, #{contactNumber},
+        #{members}, #{sauState})
+    </insert>
+
+    <insert id="insertLoop" parameterType="list" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+        <foreach collection="records" item="item" separator=",">
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="Sau">
+        update sau_info set
+        sau_name = #{sauName},
+        admin_name = #{adminName},
+        found_time=#{foundTime},
+        sau_logo = #{logo},
+        contact_email = #{contactEmail},
+        contact_number = #{contactNumber},
+        description = #{description},
+        members = #{members}
+        sau_state = #{sauState}
+        where sau_id = #{sauId}
+    </update>
+
+    <update id="updateByPrimaryKeySelective" parameterType="Sau">
+        update sau_info set
+        <set>
+            <if test="sauName != null">
+                sau_name = #{sauName},
+            </if>
+            <if test="adminName != null">
+                admin_name = #{adminName},
+            </if>
+            <if test="foundTime != null">
+                found_time=#{foundTime},
+            </if>
+            <if test="logo != null">
+                sau_logo = #{logo},
+            </if>
+            <if test="contactEmail != null">
+                contact_email = #{obj.contactEmail},
+            </if>
+            <if test="contactNumber != null">
+                contact_number = #{obj.contactNumber},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+            <if test="members != null">
+                members = #{members},
+            </if>
+            <if test="sauState != null">
+                sau_state = #{sauState},
+            </if>
+        </set>
+        where sau_id = #{sauId}
+    </update>
+
+    <update id="updateByExample">
+        update sau_info set
+        sau_name = #{obj.sauName},
+        admin_name = #{obj.adminName},
+        found_time = #{obj.foundTime},
+        sau_logo = #{obj.logo},
+        contact_email = #{obj.contactEmail},
+        contact_number = #{obj.contactNumber},
+        description = #{obj.description},
+        members = #{obj.members}
+        sau_state = #{obj.sauState}
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </update>
+
+    <update id="updateByExampleSelective">
+        update sau_info set
+        <set>
+            <if test="sauName != null">
+                sau_name = #{obj.sauName},
+            </if>
+            <if test="adminName != null">
+                admin_name = #{obj.adminName},
+            </if>
+            <if test="foundTime != null">
+                found_time=#{obj.foundTime},
+            </if>
+            <if test="logo != null">
+                sau_logo = #{obj.logo},
+            </if>
+            <if test="contactEmail != null">
+                contact_email = #{obj.contactEmail},
+            </if>
+            <if test="contactNumber != null">
+                contact_number = #{obj.contactNumber},
+            </if>
+            <if test="description != null">
+                description = #{obj.description},
+            </if>
+            <if test="members != null">
+                members = #{obj.members},
+            </if>
+            <if test="sauState != null">
+                sau_state = #{obj.sauState},
+            </if>
+        </set>
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </update>
+
+    <update id="deleteByPrimaryKey" parameterType="int">
+        update sau_info set
+        sau_state = 0
+        where sau_id = #{id}
+    </update>
+
+    <update id="deleteByExample">
+        update sau_info set
+        sau_state = 0
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </update>
+
+    <resultMap id="result" type="Sau">
+        <id property="sauId" column="sau_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="sauName" column="sau_name"/>
+        <result property="foundTime" column="found_time"/>
+        <result property="adminName" column="admin_name"/>
+        <result property="logo" column="sau_logo"/>
+        <result property="contactEmail" column="contact_email"/>
+        <result property="contactNumber" column="contact_number"/>
+        <result property="description" column="description"/>
+        <result property="members" column="members"/>
+        <result property="sauState" column="sau_state"/>
+    </resultMap>
+</mapper>

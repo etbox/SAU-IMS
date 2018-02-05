@@ -1,10 +1,10 @@
 package com.fekpal.service.impl;
 
-import com.fekpal.dao.message.MessageDao;
-import com.fekpal.dao.message.MessageReleaseDao;
-import com.fekpal.domain.pojo.Message;
-import com.fekpal.domain.pojo.MessageRelease;
-import com.fekpal.service.MessageService;
+import com.fekpal.dao.mapper.MessageMapper;
+import com.fekpal.dao.mapper.MessageReleaseMapper;
+import com.fekpal.dao.model.Message;
+import com.fekpal.dao.model.MessageRelease;
+import com.fekpal.api.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,30 +18,30 @@ import java.util.List;
 public class MessageServiceImpl implements MessageService {
 
     @Autowired
-    private MessageDao messageDao;
+    private MessageMapper messageMapper;
 
     @Autowired
-    private MessageReleaseDao releaseDao;
+    private MessageReleaseMapper releaseDao;
 
     @Override
     public Message getSendMessageByMessageId(int id) {
-        return messageDao.getMessageByMessageId(id);
+        return messageMapper.getMessageByMessageId(id);
     }
 
     @Override
     public List<Message> getSendMessageByUserId(int id, int start, int count) {
-        return messageDao.getMessagesByUserId(id, start, count);
+        return messageMapper.getMessagesByUserId(id, start, count);
     }
 
     @Override
     public List<Message> findSendMessageByTitle(Message message, int start, int count) {
-        return messageDao.findMessageByMessageTitle(message.getMessageTitle(), message.getUserId(), start, count);
+        return messageMapper.findMessageByMessageTitle(message.getMessageTitle(), message.getUserId(), start, count);
     }
 
     @Override
     public void addNewSendMessage(Message message, List<Integer> rcvIdList) {
         //添加信息
-        messageDao.addMessage(message);
+        messageMapper.addMessage(message);
 
         List<MessageRelease> list = new ArrayList<>();
         MessageRelease release;
@@ -60,7 +60,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public void updateSendMessage(Message message) {
-        messageDao.updateMessage(message);
+        messageMapper.updateMessage(message);
     }
 
     @Override

@@ -1,23 +1,14 @@
 package com.fekpal.web.controller.member;
 
-import com.fekpal.cons.AvailableState;
-import com.fekpal.cons.ResponseCode;
-import com.fekpal.domain.pojo.Club;
-import com.fekpal.domain.pojo.ClubMember;
-import com.fekpal.domain.pojo.Person;
-import com.fekpal.domain.pojo.User;
-import com.fekpal.domain.json.ClubDetail;
-import com.fekpal.service.ClubMemberService;
-import com.fekpal.service.ClubService;
-import com.fekpal.service.PersonService;
-import com.fekpal.tool.JsonObject;
+import com.fekpal.api.ClubMemberService;
+import com.fekpal.api.ClubService;
+import com.fekpal.api.PersonService;
+import com.fekpal.common.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.*;
 
 

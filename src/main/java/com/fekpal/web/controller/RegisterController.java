@@ -1,26 +1,16 @@
 package com.fekpal.web.controller;
 
-import com.fekpal.cons.AvailableState;
-import com.fekpal.cons.SystemRole;
-import com.fekpal.domain.pojo.Club;
-import com.fekpal.domain.pojo.ClubAudit;
-import com.fekpal.domain.pojo.Person;
-import com.fekpal.domain.json.PersonRegisterMsg;
-import com.fekpal.service.ClubAuditService;
-import com.fekpal.service.UserService;
-import com.fekpal.tool.*;
-import com.fekpal.tool.captcha.Captcha;
-import com.fekpal.tool.msg.email.EmailSender;
-import com.fekpal.web.controller.clubAdmin.ClubAnnRegisterController;
-import org.apache.commons.mail.EmailException;
+import com.fekpal.web.model.PersonRegisterMsg;
+import com.fekpal.api.ClubAuditService;
+import com.fekpal.api.UserService;
+import com.fekpal.common.utils.msg.email.EmailSender;
+import com.fekpal.common.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.sql.Timestamp;
 import java.util.*;
 
 /**

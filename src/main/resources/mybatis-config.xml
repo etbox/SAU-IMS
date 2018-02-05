@@ -5,41 +5,41 @@
 <configuration>
     <!--配置类别名-->
 
-    <settings>
+    <!--<settings>
         <setting name="logImpl" value="STDOUT_LOGGING"/>
-    </settings>
+    </settings>-->
 
     <typeAliases>
-        <typeAlias type="com.fekpal.domain.pojo.Role" alias="Role"/>
-        <typeAlias type="com.fekpal.domain.pojo.Authority" alias="Authority"/>
-        <typeAlias type="com.fekpal.domain.pojo.Resource" alias="Resource"/>
-        <typeAlias type="com.fekpal.domain.pojo.User" alias="User"/>
-        <typeAlias type="com.fekpal.domain.pojo.Sau" alias="Sau"/>
-        <typeAlias type="com.fekpal.domain.pojo.Club" alias="Club"/>
-        <typeAlias type="com.fekpal.domain.pojo.Person" alias="Person"/>
-        <typeAlias type="com.fekpal.domain.pojo.Department" alias="Department"/>
-        <typeAlias type="com.fekpal.domain.pojo.Major" alias="Major"/>
-        <typeAlias type="com.fekpal.domain.pojo.AnniversaryAudit" alias="AnniversaryAudit"/>
-        <typeAlias type="com.fekpal.domain.pojo.Message" alias="Message"/>
-        <typeAlias type="com.fekpal.domain.pojo.MessageRelease" alias="MessageRelease"/>
-        <typeAlias type="com.fekpal.domain.pojo.ClubMember" alias="ClubMember"/>
-        <typeAlias type="com.fekpal.domain.pojo.ClubAudit" alias="ClubAudit"/>
+        <typeAlias type="com.fekpal.dao.model.Role" alias="Role"/>
+        <typeAlias type="com.fekpal.dao.model.Authority" alias="Authority"/>
+        <typeAlias type="com.fekpal.dao.model.Resource" alias="Resource"/>
+        <typeAlias type="com.fekpal.dao.model.User" alias="User"/>
+        <typeAlias type="com.fekpal.dao.model.Sau" alias="Sau"/>
+        <typeAlias type="com.fekpal.dao.model.Club" alias="Club"/>
+        <typeAlias type="com.fekpal.dao.model.Person" alias="Person"/>
+        <typeAlias type="com.fekpal.dao.model.Department" alias="Department"/>
+        <typeAlias type="com.fekpal.dao.model.Major" alias="Major"/>
+        <typeAlias type="com.fekpal.dao.model.AnniversaryAudit" alias="AnniversaryAudit"/>
+        <typeAlias type="com.fekpal.dao.model.Message" alias="Message"/>
+        <typeAlias type="com.fekpal.dao.model.MessageRelease" alias="MessageRelease"/>
+        <typeAlias type="com.fekpal.dao.model.ClubMember" alias="ClubMember"/>
+        <typeAlias type="com.fekpal.dao.model.ClubAudit" alias="ClubAudit"/>
     </typeAliases>
 
     <!--映射文件-->
     <mappers>
-        <mapper resource="mapper/UserDao.xml"/>
+        <mapper resource="com/fekpal/service/dao/mapper/UserMapper.xml"/>
         <!--
-        <mapper resource="mapper/RoleDao.xml"/>
-        <mapper resource="mapper/ClubDao.xml"/>
-        <mapper resource="mapper/SauDao.xml/"/>
-        <mapper resource="mapper/PersonDao.xml"/>
-        <mapper resource="mapper/DepartmentDao.xml"/>
-        <mapper resource="mapper/AnniversaryAuditDao.xml"/>
-        <mapper resource="mapper/ClubAuditDao.xml"/>
-        <mapper resource="mapper/ClubMemberDao.xml"/>
-        <mapper resource="mapper/MessageDao.xml"/>
-        <mapper resource="mapper/MessageReleaseDao.xml"/>
-        <mapper resource="mapper/LikeClubDao.xml"/>-->
+        <dao resource="dao/RoleMapper.xml"/>
+        <dao resource="dao/ClubMapper.xml"/>
+        <dao resource="dao/SauMapper.xml/"/>
+        <dao resource="dao/PersonMapper.xml"/>
+        <dao resource="dao/DepartmentMapper.xml"/>
+        <dao resource="dao/AnniversaryAuditMapper.xml"/>
+        <dao resource="dao/ClubAuditMapper.xml"/>
+        <dao resource="dao/ClubMemberMapper.xml"/>
+        <dao resource="dao/MessageMapper.xml"/>
+        <dao resource="dao/MessageReleaseMapper.xml"/>
+        <dao resource="dao/LikeClubMapper.xml"/>-->
     </mappers>
 </configuration>

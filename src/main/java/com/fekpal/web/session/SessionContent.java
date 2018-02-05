@@ -1,7 +1,7 @@
 package com.fekpal.web.session;
 
-import com.fekpal.domain.BasePOJO;
-import com.fekpal.domain.pojo.User;
+import com.fekpal.common.base.BaseModel;
+import com.fekpal.dao.model.User;
 
 /**
  * Created by APone on 2018/1/30 13:05.
@@ -12,7 +12,7 @@ public class SessionContent {
     /**
      * 身份类
      */
-    public static class UserIdentity extends BasePOJO {
+    public static class UserIdentity extends BaseModel {
 
         //用户id
         private int id;
@@ -84,7 +84,7 @@ public class SessionContent {
     /**
      * 验证信息类
      */
-    public static class Captcha extends BasePOJO {
+    public static class Captcha extends BaseModel {
 
         //验证码
         private String code;
@@ -97,6 +97,17 @@ public class SessionContent {
 
         //创建时间
         private long createTime;
+
+        //当前时间
+        private long currentTime;
+
+        public long getCurrentTime() {
+            return currentTime;
+        }
+
+        public void setCurrentTime(long currentTime) {
+            this.currentTime = currentTime;
+        }
 
         public String getCode() {
             return code;

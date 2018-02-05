@@ -1,10 +1,10 @@
 package com.fekpal.web.controller.clubAdmin;
 
-import com.fekpal.cons.ResponseCode;
-import com.fekpal.domain.pojo.User;
-import com.fekpal.service.AnniversaryAuditService;
-import com.fekpal.tool.JsonObject;
-import com.fekpal.tool.FileUploadTool;
+import com.fekpal.common.constant.ResponseCode;
+import com.fekpal.dao.model.User;
+import com.fekpal.api.AnniversaryAuditService;
+import com.fekpal.common.json.JsonObject;
+import com.fekpal.common.utils.FileUploadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -169,7 +169,7 @@ public class ClubAnnRegisterController {
         Date submitTime = new Date();
 
         //将文件存入服务器中的与本项目同目录的//MySAUImages/clubAnnRegister文件夹中，返回文件名
-        List<String> fileNameList = FileUploadTool.fileHandle(file, request,"clubAnnRegister");
+        List<String> fileNameList = FileUploadUtils.fileHandle(file, request,"clubAnnRegister");
         if (fileNameList != null) {
             fileName = fileNameList.get(0);
         } else {

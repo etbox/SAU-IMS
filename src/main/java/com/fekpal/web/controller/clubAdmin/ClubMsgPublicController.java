@@ -1,20 +1,15 @@
 package com.fekpal.web.controller.clubAdmin;
 
-import com.fekpal.cons.MessageType;
-import com.fekpal.cons.AvailableState;
-import com.fekpal.domain.json.ClubPublishedNewMsg;
-import com.fekpal.domain.pojo.Club;
-import com.fekpal.domain.pojo.Message;
-import com.fekpal.domain.pojo.Person;
-import com.fekpal.domain.pojo.User;
-import com.fekpal.service.*;
-import com.fekpal.tool.JsonObject;
+import com.fekpal.api.ClubMemberService;
+import com.fekpal.api.ClubService;
+import com.fekpal.api.MessageService;
+import com.fekpal.api.UserService;
+import com.fekpal.web.model.ClubPublishedNewMsg;
+import com.fekpal.common.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
-import java.sql.Timestamp;
 import java.util.*;
 
 /**

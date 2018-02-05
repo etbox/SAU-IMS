@@ -1,9 +1,9 @@
 package com.fekpal.service.impl;
 
-import com.fekpal.dao.ClubMemberDao;
-import com.fekpal.domain.pojo.ClubMember;
-import com.fekpal.domain.pojo.Person;
-import com.fekpal.service.ClubMemberService;
+import com.fekpal.dao.mapper.ClubMemberMapper;
+import com.fekpal.dao.model.ClubMember;
+import com.fekpal.dao.model.Person;
+import com.fekpal.api.ClubMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,40 +16,40 @@ import java.util.List;
 public class ClubMemberServiceImpl implements ClubMemberService {
 
     @Autowired
-    private ClubMemberDao clubMemberDao;
+    private ClubMemberMapper clubMemberMapper;
 
     @Override
     public ClubMember getMemberByPersonAndCLub(int personId, int clubId) {
-        return clubMemberDao.getMemberByPersonAndCLub(personId, clubId);
+        return clubMemberMapper.getMemberByPersonAndCLub(personId, clubId);
     }
 
     @Override
     public List<ClubMember> getClubMemberByPersonId(int personId) {
-        return clubMemberDao.getClubMemberByPersonId(personId);
+        return clubMemberMapper.getClubMemberByPersonId(personId);
     }
 
     @Override
     public List<Person> getAllMemberByClubId(int clubId) {
-        return clubMemberDao.getAllMemberByClubId(clubId);
+        return clubMemberMapper.getAllMemberByClubId(clubId);
     }
 
     @Override
     public ClubMember getMemberById(int id) {
-        return clubMemberDao.getMemberById(id);
+        return clubMemberMapper.getMemberById(id);
     }
 
     @Override
     public void addNewClubMember(ClubMember clubMember) {
-        clubMemberDao.addClubMember(clubMember);
+        clubMemberMapper.addClubMember(clubMember);
     }
 
     @Override
     public void updateClubMember(ClubMember clubMember) {
-        clubMemberDao.updateClubMember(clubMember);
+        clubMemberMapper.updateClubMember(clubMember);
     }
 
     @Override
     public List<ClubMember> getAllAuditingByClubId(int clubId) {
-        return clubMemberDao.getAllAuditingByClubId(clubId);
+        return clubMemberMapper.getAllAuditingByClubId(clubId);
     }
 }

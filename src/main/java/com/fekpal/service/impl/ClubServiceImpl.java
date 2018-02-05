@@ -1,11 +1,12 @@
 package com.fekpal.service.impl;
 
-import com.fekpal.dao.user.ClubDao;
-import com.fekpal.dao.user.UserDao;
-import com.fekpal.domain.ExampleWrapper;
-import com.fekpal.domain.pojo.Club;
-import com.fekpal.domain.pojo.User;
-import com.fekpal.service.ClubService;
+import com.fekpal.common.base.BaseServiceImpl;
+import com.fekpal.dao.mapper.ClubMapper;
+import com.fekpal.dao.mapper.UserMapper;
+import com.fekpal.common.base.ExampleWrapper;
+import com.fekpal.dao.model.Club;
+import com.fekpal.dao.model.User;
+import com.fekpal.api.ClubService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +17,13 @@ import java.util.List;
  * ClubService实现类
  */
 @Service
-public class ClubServiceImpl extends BaseServiceImpl<ClubDao, Club> implements ClubService {
+public class ClubServiceImpl extends BaseServiceImpl<ClubMapper, Club> implements ClubService {
 
     @Autowired
-    ClubDao clubDao;
+    ClubMapper clubDao;
 
     @Autowired
-    UserDao userDao;
+    UserMapper userDao;
 
     /**
      * 根据社团名称获得社团信息记录

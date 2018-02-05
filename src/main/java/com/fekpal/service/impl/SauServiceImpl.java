@@ -1,11 +1,12 @@
 package com.fekpal.service.impl;
 
-import com.fekpal.dao.user.SauDao;
-import com.fekpal.dao.user.UserDao;
-import com.fekpal.domain.ExampleWrapper;
-import com.fekpal.domain.pojo.Sau;
-import com.fekpal.domain.pojo.User;
-import com.fekpal.service.SauService;
+import com.fekpal.common.base.BaseServiceImpl;
+import com.fekpal.dao.mapper.SauMapper;
+import com.fekpal.dao.mapper.UserMapper;
+import com.fekpal.common.base.ExampleWrapper;
+import com.fekpal.dao.model.Sau;
+import com.fekpal.dao.model.User;
+import com.fekpal.api.SauService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,13 +17,13 @@ import java.util.List;
  * SauService实现类
  */
 @Service
-public class SauServiceImpl extends BaseServiceImpl<SauDao, Sau> implements SauService {
+public class SauServiceImpl extends BaseServiceImpl<SauMapper, Sau> implements SauService {
 
     @Autowired
-    private SauDao sauDao;
+    private SauMapper sauDao;
 
     @Autowired
-    private UserDao userDao;
+    private UserMapper userDao;
 
     /**
      * 根据校社联用户的用户身份id获取校社联信息

@@ -1,22 +1,15 @@
 package com.fekpal.web.controller;
 
-import com.fekpal.cons.ResponseCode;
-import com.fekpal.domain.pojo.User;
-import com.fekpal.service.UserService;
-import com.fekpal.tool.*;
-import com.fekpal.tool.captcha.Captcha;
+import com.fekpal.api.UserService;
+import com.fekpal.common.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpSession;
 import java.util.Map;
-
-import static java.lang.System.out;
 
 /**
  * 安全功能的控制类，包含忘记密码，发送邮箱验证

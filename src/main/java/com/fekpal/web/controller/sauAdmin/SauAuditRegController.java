@@ -1,18 +1,10 @@
 package com.fekpal.web.controller.sauAdmin;
 
-import com.fekpal.cons.ResponseCode;
-import com.fekpal.cons.WebPath;
-import com.fekpal.tool.JsonObject;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.io.*;
 import java.util.*;
-
-import static java.lang.System.out;
 
 /**
  * 注册审核的控制类

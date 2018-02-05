@@ -1,9 +1,7 @@
 package com.fekpal.web.controller.clubAdmin;
 
-import com.fekpal.domain.pojo.Club;
-import com.fekpal.domain.pojo.User;
-import com.fekpal.service.ClubService;
-import com.fekpal.tool.*;
+import com.fekpal.api.ClubService;
+import com.fekpal.common.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,8 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 

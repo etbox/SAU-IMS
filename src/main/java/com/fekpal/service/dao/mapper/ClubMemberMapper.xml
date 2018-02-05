@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.fekpal.dao.com.fekpal.service.dao.mapper.ClubMemberMapper">
+    <cache/>
+
+    <sql id="re">
+      select
+      cm.*,
+      pi.person_logo,
+      pi.nickname,
+      pi.real_name,
+      pi.student_id,
+      ci.club_name,
+      ci.club_logo,
+      ci.admin_name
+      from club_member cm
+      inner join person_info pi on cm.person_id = pi.person_id
+      inner join club_info ci on cm.club_id = ci.club_id
+    </sql>
+
+    <select id="getMemberByPersonAndCLub" resultMap="memberResult">
+        <include refid="re"/>
+        where cm.person_id = #{arg0} and cm.club_id = #{arg1}
+    </select>
+
+    <select id="getClubMemberByPersonId" parameterType="int" resultMap="memberResult">
+        <include refid="re"/>
+        where cm.person_id = #{personId}
+    </select>
+
+    <select id="getMemberById" parameterType="int" resultMap="memberResult">
+        <include refid="re"/>
+        where cm.id = #{id}
+    </select>
+
+    <select id="getAllMemberByClubId" parameterType="int" resultMap="memberResult">
+        <include refid="re"/>
+        where cm.club_id = #{clubId}
+    </select>
+
+    <insert id="addClubMember" parameterType="ClubMember" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into club_member(club_id, person_id, join_time)
+        values(#{club.clubId},#{person.personId},#{joinTime})
+    </insert>
+
+    <update id="updateClubMember" parameterType="ClubMember">
+        update club_member set
+        member_duty = #{memberDuty},
+        user_state = #{userState},
+        leave_time = #{leaveTime},
+        club_department = #{clubDepartment},
+        available = #{available}
+        where id = #{id}
+    </update>
+
+    <select id="getAllAuditingByClubId" parameterType="int" resultMap="memberResult">
+        <include refid="re"/>
+        where cm.available = 2 and cm.club_id = #{clubId}
+    </select>
+
+    <resultMap id="memberResult" type="ClubMember">
+        <id property="id" column="id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="memberDuty" column="member_duty"/>
+        <result property="userState" column="user_state"/>
+        <result property="joinTime" column="join_time"/>
+        <result property="leaveTime" column="leave_time"/>
+        <result property="clubDepartment" column="club_department"/>
+
+        <association property="person" javaType="Person">
+            <id property="personId" column="person_id"/>
+            <result property="realName" column="real_name"/>
+            <result property="nickname" column="nickname"/>
+            <result property="studentId" column="student_id"/>
+            <result property="personLogo" column="'person_logo"/>
+        </association>
+
+        <association property="club" javaType="Club">
+            <id property="clubId" column="club_id"/>
+            <result property="clubName" column="club_name"/>
+            <result property="adminName" column="admin_name"/>
+            <result property="clubLogo" column="club_logo"/>
+        </association>
+
+    </resultMap>
+</mapper>

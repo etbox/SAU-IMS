@@ -1,12 +1,18 @@
 package com.fekpal.service.impl;
 
-import com.fekpal.dao.user.UserDao;
-import com.fekpal.domain.ExampleWrapper;
-import com.fekpal.domain.pojo.User;
-import com.fekpal.service.UserService;
+import com.fekpal.common.base.BaseServiceImpl;
+import com.fekpal.dao.mapper.UserMapper;
+import com.fekpal.common.base.ExampleWrapper;
+import com.fekpal.dao.model.User;
+import com.fekpal.api.UserService;
+import com.fekpal.common.utils.MD5Utils;
+import com.fekpal.web.session.SessionLocal;
+import com.fekpal.web.session.SessionContent;
+import com.fekpal.web.session.SessionNullException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -14,15 +20,71 @@ import java.util.List;
  * UserService用户服务实现类
  */
 @Service
-public class UserServiceImpl extends BaseServiceImpl<UserDao, User> implements UserService {
+public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implements UserService {
 
+    @Autowired
+    UserMapper userMapper;
+
+    HttpSession session;
+
+    /**
+     * 用户身份信息进行用户登录
+     *
+     * @param user    用户身份记录 传入参数：用户名userName, 密码password
+     * @param captcha 登录验证信息 传入参数：验证码code, 当前时间currentTime
+     * @return 是否登录成功
+     */
     @Override
-    public boolean login(String userName, String password) {
+    public boolean userLogin(User user, SessionContent.Captcha captcha) {
+        try {
+            //验证登录验证码是否正确
+            SessionLocal sessionLocal = SessionLocal.local(session);
+            if (!sessionLocal.isValidLoginCaptcha(captcha)) {
+                return false;
+            }
+
+            //开始获取用户的存在
+            User userIdentity = this.selectByUserName(user.getUserName());
+            if (userIdentity == null) {
+                return false;
+            }
+            String password = MD5Utils.md5(user.getPassword() + user.getUserKey());
+            if (user.getPassword().equals(password)) {
+                sessionLocal.createUserIdentity(userIdentity);
+                return true;
+            }
+        } catch (SessionNullException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 
-    @Autowired
-    UserDao userDao;
+    /**
+     * 用户是否仍然处于登录状态
+     *
+     * @return 是否处于登录状态
+     */
+    @Override
+    public boolean isLogin() {
+        try {
+            SessionLocal sessionLocal = SessionLocal.local(session);
+            return sessionLocal.isExitUserIdentity();
+        } catch (SessionNullException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * 用户登出系统
+     *
+     * @return 是否登出成功
+     */
+    @Override
+    public boolean userLogout() {
+        session.invalidate();
+        return false;
+    }
 
     /**
      * 根据用户名获取用户身份记录
@@ -34,7 +96,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDao, User> implements U
     public User selectByUserName(String userName) {
         ExampleWrapper<User> example = new ExampleWrapper<>();
         example.eq("user_name", userName);
-        return userDao.selectFirstByExample(example);
+        return mapper.selectFirstByExample(example);
     }
 
     /**
@@ -48,7 +110,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDao, User> implements U
     public User selectByUserNameAndPwd(String userName, String password) {
         ExampleWrapper<User> example = new ExampleWrapper<>();
         example.eq("user_name", userName).and().eq("password", password);
-        return userDao.selectFirstByExample(example);
+        return mapper.selectFirstByExample(example);
     }
 
     /**
@@ -61,7 +123,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDao, User> implements U
     public User selectByEmail(String email) {
         ExampleWrapper<User> example = new ExampleWrapper<>();
         example.eq("email", email);
-        return userDao.selectFirstByExample(example);
+        return mapper.selectFirstByExample(example);
     }
 
     /**
@@ -74,7 +136,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDao, User> implements U
     public boolean isExitAccount(String userName) {
         ExampleWrapper<User> example = new ExampleWrapper<>();
         example.eq("user_name", userName);
-        int row = userDao.countByExample(example);
+        int row = mapper.countByExample(example);
         return row >= 1;
     }
 
@@ -88,7 +150,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserDao, User> implements U
     public boolean isExitEmail(String email) {
         ExampleWrapper<User> example = new ExampleWrapper<>();
         example.eq("email", email);
-        int row = userDao.countByExample(example);
+        int row = mapper.countByExample(example);
         return row >= 1;
     }
 
@@ -102,6 +164,6 @@ public class UserServiceImpl extends BaseServiceImpl<UserDao, User> implements U
     @Override
     public List<User> loadAllUser(Integer offset, Integer limit) {
         ExampleWrapper<User> example = new ExampleWrapper<>();
-        return userDao.selectByExample(example, offset, limit);
+        return mapper.selectByExample(example, offset, limit);
     }
 }

@@ -1,7 +1,7 @@
 package com.fekpal.web.controller;
 
-import com.fekpal.service.UserService;
-import com.fekpal.tool.JsonObject;
+import com.fekpal.api.UserService;
+import com.fekpal.common.json.JsonObject;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,15 +22,17 @@ public class LoginController {
     @Autowired
     private JsonObject returnData;
 
+
     /**
      * 用户登录提交方法
      *
      * @return 返回用户信息
      */
-    @RequestMapping("/login/go")
+    @RequestMapping("/login/go/{id}")
     @ResponseBody
     public Map<String, Object> login() {
-        return null;
+
+        return returnData.getMap();
     }
 
     /**
@@ -41,7 +43,7 @@ public class LoginController {
     @RequestMapping("/logout")
     @ResponseBody
     public Map<String, Object> logout() {
-        return null;
+        return returnData.getMap();
     }
 
     /**

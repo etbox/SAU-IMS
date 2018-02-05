@@ -1,17 +1,10 @@
 package com.fekpal.web.controller.sauAdmin;
 
-import com.fekpal.cons.ResponseCode;
-import com.fekpal.domain.json.ClubDetail;
-import com.fekpal.tool.JsonObject;
 import org.springframework.stereotype.Controller;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.util.*;
-
-import static java.lang.System.out;
 
 /**
  * 校社联的社团信息的控制类

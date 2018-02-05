@@ -1,8 +1,8 @@
 package com.fekpal.service.impl;
 
-import com.fekpal.dao.DepartmentDao;
-import com.fekpal.domain.pojo.Department;
-import com.fekpal.service.DepartmentService;
+import com.fekpal.dao.mapper.DepartmentMapper;
+import com.fekpal.dao.model.Department;
+import com.fekpal.api.DepartmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,15 +15,15 @@ import java.util.List;
 public class DepartmentServiceImpl implements DepartmentService {
 
     @Autowired
-    private DepartmentDao departmentDao;
+    private DepartmentMapper departmentMapper;
 
     @Override
     public Department getDepartmentByDepartmentId(int departmentId) {
-        return departmentDao.getDepartmentByDepartmentId(departmentId);
+        return departmentMapper.getDepartmentByDepartmentId(departmentId);
     }
 
     @Override
     public List<Department> loadAllDepartment() {
-        return departmentDao.loadAllDepartment();
+        return departmentMapper.loadAllDepartment();
     }
 }

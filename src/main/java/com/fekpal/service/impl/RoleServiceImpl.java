@@ -1,8 +1,8 @@
 package com.fekpal.service.impl;
 
-import com.fekpal.dao.RoleDao;
-import com.fekpal.domain.pojo.Role;
-import com.fekpal.service.RoleService;
+import com.fekpal.dao.mapper.RoleMapper;
+import com.fekpal.dao.model.Role;
+import com.fekpal.api.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,10 +15,10 @@ import java.util.List;
 public class RoleServiceImpl implements RoleService {
 
     @Autowired
-    private RoleDao roleDao;
+    private RoleMapper roleMapper;
 
     @Override
     public List<Role> loadAll() {
-        return roleDao.loadAll();
+        return roleMapper.loadAll();
     }
 }

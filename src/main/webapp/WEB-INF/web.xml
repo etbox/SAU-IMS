@@ -46,6 +46,8 @@
     <filter-mapping>
         <filter-name>springSessionRepositoryFilter</filter-name>
         <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>ERROR</dispatcher>
     </filter-mapping>
 
     <!-- 注册spring核心编码过滤器-->
@@ -66,7 +68,7 @@
     <!--  处理get请求乱码问题的，自定义过滤器进行编码格式的设置 -->
     <filter>
         <filter-name>EncodingFilter</filter-name>
-        <filter-class>com.fekpal.tool.EncodingFilter</filter-class>
+        <filter-class>com.fekpal.web.filter.EncodingFilter</filter-class>
         <init-param>
             <param-name>encoding</param-name>
             <param-value>UTF-8</param-value>

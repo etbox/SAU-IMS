@@ -1,12 +1,7 @@
 package com.fekpal.web.controller.member;
 
-import com.fekpal.domain.pojo.ClubMember;
-import com.fekpal.domain.pojo.Person;
-import com.fekpal.domain.pojo.User;
-import com.fekpal.service.ClubMemberService;
-import com.fekpal.service.PersonService;
-import com.fekpal.tool.JsonObject;
-import com.fekpal.tool.ImagesUploadTool;
+import com.fekpal.api.ClubMemberService;
+import com.fekpal.api.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,8 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.sql.Timestamp;
 import java.util.*;
 
 /**
