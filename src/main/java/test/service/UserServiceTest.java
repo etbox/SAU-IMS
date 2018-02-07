@@ -26,8 +26,11 @@ public class UserServiceTest extends BaseServiceTest {
 
     @Before
     public void init() {
+        System.out.println("4568985");
         userService.insert(Model.user);
+        System.out.println("123123");
     }
+
 
     @Test
     public void test() {

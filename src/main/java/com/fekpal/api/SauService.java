@@ -23,12 +23,11 @@ public interface SauService extends BaseService<Sau> {
 
     /**
      * 插入新的校社联用户信息以及用户身份信息
-     * 只有插入数等于2才成功，其他一律错误
      * @param user 用户身份信息
      * @param sau 校社联用户信息
      * @return 插入数量
      */
-    int insertInfo(User user, Sau sau);
+    int insertSauAccount(User user, Sau sau);
 
     /**
      * 获得所有的校社联记录，分页获取

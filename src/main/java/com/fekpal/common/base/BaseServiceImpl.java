@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,7 +32,6 @@ public abstract class BaseServiceImpl<Mapper, Record> implements BaseService<Rec
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Throwable.class})
     public int updateByPrimaryKey(Record record) {
         try {
             Method updateByPrimaryKey = mapper.getClass().getDeclaredMethod("updateByPrimaryKey", Object.class);
@@ -39,12 +39,11 @@ public abstract class BaseServiceImpl<Mapper, Record> implements BaseService<Rec
             return Integer.parseInt(String.valueOf(object));
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
-            throw new CRUDException("按主键更新记录异常");
         }
+        return 0;
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Throwable.class})
     public int updateByPrimaryKeySelective(Record record) {
         try {
             Method updateByPrimaryKeySelective = mapper.getClass().getDeclaredMethod("updateByPrimaryKeySelective", Object.class);
@@ -52,12 +51,11 @@ public abstract class BaseServiceImpl<Mapper, Record> implements BaseService<Rec
             return Integer.parseInt(String.valueOf(object));
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
-            throw new CRUDException("按主键更新记录有效字段异常");
         }
+        return 0;
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Throwable.class})
     public int deleteByPrimaryKey(Integer id) {
         try {
             Method deleteByPrimaryKey = mapper.getClass().getDeclaredMethod("deleteByPrimaryKey", id.getClass());
@@ -65,12 +63,11 @@ public abstract class BaseServiceImpl<Mapper, Record> implements BaseService<Rec
             return Integer.parseInt(String.valueOf(object));
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
-            throw new CRUDException("按主键删除异常");
         }
+        return 0;
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Throwable.class})
     public int insert(Record record) {
         try {
             Method insert = mapper.getClass().getDeclaredMethod("insert", Object.class);
@@ -78,12 +75,11 @@ public abstract class BaseServiceImpl<Mapper, Record> implements BaseService<Rec
             return Integer.parseInt(String.valueOf(object));
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
-            throw new CRUDException("插入记录异常");
         }
+        return 0;
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Throwable.class})
     public int insertLoop(List<Record> records) {
         try {
             Method insertLoop = mapper.getClass().getDeclaredMethod("insertLoop", List.class);
@@ -91,7 +87,7 @@ public abstract class BaseServiceImpl<Mapper, Record> implements BaseService<Rec
             return Integer.parseInt(String.valueOf(object));
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
-            throw new CRUDException("批量插入异常");
         }
+        return 0;
     }
 }
