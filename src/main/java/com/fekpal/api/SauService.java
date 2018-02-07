@@ -3,6 +3,7 @@ package com.fekpal.api;
 import com.fekpal.common.base.BaseService;
 import com.fekpal.dao.model.Sau;
 import com.fekpal.dao.model.User;
+import com.fekpal.service.model.domain.SauReg;
 
 import java.util.List;
 
@@ -14,20 +15,30 @@ import java.util.List;
 public interface SauService extends BaseService<Sau> {
 
     /**
-     * 根据校社联用户的用户身份id获取校社联记录信息
+     * 根据用户身份标识获取校社联记录信息
      *
-     * @param id int 用户身份id
+     * @param id 用户身份标识
      * @return 校社联信息记录
      */
     Sau selectByUserId(int id);
 
     /**
      * 插入新的校社联用户信息以及用户身份信息
-     * @param user 用户身份信息
-     * @param sau 校社联用户信息
-     * @return 插入数量
+     *
+     * @param reg 校社联用户注册信息封装
+     *            传入参数：用户名userName，密码password，社长adminName，邮箱地址email，手机号码phone，
+     *            校社联名称sauName，描述description，验证码code，当前时间currentTime，校社联注册审核文件名auditFileName
+     * @return 是否插入成功
+     * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
      */
-    int insertSauAccount(User user, Sau sau);
+    int insertAccount(SauReg reg);
+
+    /**
+     * 用邮箱发送注册验证码
+     *
+     * @param email 邮箱地址
+     */
+    void sendRegCaptchaByEmail(String email);
 
     /**
      * 获得所有的校社联记录，分页获取

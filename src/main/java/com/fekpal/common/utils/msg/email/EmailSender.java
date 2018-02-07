@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 邮件发送工具
  */
-public class EmailSender{
+public class EmailSender {
 
     //简单文本邮件，支持换行
     private SimpleEmail simpleEmail;
@@ -27,6 +27,23 @@ public class EmailSender{
         simpleEmail.addTo(to);
         simpleEmail.setSubject(subject);
         simpleEmail.setMsg(msg);
+        simpleEmail.send();
+    }
+
+
+    /**
+     * 发送邮件
+     *
+     * @param msg 信息
+     * @throws EmailException 异常
+     */
+    public void sendMsg(EmailMsg msg) throws EmailException {
+        if (simpleEmail == null) {
+            throw new EmailException("simpleEmail can not be null");
+        }
+        simpleEmail.addTo(msg.getTo());
+        simpleEmail.setSubject(msg.getSubject());
+        simpleEmail.setMsg(msg.getMsg());
         simpleEmail.send();
     }
 

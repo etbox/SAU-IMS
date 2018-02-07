@@ -36,8 +36,8 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
             //验证登录验证码是否正确
             SessionLocal sessionLocal = SessionLocal.local(session);
             SessionContent.Captcha captcha = new SessionContent.Captcha();
-            captcha.setCode(record.code);
-            captcha.setCurrentTime(record.currentTime);
+            captcha.setCode(record.getCode());
+            captcha.setCurrentTime(record.getCurrentTime());
             if (!sessionLocal.isValidLoginCaptcha(captcha)) {
                 return false;
             }
@@ -89,8 +89,33 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
     }
 
     @Override
-    public int forgetPwd(AccountRecord record) {
+    public void sendLoginCaptchaImage() {
+
+    }
+
+    @Override
+    public int forgetPwdByEmail(AccountRecord record) {
         return 0;
+    }
+
+    @Override
+    public int forgetPwdByPhone(AccountRecord record) {
+        return 0;
+    }
+
+    @Override
+    public boolean confirmUpdatePwd() {
+        return false;
+    }
+
+    @Override
+    public boolean confirmUpdateEmail() {
+        return false;
+    }
+
+    @Override
+    public boolean confirmUpdatePhone() {
+        return false;
     }
 
     private void emailSend(String object, String email) {

@@ -6,32 +6,32 @@ import test.Model;
 /**
  * Created by APone on 2018/2/7 1:55.
  * 领域对象，用于controller层与service层的交互
- * 账号信息记录
+ * 账号信息记录更新字段封装
  */
-public class AccountRecord extends BaseModel{
+public class AccountRecord extends BaseModel {
 
     private static final long serialVersionUID = -9141383817817859890L;
 
     //用户名
-    public String userName;
+    private String userName;
 
     //新密码
-    public String oldPassword;
+    private String oldPassword;
 
     //旧密码
-    public String newPassword;
+    private String newPassword;
 
     //手机号码
-    public String phone;
+    private String phone;
 
     //邮箱地址
-    public String email;
+    private String email;
 
     //验证码
-    public String code;
+    private String code;
 
     //当前时间
-    public long currentTime;
+    private long currentTime;
 
     public String getUserName() {
         return userName;

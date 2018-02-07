@@ -13,8 +13,8 @@ public interface AccountSecureService extends BaseService<User> {
     /**
      * 用户身份信息进行用户登录
      *
-     * @param record 信息封装 传入参数：用户名userName,
-     *               密码password, 验证码code, 当前时间currentTime
+     * @param record 信息封装
+     *               传入参数：用户名userName,密码password, 验证码code, 当前时间currentTime
      * @return 是否登录成功
      */
     boolean login(AccountRecord record);
@@ -22,7 +22,7 @@ public interface AccountSecureService extends BaseService<User> {
     /**
      * 生成登录验证码，图片形式
      */
-    void createLoginCaptcha();
+    void sendLoginCaptchaImage();
 
     /**
      * 用户是否仍然处于登录状态
@@ -41,8 +41,8 @@ public interface AccountSecureService extends BaseService<User> {
     /**
      * 重置身份记录密码,适用于未登录的用户
      *
-     * @param record 信息封装 传入参数：新密码oldPassword,
-     *               验证码code, 当前时间currentTime
+     * @param record 信息封装
+     *               传入参数：新密码oldPassword, 验证码code, 当前时间currentTime
      * @return 是否修改成功
      * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
      */
@@ -51,7 +51,8 @@ public interface AccountSecureService extends BaseService<User> {
     /**
      * （申请）忘记身份记录密码，适用于未登录用户，根据填写邮箱（查伪)发送验证码
      *
-     * @param record 信息封装 传入参数：邮箱email
+     * @param record 信息封装
+     *               传入参数：邮箱email
      * @return 是否可以拥有合法修改
      * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
      */
@@ -60,7 +61,8 @@ public interface AccountSecureService extends BaseService<User> {
     /**
      * （申请）忘记身份记录密码，适用于未登录用户，根据填写手机（查伪)发送验证码
      *
-     * @param record 信息封装 传入参数：手机phone
+     * @param record 信息封装
+     *               传入参数：手机phone
      * @return 是否可以拥有合法修改
      * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
      */
@@ -76,8 +78,8 @@ public interface AccountSecureService extends BaseService<User> {
     /**
      * 更新（修改）密码记录，适用于登录用户
      *
-     * @param record 信息封装 传入参数：新密码newPassword，
-     *               旧密码oldPassword，验证码code, 当前时间currentTime
+     * @param record 信息封装
+     *               传入参数：新密码newPassword，旧密码oldPassword，验证码code, 当前时间currentTime
      * @return 是否更新成功
      * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
      */
@@ -93,7 +95,8 @@ public interface AccountSecureService extends BaseService<User> {
     /**
      * 更新（修改）邮箱地址记录，适用于登录用户
      *
-     * @param record 信息封装 传入参数：新邮箱email， 验证码code， 当前时间currentTime
+     * @param record 信息封装
+     *               传入参数：新邮箱email， 验证码code， 当前时间currentTime
      * @return 是否修改成功
      * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
      */
@@ -109,7 +112,8 @@ public interface AccountSecureService extends BaseService<User> {
     /**
      * 更新（修改）手机号码，适用于登录用户
      *
-     * @param record 信息封装 传入参数：新手机phone，验证码code， 当前时间currentTime
+     * @param record 信息封装
+     *               传入参数：新手机phone，验证码code， 当前时间currentTime
      * @return 是否修改成功
      * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
      */

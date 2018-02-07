@@ -7,6 +7,7 @@ import java.util.List;
 /**
  * Created by APone on 2017/9/5.
  * ClubAuditService接口
+ * 该接口用于校社联审核关社团注册申请的审核等操作
  */
 public interface ClubAuditService {
 
