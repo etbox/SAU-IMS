@@ -68,16 +68,16 @@
     $(formElement).serializeArray().forEach(function(item) {
       formData[item.name] = item.value;
     });
-    var jsonText = JSON.stringify(formData);
+    var json = JSON.stringify(formData);
     // console.log(formData);
 
     var url = 'login/go';
-    // var jsonText = JSON.stringify({
+    // var json = JSON.stringify({
     //   "userName": "s19961234@126.com",
     //   "password": "123456",
     //   "captcha": "cabce"
     // });
-    sendAjax(url, jsonText)
+    sendAjax(url, json)
       .done(getResponse);
   }
 
