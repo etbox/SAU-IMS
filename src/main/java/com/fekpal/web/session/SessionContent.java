@@ -14,19 +14,31 @@ public class SessionContent {
      */
     public static class UserIdentity extends BaseModel {
 
-        //用户id
+        private static final long serialVersionUID = -2303162431945571719L;
+
+        /**
+         * 用户id
+         */
         private int id;
 
-        //用户名
+        /**
+         * 用户名
+         */
         private String name;
 
-        //手机
+        /**
+         * 手机号码
+         */
         private String phone;
 
-        //邮箱
+        /**
+         * 邮箱
+         */
         private String email;
 
-        //权限
+        /**
+         * 权限
+         */
         private int authority;
 
         public UserIdentity(User user) {
@@ -86,19 +98,32 @@ public class SessionContent {
      */
     public static class Captcha extends BaseModel {
 
-        //验证码
+        private static final long serialVersionUID = -6418758502209346026L;
+
+        /**
+         * 验证码
+         */
         private String code;
 
-        //哈希值
+        /**
+         * 哈希值
+         */
         private String hashCode;
 
-        //有效时间
+
+        /**
+         * 有效时间
+         */
         private long activeTime;
 
-        //创建时间
+        /**
+         * 创建时间
+         */
         private long createTime;
 
-        //当前时间
+        /**
+         * 当前时间
+         */
         private long currentTime;
 
         public long getCurrentTime() {

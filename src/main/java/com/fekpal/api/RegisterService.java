@@ -27,6 +27,9 @@ public interface RegisterService extends BaseService<User> {
      * 注册校社联用户
      *
      * @param reg 校社联注册信息封装
+     *            传入参数：用户名userName，密码password，社长adminName，邮箱地址email，手机号码phone，
+     *            校社联名称sauName，描述description，验证码code，当前时间currentTime，校社联注册审核文件名auditFileName，
+     *            登录地址loginIp，登录时间loginTime，注册地址registerIp，注册时间registerTime
      * @return 注册状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败 Operation.CAPTCHA_INCORRECT 验证码错误
      */
     int insertSauReg(SauReg reg);
@@ -35,24 +38,27 @@ public interface RegisterService extends BaseService<User> {
      * 注册社团用户
      *
      * @param reg 社团注册信息封装
+     *            传入参数：用户名userName，密码password，社长adminName，邮箱地址email，手机号码phone，
+     *            社团名称clubName，社团类型clubType，描述description，验证码code，当前时间currentTime，
+     *            社团注册审核文件名auditFileName，登录地址loginIp，登录时间loginTime，注册地址registerIp，
+     *            注册时间registerTime
      * @return 注册状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败 Operation.CAPTCHA_INCORRECT 验证码错误
      */
     int insertClubReg(ClubReg reg);
 
     /**
-     * 邮箱发送注册验证码
+     * 邮箱发送普通用户注册验证码
      *
      * @param email 邮箱地址
      * @return 发送状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
      */
-    int sendRegCaptchaByEmail(String email);
+    int sendClubEmailCaptcha(String email);
 
     /**
-     * 手机发送注册验证码
+     * 邮箱发送社团用户注册验证码
      *
-     * @param phone 手机号码
+     * @param email 邮箱地址
      * @return 发送状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
      */
-    int sendRegCaptchaByPhone(String phone);
-
+    int sendPersonEmailCaptcha(String email);
 }

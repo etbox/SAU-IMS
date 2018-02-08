@@ -34,10 +34,6 @@ public class PersonServiceImpl extends BaseServiceImpl<PersonMapper,Person> impl
         return null;
     }
 
-    @Override
-    public int insertAccount(PersonReg reg) {
-        return 0;
-    }
 
     @Override
     public boolean isExitNickname(String name) {

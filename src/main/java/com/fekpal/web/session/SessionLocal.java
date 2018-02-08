@@ -117,7 +117,7 @@ public class SessionLocal {
      * @return 验证信息
      * @throws SessionNullException 空session异常
      */
-    private SessionContent.Captcha createCaptcha(final String type, final SessionContent.Captcha captcha) throws SessionNullException {
+    public SessionContent.Captcha createCaptcha(final String type, final SessionContent.Captcha captcha) throws SessionNullException {
         if (session == null) {
             throw new SessionNullException();
         }
@@ -382,7 +382,7 @@ public class SessionLocal {
      * @param type    验证种类
      * @return 判断
      */
-    private boolean isValidCaptcha(final SessionContent.Captcha captcha, final String type) {
+    public boolean isValidCaptcha(final SessionContent.Captcha captcha, final String type) {
         //获得验证信息
         try {
             SessionContent.Captcha valid = getCaptcha(type);

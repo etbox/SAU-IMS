@@ -31,19 +31,6 @@ public interface ClubService extends BaseService<Club> {
     Club selectByUserId(int id);
 
     /**
-     * 注册新的社团用户
-     *
-     * @param reg 社团用户注册信息封装
-     *            传入参数：用户名userName，密码password，社长adminName，邮箱地址email，手机号码phone，
-     *            社团名称clubName，社团类型clubType，描述description，验证码code，当前时间currentTime，
-     *            社团注册审核文件名auditFileName，登录地址loginIp，登录时间loginTime，注册地址registerIp，
-     *            注册时间registerTime
-     * @return 是否插入成功
-     * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
-     */
-    int insertAccount(ClubReg reg);
-
-    /**
      * 储存社团注册审核文件
      *
      * @return 是否处理成功
