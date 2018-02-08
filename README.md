@@ -10,10 +10,10 @@
 3、重写服务层接口，完成首页部分接口编写（按接口文档序号）<br/>
 4、清空controller层方法内代码，只保留方法<br/>
 5、session移向服务层，并新增session通用操作<br/>
-6、大幅修改dao层，逻辑不变
-7、清除大量无意义工具类，部分合并，但未全部修改
-8、将service api分离出来，为将来open-api/rpc-service-api？
-9、将大部分类的操作抽象为BaseXXX接口
+6、大幅修改dao层，逻辑不变<br/>
+7、清除大量无意义工具类，部分合并，但未全部修改<br/>
+8、将service api分离出来，为将来open-api/rpc-service-api？<br/>
+9、将大部分类的操作抽象为BaseXXX接口<br/>
 
 <h4>2018/1/27</h4>
 1、大幅修改Dao层，更加具有结构化<br/>
