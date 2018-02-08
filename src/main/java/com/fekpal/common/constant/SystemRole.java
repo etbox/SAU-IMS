@@ -25,11 +25,4 @@ public class SystemRole {
      * 校社联用户
      */
     public static final int SAU = 3;
-
-    /**
-     * 系统角色名称
-     */
-    public static final String[] ROLE_NAME = {"普通成员", "社团成员", "校社联成员"};
-
-    public static final String[] GENDER = {"男", "女"};
 }

@@ -4,6 +4,8 @@ import com.fekpal.common.base.BaseService;
 import com.fekpal.dao.model.User;
 import com.fekpal.service.model.domain.AccountRecord;
 
+import java.io.OutputStream;
+
 /**
  * Created by APone on 2018/2/7 0:49.
  * 账号安全服务接口，用于用户登录，登出，安全修改等操作
@@ -16,13 +18,16 @@ public interface AccountSecureService extends BaseService<User> {
      * @param record 信息封装
      *               传入参数：用户名userName,密码password, 验证码code, 当前时间currentTime
      * @return 是否登录成功
+     * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败 Operation.CAPTCHA_INCORRECT 验证码错误
      */
-    boolean login(AccountRecord record);
+    int login(AccountRecord record);
 
     /**
      * 生成登录验证码，图片形式
+     *
+     * @param out 输出流
      */
-    void sendLoginCaptchaImage();
+    void sendLoginCaptchaImage(OutputStream out);
 
     /**
      * 用户是否仍然处于登录状态

@@ -1,9 +1,9 @@
 package com.fekpal.web.controller.clubAdmin;
 
 import com.fekpal.common.constant.ResponseCode;
+import com.fekpal.common.json.JsonResult;
 import com.fekpal.dao.model.User;
 import com.fekpal.api.AnniversaryAuditService;
-import com.fekpal.common.json.JsonObject;
 import com.fekpal.common.utils.FileUploadUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +30,7 @@ public class ClubAnnRegisterController {
     private AnniversaryAuditService auditService;
 
     @Autowired
-    private JsonObject returnData;
+    private JsonResult returnData;
 
     /**
      * 查看全部注册的信息的方法
@@ -58,8 +58,8 @@ public class ClubAnnRegisterController {
         //创建放全部年度注册信息的list集合，并将它放入返回数据
         List<Map<String, Object>> auditMsgList = new ArrayList<>();
         auditMsgList.add(auditMsgListMap);
-        returnData.setData(auditMsgList);
-        return returnData.getMap();
+
+        return null;
     }
 
     /**
@@ -89,12 +89,12 @@ public class ClubAnnRegisterController {
             auditMsgDetailMap.put("auditResult", "");
 
             //将map集合数据放入到返回数据中，返回
-            returnData.setData(auditMsgDetailMap);
+
         } else {
             returnData.setStateCode(ResponseCode.REQUEST_ERROR, "要查询的年度注册消息的id不符合条件，请重新查询");
-            return returnData.getMap();
+            return null;
         }
-        return returnData.getMap();
+        return null;
     }
 
     /**
@@ -131,8 +131,7 @@ public class ClubAnnRegisterController {
         List<Map<String, Object>> auditMsgList = new ArrayList<Map<String, Object>>();
         auditMsgList.add(auditMsgListMap1);
 
-        returnData.setData(auditMsgList);
-        return returnData.getMap();
+        return null;
     }
 
     // TODO: 2017/9/2
@@ -174,7 +173,7 @@ public class ClubAnnRegisterController {
             fileName = fileNameList.get(0);
         } else {
             returnData.setStateCode(ResponseCode.REQUEST_ERROR, "还没有发送文件过来，请重新发送");
-            return returnData.getMap();
+            return null;
         }
 
         //从发来的map集合中得到年度注册描述
@@ -185,7 +184,7 @@ public class ClubAnnRegisterController {
         //根据用户id，将本社团的年度注册信息，描述，文件名，和提交时间存入数据库
         // TODO: 2017/8/27
 
-        return returnData.getMap();
+        return null;
     }
 
 
@@ -197,7 +196,7 @@ public class ClubAnnRegisterController {
      */
     public static Map<String, Object> handleFile(MultipartFile[] files) {
 
-        JsonObject returnData = new JsonObject();
+        JsonResult returnData = new JsonResult();
 
         //判断文件格式和大小是否符合
         for (MultipartFile file : files) {
@@ -205,19 +204,19 @@ public class ClubAnnRegisterController {
             if (!file.isEmpty()) {
                 if (file.getSize() > 1024 * 1024 * 10) {
                     returnData.setStateCode(ResponseCode.REQUEST_ERROR, "文件大于10m请重新上传");
-                    return returnData.getMap();
+                    return null;
                 }
                 if (!file.getContentType().equals("application/vnd.openxmlformats-officedocument.wordprocessingml.document")
                         && !file.getContentType().equals("application/msword")) {
                     returnData.setStateCode(ResponseCode.REQUEST_ERROR, "上传的文件不符合格式，请重新上传");
-                    return returnData.getMap();
+                    return null;
                 }
             } else {
                 returnData.setStateCode(1, "没上传文件，请重新上传");
-                return returnData.getMap();
+                return null;
             }
         }
 
-        return returnData.getMap();
+        return null;
     }
 }

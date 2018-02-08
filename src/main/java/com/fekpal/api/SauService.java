@@ -27,7 +27,8 @@ public interface SauService extends BaseService<Sau> {
      *
      * @param reg 校社联用户注册信息封装
      *            传入参数：用户名userName，密码password，社长adminName，邮箱地址email，手机号码phone，
-     *            校社联名称sauName，描述description，验证码code，当前时间currentTime，校社联注册审核文件名auditFileName
+     *            校社联名称sauName，描述description，验证码code，当前时间currentTime，校社联注册审核文件名auditFileName，
+     *            登录地址loginIp，登录时间loginTime，注册地址registerIp，注册时间registerTime
      * @return 是否插入成功
      * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
      */

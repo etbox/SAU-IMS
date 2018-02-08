@@ -3,7 +3,9 @@ package com.fekpal.service.impl;
 import com.fekpal.api.AccountSecureService;
 import com.fekpal.common.base.BaseServiceImpl;
 import com.fekpal.common.base.ExampleWrapper;
+import com.fekpal.common.constant.Operation;
 import com.fekpal.common.utils.MD5Utils;
+import com.fekpal.common.utils.captcha.Captcha;
 import com.fekpal.common.utils.msg.email.EmailSender;
 import com.fekpal.dao.mapper.UserMapper;
 import com.fekpal.dao.model.User;
@@ -15,6 +17,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
+
+import java.io.IOException;
+import java.io.OutputStream;
 
 import static test.Model.user;
 
@@ -31,7 +36,7 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
     EmailSender emailSender;
 
     @Override
-    public boolean login(AccountRecord record) {
+    public int login(AccountRecord record) {
         try {
             //验证登录验证码是否正确
             SessionLocal sessionLocal = SessionLocal.local(session);
@@ -39,7 +44,7 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
             captcha.setCode(record.getCode());
             captcha.setCurrentTime(record.getCurrentTime());
             if (!sessionLocal.isValidLoginCaptcha(captcha)) {
-                return false;
+                return Operation.CAPTCHA_INCORRECT;
             }
 
             //开始获取用户的存在
@@ -47,17 +52,17 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
             example.eq("user_name", record.getUserName());
             User userIdentity = mapper.selectFirstByExample(example);
             if (userIdentity == null) {
-                return false;
+                return Operation.FAILED;
             }
             String password = MD5Utils.md5(userIdentity.getPassword() + userIdentity.getUserKey());
             if (user.getPassword().equals(password)) {
                 sessionLocal.createUserIdentity(userIdentity);
-                return true;
+                return Operation.SUCCESSFULLY;
             }
         } catch (SessionNullException e) {
             e.printStackTrace();
         }
-        return false;
+        return Operation.CAPTCHA_INCORRECT;
     }
 
     @Override
@@ -78,19 +83,26 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
     }
 
     @Override
-    public int updatePwd(AccountRecord record) {
-        SessionLocal sessionLocal = SessionLocal.local(session);
-        return 0;
+    public void sendLoginCaptchaImage(OutputStream out) {
+        try {
+            Captcha captchaImg = new Captcha();
+            captchaImg.createCaptchaImg(out);
+
+            SessionLocal sessionLocal = SessionLocal.local(session);
+            SessionContent.Captcha captcha = new SessionContent.Captcha();
+            captcha.setCode(captchaImg.getCode());
+            captcha.setCreateTime(System.currentTimeMillis());
+            captcha.setActiveTime(1000 * 60 * 5);
+            sessionLocal.createLoginCaptcha(captcha);
+
+        } catch (IOException | SessionNullException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public int resetPwd(AccountRecord record) {
         return 0;
-    }
-
-    @Override
-    public void sendLoginCaptchaImage() {
-
     }
 
     @Override
@@ -109,22 +121,23 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
     }
 
     @Override
+    public int updatePwd(AccountRecord record) {
+        return 0;
+    }
+
+    @Override
     public boolean confirmUpdateEmail() {
         return false;
     }
 
     @Override
-    public boolean confirmUpdatePhone() {
-        return false;
-    }
-
-    private void emailSend(String object, String email) {
-
+    public int updateEmail(AccountRecord record) {
+        return 0;
     }
 
     @Override
-    public int updateEmail(AccountRecord record) {
-        return 0;
+    public boolean confirmUpdatePhone() {
+        return false;
     }
 
     @Override

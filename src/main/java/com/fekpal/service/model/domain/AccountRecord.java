@@ -12,7 +12,7 @@ public class AccountRecord extends BaseModel {
 
     private static final long serialVersionUID = -9141383817817859890L;
 
-    //用户名
+
     private String userName;
 
     //新密码

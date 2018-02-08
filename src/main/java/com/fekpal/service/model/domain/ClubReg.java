@@ -2,6 +2,8 @@ package com.fekpal.service.model.domain;
 
 import com.fekpal.common.base.BaseModel;
 
+import java.sql.Timestamp;
+
 /**
  * Created by APone on 2018/2/7 16:54.
  * 社团用户注册消息封装
@@ -26,11 +28,51 @@ public class ClubReg extends BaseModel {
 
     private String description;
 
+    private Timestamp loginTIme;
+
+    private Timestamp registerTime;
+
+    private String loginIp;
+
+    private String registerIp;
+
     private String code;
 
     private long currentTime;
 
     private String auditFileName;
+
+    public Timestamp getLoginTIme() {
+        return loginTIme;
+    }
+
+    public void setLoginTIme(Timestamp loginTIme) {
+        this.loginTIme = loginTIme;
+    }
+
+    public Timestamp getRegisterTime() {
+        return registerTime;
+    }
+
+    public void setRegisterTime(Timestamp registerTime) {
+        this.registerTime = registerTime;
+    }
+
+    public String getLoginIp() {
+        return loginIp;
+    }
+
+    public void setLoginIp(String loginIp) {
+        this.loginIp = loginIp;
+    }
+
+    public String getRegisterIp() {
+        return registerIp;
+    }
+
+    public void setRegisterIp(String registerIp) {
+        this.registerIp = registerIp;
+    }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;

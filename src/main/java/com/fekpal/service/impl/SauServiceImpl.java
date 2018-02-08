@@ -7,6 +7,7 @@ import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.dao.model.Sau;
 import com.fekpal.dao.model.User;
 import com.fekpal.api.SauService;
+import com.fekpal.service.model.domain.SauReg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +19,8 @@ import java.util.List;
  */
 @Service
 public class SauServiceImpl extends BaseServiceImpl<SauMapper, Sau> implements SauService {
+
+
 
     @Autowired
     private SauMapper sauDao;
@@ -38,6 +41,16 @@ public class SauServiceImpl extends BaseServiceImpl<SauMapper, Sau> implements S
         return sauDao.selectFirstByExample(example);
     }
 
+    @Override
+    public int insertAccount(SauReg reg) {
+        return 0;
+    }
+
+    @Override
+    public void sendRegCaptchaByEmail(String email) {
+
+    }
+
     /**
      * 插入新的校社联用户信息以及用户身份信息
      * 当插入数为2时才为成功，其他为错误
@@ -46,7 +59,6 @@ public class SauServiceImpl extends BaseServiceImpl<SauMapper, Sau> implements S
      * @param sau  校社联用户信息
      * @return 插入数
      */
-    @Override
     public int insertInfo(User user, Sau sau) {
 
         int row = userDao.insert(user);

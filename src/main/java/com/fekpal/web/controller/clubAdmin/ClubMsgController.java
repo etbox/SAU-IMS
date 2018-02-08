@@ -1,7 +1,7 @@
 package com.fekpal.web.controller.clubAdmin;
 
 import com.fekpal.api.ClubService;
-import com.fekpal.common.json.JsonObject;
+import com.fekpal.common.json.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ public class ClubMsgController {
     private ClubService clubService;
 
     @Autowired
-    private JsonObject returnData;
+    private JsonResult returnData;
 
     /**
      * 返回社团信息列表的方法

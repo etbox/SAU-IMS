@@ -41,7 +41,7 @@ public class Captcha {
             '3', '4', '5', '6', '7', '8', '9'};
 
     public Captcha() {
-        this(120,50,5,3);
+        this(120,40,5,3);
     }
 
     /**
@@ -50,7 +50,7 @@ public class Captcha {
      * @param codeCount 字符个数
      * @param lineCount 干扰线条数
      */
-    public Captcha(int width, int height, int codeCount, int lineCount) {
+    private Captcha(int width, int height, int codeCount, int lineCount) {
         this.width = width;
         this.height = height;
         this.codeCount = codeCount;

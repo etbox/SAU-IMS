@@ -7,6 +7,7 @@ import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.dao.model.Club;
 import com.fekpal.dao.model.User;
 import com.fekpal.api.ClubService;
+import com.fekpal.service.model.domain.ClubReg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,8 @@ public class ClubServiceImpl extends BaseServiceImpl<ClubMapper, Club> implement
         return clubDao.selectFirstByExample(example);
     }
 
+
+
     /**
      * 根据社团用户的用户身份id获得社团信息记录
      *
@@ -51,20 +54,19 @@ public class ClubServiceImpl extends BaseServiceImpl<ClubMapper, Club> implement
         return clubDao.selectFirstByExample(example);
     }
 
-    /**
-     * 插入新的社团用户信息以及用户身份信息
-     * 只有插入数等于2才成功，其他一律错误
-     *
-     * @param user User 用户身份信息
-     * @param club Club 社团用户信息
-     * @return 插入数量
-     */
     @Override
-    public int insertInfo(User user, Club club) {
+    public int insertAccount(ClubReg reg) {
+        return 0;
+    }
 
-        int row=userDao.insert(user);
+    @Override
+    public int saveRegAuditFile() {
+        return 0;
+    }
 
-        return row;
+    @Override
+    public void sendRegCaptchaByEmail(String email) {
+
     }
 
     @Override

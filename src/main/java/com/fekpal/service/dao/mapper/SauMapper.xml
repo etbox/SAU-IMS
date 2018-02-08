@@ -51,7 +51,7 @@
     </insert>
 
     <insert id="insertLoop" parameterType="list" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
-        <foreach collection="records" item="item" separator=",">
+        <foreach collection="list" item="item" separator=",">
         </foreach>
     </insert>
 
@@ -64,7 +64,7 @@
         contact_email = #{contactEmail},
         contact_number = #{contactNumber},
         description = #{description},
-        members = #{members}
+        members = #{members},
         sau_state = #{sauState}
         where sau_id = #{sauId}
     </update>

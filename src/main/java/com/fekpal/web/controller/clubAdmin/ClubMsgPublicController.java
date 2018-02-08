@@ -4,8 +4,8 @@ import com.fekpal.api.ClubMemberService;
 import com.fekpal.api.ClubService;
 import com.fekpal.api.MessageService;
 import com.fekpal.api.UserService;
+import com.fekpal.common.json.JsonResult;
 import com.fekpal.web.model.ClubPublishedNewMsg;
-import com.fekpal.common.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +32,7 @@ public class ClubMsgPublicController {
     private UserService userService;
 
     @Autowired
-    private JsonObject returnData;
+    private JsonResult returnData;
 
 
     /**

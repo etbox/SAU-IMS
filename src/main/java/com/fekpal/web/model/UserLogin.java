@@ -42,12 +42,4 @@ public class UserLogin {
         this.captcha = captcha;
     }
 
-    @Override
-    public String toString() {
-        return "UserLogin{" +
-                "userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", captcha='" + captcha + '\'' +
-                '}';
-    }
 }

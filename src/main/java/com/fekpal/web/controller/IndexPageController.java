@@ -1,10 +1,10 @@
 package com.fekpal.web.controller;
 
+import com.fekpal.common.json.JsonResult;
 import com.fekpal.dao.model.Club;
 import com.fekpal.web.model.ClubDetail;
 import com.fekpal.web.model.ClubListMsg;
 import com.fekpal.api.ClubService;
-import com.fekpal.common.json.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ public class IndexPageController {
     private ClubService clubService;
 
     @Autowired
-    private JsonObject returnData;
+    private JsonResult returnData;
 
     /**
      * 得到社团列表信息
@@ -55,9 +55,9 @@ public class IndexPageController {
             list.add(clubs);
         }
         //将list加入到数据中
-        returnData.setData(list);
 
-        return returnData.getMap();
+
+        return null;
     }
 
     /**
@@ -81,9 +81,9 @@ public class IndexPageController {
         club1.setEmail(club.getContactEmail());
         club1.setFoundTime(new Date(club.getFoundTime().getTime()));
         club1.setMembers(club.getMembers());
-        returnData.setData(club);
 
-        return returnData.getMap();
+
+        return null;
     }
 }
 

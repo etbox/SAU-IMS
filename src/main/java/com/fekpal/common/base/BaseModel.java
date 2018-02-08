@@ -1,6 +1,7 @@
 package com.fekpal.common.base;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.io.Serializable;
 
@@ -10,9 +11,10 @@ import java.io.Serializable;
  */
 public class BaseModel implements Serializable{
 
+    private static final long serialVersionUID = 2764427107524917616L;
+
     public String toString(){
 
-        return ToStringBuilder.reflectionToString(this);
+        return ToStringBuilder.reflectionToString(this, ToStringStyle.JSON_STYLE);
     }
-
 }

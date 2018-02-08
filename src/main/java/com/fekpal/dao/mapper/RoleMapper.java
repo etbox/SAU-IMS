@@ -11,7 +11,7 @@ import java.util.List;
  * 现在只获取结果集，还未有增删改功能
  */
 @Repository
-public interface RoleMapper {
+public interface RoleMapper{
 
     /**
      * 加载所有权限的资源

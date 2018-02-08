@@ -42,16 +42,6 @@ public interface PersonService extends BaseService<Person> {
     List<Person> queryByNickname(String name, int offset, int limit);
 
     /**
-     * 注册新的普通用户
-     *
-     * @param reg 普通用户注册信息封装
-     *            传入参数：用户名userName，密码password，邮箱地址email，验证码code，当前时间currentTime
-     * @return 是否插入成功
-     * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
-     */
-    int insertAccount(PersonReg reg);
-
-    /**
      * 是否有相同的昵称
      *
      * @param name 昵称

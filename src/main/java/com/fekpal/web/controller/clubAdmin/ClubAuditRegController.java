@@ -2,7 +2,7 @@ package com.fekpal.web.controller.clubAdmin;
 
 import com.fekpal.api.ClubMemberService;
 import com.fekpal.api.ClubService;
-import com.fekpal.common.json.JsonObject;
+import com.fekpal.common.json.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +23,7 @@ public class ClubAuditRegController {
     private ClubService clubService;
 
     @Autowired
-    private JsonObject returnData;
+    private JsonResult returnData;
 
     /**
      * 查看全部审核的信息的方法

@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.fekpal.dao.com.fekpal.service.dao.mapper.ClubMapper">
+<mapper namespace="com.fekpal.dao.mapper.ClubMapper">
     <cache/>
 
     <select id="selectByPrimaryKey" parameterType="int" resultMap="result">
@@ -54,8 +54,8 @@
         #{clubState})
     </insert>
 
-    <insert id="insertRecords" parameterType="List" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
-        <foreach collection="records" item="item" separator=",">
+    <insert id="insertLoop" parameterType="list" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+        <foreach collection="list" item="item" separator=",">
         </foreach>
     </insert>
 

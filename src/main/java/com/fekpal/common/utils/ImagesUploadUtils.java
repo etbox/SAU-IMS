@@ -1,7 +1,7 @@
 package com.fekpal.common.utils;
 
 import com.fekpal.common.constant.ResponseCode;
-import com.fekpal.common.json.JsonObject;
+import com.fekpal.common.json.JsonResult;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,7 +25,7 @@ public class ImagesUploadUtils {
      */
     public static Map<String, Object> uploadImage(MultipartFile[] files, HttpServletRequest request, String childrenPath) {
         //得到基本返回数据模板
-        JsonObject returnData = new JsonObject();
+        JsonResult returnData = new JsonResult();
         //判断图片格式和大小是否符合
         for (MultipartFile file : files) {
             if (!file.isEmpty()) {

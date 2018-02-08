@@ -33,10 +33,15 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     }
 
     @Override
-    public User selectByUserNameAndPwd(String userName, String password) {
+    public User selectByUserNameAndPwd(User user) {
         ExampleWrapper<User> example = new ExampleWrapper<>();
-        example.eq("user_name", userName).and().eq("password", password);
+        example.eq("user_name", user.getUserName()).and().eq("password", user.getPassword());
         return mapper.selectFirstByExample(example);
+    }
+
+    @Override
+    public boolean isExitPhone(String phone) {
+        return false;
     }
 
     @Override

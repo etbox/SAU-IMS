@@ -5,6 +5,7 @@ import com.fekpal.dao.mapper.PersonMapper;
 import com.fekpal.dao.model.Person;
 import com.fekpal.dao.model.User;
 import com.fekpal.api.PersonService;
+import com.fekpal.service.model.domain.PersonReg;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,10 +17,7 @@ import java.util.List;
 @Service
 public class PersonServiceImpl extends BaseServiceImpl<PersonMapper,Person> implements PersonService {
 
-    @Override
-    public Person selectByNickName(String nickName) {
-        return null;
-    }
+
 
     @Override
     public Person selectByUserId(int id) {
@@ -27,23 +25,23 @@ public class PersonServiceImpl extends BaseServiceImpl<PersonMapper,Person> impl
     }
 
     @Override
-    public int insertInfo(User user, Person person) {
+    public Person selectByNickname(String name) {
+        return null;
+    }
+
+    @Override
+    public List<Person> queryByNickname(String name, int offset, int limit) {
+        return null;
+    }
+
+    @Override
+    public int insertAccount(PersonReg reg) {
         return 0;
     }
 
     @Override
-    public boolean isExitNickName(String nickName) {
+    public boolean isExitNickname(String name) {
         return false;
-    }
-
-    @Override
-    public void addLikeClub(int personId, int clubId) {
-
-    }
-
-    @Override
-    public List<Integer> loadAllLikeByPersonId(int id) {
-        return null;
     }
 
     @Override

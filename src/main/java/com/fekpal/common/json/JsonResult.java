@@ -7,7 +7,7 @@ import java.util.Map;
  * 用来产生返回数据的标准工具类
  * Created by hasee on 2017/8/15.
  */
-public class JsonObject {
+public class JsonResult {
 
     //创建返回数据的map集合
     private Map<String, Object> map = new HashMap<>();
@@ -22,7 +22,7 @@ public class JsonObject {
     private Object data;
 
     //构造函数
-    public JsonObject(){
+    public JsonResult(){
         map.put("code", code);
         map.put("msg", msg);
         map.put("data", data);

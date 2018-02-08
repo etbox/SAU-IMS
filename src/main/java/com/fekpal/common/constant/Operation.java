@@ -7,9 +7,18 @@ package com.fekpal.common.constant;
  */
 public class Operation {
 
-    //操作失败常量
+    /**
+     * 操作失败常量
+     */
     public static final int FAILED = 0;
 
-    //操作成功常量
+    /**
+     * 操作成功常量
+     */
     public static final int SUCCESSFULLY = 1;
+
+    /**
+     * 验证码错误常量
+     */
+    public static final int CAPTCHA_INCORRECT = 2;
 }

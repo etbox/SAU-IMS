@@ -1,13 +1,17 @@
 package com.fekpal.web.controller;
 
-import com.fekpal.api.UserService;
-import com.fekpal.common.json.JsonObject;
+import com.fekpal.api.AccountSecureService;
 
+import com.fekpal.common.Result;
+import com.fekpal.common.json.JsonResult;
+import com.fekpal.dao.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * 登陆相关的方法
@@ -17,10 +21,10 @@ import java.util.Map;
 public class LoginController {
 
     @Autowired
-    private UserService userService;
+    private AccountSecureService accountSecureService;
 
     @Autowired
-    private JsonObject returnData;
+    private JsonResult result;
 
 
     /**
@@ -28,11 +32,11 @@ public class LoginController {
      *
      * @return 返回用户信息
      */
-    @RequestMapping("/login/go/{id}")
+    @RequestMapping("/login/go")
     @ResponseBody
-    public Map<String, Object> login() {
+    public JsonResult login() {
 
-        return returnData.getMap();
+        return result;
     }
 
     /**
@@ -40,16 +44,24 @@ public class LoginController {
      *
      * @return Map
      */
-    @RequestMapping("/logout")
     @ResponseBody
-    public Map<String, Object> logout() {
-        return returnData.getMap();
+    @RequestMapping("/logout")
+    public Result logout() {
+        Result result=new Result();
+        result.put(new User());
+        return result;
     }
 
     /**
      * 生成登陆验证码，并向浏览器输出
      */
     @RequestMapping(value = "/login/code", method = RequestMethod.GET)
-    public void captcha() {
+    public void captcha(HttpServletResponse response) {
+        try {
+            OutputStream outputStream = response.getOutputStream();
+            accountSecureService.sendLoginCaptchaImage(outputStream);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }

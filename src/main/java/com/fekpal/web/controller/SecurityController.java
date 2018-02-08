@@ -1,7 +1,7 @@
 package com.fekpal.web.controller;
 
 import com.fekpal.api.UserService;
-import com.fekpal.common.json.JsonObject;
+import com.fekpal.common.json.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +22,7 @@ public class SecurityController {
     private UserService userService;
 
     @Autowired
-    private JsonObject returnData;
+    private JsonResult returnData;
 
     /**
      * 发送重置密码的邮箱验证码

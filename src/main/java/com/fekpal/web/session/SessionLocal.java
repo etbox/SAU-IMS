@@ -10,22 +10,39 @@ import javax.servlet.http.HttpSession;
  */
 public class SessionLocal {
 
-    //身份信息
+    /**
+     * 身份信息
+     */
     private static final String USER_IDENTITY = "userIdentity";
 
-    //手机验证信息
+    /**
+     * 手机验证信息
+     */
     private static final String PHONE_CAPTCHA = "phoneCaptcha";
 
-    //邮箱验证信息
+    /**
+     * 邮箱验证信息
+     */
     private static final String EMAIL_CAPTCHA = "emailCaptcha";
 
-    //登录验证信息
+    /**
+     * 登录验证信息
+     */
     private static final String LOGIN_CAPTCHA = "loginCaptcha";
 
-    //路径验证信息
+    /**
+     * 路径验证信息
+     */
     private static final String URL_IDENTITY = "urlIdentity";
 
-    //会话对象
+    /**
+     * 验证码常量
+     */
+    private static final String CAPTCHA = "captcha";
+
+    /**
+     * 会话对象
+     */
     private HttpSession session;
 
     /**
@@ -100,13 +117,60 @@ public class SessionLocal {
      * @return 验证信息
      * @throws SessionNullException 空session异常
      */
-    private SessionContent.Captcha createCaptcha(final String type) throws SessionNullException {
+    private SessionContent.Captcha createCaptcha(final String type, final SessionContent.Captcha captcha) throws SessionNullException {
         if (session == null) {
             throw new SessionNullException();
         }
-        SessionContent.Captcha captcha = new SessionContent.Captcha();
         session.setAttribute(type, captcha);
         return captcha;
+    }
+
+    /**
+     * 创建验证码信息
+     *
+     * @param captcha 验证信息
+     * @throws SessionNullException 空session异常
+     */
+    public void createCaptcha(final SessionContent.Captcha captcha) throws SessionNullException {
+        createCaptcha(CAPTCHA, captcha);
+    }
+
+    /**
+     * 获得验证码信息
+     *
+     * @return 验证码信息
+     * @throws SessionNullException 空session异常
+     */
+    public SessionContent.Captcha getCaptcha() throws SessionNullException {
+        return getCaptcha(CAPTCHA);
+    }
+
+    /**
+     * 刷新验证码信息
+     *
+     * @param captcha 验证信息
+     * @throws SessionNullException 空session异常
+     */
+    @Deprecated
+    public void freshCaptcha(final SessionContent.Captcha captcha) throws SessionNullException {
+        createCaptcha(captcha);
+    }
+
+    /**
+     * 清除验证信息
+     */
+    public void clearCaptcha() {
+        clear(CAPTCHA);
+    }
+
+    /**
+     * 刷新用户身份信息
+     *
+     * @param userIdentity 用户身份信息
+     * @throws SessionNullException 空session异常
+     */
+    public void freshUserIdentity(final SessionContent.UserIdentity userIdentity) throws SessionNullException {
+        session.setAttribute(USER_IDENTITY, userIdentity);
     }
 
     /**
@@ -149,8 +213,9 @@ public class SessionLocal {
      * @return 验证信息
      * @throws SessionNullException 空session异常
      */
-    public SessionContent.Captcha createPhoneCaptcha() throws SessionNullException {
-        return createCaptcha(PHONE_CAPTCHA);
+    @Deprecated
+    public SessionContent.Captcha createPhoneCaptcha(final SessionContent.Captcha captcha) throws SessionNullException {
+        return createCaptcha(PHONE_CAPTCHA, captcha);
     }
 
     /**
@@ -159,6 +224,7 @@ public class SessionLocal {
      * @return 手机验证
      * @throws SessionNullException 空session异常
      */
+    @Deprecated
     public SessionContent.Captcha getPhoneCaptcha() throws SessionNullException {
         return getCaptcha(PHONE_CAPTCHA);
     }
@@ -169,6 +235,7 @@ public class SessionLocal {
      * @return 是否存在
      * @throws SessionNullException 空session异常
      */
+    @Deprecated
     public boolean isExitPhoneCaptcha() throws SessionNullException {
         SessionContent.Captcha captcha = getPhoneCaptcha();
         return captcha != null;
@@ -177,6 +244,7 @@ public class SessionLocal {
     /**
      * 清除手机验证信息
      */
+    @Deprecated
     public void clearPhoneCaptcha() {
         clear(PHONE_CAPTCHA);
     }
@@ -187,8 +255,9 @@ public class SessionLocal {
      * @return 验证信息
      * @throws SessionNullException 空session异常
      */
-    public SessionContent.Captcha createEmailCaptcha() throws SessionNullException {
-        return createCaptcha(EMAIL_CAPTCHA);
+    @Deprecated
+    public SessionContent.Captcha createEmailCaptcha(final SessionContent.Captcha captcha) throws SessionNullException {
+        return createCaptcha(EMAIL_CAPTCHA, captcha);
     }
 
     /**
@@ -197,6 +266,7 @@ public class SessionLocal {
      * @return 邮箱验证
      * @throws SessionNullException 空session异常
      */
+    @Deprecated
     public SessionContent.Captcha getEmailCaptcha() throws SessionNullException {
         return getCaptcha(EMAIL_CAPTCHA);
     }
@@ -207,6 +277,7 @@ public class SessionLocal {
      * @return 是否存在
      * @throws SessionNullException 空session异常
      */
+    @Deprecated
     public boolean isExitEmailCaptcha() throws SessionNullException {
         SessionContent.Captcha captcha = getEmailCaptcha();
         return captcha != null;
@@ -215,6 +286,7 @@ public class SessionLocal {
     /**
      * 清除邮箱验证信息
      */
+    @Deprecated
     public void clearEmailCaptcha() {
         clear(EMAIL_CAPTCHA);
     }
@@ -225,8 +297,9 @@ public class SessionLocal {
      * @return 验证信息
      * @throws SessionNullException 空session异常
      */
-    public SessionContent.Captcha createLoginCaptcha() throws SessionNullException {
-        return createCaptcha(LOGIN_CAPTCHA);
+    @Deprecated
+    public SessionContent.Captcha createLoginCaptcha(final SessionContent.Captcha captcha) throws SessionNullException {
+        return createCaptcha(LOGIN_CAPTCHA, captcha);
     }
 
     /**
@@ -235,6 +308,7 @@ public class SessionLocal {
      * @return 登录验证
      * @throws SessionNullException 空session异常
      */
+    @Deprecated
     public SessionContent.Captcha getLoginCaptcha() throws SessionNullException {
         return getCaptcha(LOGIN_CAPTCHA);
     }
@@ -245,6 +319,7 @@ public class SessionLocal {
      * @return 是否存在
      * @throws SessionNullException 空session异常
      */
+    @Deprecated
     public boolean isExitLoginCaptcha() throws SessionNullException {
         SessionContent.Captcha captcha = getLoginCaptcha();
         return captcha != null;
@@ -253,6 +328,7 @@ public class SessionLocal {
     /**
      * 清除登录验证信息
      */
+    @Deprecated
     public void clearLoginCaptcha() {
         clear(LOGIN_CAPTCHA);
     }
@@ -263,8 +339,9 @@ public class SessionLocal {
      * @return 验证信息
      * @throws SessionNullException 空session异常
      */
-    public SessionContent.Captcha createUrlIdentity() throws SessionNullException {
-        return createCaptcha(URL_IDENTITY);
+    @Deprecated
+    public SessionContent.Captcha createUrlIdentity(final SessionContent.Captcha captcha) throws SessionNullException {
+        return createCaptcha(URL_IDENTITY, captcha);
     }
 
     /**
@@ -273,6 +350,7 @@ public class SessionLocal {
      * @return 登录验证
      * @throws SessionNullException 空session异常
      */
+    @Deprecated
     public SessionContent.Captcha getUrlIdentity() throws SessionNullException {
         return getCaptcha(URL_IDENTITY);
     }
@@ -283,6 +361,7 @@ public class SessionLocal {
      * @return 是否存在
      * @throws SessionNullException 空session异常
      */
+    @Deprecated
     public boolean isExitUrlIdentity() throws SessionNullException {
         SessionContent.Captcha captcha = getUrlIdentity();
         return captcha != null;
@@ -291,6 +370,7 @@ public class SessionLocal {
     /**
      * 清除路径验证信息
      */
+    @Deprecated
     public void clearUrlIdentity() {
         clear(URL_IDENTITY);
     }
@@ -320,11 +400,23 @@ public class SessionLocal {
     }
 
     /**
+     * 验证当前验证信息是否符合预先储存的信息
+     *
+     * @param captcha 待验证的验证码信息
+     * @return 判断
+     */
+    public boolean isValidCaptcha(final SessionContent.Captcha captcha) {
+        return isValidCaptcha(captcha, CAPTCHA);
+    }
+
+
+    /**
      * 验证当前邮箱验证信息是否符合预先储存的信息
      *
      * @param captcha 待验证的验证码信息
      * @return 判断
      */
+    @Deprecated
     public boolean isValidEmailCaptcha(final SessionContent.Captcha captcha) {
         return isValidCaptcha(captcha, EMAIL_CAPTCHA);
     }
@@ -335,6 +427,7 @@ public class SessionLocal {
      * @param captcha 待验证的验证码信息
      * @return 判断
      */
+    @Deprecated
     public boolean isValidPhoneCaptcha(final SessionContent.Captcha captcha) {
         return isValidCaptcha(captcha, PHONE_CAPTCHA);
     }
@@ -345,6 +438,7 @@ public class SessionLocal {
      * @param captcha 待验证的验证码信息
      * @return 判断
      */
+    @Deprecated
     public boolean isValidLoginCaptcha(final SessionContent.Captcha captcha) {
         return isValidCaptcha(captcha, LOGIN_CAPTCHA);
     }
@@ -357,6 +451,7 @@ public class SessionLocal {
      * @param currentTime 当前时间
      * @return 判断
      */
+    @Deprecated
     public boolean isValidUrlIdentity(String code, String hashCode, long currentTime) {
         try {
             //获得验证信息
