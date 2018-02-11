@@ -1,6 +1,6 @@
 package com.fekpal.common.utils.captcha;
 
-import com.fekpal.common.utils.StringUtils;
+import com.fekpal.common.utils.StringUtil;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -15,33 +15,49 @@ import java.util.Random;
  */
 public class Captcha {
 
-    // 图片的宽度。
+    /**
+     * 图片的宽度
+     */
     private int width = 120;
 
-    // 图片的高度。
+    /**
+     * 图片的高度
+     */
     private int height = 50;
 
-    // 验证码字符个数
+    /**
+     * 验证码字符个数
+     */
     private int codeCount = 5;
 
-    // 验证码干扰线数
+    /**
+     * 验证码干扰线数
+     */
     private int lineCount = 3;
 
-    // 验证码
+    /**
+     * 验证码字符串
+     */
     private String code = null;
 
-    // 验证码图片Buffer
+    /**
+     * 验证码图片buffer
+     */
     private BufferedImage buffImg = null;
 
-    //随机数
+    /**
+     * 随机数
+     */
     private Random random = new Random();
 
-    //字符队列
+    /**
+     * 字符队列
+     */
     private char[] codeSequence = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '2',
             '3', '4', '5', '6', '7', '8', '9'};
 
     public Captcha() {
-        this(120,40,5,3);
+        this(120, 40, 5, 3);
     }
 
     /**
@@ -81,7 +97,7 @@ public class Captcha {
         int x, fontHeight, codeY;
         int red, green, blue;
 
-        x = width / (codeCount+3);//每个字符的宽度
+        x = width / (codeCount + 3);//每个字符的宽度
         fontHeight = height - 2;//字体的高度
         codeY = height - 4;
 
@@ -146,8 +162,13 @@ public class Captcha {
         ImageIO.write(buffImg, "png", sos);
     }
 
+    /**
+     * 获得验证码字符串
+     *
+     * @return 验证码字符串
+     */
     public String getCode() {
-        if (StringUtils.isEmpty(code)) {
+        if (StringUtil.isEmpty(code)) {
             createRandomCaptcha();
         }
         return code;

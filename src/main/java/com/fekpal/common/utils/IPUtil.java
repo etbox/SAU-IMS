@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 /**
  * ip工具类
  */
-public class IPUtils {
+public class IPUtil {
 
     private final static String ERROR_IP = "127.0.0.1";
 
@@ -81,7 +81,7 @@ public class IPUtils {
      * @return boolean
      */
     public static boolean isValidIP(String ip) {
-        if (StringUtils.isEmpty(ip)) {
+        if (StringUtil.isEmpty(ip)) {
             return false;
         }
         Matcher matcher = pattern.matcher(ip);

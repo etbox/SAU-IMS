@@ -4,7 +4,7 @@ import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
 import com.fekpal.dao.model.User;
 import com.fekpal.api.AnniversaryAuditService;
-import com.fekpal.common.utils.FileUploadUtils;
+import com.fekpal.common.utils.FileUploadUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
@@ -168,7 +168,7 @@ public class ClubAnnRegisterController {
         Date submitTime = new Date();
 
         //将文件存入服务器中的与本项目同目录的//MySAUImages/clubAnnRegister文件夹中，返回文件名
-        List<String> fileNameList = FileUploadUtils.fileHandle(file, request,"clubAnnRegister");
+        List<String> fileNameList = FileUploadUtil.fileHandle(file,"clubAnnRegister");
         if (fileNameList != null) {
             fileName = fileNameList.get(0);
         } else {

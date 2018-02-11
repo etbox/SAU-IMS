@@ -143,7 +143,6 @@
         </where>
     </update>
 
-
     <resultMap id="result" type="ClubAudit">
         <id property="id" column="id"/>
         <result property="clubId" column="club_id"/>

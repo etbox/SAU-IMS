@@ -33,8 +33,7 @@ public class EncodingFilter extends OncePerRequestFilter {
         String ret = input;
         // 客户端请求参数值可能为(null)服务端过滤掉当null处理即可
         if (input == null || input.trim().equals("(null)")) {
-            ret = null;
-            return ret;
+            return null;
         }
         final String method = request.getMethod();
         // 该处可以实现各种业务的自定义的过滤机制
@@ -50,8 +49,7 @@ public class EncodingFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(final HttpServletRequest request,
-                                    HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+                                    HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //设置request和response的编码格式
         if (this.encoding != null && (this.forceEncoding || request.getCharacterEncoding() == null)) {
             request.setCharacterEncoding(this.encoding);

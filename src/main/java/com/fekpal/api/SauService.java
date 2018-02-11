@@ -23,13 +23,6 @@ public interface SauService extends BaseService<Sau> {
     Sau selectByUserId(int id);
 
     /**
-     * 用邮箱发送注册验证码
-     *
-     * @param email 邮箱地址
-     */
-    void sendRegCaptchaByEmail(String email);
-
-    /**
      * 获得所有的校社联记录，分页获取
      *
      * @param offset 跳过读数

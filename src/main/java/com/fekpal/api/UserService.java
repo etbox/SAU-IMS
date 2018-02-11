@@ -2,7 +2,6 @@ package com.fekpal.api;
 
 import com.fekpal.common.base.BaseService;
 import com.fekpal.dao.model.User;
-import com.fekpal.web.session.SessionContent;
 
 import java.util.List;
 

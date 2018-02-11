@@ -6,7 +6,7 @@ import java.util.Calendar;
  * Created by hasee on 2017/8/18.
  */
 
-public class TimeUtils {
+public class TimeUtil {
 
     /**
      * 获取时间  返回毫秒级时间

@@ -4,7 +4,7 @@ import com.fekpal.api.AccountSecureService;
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
-import com.fekpal.common.utils.TimeUtils;
+import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.service.model.domain.AccountRecord;
 import com.fekpal.web.model.SecureMsg;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,6 @@ public class SecurityController {
 
     @Autowired
     private AccountSecureService accountSecureService;
-
 
     @Autowired
     private JsonResult<List> result;
@@ -49,7 +48,7 @@ public class SecurityController {
     }
 
     /**
-     * 重置密码的方法
+     * 重置密码
      *
      * @return 标准json数据
      */
@@ -59,7 +58,7 @@ public class SecurityController {
         AccountRecord record=new AccountRecord();
         record.setNewPassword(msg.getNewPassword());
         record.setCode(msg.getCaptcha());
-        record.setCurrentTime(TimeUtils.currentTime());
+        record.setCurrentTime(TimeUtil.currentTime());
 
         int state=accountSecureService.resetPwd(record);
         if(state==Operation.CAPTCHA_INCORRECT){

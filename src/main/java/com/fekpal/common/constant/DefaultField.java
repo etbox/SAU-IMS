@@ -6,6 +6,11 @@ package com.fekpal.common.constant;
 public class DefaultField {
 
     /**
+     * 默认字符为无
+     */
+    public static final String EMPTY = "无";
+
+    /**
      * 默认手机号码，为空但不为null
      */
     public static final String DEFAULT_PHONE = "";

@@ -9,7 +9,9 @@ import java.util.List;
  */
 public class EmailSender {
 
-    //简单文本邮件，支持换行
+    /**
+     * 简单文本邮件，支持换行
+     */
     private SimpleEmail simpleEmail;
 
     /**
@@ -18,7 +20,7 @@ public class EmailSender {
      * @param subject 主题
      * @param msg     信息
      * @param to      接收人
-     * @throws EmailException 异常
+     * @throws EmailException 邮件异常
      */
     public void sendMsg(String subject, String msg, String to) throws EmailException {
         if (simpleEmail == null) {
@@ -32,10 +34,10 @@ public class EmailSender {
 
 
     /**
-     * 发送邮件
+     * 发送单个接收人邮件
      *
      * @param msg 信息
-     * @throws EmailException 异常
+     * @throws EmailException 邮件异常
      */
     public void sendMsg(EmailMsg msg) throws EmailException {
         if (simpleEmail == null) {
@@ -53,7 +55,7 @@ public class EmailSender {
      * @param subject 主题
      * @param msg     信息
      * @param recList 群发列表
-     * @throws EmailException 异常
+     * @throws EmailException 邮件异常
      */
     public void sendMsg(String subject, String msg, List<String> recList) throws EmailException {
         if (simpleEmail == null) {

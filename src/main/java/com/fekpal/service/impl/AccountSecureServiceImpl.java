@@ -4,15 +4,16 @@ import com.fekpal.api.AccountSecureService;
 import com.fekpal.common.base.BaseServiceImpl;
 import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.common.constant.Operation;
-import com.fekpal.common.utils.MD5Utils;
+import com.fekpal.common.utils.MD5Util;
 import com.fekpal.common.utils.captcha.Captcha;
+import com.fekpal.common.utils.captcha.CaptchaUtil;
 import com.fekpal.common.utils.msg.email.EmailSender;
 import com.fekpal.dao.mapper.UserMapper;
 import com.fekpal.dao.model.User;
 import com.fekpal.service.model.domain.AccountRecord;
-import com.fekpal.web.session.SessionContent;
-import com.fekpal.web.session.SessionLocal;
-import com.fekpal.web.session.SessionNullException;
+import com.fekpal.common.session.SessionContent;
+import com.fekpal.common.session.SessionLocal;
+import com.fekpal.common.session.SessionNullException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +55,7 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
             if (userIdentity == null) {
                 return Operation.FAILED;
             }
-            String password = MD5Utils.md5(record.getPassword() + userIdentity.getUserKey());
+            String password = MD5Util.md5(record.getPassword() + userIdentity.getUserKey());
             if (userIdentity.getPassword().equals(password)) {
                 sessionLocal.createUserIdentity(userIdentity);
                 return Operation.SUCCESSFULLY;
@@ -85,7 +86,7 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
     @Override
     public void sendLoginCaptchaImage(OutputStream out) {
         try {
-            Captcha captchaImg = new Captcha();
+            Captcha captchaImg = CaptchaUtil.create();
 
             SessionContent.Captcha captcha = new SessionContent.Captcha();
             captcha.setCode(captchaImg.getCode());

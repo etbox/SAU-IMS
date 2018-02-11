@@ -39,8 +39,6 @@ public class ClubServiceImpl extends BaseServiceImpl<ClubMapper, Club> implement
         return clubDao.selectFirstByExample(example);
     }
 
-
-
     /**
      * 根据社团用户的用户身份id获得社团信息记录
      *

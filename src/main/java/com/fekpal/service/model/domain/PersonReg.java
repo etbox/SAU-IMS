@@ -18,11 +18,11 @@ public class PersonReg extends BaseModel {
 
     private String email;
 
-    private String code;
+    private String captcha;
 
     private long currentTime;
 
-    private Timestamp loginTIme;
+    private Timestamp loginTime;
 
     private Timestamp registerTime;
 
@@ -30,12 +30,20 @@ public class PersonReg extends BaseModel {
 
     private String registerIp;
 
-    public Timestamp getLoginTIme() {
-        return loginTIme;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setLoginTIme(Timestamp loginTIme) {
-        this.loginTIme = loginTIme;
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public Timestamp getLoginTime() {
+        return loginTime;
+    }
+
+    public void setLoginTime(Timestamp loginTime) {
+        this.loginTime = loginTime;
     }
 
     public Timestamp getRegisterTime() {
@@ -66,14 +74,6 @@ public class PersonReg extends BaseModel {
         return serialVersionUID;
     }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -90,12 +90,12 @@ public class PersonReg extends BaseModel {
         this.email = email;
     }
 
-    public String getCode() {
-        return code;
+    public String getCaptcha() {
+        return captcha;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCaptcha(String captcha) {
+        this.captcha = captcha;
     }
 
     public long getCurrentTime() {

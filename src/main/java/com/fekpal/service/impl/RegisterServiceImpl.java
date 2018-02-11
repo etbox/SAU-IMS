@@ -2,37 +2,35 @@ package com.fekpal.service.impl;
 
 import com.fekpal.api.RegisterService;
 import com.fekpal.common.base.BaseServiceImpl;
-import com.fekpal.common.constant.AvailableState;
-import com.fekpal.common.constant.DefaultField;
-import com.fekpal.common.constant.Operation;
-import com.fekpal.common.constant.SystemRole;
-import com.fekpal.common.utils.RandomUtils;
-import com.fekpal.common.utils.TimeUtils;
+import com.fekpal.common.base.CRUDException;
+import com.fekpal.common.constant.*;
+import com.fekpal.common.utils.FileUploadUtil;
+import com.fekpal.common.utils.RandomUtil;
+import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.common.utils.captcha.Captcha;
 import com.fekpal.common.utils.msg.email.EmailMsg;
 import com.fekpal.common.utils.msg.email.EmailSender;
 import com.fekpal.dao.mapper.*;
-import com.fekpal.dao.model.Club;
-import com.fekpal.dao.model.Person;
-import com.fekpal.dao.model.Sau;
-import com.fekpal.dao.model.User;
+import com.fekpal.dao.model.*;
 import com.fekpal.service.model.domain.ClubReg;
 import com.fekpal.service.model.domain.PersonReg;
 import com.fekpal.service.model.domain.SauReg;
-import com.fekpal.web.session.SessionContent;
-import com.fekpal.web.session.SessionLocal;
-import com.fekpal.web.session.SessionNullException;
+import com.fekpal.common.session.SessionContent;
+import com.fekpal.common.session.SessionLocal;
+import com.fekpal.common.session.SessionNullException;
 import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
-import java.util.Random;
+import java.io.IOException;
 
 /**
  * Created by APone on 2018/2/9 0:42.
  */
+@Service
 public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> implements RegisterService {
 
     @Autowired
@@ -50,9 +48,6 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
     @Autowired
     private ClubAuditMapper clubAuditMapper;
 
-    @Autowired
-    private EmailSender emailSender;
-
     /**
      * 社团注册
      */
@@ -67,7 +62,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Throwable.class})
     public int insertPersonReg(PersonReg reg) {
         SessionContent.Captcha captcha = new SessionContent.Captcha();
-        captcha.setCode(reg.getCode());
+        captcha.setCode(reg.getCaptcha());
         captcha.setCurrentTime(reg.getCurrentTime());
         if (!isValidCaptcha(captcha, PERSON_REG)) {
             return Operation.CAPTCHA_INCORRECT;
@@ -84,7 +79,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setPhone(DefaultField.DEFAULT_PHONE);
         user.setAuthority(SystemRole.PERSON);
         user.setUserState(AvailableState.AUDITING);
-        user.setUserKey(RandomUtils.createSalt());
+        user.setUserKey(RandomUtil.createSalt());
         int row = mapper.insert(user);
 
         Person person = new Person();
@@ -110,10 +105,10 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setLoginTime(reg.getRegisterTime());
         user.setRegisterIp(reg.getRegisterIp());
         user.setRegisterTime(reg.getRegisterTime());
-        user.setPhone(DefaultField.DEFAULT_PHONE);
+        user.setPhone(reg.getPhone());
         user.setAuthority(SystemRole.PERSON);
         user.setUserState(AvailableState.AUDITING);
-        user.setUserKey(RandomUtils.createSalt());
+        user.setUserKey(RandomUtil.createSalt());
         int row = mapper.insert(user);
 
         Sau sau = new Sau();
@@ -133,7 +128,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Throwable.class})
     public int insertClubReg(ClubReg reg) {
         SessionContent.Captcha captcha = new SessionContent.Captcha();
-        captcha.setCode(reg.getCode());
+        captcha.setCode(reg.getCaptcha());
         captcha.setCurrentTime(reg.getCurrentTime());
         if (!isValidCaptcha(captcha, CLUB_REG)) {
             return Operation.CAPTCHA_INCORRECT;
@@ -147,10 +142,10 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setLoginTime(reg.getRegisterTime());
         user.setRegisterIp(reg.getRegisterIp());
         user.setRegisterTime(reg.getRegisterTime());
-        user.setPhone(DefaultField.DEFAULT_PHONE);
+        user.setPhone(reg.getPhone());
         user.setAuthority(SystemRole.PERSON);
         user.setUserState(AvailableState.AUDITING);
-        user.setUserKey(RandomUtils.createSalt());
+        user.setUserKey(RandomUtil.createSalt());
         int row = mapper.insert(user);
 
         Club club = new Club();
@@ -165,6 +160,26 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         club.setMembers(DefaultField.DEFAULT_MEMBERS);
         club.setLikeNumber(DefaultField.DEFAULT_MEMBERS);
         row += clubMapper.insert(club);
+
+        String auditFileName;
+
+        try {
+            auditFileName = FileUploadUtil.fileHandle(reg.getAuditFile(), FIleDefaultPath.CLUB_AUDIT_FILE);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new CRUDException();
+        }
+        ClubAudit clubAudit = new ClubAudit();
+        clubAudit.setClubId(club.getClubId());
+        clubAudit.setRegisterTime(reg.getRegisterTime());
+        clubAudit.setFile(auditFileName);
+        clubAudit.setApplyName(reg.getAdminName());
+        clubAudit.setAuditResult(AuditState.AUDITING);
+        clubAudit.setAuditTitle(reg.getClubName() + " 注册申请审核");
+        clubAudit.setAuditTime(reg.getRegisterTime());
+        clubAudit.setAuditDescription(DefaultField.EMPTY);
+        clubAudit.setAuditState(AvailableState.AUDITING);
+        row += clubAuditMapper.insert(clubAudit);
 
         return row == 3 ? Operation.SUCCESSFULLY : Operation.FAILED;
     }
@@ -195,14 +210,15 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
             SessionContent.Captcha captcha = new SessionContent.Captcha();
             captcha.setCode(code);
             captcha.setActiveTime(1000 * 60 * 10);
-            captcha.setCreateTime(TimeUtils.currentTime());
+            captcha.setCreateTime(TimeUtil.currentTime());
             SessionLocal.local(session).createCaptcha(type, captcha);
 
             EmailMsg msg = new EmailMsg();
             msg.setSubject("校社联管理系统用户注册验证码");
             msg.setMsg("您获取的验证码为：" + code + "，10分钟内有效");
             msg.setTo(email);
-            emailSender.sendMsg(msg);
+            EmailSender sender = new EmailSender();
+            sender.sendMsg(msg);
 
             return Operation.SUCCESSFULLY;
         } catch (EmailException | SessionNullException e) {

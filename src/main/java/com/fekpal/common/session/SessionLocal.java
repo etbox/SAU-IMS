@@ -1,4 +1,4 @@
-package com.fekpal.web.session;
+package com.fekpal.common.session;
 
 import com.fekpal.dao.model.User;
 

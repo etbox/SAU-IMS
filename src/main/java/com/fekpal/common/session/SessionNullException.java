@@ -1,4 +1,4 @@
-package com.fekpal.web.session;
+package com.fekpal.common.session;
 
 /**
  * Created by APone on 2018/1/31 2:20.

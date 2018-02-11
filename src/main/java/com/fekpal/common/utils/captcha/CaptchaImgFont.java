@@ -8,10 +8,12 @@ import java.io.ByteArrayInputStream;
  */
 class CaptchaImgFont {
 
-    // 常量，由于太长，放到文件中，服务启动时加载到内存中
+    /**
+     * 常量，由于太长，放到文件中，服务启动时加载到内存中
+     */
     private static String fontStr = null;
 
-    public Font getFont(int fontHeight) {
+    Font getFont(int fontHeight) {
         try {
             Font baseFont = Font.createFont(Font.TRUETYPE_FONT, new ByteArrayInputStream(hex2byte(fontStr)));
             return baseFont.deriveFont(Font.PLAIN, fontHeight);

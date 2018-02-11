@@ -20,8 +20,6 @@ import java.util.List;
 @Service
 public class SauServiceImpl extends BaseServiceImpl<SauMapper, Sau> implements SauService {
 
-
-
     @Autowired
     private SauMapper sauDao;
 
@@ -39,26 +37,6 @@ public class SauServiceImpl extends BaseServiceImpl<SauMapper, Sau> implements S
         ExampleWrapper<Sau> example = new ExampleWrapper<>();
         example.eq("user_id", id);
         return sauDao.selectFirstByExample(example);
-    }
-
-    @Override
-    public void sendRegCaptchaByEmail(String email) {
-
-    }
-
-    /**
-     * 插入新的校社联用户信息以及用户身份信息
-     * 当插入数为2时才为成功，其他为错误
-     *
-     * @param user 用户身份信息
-     * @param sau  校社联用户信息
-     * @return 插入数
-     */
-    public int insertInfo(User user, Sau sau) {
-
-        int row = userDao.insert(user);
-        row += sauDao.insert(sau);
-        return row;
     }
 
     /**

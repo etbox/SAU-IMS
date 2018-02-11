@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
  * word文档转html
  */
 
-public class WordFileUtils {
+public class WordFileUtil {
 
     private static final String regex = "";
 
@@ -77,7 +77,7 @@ public class WordFileUtils {
      * @return boolean
      */
     public static boolean isVaild(String fileName) {
-        if (StringUtils.isEmpty(fileName)) {
+        if (StringUtil.isEmpty(fileName)) {
             return false;
         }
         Matcher matcher = pattern.matcher(fileName);

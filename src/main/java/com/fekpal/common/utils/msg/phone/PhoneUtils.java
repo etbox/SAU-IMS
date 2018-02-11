@@ -1,6 +1,6 @@
 package com.fekpal.common.utils.msg.phone;
 
-import com.fekpal.common.utils.StringUtils;
+import com.fekpal.common.utils.StringUtil;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,7 +15,7 @@ public class PhoneUtils {
     private static final Pattern pattern=Pattern.compile(regex);
 
     public static boolean isValid(String phone){
-        if(StringUtils.isEmpty(phone)){
+        if(StringUtil.isEmpty(phone)){
             return false;
         }
         Matcher matcher=pattern.matcher(phone);

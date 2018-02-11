@@ -1,6 +1,7 @@
 package com.fekpal.service.model.domain;
 
 import com.fekpal.common.base.BaseModel;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 
@@ -28,7 +29,7 @@ public class ClubReg extends BaseModel {
 
     private String description;
 
-    private Timestamp loginTIme;
+    private Timestamp loginTime;
 
     private Timestamp registerTime;
 
@@ -36,18 +37,26 @@ public class ClubReg extends BaseModel {
 
     private String registerIp;
 
-    private String code;
+    private String captcha;
 
     private long currentTime;
 
-    private String auditFileName;
+    private MultipartFile auditFile;
 
-    public Timestamp getLoginTIme() {
-        return loginTIme;
+    public MultipartFile getAuditFile() {
+        return auditFile;
     }
 
-    public void setLoginTIme(Timestamp loginTIme) {
-        this.loginTIme = loginTIme;
+    public void setAuditFile(MultipartFile auditFile) {
+        this.auditFile = auditFile;
+    }
+
+    public Timestamp getLoginTime() {
+        return loginTime;
+    }
+
+    public void setLoginTime(Timestamp loginTime) {
+        this.loginTime = loginTime;
     }
 
     public Timestamp getRegisterTime() {
@@ -142,12 +151,12 @@ public class ClubReg extends BaseModel {
         this.description = description;
     }
 
-    public String getCode() {
-        return code;
+    public String getCaptcha() {
+        return captcha;
     }
 
-    public void setCode(String code) {
-        this.code = code;
+    public void setCaptcha(String captcha) {
+        this.captcha = captcha;
     }
 
     public long getCurrentTime() {
@@ -156,13 +165,5 @@ public class ClubReg extends BaseModel {
 
     public void setCurrentTime(long currentTime) {
         this.currentTime = currentTime;
-    }
-
-    public String getAuditFileName() {
-        return auditFileName;
-    }
-
-    public void setAuditFileName(String auditFileName) {
-        this.auditFileName = auditFileName;
     }
 }

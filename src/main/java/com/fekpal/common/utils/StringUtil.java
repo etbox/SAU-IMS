@@ -3,7 +3,7 @@ package com.fekpal.common.utils;
 /**
  * 字符串工具类
  */
-public class StringUtils {
+public class StringUtil {
 
     /**
      * 判断是否为空

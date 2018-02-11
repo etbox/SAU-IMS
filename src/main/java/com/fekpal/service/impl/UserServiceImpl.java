@@ -5,10 +5,6 @@ import com.fekpal.dao.mapper.UserMapper;
 import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.dao.model.User;
 import com.fekpal.api.UserService;
-import com.fekpal.common.utils.MD5Utils;
-import com.fekpal.web.session.SessionLocal;
-import com.fekpal.web.session.SessionContent;
-import com.fekpal.web.session.SessionNullException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -41,6 +37,9 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
 
     @Override
     public boolean isExitPhone(String phone) {
+        ExampleWrapper<User> example = new ExampleWrapper<>();
+        example.eq("phone", phone);
+        int row = mapper.countByExample(example);
         return false;
     }
 

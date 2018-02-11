@@ -5,27 +5,44 @@ import org.apache.commons.mail.EmailAttachment;
 import java.util.List;
 
 /**
- * 邮箱信息实体类,暂时不用
+ * 邮箱信息封装
  */
 public class EmailMsg {
 
-    //发送人
+    /**
+     * 发送人
+     */
     private String from;
 
-    //名称
+    /**
+     * 名称
+     */
     private String name;
 
-    //接收人
+    /**
+     * 接收人
+     */
     private String to;
 
-    //主题
+    /**
+     * 主题
+     */
     private String subject;
 
-    //内容
+    /**
+     * 内容
+     */
     private String msg;
 
-    //接收人列表，群发用
+    /**
+     * 接收人列表，群发
+     */
     private List<String> recList;
+
+    /**
+     * 附件
+     */
+    private EmailAttachment attachment;
 
     public List<String> getRecList() {
         return recList;
@@ -34,9 +51,6 @@ public class EmailMsg {
     public void setRecList(List<String> recList) {
         this.recList = recList;
     }
-
-    //附件
-    private EmailAttachment attachment;
 
     public String getFrom() {
         return from;

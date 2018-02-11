@@ -6,7 +6,7 @@ import java.security.MessageDigest;
  * MD5加密工具类
  *
  */
-public class MD5Utils {
+public class MD5Util {
 
     /**
      * 传入原始密码，返回加密之后的密码字符串

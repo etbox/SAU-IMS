@@ -5,7 +5,7 @@ import com.fekpal.api.AccountSecureService;
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
-import com.fekpal.common.utils.TimeUtils;
+import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.service.model.domain.AccountRecord;
 import com.fekpal.web.model.UserLogin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,14 +35,14 @@ public class LoginController {
      *
      * @return 返回用户信息
      */
-    @RequestMapping("/login/go")
     @ResponseBody
+    @RequestMapping("/login/go")
     public JsonResult<List> login(UserLogin login) {
         AccountRecord record = new AccountRecord();
         record.setUserName(login.getUserName());
         record.setPassword(login.getPassword());
         record.setCode(login.getCaptcha());
-        record.setCurrentTime(TimeUtils.currentTime());
+        record.setCurrentTime(TimeUtil.currentTime());
 
         int state = accountSecureService.login(record);
 

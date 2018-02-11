@@ -55,7 +55,6 @@ public class IndexPageController {
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "成功加载");
             result.setData(results);
         }
-
         return result;
     }
 
@@ -66,8 +65,8 @@ public class IndexPageController {
      * @return 返回社团详细信息json
      */
     @ResponseBody
-    @RequestMapping(value = "/club/{clubId}")
-    public JsonResult<ClubDetail> getClubDetail(@PathVariable("clubId") Integer clubId) {
+    @RequestMapping(value = "/club/{id}")
+    public JsonResult<ClubDetail> getClubDetail(@PathVariable("id") Integer clubId) {
 
         Club club = clubService.selectByPrimaryKey(clubId);
         JsonResult<ClubDetail> result = new JsonResult<>();
@@ -76,7 +75,6 @@ public class IndexPageController {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
         } else {
             ClubDetail record = new ClubDetail();
-
             record.setClubId(club.getClubId());
             record.setAdminName(club.getAdminName());
             record.setClubLogo(club.getLogo());
@@ -87,7 +85,6 @@ public class IndexPageController {
             record.setMembers(club.getMembers());
             result.setData(record);
         }
-
         return result;
     }
 }
