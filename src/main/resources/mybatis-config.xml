@@ -29,17 +29,9 @@
     <!--映射文件-->
     <mappers>
         <mapper resource="com/fekpal/service/dao/mapper/UserMapper.xml"/>
-        <!--
-        <dao resource="dao/RoleMapper.xml"/>
-        <dao resource="dao/ClubMapper.xml"/>
-        <dao resource="dao/SauMapper.xml/"/>
-        <dao resource="dao/PersonMapper.xml"/>
-        <dao resource="dao/DepartmentMapper.xml"/>
-        <dao resource="dao/AnniversaryAuditMapper.xml"/>
-        <dao resource="dao/ClubAuditMapper.xml"/>
-        <dao resource="dao/ClubMemberMapper.xml"/>
-        <dao resource="dao/MessageMapper.xml"/>
-        <dao resource="dao/MessageReleaseMapper.xml"/>
-        <dao resource="dao/LikeClubMapper.xml"/>-->
+        <mapper resource="com/fekpal/service/dao/mapper/ClubMapper.xml"/>
+        <mapper resource="com/fekpal/service/dao/mapper/PersonMapper.xml"/>
+        <mapper resource="com/fekpal/service/dao/mapper/SauMapper.xml"/>
+        <mapper resource="com/fekpal/service/dao/mapper/ClubAuditMapper.xml"/>
     </mappers>
 </configuration>

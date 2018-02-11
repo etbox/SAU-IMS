@@ -1,7 +1,6 @@
 package com.fekpal.dao.mapper;
 
 import com.fekpal.common.base.BaseMapper;
-import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.dao.model.Club;
 import org.springframework.stereotype.Repository;
 

@@ -24,9 +24,6 @@ public class SecurityController {
     @Autowired
     private AccountSecureService accountSecureService;
 
-    @Autowired
-    private JsonResult<List> result;
-
     /**
      * 发送重置密码的邮箱验证码
      *
@@ -38,6 +35,7 @@ public class SecurityController {
         AccountRecord record = new AccountRecord();
         record.setEmail(msg.getEmail());
 
+        JsonResult<List> result = new JsonResult<>();
         int state = accountSecureService.forgetPwdByEmail(record);
         if (state == Operation.SUCCESSFULLY) {
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "发送验证码成功");
@@ -60,6 +58,7 @@ public class SecurityController {
         record.setCode(msg.getCaptcha());
         record.setCurrentTime(TimeUtil.currentTime());
 
+        JsonResult<List> result = new JsonResult<>();
         int state=accountSecureService.resetPwd(record);
         if(state==Operation.CAPTCHA_INCORRECT){
             result.setStateCode(ResponseCode.RESPONSE_ERROR,"验证码错误");
@@ -79,7 +78,6 @@ public class SecurityController {
     public JsonResult<List> sendResetEmailCaptcha(@RequestBody SecureMsg msg) {
         AccountRecord record=new AccountRecord();
         record.setEmail(msg.getEmail());
-
         return null;
     }
 

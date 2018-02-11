@@ -18,7 +18,6 @@ import com.fekpal.service.model.domain.SauReg;
 import com.fekpal.common.session.SessionContent;
 import com.fekpal.common.session.SessionLocal;
 import com.fekpal.common.session.SessionNullException;
-import org.apache.commons.mail.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -47,6 +46,9 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
 
     @Autowired
     private ClubAuditMapper clubAuditMapper;
+
+    @Autowired
+    private EmailSender emailSender;
 
     /**
      * 社团注册
@@ -215,13 +217,12 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
 
             EmailMsg msg = new EmailMsg();
             msg.setSubject("校社联管理系统用户注册验证码");
-            msg.setMsg("您获取的验证码为：" + code + "，10分钟内有效");
+            msg.setText("您获取的验证码为：" + code + "，10分钟内有效，请勿泄露");
             msg.setTo(email);
-            EmailSender sender = new EmailSender();
-            sender.sendMsg(msg);
+            emailSender.send(msg);
 
             return Operation.SUCCESSFULLY;
-        } catch (EmailException | SessionNullException e) {
+        } catch (SessionNullException e) {
             e.printStackTrace();
         }
         return Operation.FAILED;

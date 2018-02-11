@@ -25,8 +25,6 @@ public class ClubCenterController {
     @Autowired
     private ClubService clubService;
 
-    @Autowired
-    private JsonResult returnData;
 
     /**
      * 得到社团中心的信息的方法

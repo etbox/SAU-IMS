@@ -9,6 +9,7 @@ import com.fekpal.common.utils.IPUtil;
 import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.service.model.domain.ClubReg;
 import com.fekpal.service.model.domain.PersonReg;
+import com.fekpal.web.model.CaptchaMsg;
 import com.fekpal.web.model.ClubRegisterMsg;
 import com.fekpal.web.model.PersonRegisterMsg;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,19 +31,17 @@ public class RegisterController {
     @Autowired
     private RegisterService registerService;
 
-    @Autowired
-    private JsonResult<List> result;
-
     /**
      * 发送社团邮箱验证码
      *
-     * @param email 邮箱地址
+     * @param msg 验证来源封装
      * @return json数据封装
      */
     @ResponseBody
-    @RequestMapping(value = "/reg/person/captcha", method = RequestMethod.GET)
-    public JsonResult<List> sendClubEmailCaptcha(@RequestParam(value = "email") String email) {
-        int state = registerService.sendPersonEmailCaptcha(email);
+    @RequestMapping(value = "/reg/person/captcha", method = RequestMethod.POST)
+    public JsonResult<List> sendClubEmailCaptcha(@RequestBody CaptchaMsg msg) {
+        JsonResult<List> result = new JsonResult<>();
+        int state = registerService.sendPersonEmailCaptcha(msg.getEmail());
         if (state == Operation.SUCCESSFULLY) {
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "验证码发送成功");
         } else if (state == Operation.FAILED) {
@@ -54,13 +53,14 @@ public class RegisterController {
     /**
      * 发送社团邮箱验证码
      *
-     * @param email 邮箱地址
+     * @param msg 验证来源封装
      * @return json数据封装
      */
     @ResponseBody
-    @RequestMapping(value = "/reg/club/captcha", method = RequestMethod.GET)
-    public JsonResult<List> sendPersonEmailCaptcha(@RequestParam(value = "email") String email) {
-        int state = registerService.sendPersonEmailCaptcha(email);
+    @RequestMapping(value = "/reg/club/captcha", method = RequestMethod.POST)
+    public JsonResult<List> sendPersonEmailCaptcha(@RequestBody CaptchaMsg msg) {
+        JsonResult<List> result = new JsonResult<>();
+        int state = registerService.sendPersonEmailCaptcha(msg.getEmail());
         if (state == Operation.SUCCESSFULLY) {
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "验证码发送成功");
         } else if (state == Operation.FAILED) {
@@ -102,6 +102,7 @@ public class RegisterController {
         reg.setDescription(clubRegisterMsg.getDescription());
         reg.setAuditFile(file[0]);
 
+        JsonResult<List> result = new JsonResult<>();
         int state = registerService.insertClubReg(reg);
         setRegHintMsg(state, result);
         return result;
@@ -131,6 +132,7 @@ public class RegisterController {
         reg.setRegisterIp(ip);
         reg.setRegisterTime(new Timestamp(time));
 
+        JsonResult<List> result = new JsonResult<>();
         int state = registerService.insertPersonReg(reg);
         setRegHintMsg(state, result);
         return result;

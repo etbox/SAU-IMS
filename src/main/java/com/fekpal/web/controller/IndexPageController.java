@@ -32,7 +32,7 @@ public class IndexPageController {
      * @return 社团列表信息json
      */
     @ResponseBody
-    @RequestMapping(value = "/club")
+    @RequestMapping(value = "/club", method = RequestMethod.GET)
     public JsonResult<List> getClubList() {
 
         List<Club> clubList = clubService.loadAllClub(0, 50);
@@ -52,7 +52,7 @@ public class IndexPageController {
                 clubs.setMembers(club.getMembers());
                 results.add(clubs);
             }
-            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "成功加载");
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
             result.setData(results);
         }
         return result;
@@ -65,7 +65,7 @@ public class IndexPageController {
      * @return 返回社团详细信息json
      */
     @ResponseBody
-    @RequestMapping(value = "/club/{id}")
+    @RequestMapping(value = "/club/{id}", method = RequestMethod.GET)
     public JsonResult<ClubDetail> getClubDetail(@PathVariable("id") Integer clubId) {
 
         Club club = clubService.selectByPrimaryKey(clubId);
@@ -83,6 +83,8 @@ public class IndexPageController {
             record.setEmail(club.getContactEmail());
             record.setFoundTime(new Date(club.getFoundTime().getTime()));
             record.setMembers(club.getMembers());
+
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
             result.setData(record);
         }
         return result;

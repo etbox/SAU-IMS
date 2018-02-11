@@ -27,25 +27,23 @@ public class LoginController {
     @Autowired
     private AccountSecureService accountSecureService;
 
-    @Autowired
-    private JsonResult<List> result;
-
     /**
      * 用户登录提交方法
      *
      * @return 返回用户信息
      */
     @ResponseBody
-    @RequestMapping("/login/go")
-    public JsonResult<List> login(UserLogin login) {
+    @RequestMapping(value = "/login/go", method = RequestMethod.POST)
+    public JsonResult<List> login(@RequestBody UserLogin login) {
+
         AccountRecord record = new AccountRecord();
         record.setUserName(login.getUserName());
         record.setPassword(login.getPassword());
         record.setCode(login.getCaptcha());
         record.setCurrentTime(TimeUtil.currentTime());
 
+        JsonResult<List> result = new JsonResult<>();
         int state = accountSecureService.login(record);
-
         if (state == Operation.CAPTCHA_INCORRECT) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "验证码错误");
         } else if (state == Operation.FAILED) {
@@ -62,9 +60,9 @@ public class LoginController {
      * @return Map
      */
     @ResponseBody
-    @RequestMapping("/logout")
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public JsonResult<List> logout() {
-
+        JsonResult<List> result = new JsonResult<>();
         if (accountSecureService.logout()) {
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "登出成功");
         } else {

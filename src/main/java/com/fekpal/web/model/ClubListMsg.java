@@ -1,10 +1,17 @@
 package com.fekpal.web.model;
 
+
+import com.fekpal.common.base.BaseModel;
+import org.springframework.stereotype.Component;
+
 /**
  * 用来发送给前端的社团列表信息实体类
  * Created by hasee on 2017/8/15.
  */
-public class ClubListMsg {
+@Component
+public class ClubListMsg extends BaseModel {
+
+    private static final long serialVersionUID = 4994884684828642007L;
 
     private String clubName;
 
@@ -12,7 +19,7 @@ public class ClubListMsg {
 
     private String clubView;
 
-    private  String description;
+    private String description;
 
     private int members;
 
@@ -38,7 +45,8 @@ public class ClubListMsg {
         this.clubName = clubName;
     }
 
-    public ClubListMsg(){}
+    public ClubListMsg() {
+    }
 
     public Integer getClubId() {
         return clubId;

@@ -31,21 +31,6 @@ public interface ClubService extends BaseService<Club> {
     Club selectByUserId(int id);
 
     /**
-     * 储存社团注册审核文件
-     *
-     * @return 是否处理成功
-     * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
-     */
-    int saveRegAuditFile();
-
-    /**
-     * 用邮箱发送注册验证码
-     *
-     * @param email 邮箱地址
-     */
-    void sendRegCaptchaByEmail(String email);
-
-    /**
      * 根据社团名称进行模糊搜索社团信息记录，分页读取
      *
      * @param name 社团名称
@@ -62,7 +47,6 @@ public interface ClubService extends BaseService<Club> {
      * @return 是否存在
      */
     boolean isExitClubName(String name);
-
 
     /**
      * 获得所有的社团信息记录,分页读取

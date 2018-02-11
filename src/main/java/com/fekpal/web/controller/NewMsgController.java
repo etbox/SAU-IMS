@@ -19,8 +19,6 @@ public class NewMsgController {
     @Autowired
     private MessageService messageService;
 
-    @Autowired
-    private JsonResult returnData;
 
     /**
      * 根据用户id返回全部消息或者删除某些消息的方法

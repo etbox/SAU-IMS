@@ -31,9 +31,6 @@ public class ClubMsgPublicController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private JsonResult returnData;
-
 
     /**
      * 根据发布信息类型选择接收人的范围

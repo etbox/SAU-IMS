@@ -19,9 +19,6 @@ public class ClubMsgController {
     @Autowired
     private ClubService clubService;
 
-    @Autowired
-    private JsonResult returnData;
-
     /**
      * 返回社团信息列表的方法
      *

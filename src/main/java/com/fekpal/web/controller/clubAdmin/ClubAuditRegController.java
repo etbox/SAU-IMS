@@ -22,8 +22,6 @@ public class ClubAuditRegController {
     @Autowired
     private ClubService clubService;
 
-    @Autowired
-    private JsonResult returnData;
 
     /**
      * 查看全部审核的信息的方法

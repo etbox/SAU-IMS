@@ -29,8 +29,6 @@ public class ClubAnnRegisterController {
     @Autowired
     private AnniversaryAuditService auditService;
 
-    @Autowired
-    private JsonResult returnData;
 
     /**
      * 查看全部注册的信息的方法
@@ -91,7 +89,7 @@ public class ClubAnnRegisterController {
             //将map集合数据放入到返回数据中，返回
 
         } else {
-            returnData.setStateCode(ResponseCode.REQUEST_ERROR, "要查询的年度注册消息的id不符合条件，请重新查询");
+            //returnData.setStateCode(ResponseCode.REQUEST_ERROR, "要查询的年度注册消息的id不符合条件，请重新查询");
             return null;
         }
         return null;
@@ -168,11 +166,11 @@ public class ClubAnnRegisterController {
         Date submitTime = new Date();
 
         //将文件存入服务器中的与本项目同目录的//MySAUImages/clubAnnRegister文件夹中，返回文件名
-        List<String> fileNameList = FileUploadUtil.fileHandle(file,"clubAnnRegister");
+        List<String> fileNameList = null;//FileUploadUtil.fileHandle(file,"clubAnnRegister");
         if (fileNameList != null) {
             fileName = fileNameList.get(0);
         } else {
-            returnData.setStateCode(ResponseCode.REQUEST_ERROR, "还没有发送文件过来，请重新发送");
+            //returnData.setStateCode(ResponseCode.REQUEST_ERROR, "还没有发送文件过来，请重新发送");
             return null;
         }
 

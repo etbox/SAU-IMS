@@ -2,11 +2,14 @@ package com.fekpal.service.impl;
 
 import com.fekpal.api.AccountSecureService;
 import com.fekpal.common.base.BaseServiceImpl;
+import com.fekpal.common.base.CRUDException;
 import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.utils.MD5Util;
+import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.common.utils.captcha.Captcha;
 import com.fekpal.common.utils.captcha.CaptchaUtil;
+import com.fekpal.common.utils.msg.email.EmailMsg;
 import com.fekpal.common.utils.msg.email.EmailSender;
 import com.fekpal.dao.mapper.UserMapper;
 import com.fekpal.dao.model.User;
@@ -16,6 +19,8 @@ import com.fekpal.common.session.SessionLocal;
 import com.fekpal.common.session.SessionNullException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 
@@ -79,7 +84,9 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
 
     @Override
     public boolean logout() {
-        session.invalidate();
+        if (isLogin()) {
+            session.invalidate();
+        }
         return true;
     }
 
@@ -94,7 +101,6 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
             captcha.setActiveTime(1000 * 60 * 5);
             //先数据存储到session，再图片流发送到客户端，否则将引起sessionID不一致
             SessionLocal.local(session).createCaptcha(captcha);
-
             captchaImg.createCaptchaImg(out);
         } catch (IOException | SessionNullException e) {
             e.printStackTrace();
@@ -102,18 +108,83 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Throwable.class})
     public int resetPwd(AccountRecord record) {
-        return 0;
+        SessionContent.Captcha captcha = new SessionContent.Captcha();
+        captcha.setCode(record.getCode());
+        captcha.setCurrentTime(record.getCurrentTime());
+        if (!SessionLocal.local(session).isValidCaptcha(captcha)) {
+            return Operation.CAPTCHA_INCORRECT;
+        }
+
+        String email = (String) session.getAttribute("email");
+        session.removeAttribute("email");
+
+        ExampleWrapper<User> example = new ExampleWrapper<>();
+        example.eq("email", email);
+        User user = new User();
+        user.setPassword(record.getNewPassword());
+        int row = mapper.updateByExample(user, example);
+        if (row > 1) {
+            throw new CRUDException();
+        }
+        return row == 1 ? Operation.SUCCESSFULLY : Operation.FAILED;
     }
 
     @Override
     public int forgetPwdByEmail(AccountRecord record) {
-        return 0;
+        ExampleWrapper<User> example = new ExampleWrapper<>();
+        example.eq("email", record.getEmail());
+        int row = mapper.countByExample(example);
+        if (row == 1) {
+            String code = CaptchaUtil.create().getCode();
+
+            try {
+                SessionContent.Captcha captcha = new SessionContent.Captcha();
+                captcha.setCode(code);
+                captcha.setCreateTime(TimeUtil.currentTime());
+                captcha.setActiveTime(10 * 60 * 1000);
+                SessionLocal.local(session).createCaptcha(captcha);
+
+                EmailMsg msg = new EmailMsg();
+                msg.setTo(record.getEmail());
+                msg.setSubject("忘记密码邮箱验证");
+                msg.setText("您获取的验证码为：" + code + " 有效期为10分钟，请勿泄露。如果此请求不是由您发出，请尽快修密码");
+                emailSender.send(msg);
+                session.setAttribute("email", record.getEmail());
+
+                return Operation.SUCCESSFULLY;
+            } catch (SessionNullException e) {
+                e.printStackTrace();
+            }
+        }
+        return Operation.FAILED;
     }
 
     @Override
     public int forgetPwdByPhone(AccountRecord record) {
-        return 0;
+
+        ExampleWrapper<User> example = new ExampleWrapper<>();
+        example.eq("phone", record.getPhone());
+        int row = mapper.countByExample(example);
+        if (row == 1) {
+            String code = CaptchaUtil.create().getCode();
+
+            try {
+                SessionContent.Captcha captcha = new SessionContent.Captcha();
+                captcha.setCode(code);
+                captcha.setCreateTime(TimeUtil.currentTime());
+                captcha.setActiveTime(10 * 60 * 1000);
+                SessionLocal.local(session).createCaptcha(captcha);
+                //此处添加手机发送工具
+                session.setAttribute("phone", record.getPhone());
+
+                return Operation.SUCCESSFULLY;
+            } catch (SessionNullException e) {
+                e.printStackTrace();
+            }
+        }
+        return Operation.FAILED;
     }
 
     @Override

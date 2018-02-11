@@ -1,8 +1,18 @@
 package com.fekpal.common.utils.msg.email;
 
 import org.apache.commons.mail.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.stereotype.Component;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.net.ssl.SSLSocketFactory;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * 邮件发送工具
@@ -15,6 +25,16 @@ public class EmailSender {
     private SimpleEmail simpleEmail;
 
     /**
+     * 邮件发送
+     */
+    private JavaMailSender mailSender;
+
+    /**
+     * 发送人
+     */
+    private String defaultFrom;
+
+    /**
      * 发送邮件
      *
      * @param subject 主题
@@ -22,7 +42,9 @@ public class EmailSender {
      * @param to      接收人
      * @throws EmailException 邮件异常
      */
+    @Deprecated
     public void sendMsg(String subject, String msg, String to) throws EmailException {
+
         if (simpleEmail == null) {
             throw new EmailException("simpleEmail can not be null");
         }
@@ -39,14 +61,25 @@ public class EmailSender {
      * @param msg 信息
      * @throws EmailException 邮件异常
      */
+    @Deprecated
     public void sendMsg(EmailMsg msg) throws EmailException {
         if (simpleEmail == null) {
             throw new EmailException("simpleEmail can not be null");
         }
         simpleEmail.addTo(msg.getTo());
         simpleEmail.setSubject(msg.getSubject());
-        simpleEmail.setMsg(msg.getMsg());
+        simpleEmail.setMsg(msg.getText());
         simpleEmail.send();
+    }
+
+    /**
+     * 邮件发送
+     *
+     * @param msg 邮件信息封装
+     */
+    public void send(EmailMsg msg) {
+        msg.setFrom(defaultFrom);
+        mailSender.send(msg);
     }
 
     /**
@@ -57,6 +90,7 @@ public class EmailSender {
      * @param recList 群发列表
      * @throws EmailException 邮件异常
      */
+    @Deprecated
     public void sendMsg(String subject, String msg, List<String> recList) throws EmailException {
         if (simpleEmail == null) {
             throw new EmailException("simpleEmail can not be null");
@@ -69,11 +103,27 @@ public class EmailSender {
         simpleEmail.send();
     }
 
+    public String getDefaultFrom() {
+        return defaultFrom;
+    }
+
+    public void setDefaultFrom(String defaultFrom) {
+        this.defaultFrom = defaultFrom;
+    }
+
     public SimpleEmail getSimpleEmail() {
         return simpleEmail;
     }
 
     public void setSimpleEmail(SimpleEmail simpleEmail) {
         this.simpleEmail = simpleEmail;
+    }
+
+    public JavaMailSender getMailSender() {
+        return mailSender;
+    }
+
+    public void setMailSender(JavaMailSender mailSender) {
+        this.mailSender = mailSender;
     }
 }

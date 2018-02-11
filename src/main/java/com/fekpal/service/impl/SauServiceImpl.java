@@ -20,36 +20,17 @@ import java.util.List;
 @Service
 public class SauServiceImpl extends BaseServiceImpl<SauMapper, Sau> implements SauService {
 
-    @Autowired
-    private SauMapper sauDao;
-
-    @Autowired
-    private UserMapper userDao;
-
-    /**
-     * 根据校社联用户的用户身份id获取校社联信息
-     *
-     * @param id int 用户身份id
-     * @return 校社联信息记录
-     */
     @Override
     public Sau selectByUserId(int id) {
         ExampleWrapper<Sau> example = new ExampleWrapper<>();
         example.eq("user_id", id);
-        return sauDao.selectFirstByExample(example);
+        return mapper.selectFirstByExample(example);
     }
 
-    /**
-     * 获取所有校社联信息，分页获取
-     *
-     * @param offset 跳过读数
-     * @param limit  读取数
-     * @return 校社联信息记录集
-     */
     @Override
     public List<Sau> loadAllSau(int offset, int limit) {
         ExampleWrapper<Sau> example = new ExampleWrapper<>();
-        return sauDao.selectByExample(example, offset, limit);
+        return mapper.selectByExample(example, offset, limit);
     }
 }
 

@@ -1,5 +1,6 @@
 package com.fekpal.web.model;
 
+import com.fekpal.common.base.BaseModel;
 import org.springframework.stereotype.Component;
 
 /**
@@ -7,7 +8,9 @@ import org.springframework.stereotype.Component;
  * Created by hasee on 2017/8/18.
  */
 @Component
-public class ClubRegisterMsg {
+public class ClubRegisterMsg extends BaseModel{
+
+    private static final long serialVersionUID = -2563527181926713583L;
 
     private String userName;
 

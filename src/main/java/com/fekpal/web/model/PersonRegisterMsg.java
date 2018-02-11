@@ -1,22 +1,21 @@
 package com.fekpal.web.model;
 
+import com.fekpal.common.base.BaseModel;
+import org.springframework.stereotype.Component;
+
 /**
  * Created by hasee on 2017/8/18.
  */
-public class PersonRegisterMsg {
-    private String userName;
-    private String password;
-    private String captcha;
-    public PersonRegisterMsg(){}
+@Component
+public class PersonRegisterMsg extends BaseModel{
 
-    @Override
-    public String toString() {
-        return "PersonRegisterMsg{" +
-                "userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", captcha='" + captcha + '\'' +
-                '}';
-    }
+    private static final long serialVersionUID = 7346679216150174894L;
+
+    private String userName;
+
+    private String password;
+
+    private String captcha;
 
     public String getUserName() {
         return userName;
