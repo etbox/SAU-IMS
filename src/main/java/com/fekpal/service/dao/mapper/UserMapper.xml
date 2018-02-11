@@ -62,7 +62,7 @@
         user_state)
         values
         <foreach collection="list" item="item" separator=",">
-          (#{item.userName}, #{item.password},
+            (#{item.userName}, #{item.password},
             #{item.email}, #{item.phone},
             #{item.userKey}, #{item.loginIp},
             #{item.loginTime}, #{item.registerIp},

@@ -27,6 +27,7 @@
         <!-- session 过期时间,30分钟-->
         <property name="maxInactiveIntervalInSeconds" value="1800"/>
     </bean>
+
     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig"
           p:maxIdle="${redis.jedis.pool.maxIdle}"
           p:maxTotal="${redis.jedis.pool.maxTotal}"

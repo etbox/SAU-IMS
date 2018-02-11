@@ -2,16 +2,9 @@ package test.service;
 
 import com.fekpal.api.UserService;
 import com.fekpal.dao.mapper.UserMapper;
-import com.fekpal.dao.model.User;
 import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
-import test.Model;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by APone on 2017/9/5.

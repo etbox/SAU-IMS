@@ -2,9 +2,12 @@ package com.fekpal.web.controller;
 
 import com.fekpal.api.AccountSecureService;
 
-import com.fekpal.common.Result;
+import com.fekpal.common.constant.Operation;
+import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
-import com.fekpal.dao.model.User;
+import com.fekpal.common.utils.TimeUtils;
+import com.fekpal.service.model.domain.AccountRecord;
+import com.fekpal.web.model.UserLogin;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.List;
 
 /**
  * 登陆相关的方法
@@ -24,8 +28,7 @@ public class LoginController {
     private AccountSecureService accountSecureService;
 
     @Autowired
-    private JsonResult result;
-
+    private JsonResult<List> result;
 
     /**
      * 用户登录提交方法
@@ -34,8 +37,22 @@ public class LoginController {
      */
     @RequestMapping("/login/go")
     @ResponseBody
-    public JsonResult login() {
+    public JsonResult<List> login(UserLogin login) {
+        AccountRecord record = new AccountRecord();
+        record.setUserName(login.getUserName());
+        record.setPassword(login.getPassword());
+        record.setCode(login.getCaptcha());
+        record.setCurrentTime(TimeUtils.currentTime());
 
+        int state = accountSecureService.login(record);
+
+        if (state == Operation.CAPTCHA_INCORRECT) {
+            result.setStateCode(ResponseCode.RESPONSE_ERROR, "验证码错误");
+        } else if (state == Operation.FAILED) {
+            result.setStateCode(ResponseCode.RESPONSE_ERROR, "用户名或密码错误");
+        } else if (state == Operation.SUCCESSFULLY) {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "登录成功");
+        }
         return result;
     }
 
@@ -46,9 +63,13 @@ public class LoginController {
      */
     @ResponseBody
     @RequestMapping("/logout")
-    public Result logout() {
-        Result result=new Result();
-        result.put(new User());
+    public JsonResult<List> logout() {
+
+        if (accountSecureService.logout()) {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "登出成功");
+        } else {
+            result.setStateCode(ResponseCode.RESPONSE_ERROR, "登出失败");
+        }
         return result;
     }
 
@@ -60,7 +81,7 @@ public class LoginController {
         try {
             OutputStream outputStream = response.getOutputStream();
             accountSecureService.sendLoginCaptchaImage(outputStream);
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

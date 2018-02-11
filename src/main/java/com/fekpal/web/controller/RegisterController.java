@@ -1,6 +1,7 @@
 package com.fekpal.web.controller;
 
 import com.fekpal.common.json.JsonResult;
+import com.fekpal.web.model.ClubRegisterMsg;
 import com.fekpal.web.model.PersonRegisterMsg;
 import com.fekpal.api.ClubAuditService;
 import com.fekpal.api.UserService;
@@ -20,18 +21,6 @@ import java.util.*;
 @Controller
 public class RegisterController {
 
-    @Autowired
-    private EmailSender emailSender;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private ClubAuditService clubAuditService;
-
-    @Autowired
-    private JsonResult returnData;
-
     /**
      * 发送邮箱验证码
      *
@@ -40,21 +29,20 @@ public class RegisterController {
      */
     @ResponseBody
     @RequestMapping(value = "/reg/code", method = RequestMethod.GET)
-    public Map<String, Object> sendEmailCaptcha(@RequestParam(value = "email") String email) {
+    public JsonResult<List> sendEmailCaptcha(@RequestParam(value = "email") String email) {
         return null;
     }
 
     /**
      * 社团注册的方法
      *
-     * @param file    上传的文件
-     * @param request 请求
+     * @param file 上传的文件
      * @return 标准json数据
      */
     @ResponseBody
     @RequestMapping(value = "/reg/club", method = RequestMethod.POST)
-    public Map<String, Object> clubRegister(@RequestParam MultipartFile[] file,
-                                            HttpServletRequest request) {
+    public JsonResult<List> clubRegister(@RequestParam MultipartFile[] file,
+                                         @RequestBody ClubRegisterMsg clubRegisterMsg) {
         return null;
     }
 
@@ -66,8 +54,7 @@ public class RegisterController {
      */
     @ResponseBody
     @RequestMapping("/reg/person")
-    public Map<String, Object> personRegister(@RequestBody PersonRegisterMsg personRegisterMsg,
-                                              HttpServletRequest request) {
+    public JsonResult<List> personRegister(@RequestBody PersonRegisterMsg personRegisterMsg) {
         return null;
     }
 }

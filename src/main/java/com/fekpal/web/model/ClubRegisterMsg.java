@@ -1,38 +1,33 @@
 package com.fekpal.web.model;
 
+import org.springframework.stereotype.Component;
+
 /**
  * 社团注册信息的实体类
  * Created by hasee on 2017/8/18.
  */
+@Component
 public class ClubRegisterMsg {
-    private String userName;
-    private String password;
-    private String realName;
-    private String email;
-    //邮箱验证码
-    private String captcha;
-    private String phone;
-    private String clubName;
-    private String clubType;
-    private String description;
-    private String file;
-    public ClubRegisterMsg(){}
 
-    @Override
-    public String toString() {
-        return "ClubRegisterMsg{" +
-                "userName='" + userName + '\'' +
-                ", password='" + password + '\'' +
-                ", realName='" + realName + '\'' +
-                ", email='" + email + '\'' +
-                ", captcha='" + captcha + '\'' +
-                ", phone='" + phone + '\'' +
-                ", clubName='" + clubName + '\'' +
-                ", clubType='" + clubType + '\'' +
-                ", description='" + description + '\'' +
-                ", file='" + file + '\'' +
-                '}';
-    }
+    private String userName;
+
+    private String password;
+
+    private String realName;
+
+    private String email;
+
+    private String captcha;
+
+    private String phone;
+
+    private String clubName;
+
+    private String clubType;
+
+    private String description;
+
+    private String file;
 
     public String getUserName() {
         return userName;

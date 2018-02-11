@@ -47,7 +47,7 @@ public interface AccountSecureService extends BaseService<User> {
      * 重置身份记录密码,适用于未登录的用户
      *
      * @param record 信息封装
-     *               传入参数：新密码oldPassword, 验证码code, 当前时间currentTime
+     *               传入参数：新密码newPassword, 验证码code, 当前时间currentTime
      * @return 是否修改成功
      * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
      */

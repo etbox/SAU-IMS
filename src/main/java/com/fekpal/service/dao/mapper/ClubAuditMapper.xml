@@ -3,66 +3,157 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.fekpal.dao.com.fekpal.service.dao.mapper.ClubAuditMapper">
+<mapper namespace="com.fekpal.dao.mapper.ClubAuditMapper">
     <cache/>
 
-    <select id="getClubAuditByClubId" parameterType="int" resultMap="auditResult">
-        select *
-        from club_audit ca
-        inner join club_info ci on ca.club_id = ci.club_id
-        where ca.club_id = #{clubId}
+    <select id="selectByPrimaryKey" parameterType="int" resultMap="result">
+        select * from club_audit
+        where id = #{id}
     </select>
 
-    <select id="getClubAuditById" parameterType="int" resultMap="auditResult">
-        select *
-        from club_audit ca
-        inner join club_info ci on ca.club_id = ci.club_id
-        where ca.id = #{id}
+    <select id="selectFirstByExample" resultMap="result">
+        <where>
+            select * from club_audit
+            <where>
+                ${ex.sqlSegment}
+            </where>
+            limit 1
+        </where>
     </select>
 
-
-    <select id="findClubAuditByClubName" parameterType="String" resultMap="auditResult">
-        select *
-        from club_audit ca
-        inner join club_info ci on ca.club_id = ci.club_id
-        where ci.club_name like concat('%',#{clubName},'%')
+    <select id="selectByExample" resultMap="result">
+        select * from club_audit
+        <where>
+            ${ex.sqlSegment}
+            and id >= #{offset}
+        </where>
+        limit #{limit}
     </select>
 
-    <insert id="addClubAudit" parameterType="ClubAudit" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        insert into club_audit(club_id, send_time, file)
-        values(#{club.clubId},#{sendTime},#{file})
+    <select id="countByExample" resultType="int">
+        select count(*) from club_audit
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </select>
+
+    <insert id="insert" parameterType="ClubAudit" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into club_audit(
+        club_id, register_time,
+        audit_time, audit_result,
+        file, audit_description,
+        audit_title, apply_name,
+        audit_state)
+        values (
+        #{clubId}, #{registerTime},
+        #{auditTime}, #{auditResult},
+        #{file}, #{auditDescription},
+        #{auditTitle}, #{applyName},
+        #{auditState})
     </insert>
 
-    <update id="updateClubAudit" parameterType="ClubAudit">
+    <insert id="insertLoop" parameterType="list" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into club_audit(
+        club_id, register_time,
+        audit_time, audit_result,
+        file, audit_description,
+        audit_title, apply_name,
+        audit_state)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.clubId}, #{item.registerTime},
+            #{item.auditTime}, #{item.auditResult},
+            #{item.file}, #{item.auditDescription},
+            #{item.auditTitle}, #{item.applyName},
+            #{auditState})
+        </foreach>
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="ClubAudit">
         update club_audit set
         audit_time = #{auditTime},
         audit_result = #{auditResult},
-        audit_description =#{auditDescription}
+        audit_description = #{auditDescription},
+        audit_state = #{auditState}
         where id = #{id}
     </update>
 
-    <select id="loadAllCLubAudit" resultMap="auditResult">
-        select *
-        from club_audit ca
-        inner join club_info ci on ca.club_id = ci.club_id
-        limit #{arg0},#{arg1}
-    </select>
+    <update id="updateByPrimaryKeySelective" parameterType="ClubAudit">
+        update club_audit set
+        <set>
+            <if test="auditTime != null">
+                audit_time = #{auditTime},
+            </if>
+            <if test="auditResult != null">
+                audit_result = #{auditResult},
+            </if>
+            <if test="auditDescription != null">
+                audit_description = #{auditDescription},
+            </if>
+            <if test="auditState != null">
+                audit_state = #{auditState},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
 
-    <resultMap id="auditResult" type="ClubAudit">
+    <update id="updateByExample" parameterType="map">
+        update club_audit set
+        audit_time = #{obj.auditTime},
+        audit_result = #{obj.auditResult},
+        audit_description = #{obj.auditDescription},
+        audit_state = #{auditState}
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </update>
+
+    <update id="updateByExampleSelective" parameterType="map">
+        update club_audit set
+        <set>
+            <if test="auditTime != null">
+                audit_time = #{auditTime},
+            </if>
+            <if test="auditResult != null">
+                audit_result = #{auditResult},
+            </if>
+            <if test="auditDescription != null">
+                audit_description = #{auditDescription},
+            </if>
+            <if test="auditState != null">
+                audit_state = #{auditState},
+            </if>
+        </set>
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </update>
+
+    <update id="deleteByPrimaryKey" parameterType="int">
+        update club_audit set
+        audit_state = 0
+        where id = #{id}
+    </update>
+
+    <update id="deleteByExample">
+        update club_audit set
+        audit_state = 0
+        <where>
+            ${ex.sqlSegment}
+        </where>
+    </update>
+
+
+    <resultMap id="result" type="ClubAudit">
         <id property="id" column="id"/>
-        <result property="sendTime" column="send_time"/>
+        <result property="clubId" column="club_id"/>
+        <result property="auditTitle" column="audit_title"/>
+        <result property="registerTime" column="register_time"/>
         <result property="auditTime" column="audit_time"/>
         <result property="auditResult" column="audit_result"/>
         <result property="auditDescription" column="audit_description"/>
         <result property="file" column="file"/>
-
-        <association property="club" javaType="Club">
-            <id property="clubId" column="club_id"/>
-            <result property="userId" column="user_id"/>
-            <result property="clubName" column="club_name"/>
-            <result property="foundTime" column="found_time"/>
-            <result property="adminName" column="admin_name"/>
-            <result property="clubLogo" column="club_logo"/>
-        </association>
+        <result property="applyName" column="apply_name"/>
+        <result property="auditState" column="auditState"/>
     </resultMap>
 </mapper>

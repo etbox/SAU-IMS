@@ -42,11 +42,6 @@ public class SauServiceImpl extends BaseServiceImpl<SauMapper, Sau> implements S
     }
 
     @Override
-    public int insertAccount(SauReg reg) {
-        return 0;
-    }
-
-    @Override
     public void sendRegCaptchaByEmail(String email) {
 
     }

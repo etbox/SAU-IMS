@@ -1,7 +1,6 @@
 package com.fekpal.service.model.domain;
 
 import com.fekpal.common.base.BaseModel;
-import test.Model;
 
 /**
  * Created by APone on 2018/2/7 1:55.
@@ -12,26 +11,53 @@ public class AccountRecord extends BaseModel {
 
     private static final long serialVersionUID = -9141383817817859890L;
 
-
+    /**
+     * 用户名
+     */
     private String userName;
 
-    //新密码
+    /**
+     * 旧密码
+     */
     private String oldPassword;
 
-    //旧密码
+    /**
+     * 新密码
+     */
     private String newPassword;
 
-    //手机号码
+    /**
+     * 密码
+     */
+    private String password;
+
+    /**
+     * 手机号码
+     */
     private String phone;
 
-    //邮箱地址
+    /**
+     * 邮箱地址
+     */
     private String email;
 
-    //验证码
+    /**
+     * 验证码
+     */
     private String code;
 
-    //当前时间
+    /**
+     * 当前时间
+     */
     private long currentTime;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getUserName() {
         return userName;

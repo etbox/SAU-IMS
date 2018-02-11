@@ -10,9 +10,11 @@ public class ClubAudit extends BaseModel {
 
     private int id;
 
-    private Club club;
+    private int clubId;
 
-    private Timestamp sendTime;
+    private String auditTitle;
+
+    private Timestamp registerTime;
 
     private Timestamp auditTime;
 
@@ -22,6 +24,10 @@ public class ClubAudit extends BaseModel {
 
     private String auditDescription;
 
+    private String applyName;
+
+    private int auditState;
+
     public int getId() {
         return id;
     }
@@ -30,20 +36,44 @@ public class ClubAudit extends BaseModel {
         this.id = id;
     }
 
-    public Club getClub() {
-        return club;
+    public int getClubId() {
+        return clubId;
     }
 
-    public void setClub(Club club) {
-        this.club = club;
+    public void setClubId(int clubId) {
+        this.clubId = clubId;
     }
 
-    public Timestamp getSendTime() {
-        return sendTime;
+    public int getAuditState() {
+        return auditState;
     }
 
-    public void setSendTime(Timestamp sendTime) {
-        this.sendTime = sendTime;
+    public void setAuditState(int auditState) {
+        this.auditState = auditState;
+    }
+
+    public String getApplyName() {
+        return applyName;
+    }
+
+    public void setApplyName(String applyName) {
+        this.applyName = applyName;
+    }
+
+    public String getAuditTitle() {
+        return auditTitle;
+    }
+
+    public void setAuditTitle(String auditTitle) {
+        this.auditTitle = auditTitle;
+    }
+
+    public Timestamp getRegisterTime() {
+        return registerTime;
+    }
+
+    public void setRegisterTime(Timestamp registerTime) {
+        this.registerTime = registerTime;
     }
 
     public Timestamp getAuditTime() {

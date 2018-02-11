@@ -1,12 +1,18 @@
 package com.fekpal.web.model;
 
+import com.fekpal.common.base.BaseModel;
+import org.springframework.stereotype.Component;
+
 import java.util.Date;
 
 /**
  * 这是社团详细信息的实体类
  * Created by hasee on 2017/8/15.
  */
-public class ClubDetail {
+@Component
+public class ClubDetail extends BaseModel{
+
+    private static final long serialVersionUID = -4455173302218110760L;
 
     private int clubId;
 
@@ -25,9 +31,6 @@ public class ClubDetail {
     private Date foundTime;
 
     private int members;
-
-    public ClubDetail() {
-    }
 
     public int getClubId() {
         return clubId;

@@ -177,7 +177,9 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
      */
     private boolean isValidCaptcha(SessionContent.Captcha captcha, final String type) {
         SessionLocal sessionLocal = SessionLocal.local(session);
-        return sessionLocal.isValidCaptcha(captcha, type);
+        boolean isValid = sessionLocal.isValidCaptcha(captcha, type);
+        sessionLocal.clearCaptcha(type);
+        return isValid;
     }
 
     /**
@@ -200,8 +202,8 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
             msg.setSubject("校社联管理系统用户注册验证码");
             msg.setMsg("您获取的验证码为：" + code + "，10分钟内有效");
             msg.setTo(email);
-
             emailSender.sendMsg(msg);
+
             return Operation.SUCCESSFULLY;
         } catch (EmailException | SessionNullException e) {
             e.printStackTrace();

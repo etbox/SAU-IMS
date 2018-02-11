@@ -5,16 +5,17 @@ package com.fekpal.web.model;
  * Created by hasee on 2017/8/15.
  */
 public class ClubListMsg {
+
     private String clubName;
-    //社团ID
+
     private int clubId;
-    //社团展示的图片名称
+
     private String clubView;
-    //社团描述
+
     private  String description;
-    //社团成员
+
     private int members;
-    //喜爱人数
+
     private int likeNumber;
 
     public void setClubId(int clubId) {
@@ -30,7 +31,6 @@ public class ClubListMsg {
     }
 
     public String getClubName() {
-
         return clubName;
     }
 

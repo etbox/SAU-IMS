@@ -1,4 +1,4 @@
-package test;
+package test.service;
 
 import com.fekpal.common.constant.MessageType;
 import com.fekpal.common.constant.SystemRole;
@@ -9,31 +9,31 @@ import java.sql.Timestamp;
 /**
  * Created by APone on 2018/2/5 1:43.
  */
-public class Model {
+class Model {
 
-    public static User user = new User();
+    protected static User user = new User();
 
-    public static User anUser = new User();
+    protected static User anUser = new User();
 
-    public static Club club = new Club();
+    protected static Club club = new Club();
 
-    public static Sau sau = new Sau();
+    protected static Sau sau = new Sau();
 
-    public static Person person = new Person();
+    protected static Person person = new Person();
 
-    public static ClubAudit clubAudit = new ClubAudit();
+    protected static ClubAudit clubAudit = new ClubAudit();
 
-    public static AnniversaryAudit anniversaryAudit = new AnniversaryAudit();
+    protected static AnniversaryAudit anniversaryAudit = new AnniversaryAudit();
 
-    public static Message message = new Message();
+    protected static Message message = new Message();
 
-    public static Message message1 = new Message();
+    protected static Message message1 = new Message();
 
-    public static MessageRelease messageRelease = new MessageRelease();
+    protected static MessageRelease messageRelease = new MessageRelease();
 
-    public static MessageRelease messageRelease1 = new MessageRelease();
+    protected static MessageRelease messageRelease1 = new MessageRelease();
 
-    public static ClubMember clubMember = new ClubMember();
+    protected static ClubMember clubMember = new ClubMember();
 
     static {
         user.setUserName("zjboy");
@@ -66,9 +66,9 @@ public class Model {
         club.setClubName("IT社");
         club.setFoundTime(Timestamp.valueOf("1996-1-2 01:01:01"));
 
-        clubAudit.setClub(club);
+        clubAudit.setClubId(club.getClubId());
         clubAudit.setFile("java部落");
-        clubAudit.setSendTime(Timestamp.valueOf("1996-06-09 00:01:02"));
+        clubAudit.setRegisterTime(Timestamp.valueOf("1996-06-09 00:01:02"));
 
         anniversaryAudit.setSubmitTime(Timestamp.valueOf("1996-06-09 01:01:01"));
         anniversaryAudit.setSubmitDescription("这是it社重改版本");

@@ -1,31 +1,38 @@
 package com.fekpal.common.json;
 
-import java.util.HashMap;
-import java.util.Map;
+
+import java.io.Serializable;
 
 /**
  * 用来产生返回数据的标准工具类
  * Created by hasee on 2017/8/15.
  */
-public class JsonResult {
+public class JsonResult<Result> implements Serializable {
 
-    //创建返回数据的map集合
-    private Map<String, Object> map = new HashMap<>();
+    private static final long serialVersionUID = 8014073413945308268L;
 
-    //设置初始默认返回数据
-    private int code = 0;
+    /**
+     * 响应状态
+     */
+    private int code;
 
-    //响应信息
+    /**
+     * 响应信息
+     */
     private String msg;
 
-    //数据
-    private Object data;
+    /**
+     * 响应数据
+     */
+    private Result data;
 
-    //构造函数
-    public JsonResult(){
-        map.put("code", code);
-        map.put("msg", msg);
-        map.put("data", data);
+    /**
+     * 构造函数
+     */
+    public JsonResult() {
+        this.code = 0;
+        this.msg = "";
+        this.data = null;
     }
 
     /**
@@ -39,22 +46,27 @@ public class JsonResult {
         this.msg = msg;
     }
 
-    /**
-     * 设置data返回的数据
-     *
-     * @param object 传递过来返回的object对象
-     */
-    public void setData(Object object) {
-        data = object;
-        map.put("data", data);
+    public int getCode() {
+        return code;
     }
 
-    /**
-     * 得到map集合，得到返回的数据
-     *
-     * @return Map 返回数据map集合
-     */
-    public Map<String, Object> getMap() {
-        return map;
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    public String getMsg() {
+        return msg;
+    }
+
+    public void setMsg(String msg) {
+        this.msg = msg;
+    }
+
+    public Result getData() {
+        return data;
+    }
+
+    public void setData(Result data) {
+        this.data = data;
     }
 }

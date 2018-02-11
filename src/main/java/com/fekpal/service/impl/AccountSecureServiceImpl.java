@@ -21,8 +21,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static test.Model.user;
-
 /**
  * Created by APone on 2018/2/7 2:06.
  */
@@ -43,8 +41,10 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
             SessionContent.Captcha captcha = new SessionContent.Captcha();
             captcha.setCode(record.getCode());
             captcha.setCurrentTime(record.getCurrentTime());
-            if (!sessionLocal.isValidLoginCaptcha(captcha)) {
+            if (!sessionLocal.isValidCaptcha(captcha)) {
                 return Operation.CAPTCHA_INCORRECT;
+            } else {
+                sessionLocal.clearCaptcha();
             }
 
             //开始获取用户的存在
@@ -54,8 +54,8 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
             if (userIdentity == null) {
                 return Operation.FAILED;
             }
-            String password = MD5Utils.md5(userIdentity.getPassword() + userIdentity.getUserKey());
-            if (user.getPassword().equals(password)) {
+            String password = MD5Utils.md5(record.getPassword() + userIdentity.getUserKey());
+            if (userIdentity.getPassword().equals(password)) {
                 sessionLocal.createUserIdentity(userIdentity);
                 return Operation.SUCCESSFULLY;
             }
@@ -86,15 +86,15 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
     public void sendLoginCaptchaImage(OutputStream out) {
         try {
             Captcha captchaImg = new Captcha();
-            captchaImg.createCaptchaImg(out);
 
-            SessionLocal sessionLocal = SessionLocal.local(session);
             SessionContent.Captcha captcha = new SessionContent.Captcha();
             captcha.setCode(captchaImg.getCode());
             captcha.setCreateTime(System.currentTimeMillis());
             captcha.setActiveTime(1000 * 60 * 5);
-            sessionLocal.createLoginCaptcha(captcha);
+            //先数据存储到session，再图片流发送到客户端，否则将引起sessionID不一致
+            SessionLocal.local(session).createCaptcha(captcha);
 
+            captchaImg.createCaptchaImg(out);
         } catch (IOException | SessionNullException e) {
             e.printStackTrace();
         }

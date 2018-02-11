@@ -12,11 +12,8 @@ public class UserLogin {
     private String userName;
 
     private String password;
-    //验证码
-    private String captcha;
 
-    public UserLogin() {
-    }
+    private String captcha;
 
     public String getUserName() {
         return userName;
@@ -41,5 +38,4 @@ public class UserLogin {
     public void setCaptcha(String captcha) {
         this.captcha = captcha;
     }
-
 }

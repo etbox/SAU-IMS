@@ -164,6 +164,15 @@ public class SessionLocal {
     }
 
     /**
+     * 清除种类信息
+     *
+     * @param type 种类
+     */
+    public void clearCaptcha(final String type) {
+        clear(type);
+    }
+
+    /**
      * 刷新用户身份信息
      *
      * @param userIdentity 用户身份信息

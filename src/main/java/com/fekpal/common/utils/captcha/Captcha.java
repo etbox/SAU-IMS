@@ -144,7 +144,6 @@ public class Captcha {
     public void createCaptchaImg(OutputStream sos) throws IOException {
         createImg();
         ImageIO.write(buffImg, "png", sos);
-        sos.close();
     }
 
     public String getCode() {

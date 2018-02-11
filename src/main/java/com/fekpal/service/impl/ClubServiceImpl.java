@@ -55,11 +55,6 @@ public class ClubServiceImpl extends BaseServiceImpl<ClubMapper, Club> implement
     }
 
     @Override
-    public int insertAccount(ClubReg reg) {
-        return 0;
-    }
-
-    @Override
     public int saveRegAuditFile() {
         return 0;
     }

@@ -1,5 +1,6 @@
 package com.fekpal.web.controller;
 
+import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
 import com.fekpal.dao.model.Club;
 import com.fekpal.web.model.ClubDetail;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -26,9 +26,6 @@ public class IndexPageController {
     @Autowired
     private ClubService clubService;
 
-    @Autowired
-    private JsonResult returnData;
-
     /**
      * 得到社团列表信息
      *
@@ -36,28 +33,30 @@ public class IndexPageController {
      */
     @ResponseBody
     @RequestMapping(value = "/club")
-    public Map<String, Object> getClubList() {
+    public JsonResult<List> getClubList() {
 
-        // 创建封装社团列表信息的list集合
-        List<ClubListMsg> list = new ArrayList<>();
-
-        //从service中得到对象，获取对象属性，放入对应中
         List<Club> clubList = clubService.loadAllClub(0, 50);
+        JsonResult<List> result = new JsonResult<>();
 
-        for (Club club : clubList) {
-            ClubListMsg clubs = new ClubListMsg();
-            clubs.setClubId(club.getClubId());
-            clubs.setClubName(club.getClubName());
-            clubs.setClubView(club.getClubView());
-            clubs.setDescription(club.getDescription());
-            clubs.setLikeNumber(club.getLikeNumber());
-            clubs.setMembers(club.getMembers());
-            list.add(clubs);
+        if (clubList == null) {
+            result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
+        } else {
+            List<ClubListMsg> results = new ArrayList<>();
+            for (Club club : clubList) {
+                ClubListMsg clubs = new ClubListMsg();
+                clubs.setClubId(club.getClubId());
+                clubs.setClubName(club.getClubName());
+                clubs.setClubView(club.getClubView());
+                clubs.setDescription(club.getDescription());
+                clubs.setLikeNumber(club.getLikeNumber());
+                clubs.setMembers(club.getMembers());
+                results.add(clubs);
+            }
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "成功加载");
+            result.setData(results);
         }
-        //将list加入到数据中
 
-
-        return null;
+        return result;
     }
 
     /**
@@ -68,22 +67,28 @@ public class IndexPageController {
      */
     @ResponseBody
     @RequestMapping(value = "/club/{clubId}")
-    public Map<String, Object> getClubDetail(@PathVariable("clubId") Integer clubId) {
+    public JsonResult<ClubDetail> getClubDetail(@PathVariable("clubId") Integer clubId) {
 
         Club club = clubService.selectByPrimaryKey(clubId);
-        ClubDetail club1 = new ClubDetail();
+        JsonResult<ClubDetail> result = new JsonResult<>();
 
-        club1.setClubId(club.getClubId());
-        club1.setAdminName(club.getAdminName());
-        club1.setClubLogo(club.getLogo());
-        club1.setClubName(club.getClubName());
-        club1.setDescription(club.getDescription());
-        club1.setEmail(club.getContactEmail());
-        club1.setFoundTime(new Date(club.getFoundTime().getTime()));
-        club1.setMembers(club.getMembers());
+        if (club == null) {
+            result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
+        } else {
+            ClubDetail record = new ClubDetail();
 
+            record.setClubId(club.getClubId());
+            record.setAdminName(club.getAdminName());
+            record.setClubLogo(club.getLogo());
+            record.setClubName(club.getClubName());
+            record.setDescription(club.getDescription());
+            record.setEmail(club.getContactEmail());
+            record.setFoundTime(new Date(club.getFoundTime().getTime()));
+            record.setMembers(club.getMembers());
+            result.setData(record);
+        }
 
-        return null;
+        return result;
     }
 }
 
