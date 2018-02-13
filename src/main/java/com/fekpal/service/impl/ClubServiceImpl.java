@@ -2,13 +2,9 @@ package com.fekpal.service.impl;
 
 import com.fekpal.common.base.BaseServiceImpl;
 import com.fekpal.dao.mapper.ClubMapper;
-import com.fekpal.dao.mapper.UserMapper;
 import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.dao.model.Club;
-import com.fekpal.dao.model.User;
 import com.fekpal.api.ClubService;
-import com.fekpal.service.model.domain.ClubReg;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

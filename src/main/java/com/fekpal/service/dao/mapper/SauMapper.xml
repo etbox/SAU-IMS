@@ -35,7 +35,7 @@
         </where>
     </select>
 
-    <insert id="insert" parameterType="Sau" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+    <insert id="insert" parameterType="Sau" useGeneratedKeys="true" keyProperty="sauId" keyColumn="sau_id">
         insert into sau_info (
         user_id, sau_name,
         found_time, description,
@@ -50,7 +50,7 @@
         #{members}, #{sauState})
     </insert>
 
-    <insert id="insertLoop" parameterType="list" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+    <insert id="insertLoop" parameterType="list" useGeneratedKeys="true" keyProperty="sauId" keyColumn="sau_id">
         <foreach collection="list" item="item" separator=",">
         </foreach>
     </insert>

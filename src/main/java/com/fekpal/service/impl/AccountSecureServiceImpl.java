@@ -4,6 +4,7 @@ import com.fekpal.api.AccountSecureService;
 import com.fekpal.common.base.BaseServiceImpl;
 import com.fekpal.common.base.CRUDException;
 import com.fekpal.common.base.ExampleWrapper;
+import com.fekpal.common.constant.AvailableState;
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.utils.MD5Util;
 import com.fekpal.common.utils.TimeUtil;
@@ -39,29 +40,38 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
     @Autowired
     EmailSender emailSender;
 
+    /**
+     * 登录常量
+     */
+    private final static String LOGIN = "login";
+
     @Override
     public int login(AccountRecord record) {
         try {
             //验证登录验证码是否正确
             SessionLocal sessionLocal = SessionLocal.local(session);
-            SessionContent.Captcha captcha = new SessionContent.Captcha();
+            SessionContent.Captcha captcha = SessionContent.createCaptcha();
             captcha.setCode(record.getCode());
             captcha.setCurrentTime(record.getCurrentTime());
-            if (!sessionLocal.isValidCaptcha(captcha)) {
+            if (!sessionLocal.isValidCaptcha(captcha, LOGIN)) {
                 return Operation.CAPTCHA_INCORRECT;
-            } else {
-                sessionLocal.clearCaptcha();
             }
 
             //开始获取用户的存在
             ExampleWrapper<User> example = new ExampleWrapper<>();
             example.eq("user_name", record.getUserName());
-            User userIdentity = mapper.selectFirstByExample(example);
-            if (userIdentity == null) {
+            User user = mapper.selectFirstByExample(example);
+            //拥有此用户信息且允许用户登录状态
+            if (user == null || user.getUserState() == AvailableState.AVAILABLE) {
                 return Operation.FAILED;
             }
-            String password = MD5Util.md5(record.getPassword() + userIdentity.getUserKey());
-            if (userIdentity.getPassword().equals(password)) {
+
+            String password = MD5Util.md5(record.getPassword() + user.getUserKey());
+            if (user.getPassword().equals(password)) {
+                SessionContent.UserIdentity userIdentity = SessionContent.createUID();
+                userIdentity.setId(user.getUserId());
+                userIdentity.setAuthority(user.getAuthority());
+                userIdentity.setName(user.getUserName());
                 sessionLocal.createUserIdentity(userIdentity);
                 return Operation.SUCCESSFULLY;
             }
@@ -95,12 +105,12 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
         try {
             Captcha captchaImg = CaptchaUtil.create();
 
-            SessionContent.Captcha captcha = new SessionContent.Captcha();
+            SessionContent.Captcha captcha = SessionContent.createCaptcha();
             captcha.setCode(captchaImg.getCode());
             captcha.setCreateTime(System.currentTimeMillis());
             captcha.setActiveTime(1000 * 60 * 5);
             //先数据存储到session，再图片流发送到客户端，否则将引起sessionID不一致
-            SessionLocal.local(session).createCaptcha(captcha);
+            SessionLocal.local(session).createCaptcha(captcha, LOGIN);
             captchaImg.createCaptchaImg(out);
         } catch (IOException | SessionNullException e) {
             e.printStackTrace();
@@ -110,10 +120,10 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Throwable.class})
     public int resetPwd(AccountRecord record) {
-        SessionContent.Captcha captcha = new SessionContent.Captcha();
+        SessionContent.Captcha captcha = SessionContent.createCaptcha();
         captcha.setCode(record.getCode());
         captcha.setCurrentTime(record.getCurrentTime());
-        if (!SessionLocal.local(session).isValidCaptcha(captcha)) {
+        if (!SessionLocal.local(session).isValidCaptcha(captcha, LOGIN)) {
             return Operation.CAPTCHA_INCORRECT;
         }
 
@@ -140,11 +150,11 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
             String code = CaptchaUtil.create().getCode();
 
             try {
-                SessionContent.Captcha captcha = new SessionContent.Captcha();
+                SessionContent.Captcha captcha = SessionContent.createCaptcha();
                 captcha.setCode(code);
                 captcha.setCreateTime(TimeUtil.currentTime());
                 captcha.setActiveTime(10 * 60 * 1000);
-                SessionLocal.local(session).createCaptcha(captcha);
+                SessionLocal.local(session).createCaptcha(captcha, LOGIN);
 
                 EmailMsg msg = new EmailMsg();
                 msg.setTo(record.getEmail());
@@ -171,11 +181,11 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
             String code = CaptchaUtil.create().getCode();
 
             try {
-                SessionContent.Captcha captcha = new SessionContent.Captcha();
+                SessionContent.Captcha captcha = SessionContent.createCaptcha();
                 captcha.setCode(code);
                 captcha.setCreateTime(TimeUtil.currentTime());
                 captcha.setActiveTime(10 * 60 * 1000);
-                SessionLocal.local(session).createCaptcha(captcha);
+                SessionLocal.local(session).createCaptcha(captcha, LOGIN);
                 //此处添加手机发送工具
                 session.setAttribute("phone", record.getPhone());
 

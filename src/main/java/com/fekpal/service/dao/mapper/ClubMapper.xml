@@ -35,7 +35,7 @@
         </where>
     </select>
 
-    <insert id="insert" parameterType="Club" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+    <insert id="insert" parameterType="Club" useGeneratedKeys="true" keyProperty="clubId" keyColumn="club_id">
         insert into club_info (
         user_id, club_name,
         found_time, decription,
@@ -54,7 +54,7 @@
         #{clubState})
     </insert>
 
-    <insert id="insertLoop" parameterType="list" useGeneratedKeys="true" keyProperty="userId" keyColumn="user_id">
+    <insert id="insertLoop" parameterType="list" useGeneratedKeys="true" keyProperty="clubId" keyColumn="club_id">
         <foreach collection="list" item="item" separator=",">
         </foreach>
     </insert>

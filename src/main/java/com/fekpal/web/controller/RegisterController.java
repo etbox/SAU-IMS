@@ -119,6 +119,7 @@ public class RegisterController {
     public JsonResult<List> personRegister(@RequestBody PersonRegisterMsg personRegisterMsg,
                                            HttpServletRequest request) {
         long time = TimeUtil.currentTime();
+        Timestamp timestamp = new Timestamp(time);
         String ip = IPUtil.getUserIP(request);
 
         PersonReg reg = new PersonReg();
@@ -128,9 +129,9 @@ public class RegisterController {
         reg.setCaptcha(personRegisterMsg.getCaptcha());
         reg.setCurrentTime(time);
         reg.setLoginIp(ip);
-        reg.setLoginTime(new Timestamp(time));
+        reg.setLoginTime(timestamp);
         reg.setRegisterIp(ip);
-        reg.setRegisterTime(new Timestamp(time));
+        reg.setRegisterTime(timestamp);
 
         JsonResult<List> result = new JsonResult<>();
         int state = registerService.insertPersonReg(reg);

@@ -1,13 +1,30 @@
 package com.fekpal.common.session;
 
 import com.fekpal.common.base.BaseModel;
-import com.fekpal.dao.model.User;
 
 /**
  * Created by APone on 2018/1/30 13:05.
  * 存储在session的常用信息类
  */
 public class SessionContent {
+
+    /**
+     * 生成用户身份实例
+     *
+     * @return 用户身份封装
+     */
+    public static UserIdentity createUID() {
+        return new UserIdentity();
+    }
+
+    /**
+     * 生成验证信息实例
+     *
+     * @return 验证信息封装
+     */
+    public static Captcha createCaptcha() {
+        return new Captcha();
+    }
 
     /**
      * 身份类
@@ -41,15 +58,8 @@ public class SessionContent {
          */
         private int authority;
 
-        public UserIdentity(User user) {
-            this.id = user.getUserId();
-            this.name = user.getUserName();
-            this.email = user.getEmail();
-            this.phone = user.getPhone();
-            this.authority = user.getAuthority();
-        }
+        private UserIdentity() {
 
-        public UserIdentity() {
         }
 
         public int getId() {
@@ -110,7 +120,6 @@ public class SessionContent {
          */
         private String hashCode;
 
-
         /**
          * 有效时间
          */
@@ -125,6 +134,15 @@ public class SessionContent {
          * 当前时间
          */
         private long currentTime;
+
+        /**
+         * 授权对象
+         */
+        private String authorize;
+
+        private Captcha() {
+
+        }
 
         public long getCurrentTime() {
             return currentTime;
@@ -164,6 +182,14 @@ public class SessionContent {
 
         public void setCreateTime(long createTime) {
             this.createTime = createTime;
+        }
+
+        public String getAuthorize() {
+            return authorize;
+        }
+
+        public void setAuthorize(String authorize) {
+            this.authorize = authorize;
         }
     }
 }

@@ -1,10 +1,14 @@
 package com.fekpal.service.impl;
 
+import com.fekpal.api.ClubService;
 import com.fekpal.api.RegisterService;
+import com.fekpal.api.UserService;
 import com.fekpal.common.base.BaseServiceImpl;
 import com.fekpal.common.base.CRUDException;
+import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.common.constant.*;
 import com.fekpal.common.utils.FileUploadUtil;
+import com.fekpal.common.utils.MD5Util;
 import com.fekpal.common.utils.RandomUtil;
 import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.common.utils.captcha.Captcha;
@@ -56,23 +60,25 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
     private static final String CLUB_REG = "club_reg";
 
     /**
-     * 社团注册
+     * 普通注册
      */
     private static final String PERSON_REG = "person_reg";
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Throwable.class})
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int insertPersonReg(PersonReg reg) {
-        SessionContent.Captcha captcha = new SessionContent.Captcha();
+        SessionContent.Captcha captcha = SessionContent.createCaptcha();
+        captcha.setAuthorize(reg.getEmail());
         captcha.setCode(reg.getCaptcha());
         captcha.setCurrentTime(reg.getCurrentTime());
         if (!isValidCaptcha(captcha, PERSON_REG)) {
             return Operation.CAPTCHA_INCORRECT;
         }
 
+        String salt = RandomUtil.createSalt();
         User user = new User();
         user.setUserName(reg.getUserName());
-        user.setPassword(reg.getPassword());
+        user.setPassword(MD5Util.md5(reg.getPassword() + salt));
         user.setEmail(reg.getEmail());
         user.setLoginIp(reg.getLoginIp());
         user.setLoginTime(reg.getRegisterTime());
@@ -81,7 +87,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setPhone(DefaultField.DEFAULT_PHONE);
         user.setAuthority(SystemRole.PERSON);
         user.setUserState(AvailableState.AUDITING);
-        user.setUserKey(RandomUtil.createSalt());
+        user.setUserKey(salt);
         int row = mapper.insert(user);
 
         Person person = new Person();
@@ -90,18 +96,20 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         person.setNickname(DefaultField.DEFAULT_NICKNAME + user.getUserId());
         person.setLogo(DefaultField.DEFAULT_LOGO);
         person.setGender(DefaultField.DEFAULT_GENDER);
+        person.setBirthday(DefaultField.DEFAULT_TIME);
         row += personMapper.insert(person);
 
         return row == 2 ? Operation.SUCCESSFULLY : Operation.FAILED;
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Throwable.class})
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int insertSauReg(SauReg reg) {
 
+        String salt = RandomUtil.createSalt();
         User user = new User();
         user.setUserName(reg.getUserName());
-        user.setPassword(reg.getPassword());
+        user.setPassword(MD5Util.md5(reg.getPassword() + salt));
         user.setEmail(reg.getEmail());
         user.setLoginIp(reg.getLoginIp());
         user.setLoginTime(reg.getRegisterTime());
@@ -110,7 +118,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setPhone(reg.getPhone());
         user.setAuthority(SystemRole.PERSON);
         user.setUserState(AvailableState.AUDITING);
-        user.setUserKey(RandomUtil.createSalt());
+        user.setUserKey(salt);
         int row = mapper.insert(user);
 
         Sau sau = new Sau();
@@ -127,18 +135,20 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
     }
 
     @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Throwable.class})
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int insertClubReg(ClubReg reg) {
-        SessionContent.Captcha captcha = new SessionContent.Captcha();
+        SessionContent.Captcha captcha = SessionContent.createCaptcha();
+        captcha.setAuthorize(reg.getEmail());
         captcha.setCode(reg.getCaptcha());
         captcha.setCurrentTime(reg.getCurrentTime());
         if (!isValidCaptcha(captcha, CLUB_REG)) {
             return Operation.CAPTCHA_INCORRECT;
         }
 
+        String salt = RandomUtil.createSalt();
         User user = new User();
         user.setUserName(reg.getUserName());
-        user.setPassword(reg.getPassword());
+        user.setPassword(MD5Util.md5(reg.getPassword() + salt));
         user.setEmail(reg.getEmail());
         user.setLoginIp(reg.getLoginIp());
         user.setLoginTime(reg.getRegisterTime());
@@ -147,7 +157,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setPhone(reg.getPhone());
         user.setAuthority(SystemRole.PERSON);
         user.setUserState(AvailableState.AUDITING);
-        user.setUserKey(RandomUtil.createSalt());
+        user.setUserKey(salt);
         int row = mapper.insert(user);
 
         Club club = new Club();
@@ -164,7 +174,6 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         row += clubMapper.insert(club);
 
         String auditFileName;
-
         try {
             auditFileName = FileUploadUtil.fileHandle(reg.getAuditFile(), FIleDefaultPath.CLUB_AUDIT_FILE);
         } catch (IOException e) {
@@ -194,8 +203,11 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
      */
     private boolean isValidCaptcha(SessionContent.Captcha captcha, final String type) {
         SessionLocal sessionLocal = SessionLocal.local(session);
-        boolean isValid = sessionLocal.isValidCaptcha(captcha, type);
-        sessionLocal.clearCaptcha(type);
+        boolean isValid = sessionLocal.isValidCaptchaWithAuth(captcha, type);
+        //正确则清除原有验证信息
+        if (isValid) {
+            sessionLocal.clear(type);
+        }
         return isValid;
     }
 
@@ -209,15 +221,16 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
     private int sendRegCaptchaByEmail(String email, final String type) {
         try {
             String code = new Captcha().getCode();
-            SessionContent.Captcha captcha = new SessionContent.Captcha();
+            SessionContent.Captcha captcha = SessionContent.createCaptcha();
             captcha.setCode(code);
             captcha.setActiveTime(1000 * 60 * 10);
             captcha.setCreateTime(TimeUtil.currentTime());
-            SessionLocal.local(session).createCaptcha(type, captcha);
+            captcha.setAuthorize(email);
+            SessionLocal.local(session).createCaptcha(captcha, type);
 
             EmailMsg msg = new EmailMsg();
             msg.setSubject("校社联管理系统用户注册验证码");
-            msg.setText("您获取的验证码为：" + code + "，10分钟内有效，请勿泄露");
+            msg.setText("您获取的验证码为：" + code + "\n10分钟内有效，如果不是您提出的注册申请，请留意");
             msg.setTo(email);
             emailSender.send(msg);
 

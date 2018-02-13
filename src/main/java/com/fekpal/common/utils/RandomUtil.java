@@ -59,6 +59,9 @@ public class RandomUtil {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println(createFileName());
+        String salt=createSalt();
+        System.out.println(salt);
+        System.out.println(MD5Util.md5("123456"+salt));
+
     }
 }

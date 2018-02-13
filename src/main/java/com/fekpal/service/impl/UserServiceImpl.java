@@ -36,18 +36,18 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     }
 
     @Override
-    public boolean isExitPhone(String phone) {
-        ExampleWrapper<User> example = new ExampleWrapper<>();
-        example.eq("phone", phone);
-        int row = mapper.countByExample(example);
-        return false;
-    }
-
-    @Override
     public User selectByEmail(String email) {
         ExampleWrapper<User> example = new ExampleWrapper<>();
         example.eq("email", email);
         return mapper.selectFirstByExample(example);
+    }
+
+    @Override
+    public boolean isExitPhone(String phone) {
+        ExampleWrapper<User> example = new ExampleWrapper<>();
+        example.eq("phone", phone);
+        int row = mapper.countByExample(example);
+        return row >= 1;
     }
 
     @Override

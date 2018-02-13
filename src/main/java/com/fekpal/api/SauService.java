@@ -2,8 +2,6 @@ package com.fekpal.api;
 
 import com.fekpal.common.base.BaseService;
 import com.fekpal.dao.model.Sau;
-import com.fekpal.dao.model.User;
-import com.fekpal.service.model.domain.SauReg;
 
 import java.util.List;
 

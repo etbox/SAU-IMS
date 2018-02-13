@@ -1,5 +1,8 @@
 package com.fekpal.common.constant;
 
+import java.sql.Time;
+import java.sql.Timestamp;
+
 /**
  * Created by APone on 2018/2/9 2:23.
  */
@@ -39,4 +42,9 @@ public class DefaultField {
      * 默认社团预览图问文件名（展示图），没有图片后缀名
      */
     public static final String DEFAULT_CLUB_OVERVIEW = "default_club_overview";
+
+    /**
+     * 默认时间，以1970年（Unix）开始
+     */
+    public static final Timestamp DEFAULT_TIME = new Timestamp(0);
 }

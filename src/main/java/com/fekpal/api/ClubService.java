@@ -1,10 +1,7 @@
 package com.fekpal.api;
 
 import com.fekpal.common.base.BaseService;
-import com.fekpal.common.utils.msg.email.EmailMsg;
 import com.fekpal.dao.model.Club;
-import com.fekpal.dao.model.User;
-import com.fekpal.service.model.domain.ClubReg;
 
 import java.util.List;
 

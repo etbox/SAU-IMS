@@ -2,9 +2,6 @@ package com.fekpal.api;
 
 import com.fekpal.common.base.BaseService;
 import com.fekpal.dao.model.Person;
-import com.fekpal.dao.model.User;
-import com.fekpal.service.model.domain.ClubReg;
-import com.fekpal.service.model.domain.PersonReg;
 
 import java.util.List;
 

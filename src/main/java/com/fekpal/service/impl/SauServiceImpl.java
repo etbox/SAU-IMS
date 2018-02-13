@@ -2,13 +2,9 @@ package com.fekpal.service.impl;
 
 import com.fekpal.common.base.BaseServiceImpl;
 import com.fekpal.dao.mapper.SauMapper;
-import com.fekpal.dao.mapper.UserMapper;
 import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.dao.model.Sau;
-import com.fekpal.dao.model.User;
 import com.fekpal.api.SauService;
-import com.fekpal.service.model.domain.SauReg;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

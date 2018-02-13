@@ -1,5 +1,7 @@
 package test.service;
 
+import com.fekpal.common.constant.AvailableState;
+import com.fekpal.common.constant.DefaultField;
 import com.fekpal.common.constant.MessageType;
 import com.fekpal.common.constant.SystemRole;
 import com.fekpal.dao.model.*;
@@ -61,6 +63,13 @@ class Model {
         anUser.setUserState(1);
 
         person.setNickname("佳佳");
+        person.setUserId(user.getUserId());
+        person.setPersonState(AvailableState.AUDITING);
+        person.setNickname(DefaultField.DEFAULT_NICKNAME + user.getUserId());
+        person.setLogo(DefaultField.DEFAULT_LOGO);
+        person.setGender(DefaultField.DEFAULT_GENDER);
+        person.setBirthday(DefaultField.DEFAULT_TIME);
+
 
         club.setAdminName("zj");
         club.setClubName("IT社");

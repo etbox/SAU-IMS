@@ -23,4 +23,8 @@ public class WebPath {
 
     //获取web项目同级的目录  D:\masterspring\SAU.但是在idea中好像不可行，应该发布在服务器上可以了
     public final static String rootParentPath =  new File(rootPath).getParent();
+
+    public static void main(String[] args){
+        System.out.println(WebPath.classesPath+" "+WebPath.fekpalPath);
+    }
 }
