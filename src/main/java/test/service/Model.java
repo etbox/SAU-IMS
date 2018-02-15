@@ -31,9 +31,9 @@ class Model {
 
     protected static Message message1 = new Message();
 
-    protected static MessageRelease messageRelease = new MessageRelease();
+    protected static MessageReceive messageReceive = new MessageReceive();
 
-    protected static MessageRelease messageRelease1 = new MessageRelease();
+    protected static MessageReceive messageReceive1 = new MessageReceive();
 
     protected static ClubMember clubMember = new ClubMember();
 

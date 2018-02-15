@@ -61,7 +61,7 @@ public class IndexPageController {
     /**
      * 发送某个社团的详细信息
      *
-     * @param clubId 接受社团ID
+     * @param clubId 接受社团标识
      * @return 返回社团详细信息json
      */
     @ResponseBody

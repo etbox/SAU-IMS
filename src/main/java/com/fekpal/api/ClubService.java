@@ -7,7 +7,8 @@ import java.util.List;
 
 /**
  * Created by APone on 2017/9/5.
- * 该接口主要提功增删查改社团信息
+ * 社团用户信息接口
+ * 该接口主要提功社团用户信息增删查操作
  */
 public interface ClubService extends BaseService<Club> {
 
@@ -30,9 +31,9 @@ public interface ClubService extends BaseService<Club> {
     /**
      * 根据社团名称进行模糊搜索社团信息记录，分页读取
      *
-     * @param name 社团名称
-     * @param offset   跳过读数
-     * @param limit    读取数
+     * @param name   社团名称
+     * @param offset 跳过读数
+     * @param limit  读取数
      * @return 社团信息记录集
      */
     List<Club> queryByClubName(String name, int offset, int limit);

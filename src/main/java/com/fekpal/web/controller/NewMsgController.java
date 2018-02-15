@@ -1,7 +1,6 @@
 package com.fekpal.web.controller;
 
-import com.fekpal.api.MessageService;
-import com.fekpal.common.json.JsonResult;
+import com.fekpal.api.MessageSendService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -17,8 +16,7 @@ import java.util.*;
 public class NewMsgController {
 
     @Autowired
-    private MessageService messageService;
-
+    private MessageSendService messageSendService;
 
     /**
      * 根据用户id返回全部消息或者删除某些消息的方法

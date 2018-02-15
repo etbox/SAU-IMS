@@ -1,11 +1,8 @@
 package com.fekpal.service.impl;
 
-import com.fekpal.api.ClubService;
 import com.fekpal.api.RegisterService;
-import com.fekpal.api.UserService;
 import com.fekpal.common.base.BaseServiceImpl;
 import com.fekpal.common.base.CRUDException;
-import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.common.constant.*;
 import com.fekpal.common.utils.FileUploadUtil;
 import com.fekpal.common.utils.MD5Util;
@@ -21,7 +18,6 @@ import com.fekpal.service.model.domain.PersonReg;
 import com.fekpal.service.model.domain.SauReg;
 import com.fekpal.common.session.SessionContent;
 import com.fekpal.common.session.SessionLocal;
-import com.fekpal.common.session.SessionNullException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -214,40 +210,37 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
     /**
      * 发送验证码邮件通用操作
      *
-     * @param email 邮箱地址
-     * @param type  注册种类
+     * @param email  邮箱地址
+     * @param type   注册种类
+     * @param common 对象类型
      * @return 发送状态
      */
-    private int sendRegCaptchaByEmail(String email, final String type) {
-        try {
-            String code = new Captcha().getCode();
-            SessionContent.Captcha captcha = SessionContent.createCaptcha();
-            captcha.setCode(code);
-            captcha.setActiveTime(1000 * 60 * 10);
-            captcha.setCreateTime(TimeUtil.currentTime());
-            captcha.setAuthorize(email);
-            SessionLocal.local(session).createCaptcha(captcha, type);
+    private int sendRegCaptchaByEmail(String email, final String type, String common) {
 
-            EmailMsg msg = new EmailMsg();
-            msg.setSubject("校社联管理系统用户注册验证码");
-            msg.setText("您获取的验证码为：" + code + "\n10分钟内有效，如果不是您提出的注册申请，请留意");
-            msg.setTo(email);
-            emailSender.send(msg);
+        String code = new Captcha().getCode();
+        SessionContent.Captcha captcha = SessionContent.createCaptcha();
+        captcha.setCode(code);
+        captcha.setActiveTime(1000 * 60 * 10);
+        captcha.setCreateTime(TimeUtil.currentTime());
+        captcha.setAuthorize(email);
+        SessionLocal.local(session).createCaptcha(captcha, type);
 
-            return Operation.SUCCESSFULLY;
-        } catch (SessionNullException e) {
-            e.printStackTrace();
-        }
-        return Operation.FAILED;
+        EmailMsg msg = new EmailMsg();
+        msg.setSubject("校社联管理系统" + common + "用户注册验证码");
+        msg.setText("您获取的验证码为：" + code + "\n10分钟内有效，如果不是您提出的注册申请，请留意");
+        msg.setTo(email);
+        emailSender.send(msg);
+
+        return Operation.SUCCESSFULLY;
     }
 
     @Override
     public int sendClubEmailCaptcha(String email) {
-        return sendRegCaptchaByEmail(email, CLUB_REG);
+        return sendRegCaptchaByEmail(email, CLUB_REG, "社团");
     }
 
     @Override
     public int sendPersonEmailCaptcha(String email) {
-        return sendRegCaptchaByEmail(email, PERSON_REG);
+        return sendRegCaptchaByEmail(email, PERSON_REG, "普通");
     }
 }

@@ -24,8 +24,8 @@
     <select id="selectByExample" resultMap="result">
         select * from club_audit
         <where>
-            ${ex.sqlSegment}
-            and id >= #{offset}
+            id >= #{offset}
+            and ${ex.sqlSegment}
         </where>
         limit #{limit}
     </select>

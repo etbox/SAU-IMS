@@ -19,9 +19,9 @@ public class DefaultField {
     public static final String DEFAULT_PHONE = "";
 
     /**
-     * 默认头像图片文件名，没有图片后缀名
+     * 默认头像图片文件名
      */
-    public static final String DEFAULT_LOGO = "default_logo";
+    public static final String DEFAULT_LOGO = "default_logo.png";
 
     /**
      * 默认性别，性别男
@@ -39,12 +39,12 @@ public class DefaultField {
     public static final int DEFAULT_MEMBERS = 0;
 
     /**
-     * 默认社团预览图问文件名（展示图），没有图片后缀名
+     * 默认社团预览图问文件名（展示图）
      */
-    public static final String DEFAULT_CLUB_OVERVIEW = "default_club_overview";
+    public static final String DEFAULT_CLUB_OVERVIEW = "default_club_overview.png";
 
     /**
-     * 默认时间，以1970年（Unix）开始
+     * 默认时间，以1970年开始
      */
     public static final Timestamp DEFAULT_TIME = new Timestamp(0);
 }

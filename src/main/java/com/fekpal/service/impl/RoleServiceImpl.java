@@ -14,11 +14,4 @@ import java.util.List;
 @Service
 public class RoleServiceImpl implements RoleService {
 
-    @Autowired
-    private RoleMapper roleMapper;
-
-    @Override
-    public List<Role> loadAll() {
-        return roleMapper.loadAll();
-    }
 }

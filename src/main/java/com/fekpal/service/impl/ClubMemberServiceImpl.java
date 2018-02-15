@@ -15,41 +15,4 @@ import java.util.List;
 @Service
 public class ClubMemberServiceImpl implements ClubMemberService {
 
-    @Autowired
-    private ClubMemberMapper clubMemberMapper;
-
-    @Override
-    public ClubMember getMemberByPersonAndCLub(int personId, int clubId) {
-        return clubMemberMapper.getMemberByPersonAndCLub(personId, clubId);
-    }
-
-    @Override
-    public List<ClubMember> getClubMemberByPersonId(int personId) {
-        return clubMemberMapper.getClubMemberByPersonId(personId);
-    }
-
-    @Override
-    public List<Person> getAllMemberByClubId(int clubId) {
-        return clubMemberMapper.getAllMemberByClubId(clubId);
-    }
-
-    @Override
-    public ClubMember getMemberById(int id) {
-        return clubMemberMapper.getMemberById(id);
-    }
-
-    @Override
-    public void addNewClubMember(ClubMember clubMember) {
-        clubMemberMapper.addClubMember(clubMember);
-    }
-
-    @Override
-    public void updateClubMember(ClubMember clubMember) {
-        clubMemberMapper.updateClubMember(clubMember);
-    }
-
-    @Override
-    public List<ClubMember> getAllAuditingByClubId(int clubId) {
-        return clubMemberMapper.getAllAuditingByClubId(clubId);
-    }
 }

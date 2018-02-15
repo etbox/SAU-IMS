@@ -7,8 +7,8 @@ import java.util.List;
 
 /**
  * Created by APone on 2017/9/5.
- * PersonService接口
- * 该接口主要提功增删查改普通信息
+ * 普通用户信息接口
+ * 该接口主要提功普通用户信息增删查改操作
  */
 public interface PersonService extends BaseService<Person> {
 

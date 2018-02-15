@@ -7,8 +7,8 @@ import java.util.List;
 
 /**
  * Created by APone on 2017/8/25.
- * UserService接口
- * 该接口主要提功增删查改所有角色的基本身份信息
+ * 用户身份信息接口
+ * 该接口主要提功增删查改所有角色的基本身份信息的操作
  */
 public interface UserService extends BaseService<User> {
 

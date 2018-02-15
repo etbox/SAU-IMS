@@ -10,19 +10,5 @@ import java.util.List;
  */
 public interface DepartmentService {
 
-    /**
-     * 根据系别id获得系部
-     *
-     * @param departmentId int
-     * @return Department
-     */
-    Department getDepartmentByDepartmentId(int departmentId);
-
-    /**
-     * 获取所有的系别
-     *
-     * @return List
-     */
-    List<Department> loadAllDepartment();
 
 }

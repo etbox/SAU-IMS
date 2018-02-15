@@ -41,9 +41,8 @@ public class SessionLocal {
      * 是否存在用户身份信息的会话
      *
      * @return 是否存在
-     * @throws SessionNullException 空session异常
      */
-    public boolean isExitUserIdentity() throws SessionNullException {
+    public boolean isExitUserIdentity() {
         SessionContent.UserIdentity userIdentity = getUserIdentity();
         return userIdentity != null;
     }
@@ -53,12 +52,8 @@ public class SessionLocal {
      *
      * @param type 种类
      * @return 验证信息
-     * @throws SessionNullException 空session异常
      */
-    private SessionContent.Captcha getCaptcha(final String type) throws SessionNullException {
-        if (session == null) {
-            throw new SessionNullException();
-        }
+    public SessionContent.Captcha getCaptcha(final String type) {
         return (SessionContent.Captcha) session.getAttribute(type);
     }
 
@@ -67,12 +62,8 @@ public class SessionLocal {
      * 创建验证信息
      *
      * @param type 验证种类
-     * @throws SessionNullException 空session异常
      */
-    public void createCaptcha(final SessionContent.Captcha captcha, final String type) throws SessionNullException {
-        if (session == null) {
-            throw new SessionNullException();
-        }
+    public void createCaptcha(final SessionContent.Captcha captcha, final String type) {
         session.setAttribute(type, captcha);
     }
 
@@ -80,12 +71,8 @@ public class SessionLocal {
      * 创建用户身份信息
      *
      * @param userIdentity 用户身份信息
-     * @throws SessionNullException 空session异常
      */
-    public void createUserIdentity(SessionContent.UserIdentity userIdentity) throws SessionNullException {
-        if (session == null) {
-            throw new SessionNullException();
-        }
+    public void createUserIdentity(SessionContent.UserIdentity userIdentity) {
         session.setAttribute(USER_IDENTITY, userIdentity);
     }
 
@@ -111,12 +98,8 @@ public class SessionLocal {
      * 获取当前用户身份
      *
      * @return 会话
-     * @throws SessionNullException 空session异常
      */
-    public SessionContent.UserIdentity getUserIdentity() throws SessionNullException {
-        if (session == null) {
-            throw new SessionNullException();
-        }
+    public SessionContent.UserIdentity getUserIdentity() {
         return (SessionContent.UserIdentity) session.getAttribute(USER_IDENTITY);
     }
 
@@ -129,17 +112,13 @@ public class SessionLocal {
      */
     public boolean isValidCaptcha(final SessionContent.Captcha captcha, final String type) {
         //获得验证信息
-        try {
-            SessionContent.Captcha validCaptcha = getCaptcha(type);
-            if (validCaptcha != null) {
-                //是否超时
-                boolean timeOut = (captcha.getCreateTime() - validCaptcha.getCreateTime()) > validCaptcha.getActiveTime();
-                //如果验证码正确且无超时则返回真
-                return captcha.getCode().equalsIgnoreCase(validCaptcha.getCode()) &&
-                        !timeOut;
-            }
-        } catch (SessionNullException e) {
-            e.printStackTrace();
+        SessionContent.Captcha validCaptcha = getCaptcha(type);
+        if (validCaptcha != null) {
+            //是否超时
+            boolean timeOut = (captcha.getCreateTime() - validCaptcha.getCreateTime()) > validCaptcha.getActiveTime();
+            //如果验证码正确且无超时则返回真
+            return captcha.getCode().equalsIgnoreCase(validCaptcha.getCode()) &&
+                    !timeOut;
         }
         return false;
     }
@@ -153,18 +132,14 @@ public class SessionLocal {
      */
     public boolean isValidCaptchaWithAuth(final SessionContent.Captcha captcha, final String type) {
         //获得验证信息
-        try {
-            SessionContent.Captcha validCaptcha = getCaptcha(type);
-            if (validCaptcha != null && validCaptcha.getAuthorize() != null && captcha.getAuthorize() != null) {
-                //是否超时
-                boolean timeOut = (captcha.getCreateTime() - validCaptcha.getCreateTime()) > validCaptcha.getActiveTime();
-                //如果验证码正确,授权对象一致且无超时则返回真
-                return captcha.getCode().equalsIgnoreCase(validCaptcha.getCode()) &&
-                        captcha.getAuthorize().equals(validCaptcha.getAuthorize()) &&
-                        !timeOut;
-            }
-        } catch (SessionNullException e) {
-            e.printStackTrace();
+        SessionContent.Captcha validCaptcha = getCaptcha(type);
+        if (validCaptcha != null && validCaptcha.getAuthorize() != null && captcha.getAuthorize() != null) {
+            //是否超时
+            boolean timeOut = (captcha.getCreateTime() - validCaptcha.getCreateTime()) > validCaptcha.getActiveTime();
+            //如果验证码正确,授权对象一致且无超时则返回真
+            return captcha.getCode().equalsIgnoreCase(validCaptcha.getCode()) &&
+                    captcha.getAuthorize().equals(validCaptcha.getAuthorize()) &&
+                    !timeOut;
         }
         return false;
     }

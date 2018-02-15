@@ -14,16 +14,4 @@ import java.util.List;
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 
-    @Autowired
-    private DepartmentMapper departmentMapper;
-
-    @Override
-    public Department getDepartmentByDepartmentId(int departmentId) {
-        return departmentMapper.getDepartmentByDepartmentId(departmentId);
-    }
-
-    @Override
-    public List<Department> loadAllDepartment() {
-        return departmentMapper.loadAllDepartment();
-    }
 }

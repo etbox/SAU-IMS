@@ -22,8 +22,8 @@
     <select id="selectByExample" resultMap="result">
         select * from user
         <where>
-            ${ex.sqlSegment}
-            and user_id >= #{offset}
+            user_id >= #{offset}
+            and ${ex.sqlSegment}
         </where>
         limit #{limit}
     </select>

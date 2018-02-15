@@ -28,7 +28,7 @@ public class LoginController {
     private AccountSecureService accountSecureService;
 
     /**
-     * 用户登录提交方法
+     * 用户登录
      *
      * @return 返回用户信息
      */
@@ -55,9 +55,9 @@ public class LoginController {
     }
 
     /**
-     * 用户的登出方法
+     * 用户的登出
      *
-     * @return Map
+     * @return json数据
      */
     @ResponseBody
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
@@ -72,7 +72,7 @@ public class LoginController {
     }
 
     /**
-     * 生成登陆验证码，并向浏览器输出
+     * 生成登陆验证码
      */
     @RequestMapping(value = "/login/code", method = RequestMethod.GET)
     public void captcha(HttpServletResponse response) {

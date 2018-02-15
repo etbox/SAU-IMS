@@ -22,8 +22,8 @@
     <select id="selectByExample" resultMap="result">
         select * from person_info
         <where>
-            ${ex.sqlSegment}
-            and person_id >= #{offset}
+            person_id >= #{offset}
+            and ${ex.sqlSegment}
         </where>
         limit #{limit}
     </select>
@@ -53,7 +53,21 @@
     </insert>
 
     <insert id="insertLoop" parameterType="list" useGeneratedKeys="true" keyProperty="personId" keyColumn="person_id">
+        insert into person_info (
+        user_id, real_name,
+        nickname, gender,
+        birthday, description,
+        address, department,
+        major, student_id,
+        person_logo, person_state)
+        values
         <foreach collection="list" item="item" separator=",">
+            (#{item.item.userId}, #{item.realName},
+            #{item.nickname}, #{item.gender},
+            #{item.birthday}, #{item.description},
+            #{item.address}, #{item.department},
+            #{item.major}, #{item.studentId},
+            #{item.logo}, #{item.personState})
         </foreach>
     </insert>
 

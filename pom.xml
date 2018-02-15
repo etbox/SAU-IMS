@@ -212,7 +212,7 @@
     </dependencies>
 
     <build>
-        <finalName>SAU_IMS</finalName>
+        <finalName>sauims</finalName>
         <resources>
             <resource>
                 <directory>src/main/java</directory>

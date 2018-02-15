@@ -1,6 +1,7 @@
 package com.fekpal.service.model.domain;
 
 import com.fekpal.common.base.BaseModel;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 
@@ -38,7 +39,7 @@ public class SauReg extends BaseModel {
 
     private long currentTime;
 
-    private String auditFileName;
+    private MultipartFile auditFile;
 
     public Timestamp getLoginTIme() {
         return loginTIme;
@@ -148,11 +149,11 @@ public class SauReg extends BaseModel {
         this.currentTime = currentTime;
     }
 
-    public String getAuditFileName() {
-        return auditFileName;
+    public MultipartFile getAuditFile() {
+        return auditFile;
     }
 
-    public void setAuditFileName(String auditFileName) {
-        this.auditFileName = auditFileName;
+    public void setAuditFile(MultipartFile auditFile) {
+        this.auditFile = auditFile;
     }
 }

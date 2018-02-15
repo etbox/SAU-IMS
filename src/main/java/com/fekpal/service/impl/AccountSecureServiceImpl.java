@@ -17,7 +17,6 @@ import com.fekpal.dao.model.User;
 import com.fekpal.service.model.domain.AccountRecord;
 import com.fekpal.common.session.SessionContent;
 import com.fekpal.common.session.SessionLocal;
-import com.fekpal.common.session.SessionNullException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -45,51 +44,55 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
      */
     private final static String LOGIN = "login";
 
+    /**
+     * 忘记密码
+     */
+    private final static String RESET = "reset";
+
+    /**
+     * 更新
+     */
+    private final static String UPDATE = "update";
+
     @Override
     public int login(AccountRecord record) {
-        try {
-            //验证登录验证码是否正确
-            SessionLocal sessionLocal = SessionLocal.local(session);
-            SessionContent.Captcha captcha = SessionContent.createCaptcha();
-            captcha.setCode(record.getCode());
-            captcha.setCurrentTime(record.getCurrentTime());
-            if (!sessionLocal.isValidCaptcha(captcha, LOGIN)) {
-                return Operation.CAPTCHA_INCORRECT;
-            }
 
-            //开始获取用户的存在
-            ExampleWrapper<User> example = new ExampleWrapper<>();
-            example.eq("user_name", record.getUserName());
-            User user = mapper.selectFirstByExample(example);
-            //拥有此用户信息且允许用户登录状态
-            if (user == null || user.getUserState() == AvailableState.AVAILABLE) {
-                return Operation.FAILED;
-            }
+        //验证登录验证码是否正确
+        SessionLocal sessionLocal = SessionLocal.local(session);
+        SessionContent.Captcha captcha = SessionContent.createCaptcha();
+        captcha.setCode(record.getCode());
+        captcha.setCurrentTime(record.getCurrentTime());
+        if (!sessionLocal.isValidCaptcha(captcha, LOGIN)) {
+            return Operation.CAPTCHA_INCORRECT;
+        }
 
-            String password = MD5Util.md5(record.getPassword() + user.getUserKey());
-            if (user.getPassword().equals(password)) {
-                SessionContent.UserIdentity userIdentity = SessionContent.createUID();
-                userIdentity.setId(user.getUserId());
-                userIdentity.setAuthority(user.getAuthority());
-                userIdentity.setName(user.getUserName());
-                sessionLocal.createUserIdentity(userIdentity);
-                return Operation.SUCCESSFULLY;
-            }
-        } catch (SessionNullException e) {
-            e.printStackTrace();
+        //开始获取用户的存在
+        ExampleWrapper<User> example = new ExampleWrapper<>();
+        example.eq("user_name", record.getUserName());
+        User user = mapper.selectFirstByExample(example);
+        //拥有此用户信息且允许用户登录状态
+        if (user == null || user.getUserState() == AvailableState.AVAILABLE) {
+            return Operation.FAILED;
+        }
+
+        String password = MD5Util.md5(record.getPassword() + user.getUserKey());
+        if (user.getPassword().equals(password)) {
+            SessionContent.UserIdentity userIdentity = SessionContent.createUID();
+            userIdentity.setId(user.getUserId());
+            userIdentity.setAuthority(user.getAuthority());
+            userIdentity.setName(user.getUserName());
+            sessionLocal.createUserIdentity(userIdentity);
+            return Operation.SUCCESSFULLY;
         }
         return Operation.CAPTCHA_INCORRECT;
     }
 
     @Override
     public boolean isLogin() {
-        try {
-            SessionLocal sessionLocal = SessionLocal.local(session);
-            return sessionLocal.isExitUserIdentity();
-        } catch (SessionNullException e) {
-            e.printStackTrace();
-        }
-        return false;
+
+        SessionLocal sessionLocal = SessionLocal.local(session);
+        return sessionLocal.isExitUserIdentity();
+
     }
 
     @Override
@@ -112,7 +115,7 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
             //先数据存储到session，再图片流发送到客户端，否则将引起sessionID不一致
             SessionLocal.local(session).createCaptcha(captcha, LOGIN);
             captchaImg.createCaptchaImg(out);
-        } catch (IOException | SessionNullException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -123,12 +126,12 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
         SessionContent.Captcha captcha = SessionContent.createCaptcha();
         captcha.setCode(record.getCode());
         captcha.setCurrentTime(record.getCurrentTime());
-        if (!SessionLocal.local(session).isValidCaptcha(captcha, LOGIN)) {
+        SessionLocal sessionLocal = SessionLocal.local(session);
+        if (!sessionLocal.isValidCaptcha(captcha, RESET)) {
             return Operation.CAPTCHA_INCORRECT;
         }
 
-        String email = (String) session.getAttribute("email");
-        session.removeAttribute("email");
+        String email = sessionLocal.getCaptcha(RESET).getAuthorize();
 
         ExampleWrapper<User> example = new ExampleWrapper<>();
         example.eq("email", email);
@@ -147,26 +150,22 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
         example.eq("email", record.getEmail());
         int row = mapper.countByExample(example);
         if (row == 1) {
+
             String code = CaptchaUtil.create().getCode();
+            SessionContent.Captcha captcha = SessionContent.createCaptcha();
+            captcha.setCode(code);
+            captcha.setCreateTime(TimeUtil.currentTime());
+            captcha.setActiveTime(10 * 60 * 1000);
+            captcha.setAuthorize(record.getEmail());
+            SessionLocal.local(session).createCaptcha(captcha, LOGIN);
 
-            try {
-                SessionContent.Captcha captcha = SessionContent.createCaptcha();
-                captcha.setCode(code);
-                captcha.setCreateTime(TimeUtil.currentTime());
-                captcha.setActiveTime(10 * 60 * 1000);
-                SessionLocal.local(session).createCaptcha(captcha, LOGIN);
+            EmailMsg msg = new EmailMsg();
+            msg.setTo(record.getEmail());
+            msg.setSubject("忘记密码邮箱验证");
+            msg.setText("您获取的验证码为：" + code + " 有效期为10分钟，请勿泄露。如果此请求不是由您发出，请尽快修密码");
+            emailSender.send(msg);
 
-                EmailMsg msg = new EmailMsg();
-                msg.setTo(record.getEmail());
-                msg.setSubject("忘记密码邮箱验证");
-                msg.setText("您获取的验证码为：" + code + " 有效期为10分钟，请勿泄露。如果此请求不是由您发出，请尽快修密码");
-                emailSender.send(msg);
-                session.setAttribute("email", record.getEmail());
-
-                return Operation.SUCCESSFULLY;
-            } catch (SessionNullException e) {
-                e.printStackTrace();
-            }
+            return Operation.SUCCESSFULLY;
         }
         return Operation.FAILED;
     }
@@ -178,27 +177,24 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
         example.eq("phone", record.getPhone());
         int row = mapper.countByExample(example);
         if (row == 1) {
+
             String code = CaptchaUtil.create().getCode();
+            SessionContent.Captcha captcha = SessionContent.createCaptcha();
+            captcha.setCode(code);
+            captcha.setCreateTime(TimeUtil.currentTime());
+            captcha.setActiveTime(10 * 60 * 1000);
+            captcha.setAuthorize(record.getPhone());
+            SessionLocal.local(session).createCaptcha(captcha, LOGIN);
+            //此处添加手机发送工具
 
-            try {
-                SessionContent.Captcha captcha = SessionContent.createCaptcha();
-                captcha.setCode(code);
-                captcha.setCreateTime(TimeUtil.currentTime());
-                captcha.setActiveTime(10 * 60 * 1000);
-                SessionLocal.local(session).createCaptcha(captcha, LOGIN);
-                //此处添加手机发送工具
-                session.setAttribute("phone", record.getPhone());
-
-                return Operation.SUCCESSFULLY;
-            } catch (SessionNullException e) {
-                e.printStackTrace();
-            }
+            return Operation.SUCCESSFULLY;
         }
         return Operation.FAILED;
     }
 
     @Override
     public boolean confirmUpdatePwd() {
+
         return false;
     }
 

@@ -2,9 +2,8 @@ package com.fekpal.web.controller.clubAdmin;
 
 import com.fekpal.api.ClubMemberService;
 import com.fekpal.api.ClubService;
-import com.fekpal.api.MessageService;
+import com.fekpal.api.MessageSendService;
 import com.fekpal.api.UserService;
-import com.fekpal.common.json.JsonResult;
 import com.fekpal.web.model.ClubPublishedNewMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,7 +19,7 @@ import java.util.*;
 public class ClubMsgPublicController {
 
     @Autowired
-    private MessageService messageService;
+    private MessageSendService messageSendService;
 
     @Autowired
     private ClubMemberService clubMemberService;

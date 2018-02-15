@@ -10,10 +10,4 @@ import java.util.List;
  */
 public interface RoleService {
 
-    /**
-     * 加载所有权限的资源
-     *
-     * @return List
-     */
-    List<Role> loadAll();
 }

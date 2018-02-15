@@ -1,7 +1,6 @@
 package com.fekpal.web.controller;
 
 import com.fekpal.api.RegisterService;
-import com.fekpal.common.constant.DefaultField;
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
@@ -31,36 +30,27 @@ public class RegisterController {
     @Autowired
     private RegisterService registerService;
 
-    /**
-     * 发送社团邮箱验证码
-     *
-     * @param msg 验证来源封装
-     * @return json数据封装
-     */
-    @ResponseBody
-    @RequestMapping(value = "/reg/person/captcha", method = RequestMethod.POST)
-    public JsonResult<List> sendClubEmailCaptcha(@RequestBody CaptchaMsg msg) {
-        JsonResult<List> result = new JsonResult<>();
-        int state = registerService.sendPersonEmailCaptcha(msg.getEmail());
-        if (state == Operation.SUCCESSFULLY) {
-            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "验证码发送成功");
-        } else if (state == Operation.FAILED) {
-            result.setStateCode(ResponseCode.RESPONSE_ERROR, "验证码发送失败");
-        }
-        return result;
-    }
+    private static final String CLUB = "club";
+
+    private static final String PERSON = "person";
 
     /**
-     * 发送社团邮箱验证码
+     * 按照注册类型发送邮箱验证码
      *
      * @param msg 验证来源封装
      * @return json数据封装
      */
     @ResponseBody
-    @RequestMapping(value = "/reg/club/captcha", method = RequestMethod.POST)
-    public JsonResult<List> sendPersonEmailCaptcha(@RequestBody CaptchaMsg msg) {
+    @RequestMapping(value = "/reg/{regType}/captcha", method = RequestMethod.POST)
+    public JsonResult<List> sendEmailCaptcha(@RequestBody CaptchaMsg msg, @PathVariable String regType) {
         JsonResult<List> result = new JsonResult<>();
-        int state = registerService.sendPersonEmailCaptcha(msg.getEmail());
+        int state = Operation.FAILED;
+
+        if (regType.equals(CLUB)) {
+            state = registerService.sendClubEmailCaptcha(msg.getEmail());
+        } else if (regType.equals(PERSON)) {
+            state = registerService.sendPersonEmailCaptcha(msg.getEmail());
+        }
         if (state == Operation.SUCCESSFULLY) {
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "验证码发送成功");
         } else if (state == Operation.FAILED) {

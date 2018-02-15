@@ -7,8 +7,8 @@ import java.util.List;
 
 /**
  * Created by APone on 2017/9/5.
- * SauService接口
- * 该接口主要提功增删查改校社联信息
+ * 校社联用户信息接口
+ * 该接口主要提功校社联用户信息增删查改操作
  */
 public interface SauService extends BaseService<Sau> {
 

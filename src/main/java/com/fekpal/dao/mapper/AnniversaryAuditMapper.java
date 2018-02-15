@@ -7,7 +7,6 @@ import java.util.List;
 
 /**
  * Created by APone on 2017/8/23.
- * AnniversaryAuditDao接口
  */
 @Repository
 public interface AnniversaryAuditMapper {

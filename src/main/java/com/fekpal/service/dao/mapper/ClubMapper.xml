@@ -22,8 +22,8 @@
     <select id="selectByExample" resultMap="result">
         select * from club_info
         <where>
-            ${ex.sqlSegment}
-            and club_id >= #{offset}
+            club_id >= #{offset}
+            and ${ex.sqlSegment}
         </where>
         limit #{limit}
     </select>
@@ -38,11 +38,11 @@
     <insert id="insert" parameterType="Club" useGeneratedKeys="true" keyProperty="clubId" keyColumn="club_id">
         insert into club_info (
         user_id, club_name,
-        found_time, decription,
+        found_time, description,
         admin_name, club_type,
         club_logo, club_view,
         contact_email, contact_number,
-        like_number, members
+        like_number, members,
         club_state)
         values (
         #{userId}, #{clubName},

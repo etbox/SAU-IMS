@@ -2,7 +2,7 @@ package com.fekpal.dao.model;
 
 import com.fekpal.common.base.BaseModel;
 
-public class MessageRelease extends BaseModel {
+public class MessageReceive extends BaseModel {
 
     private static final long serialVersionUID = 7974631739775373072L;
 

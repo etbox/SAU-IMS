@@ -21,7 +21,7 @@
         <typeAlias type="com.fekpal.dao.model.Major" alias="Major"/>
         <typeAlias type="com.fekpal.dao.model.AnniversaryAudit" alias="AnniversaryAudit"/>
         <typeAlias type="com.fekpal.dao.model.Message" alias="Message"/>
-        <typeAlias type="com.fekpal.dao.model.MessageRelease" alias="MessageRelease"/>
+        <typeAlias type="com.fekpal.dao.model.MessageReceive" alias="MessageReceive"/>
         <typeAlias type="com.fekpal.dao.model.ClubMember" alias="ClubMember"/>
         <typeAlias type="com.fekpal.dao.model.ClubAudit" alias="ClubAudit"/>
     </typeAliases>
@@ -33,5 +33,7 @@
         <mapper resource="com/fekpal/service/dao/mapper/PersonMapper.xml"/>
         <mapper resource="com/fekpal/service/dao/mapper/SauMapper.xml"/>
         <mapper resource="com/fekpal/service/dao/mapper/ClubAuditMapper.xml"/>
+        <mapper resource="com/fekpal/service/dao/mapper/MessageMapper.xml"/>
+        <mapper resource="com/fekpal/service/dao/mapper/MessageReceiveMapper.xml"/>
     </mappers>
 </configuration>
