@@ -7,12 +7,12 @@
     <cache/>
 
     <select id="selectByPrimaryKey" parameterType="int" resultMap="result">
-        select * from message
-        where message_id = #{id}
+        select * from message_receive
+        where id = #{id}
     </select>
 
     <select id="selectFirstByExample" resultMap="result">
-        select * from message
+        select * from message_receive
         <where>
             ${ex.sqlSegment}
         </where>
@@ -20,78 +20,86 @@
     </select>
 
     <select id="selectByExample" resultMap="result">
-        select * from message
+        select * from message_receive
         <where>
-            message_id >= #{offset}
-            and ${ex.sqlSegment}
+            id >= #{offset}
+            ${ex.sqlSegment}
         </where>
         limit #{limit}
     </select>
 
     <select id="countByExample" resultType="int">
-        select count(*) from message
+        select count(*) from message_receive
         <where>
             ${ex.sqlSegment}
         </where>
     </select>
 
-    <insert id="insert" parameterType="Message" useGeneratedKeys="true" keyProperty="messageId" keyColumn="message_id">
-        insert into message(
-        message_title, message_content,
-        release_time, user_id,
-        message_type, message_annex,
-        message_state, release_name)
+    <insert id="insert" parameterType="MessageReceive" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into message_receive(
+        message_id, receive_id,
+        read_flag, available,
+        message_title, release_name,
+        release_time)
         values (
-        #{messageTitle}, #{messageContent},
-        #{releaseTime}, #{userId},
-        #{messageType}, #{messageAnnex},
-        #{messageState}, #{releaseName})
+        #{messageId}, #{receiveId},
+        #{readFlag}, #{available},
+        #{messageTitle}, #{releaseName},
+        #{releaseTime})
     </insert>
 
-    <insert id="insertLoop" parameterType="list" useGeneratedKeys="true" keyProperty="messageId" keyColumn="message_id">
-        insert into message(
-        message_title, message_content,
-        release_time, user_id,
-        message_type, message_annex,
-        message_state, release_name)
+    <insert id="insertLoop" parameterType="list" useGeneratedKeys="true" keyProperty="id" keyColumn="iid">
+        insert into message_receive(
+        message_id, receive_id,
+        read_flag, available,
+        message_title, release_name,
+        release_time)
         values
         <foreach collection="list" item="item" separator=",">
-            (#{item.messageTitle}, #{item.messageContent},
-            #{item.releaseTime}, #{item.userId},
-            #{item.messageType}, #{item.messageAnnex},
-            #{item.messageState}, #{item.releaseName})
+            (#{item.messageId}, #{item.receiveId},
+            #{item.readFlag}, #{item.available},
+            #{item.messageTitle}, #{item.releaseName},
+            #{item.releaseTime})
         </foreach>
     </insert>
 
-    <update id="updateByPrimaryKey" parameterType="Message">
-        update message set
-        message_state = #{messageState}
-        where message_id =#{messageId}
+    <update id="updateByPrimaryKey" parameterType="MessageReceive">
+        update message_receive set
+        read_flag = #{readFlag},
+        available = #{available}
+        where id =#{id}
     </update>
 
-    <update id="updateByPrimaryKeySelective" parameterType="Message">
-        update message set
+    <update id="updateByPrimaryKeySelective" parameterType="MessageReceive">
+        update message_receive
         <set>
-            <if test="messageState != null">
-                message_state = #{messageState}
+            <if test="readFlag != null">
+                read_flag = #{readFlag},
+            </if>
+            <if test="available != null">
+                available = #{available},
             </if>
         </set>
-        where message_id = #{messageId}
+        where id = #{id}
     </update>
 
     <update id="updateByExample">
-        update message set
-        message_state = #{obj.messageState}
+        update message_receive set
+        read_flag = #{readFlag},
+        available = #{available}
         <where>
             ${ex.sqlSegment}
         </where>
     </update>
 
     <update id="updateByExampleSelective">
-        update message set
+        update message_receive
         <set>
-            <if test="messageState != null">
-                message_state = #{obj.messageState},
+            <if test="readFlag != null">
+                read_flag = #{readFlag},
+            </if>
+            <if test="available != null">
+                available = #{available},
             </if>
         </set>
         <where>
@@ -100,14 +108,14 @@
     </update>
 
     <update id="deleteByPrimaryKey" parameterType="int">
-        update message set
-        message_state = 0
-        where message_id = #{id}
+        update message_receive set
+        available = 0
+        where id = #{id}
     </update>
 
     <update id="deleteByExample">
-        update message set
-        message_state = 0
+        update message_receive set
+        available = 0
         <where>
             ${ex.sqlSegment}
         </where>
@@ -115,20 +123,12 @@
 
     <resultMap id="result" type="MessageReceive">
         <id property="id" column="id"/>
-        <result property="readFlag" column="read_flag"/>
+        <result property="messageId" column="message_id"/>
         <result property="receiveId" column="receive_id"/>
+        <result property="releaseName" column="release_name"/>
+        <result property="messageTitle" column="message_title"/>
+        <result property="releaseTime" column="release_time"/>
+        <result property="readFlag" column="read_flag"/>
         <result property="available" column="available"/>
-
-        <association property="message" javaType="Message">
-            <id property="messageId" column="message_id"/>
-            <result property="userId" column="user_id"/>
-            <result property="messageTitle" column="message_title"/>
-            <result property="messageContent" column="message_content"/>
-            <result property="releaseTime" column="release_time"/>
-            <result property="releaseName" column="release_name"/>
-            <result property="messageType" column="message_type"/>
-            <result property="messageAnnex" column="message_annex"/>
-            <result property="messageState" column="message_state"/>
-        </association>
     </resultMap>
 </mapper>

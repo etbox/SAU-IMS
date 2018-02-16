@@ -4,9 +4,6 @@ import com.fekpal.common.base.BaseModel;
 
 import java.sql.Timestamp;
 
-/**
- * 社团用户实体类
- */
 public class Club extends BaseModel {
 
     private static final long serialVersionUID = -655904645499400766L;

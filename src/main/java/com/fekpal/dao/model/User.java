@@ -4,9 +4,6 @@ import com.fekpal.common.base.BaseModel;
 
 import java.sql.Timestamp;
 
-/**
- * 用户实体类，所有的其他角色必须继承该类
- */
 public class User extends BaseModel {
 
     private static final long serialVersionUID = -6379875187449194006L;

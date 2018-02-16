@@ -21,7 +21,6 @@
             <result property="clubName" column="club_name"/>
             <result property="foundTime" column="found_time"/>
             <result property="adminName" column="admin_name"/>
-            <result property="clubLogo" column="club_logo"/>
         </association>
     </resultMap>
 </mapper>

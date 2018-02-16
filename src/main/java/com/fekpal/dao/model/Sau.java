@@ -4,9 +4,6 @@ import com.fekpal.common.base.BaseModel;
 
 import java.sql.Timestamp;
 
-/**
- * 校社联用户实体类
- */
 public class Sau extends BaseModel {
 
     private static final long serialVersionUID = 7350035707570625597L;

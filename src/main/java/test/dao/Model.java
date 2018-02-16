@@ -1,4 +1,4 @@
-package test.service;
+package test.dao;
 
 import com.fekpal.common.constant.AvailableState;
 import com.fekpal.common.constant.DefaultField;
@@ -31,13 +31,19 @@ class Model {
 
     protected static Message message1 = new Message();
 
-    protected static MessageReceive messageReceive = new MessageReceive();
-
-    protected static MessageReceive messageReceive1 = new MessageReceive();
-
     protected static ClubMember clubMember = new ClubMember();
 
+    protected static MessageReceive messageReceive=new MessageReceive();
+
     static {
+        messageReceive.setMessageId(10);
+        messageReceive.setAvailable(AvailableState.AVAILABLE);
+        messageReceive.setMessageTitle("测试工程");
+        messageReceive.setReadFlag(MessageType.UN_READ);
+        messageReceive.setReceiveId(1);
+        messageReceive.setReleaseName("小喇叭");
+        messageReceive.setReleaseTime(Timestamp.valueOf("1992-01-02 01:02:09"));
+
         user.setUserName("zjboy");
         user.setPassword("123456");
         user.setEmail("zjboy@163.com");

@@ -23,7 +23,7 @@
         select * from user
         <where>
             user_id >= #{offset}
-            and ${ex.sqlSegment}
+            ${ex.sqlSegment}
         </where>
         limit #{limit}
     </select>
@@ -83,7 +83,7 @@
     </update>
 
     <update id="updateByPrimaryKeySelective" parameterType="User">
-        update user set
+        update user
         <set>
             <if test="password != null">
                 password = #{password},
@@ -121,7 +121,7 @@
     </update>
 
     <update id="updateByExampleSelective">
-        update user set
+        update user
         <set>
             <if test="password != null">
                 password = #{obj.password},
