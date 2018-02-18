@@ -37,7 +37,6 @@
         <url-pattern>*.jpeg</url-pattern>
     </servlet-mapping>
 
-
     <!--监听session-->
     <filter>
         <filter-name>springSessionRepositoryFilter</filter-name>
@@ -98,7 +97,7 @@
     <!-- 用于获取项目根目录的监听器配置-->
     <context-param>
         <param-name>webAppRootKey</param-name>
-        <param-value>SAU_IMS.webapp</param-value>
+        <param-value>root</param-value>
     </context-param>
     <listener>
         <listener-class>org.springframework.web.util.WebAppRootListener</listener-class>

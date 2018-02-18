@@ -44,22 +44,11 @@ public class SessionContent {
         private String name;
 
         /**
-         * 手机号码
-         */
-        private String phone;
-
-        /**
-         * 邮箱
-         */
-        private String email;
-
-        /**
-         * 权限
+         * 角色权限
          */
         private int authority;
 
         private UserIdentity() {
-
         }
 
         public int getId() {
@@ -76,22 +65,6 @@ public class SessionContent {
 
         public void setName(String name) {
             this.name = name;
-        }
-
-        public String getPhone() {
-            return phone;
-        }
-
-        public void setPhone(String phone) {
-            this.phone = phone;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
         }
 
         public int getAuthority() {

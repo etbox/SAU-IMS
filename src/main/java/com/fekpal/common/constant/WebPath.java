@@ -25,6 +25,6 @@ public class WebPath {
     public final static String rootParentPath =  new File(rootPath).getParent();
 
     public static void main(String[] args){
-        System.out.println(WebPath.classesPath+" "+WebPath.fekpalPath);
+        System.out.println(WebPath.consPath+" "+WebPath.classesPath+" "+WebPath.fekpalPath);
     }
 }

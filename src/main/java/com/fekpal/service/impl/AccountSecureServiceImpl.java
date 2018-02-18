@@ -140,12 +140,12 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
         SessionContent.Captcha captcha = SessionContent.createCaptcha();
         captcha.setCode(record.getCode());
         captcha.setCurrentTime(record.getCurrentTime());
-        SessionLocal sessionLocal = SessionLocal.local(session);
+
         if (!isValidCaptcha(captcha, RESET)) {
             return Operation.CAPTCHA_INCORRECT;
         }
 
-        String email = sessionLocal.getCaptcha(RESET).getAuthorize();
+        String email = SessionLocal.local(session).getCaptcha(RESET).getAuthorize();
 
         ExampleWrapper<User> example = new ExampleWrapper<>();
         example.eq("email", email);
@@ -176,7 +176,7 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
             EmailMsg msg = new EmailMsg();
             msg.setTo(record.getEmail());
             msg.setSubject("忘记密码邮箱验证");
-            msg.setText("您获取的验证码为：" + code + " 有效期为10分钟，请勿泄露。如果此请求不是由您发出，请尽快修密码");
+            msg.setText("您获取的验证码为：" + code + "\n有效期为10分钟，请勿泄露。如果此请求不是由您发出，请尽快修密码");
             emailSender.send(msg);
 
             return Operation.SUCCESSFULLY;
@@ -208,7 +208,6 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
 
     @Override
     public boolean confirmUpdatePwd() {
-
         return false;
     }
 
@@ -219,12 +218,41 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
 
     @Override
     public boolean confirmUpdateEmail() {
+        int uid = SessionLocal.local(session).getUserIdentity().getId();
+        User user = mapper.selectByPrimaryKey(uid);
+        if (user != null) {
+            String code = new Captcha().getCode();
+            SessionContent.Captcha captcha = SessionContent.createCaptcha();
+            captcha.setCode(code);
+            captcha.setCreateTime(TimeUtil.currentTime());
+            captcha.setActiveTime(1000 * 60 * 10);
+            SessionLocal.local(session).createCaptcha(captcha, UPDATE);
+
+            EmailMsg msg = new EmailMsg();
+            msg.setTo(user.getEmail());
+            msg.setSubject("修改邮箱安全验证码");
+            msg.setText("您所申请修改邮箱安全验证码为：" + code + "\n有效期为10分钟，请勿泄露。如果此请求不是由您发出，请留意您的账户安全");
+            emailSender.send(msg);
+            return true;
+        }
         return false;
     }
 
     @Override
     public int updateEmail(AccountRecord record) {
-        return 0;
+        SessionContent.Captcha captcha = SessionContent.createCaptcha();
+        captcha.setCode(record.getCode());
+        captcha.setCurrentTime(record.getCurrentTime());
+        if (!isValidCaptcha(captcha, UPDATE)) {
+            return Operation.CAPTCHA_INCORRECT;
+        }
+
+        int uid = SessionLocal.local(session).getUserIdentity().getId();
+        User user = new User();
+        user.setUserId(uid);
+        user.setEmail(record.getEmail());
+        int row = mapper.updateByPrimaryKeySelective(user);
+        return row == 1 ? Operation.SUCCESSFULLY : Operation.FAILED;
     }
 
     @Override

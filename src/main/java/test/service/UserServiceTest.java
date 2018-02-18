@@ -15,6 +15,7 @@ public class UserServiceTest extends BaseServiceTest {
 
     @Before
     public void init() {
+
     }
 
 
