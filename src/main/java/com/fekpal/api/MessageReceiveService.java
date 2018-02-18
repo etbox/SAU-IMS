@@ -18,11 +18,11 @@ public interface MessageReceiveService extends BaseService<MessageReceive> {
 
     MessageReceive selectByUserId(int id);
 
-    List<MessageReceive> queryByMessageTitle(RMsgRecord msg, int offset, int limit);
+    List<MessageReceive> queryByMessageTitle(String title, int offset, int limit);
 
-    List<MessageReceive> queryByReleaseName(RMsgRecord msg, int offset, int limit);
+    List<MessageReceive> queryByReleaseName(String name, int offset, int limit);
 
     void getReceiveMessageAnnex(OutputStream outputStream);
 
-    List<MessageReceive> loadAllReceiveMessage(RMsgRecord msg, int offset, int limit);
+    List<MessageReceive> loadAllReceiveMessage(int offset, int limit);
 }

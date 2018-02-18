@@ -82,7 +82,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setRegisterTime(reg.getRegisterTime());
         user.setPhone(DefaultField.DEFAULT_PHONE);
         user.setAuthority(SystemRole.PERSON);
-        user.setUserState(AvailableState.AUDITING);
+        user.setUserState(AvailableState.AVAILABLE);
         user.setUserKey(salt);
         int row = mapper.insert(user);
 
@@ -112,7 +112,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setRegisterIp(reg.getRegisterIp());
         user.setRegisterTime(reg.getRegisterTime());
         user.setPhone(reg.getPhone());
-        user.setAuthority(SystemRole.PERSON);
+        user.setAuthority(SystemRole.SAU);
         user.setUserState(AvailableState.AUDITING);
         user.setUserKey(salt);
         int row = mapper.insert(user);
@@ -151,13 +151,14 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setRegisterIp(reg.getRegisterIp());
         user.setRegisterTime(reg.getRegisterTime());
         user.setPhone(reg.getPhone());
-        user.setAuthority(SystemRole.PERSON);
+        user.setAuthority(SystemRole.CLUB);
         user.setUserState(AvailableState.AUDITING);
         user.setUserKey(salt);
         int row = mapper.insert(user);
 
         Club club = new Club();
         club.setUserId(user.getUserId());
+        club.setClubName(reg.getClubName());
         club.setAdminName(reg.getAdminName());
         club.setFoundTime(reg.getRegisterTime());
         club.setDescription(reg.getDescription());

@@ -47,7 +47,7 @@
         values (
         #{userId}, #{clubName},
         #{foundTime}, #{description},
-        #{adminName}, #{clubType}
+        #{adminName}, #{clubType},
         #{logo}, #{clubView},
         #{contactEmail}, #{contactNumber},
         #{likeNumber}, #{members},

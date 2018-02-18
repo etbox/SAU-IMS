@@ -2,6 +2,7 @@ package com.fekpal.web.model;
 
 import com.fekpal.common.base.BaseModel;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 社团注册信息的实体类
@@ -30,7 +31,11 @@ public class ClubRegisterMsg extends BaseModel{
 
     private String description;
 
-    private String file;
+    private MultipartFile file;
+
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
 
     public String getUserName() {
         return userName;
@@ -104,11 +109,7 @@ public class ClubRegisterMsg extends BaseModel{
         this.description = description;
     }
 
-    public String getFile() {
+    public MultipartFile getFile() {
         return file;
-    }
-
-    public void setFile(String file) {
-        this.file = file;
     }
 }

@@ -62,7 +62,7 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
         SessionContent.Captcha captcha = SessionContent.createCaptcha();
         captcha.setCode(record.getCode());
         captcha.setCurrentTime(record.getCurrentTime());
-        if (!sessionLocal.isValidCaptcha(captcha, LOGIN)) {
+        if (!isValidCaptcha(captcha, LOGIN)) {
             return Operation.CAPTCHA_INCORRECT;
         }
 
@@ -87,12 +87,26 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
         return Operation.CAPTCHA_INCORRECT;
     }
 
+    /**
+     * 验证验证码
+     *
+     * @param captcha 验证码
+     * @return 是否正确
+     */
+    private boolean isValidCaptcha(SessionContent.Captcha captcha, final String type) {
+        SessionLocal sessionLocal = SessionLocal.local(session);
+        boolean isValid = sessionLocal.isValidCaptcha(captcha, type);
+        //正确则清除原有验证信息
+        if (isValid) {
+            sessionLocal.clear(type);
+        }
+        return isValid;
+    }
+
     @Override
     public boolean isLogin() {
-
         SessionLocal sessionLocal = SessionLocal.local(session);
         return sessionLocal.isExitUserIdentity();
-
     }
 
     @Override
@@ -127,7 +141,7 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
         captcha.setCode(record.getCode());
         captcha.setCurrentTime(record.getCurrentTime());
         SessionLocal sessionLocal = SessionLocal.local(session);
-        if (!sessionLocal.isValidCaptcha(captcha, RESET)) {
+        if (!isValidCaptcha(captcha, RESET)) {
             return Operation.CAPTCHA_INCORRECT;
         }
 

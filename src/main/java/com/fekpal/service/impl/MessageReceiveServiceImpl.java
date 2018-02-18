@@ -36,12 +36,17 @@ public class MessageReceiveServiceImpl extends BaseServiceImpl<MessageReceiveMap
     }
 
     @Override
-    public List<MessageReceive> queryByMessageTitle(RMsgRecord msg, int offset, int limit) {
+    public List<MessageReceive> queryByMessageTitle(String title, int offset, int limit) {
         return null;
     }
 
     @Override
-    public List<MessageReceive> queryByReleaseName(RMsgRecord msg, int offset, int limit) {
+    public List<MessageReceive> queryByReleaseName(String name, int offset, int limit) {
+        return null;
+    }
+
+    @Override
+    public List<MessageReceive> loadAllReceiveMessage(int offset, int limit) {
         return null;
     }
 
@@ -50,8 +55,4 @@ public class MessageReceiveServiceImpl extends BaseServiceImpl<MessageReceiveMap
 
     }
 
-    @Override
-    public List<MessageReceive> loadAllReceiveMessage(RMsgRecord msg, int offset, int limit) {
-        return null;
-    }
 }

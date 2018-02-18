@@ -9,7 +9,7 @@ public class FIleDefaultPath {
     /**
      * 社团注册审核文件存放路径
      */
-    public static final String CLUB_AUDIT_FILE = "";
+    public static final String CLUB_AUDIT_FILE = "D:/";
 
     /**
      * 社团注册审核在线浏览文件存放路径

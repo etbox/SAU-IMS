@@ -77,6 +77,7 @@ public class LoginController {
     @RequestMapping(value = "/login/code", method = RequestMethod.GET)
     public void captcha(HttpServletResponse response) {
         try {
+            response.setContentType("image/png");
             OutputStream outputStream = response.getOutputStream();
             accountSecureService.sendLoginCaptchaImage(outputStream);
         } catch (IOException e) {

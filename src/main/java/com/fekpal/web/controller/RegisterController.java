@@ -14,7 +14,6 @@ import com.fekpal.web.model.PersonRegisterMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
@@ -62,14 +61,12 @@ public class RegisterController {
     /**
      * 社团注册的方法
      *
-     * @param file            上传的文件
      * @param clubRegisterMsg 社团用户注册信息封装
      * @return 标准json数据
      */
     @ResponseBody
     @RequestMapping(value = "/reg/club", method = RequestMethod.POST)
-    public JsonResult<List> clubRegister(@RequestParam(value = "file") MultipartFile[] file,
-                                         @RequestBody ClubRegisterMsg clubRegisterMsg,
+    public JsonResult<List> clubRegister(@ModelAttribute ClubRegisterMsg clubRegisterMsg,
                                          HttpServletRequest request) {
         long time = TimeUtil.currentTime();
         String ip = IPUtil.getUserIP(request);
@@ -90,7 +87,7 @@ public class RegisterController {
         reg.setAdminName(clubRegisterMsg.getRealName());
         reg.setClubType(clubRegisterMsg.getClubType());
         reg.setDescription(clubRegisterMsg.getDescription());
-        reg.setAuditFile(file[0]);
+        reg.setAuditFile(clubRegisterMsg.getFile());
 
         JsonResult<List> result = new JsonResult<>();
         int state = registerService.insertClubReg(reg);
