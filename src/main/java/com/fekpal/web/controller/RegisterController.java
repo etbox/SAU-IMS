@@ -50,19 +50,14 @@ public class RegisterController {
     @ResponseBody
     @RequestMapping(value = "/reg/{regType}/captcha", method = RequestMethod.POST)
     public JsonResult<List> sendEmailCaptcha(@RequestBody CaptchaMsg msg, @PathVariable("regType") String regType) {
-        int state = Operation.FAILED;
         if (regType.equals(CLUB)) {
-            state = registerService.sendClubEmailCaptcha(msg.getEmail());
+            registerService.sendClubEmailCaptcha(msg.getEmail());
         } else if (regType.equals(PERSON)) {
-            state = registerService.sendPersonEmailCaptcha(msg.getEmail());
+            registerService.sendPersonEmailCaptcha(msg.getEmail());
         }
 
         JsonResult<List> result = new JsonResult<>();
-        if (state == Operation.SUCCESSFULLY) {
-            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "验证码发送成功");
-        } else if (state == Operation.FAILED) {
-            result.setStateCode(ResponseCode.RESPONSE_ERROR, "验证码发送失败");
-        }
+        result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "验证码发送成功");
         return result;
     }
 
@@ -118,7 +113,7 @@ public class RegisterController {
         Timestamp timestamp = new Timestamp(time);
         String ip = IPUtil.getUserIP(request);
 
-        SauReg reg=new SauReg();
+        SauReg reg = new SauReg();
         reg.setUserName(sauRegisterMsg.getUserName());
         reg.setPassword(sauRegisterMsg.getPassword());
         reg.setEmail(sauRegisterMsg.getEmail());
@@ -170,7 +165,6 @@ public class RegisterController {
     }
 
 
-
     /**
      * 操作结果
      *
@@ -180,8 +174,6 @@ public class RegisterController {
     private static void setRegHintMsg(int state, JsonResult<List> result) {
         if (state == Operation.SUCCESSFULLY) {
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "注册成功");
-        } else if (state == Operation.FAILED) {
-            result.setStateCode(ResponseCode.RESPONSE_ERROR, "注册失败");
         } else if (state == Operation.CAPTCHA_INCORRECT) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "验证码错误");
         }

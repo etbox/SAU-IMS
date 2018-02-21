@@ -19,7 +19,7 @@ public interface AccountSecureService extends BaseService<User> {
      * @param record 信息封装
      *               传入参数：新密码newPassword, 验证码code, 当前时间currentTime
      * @return 是否修改成功
-     * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
+     * 参考参数：Operation.SUCCESSFULLY 成功
      */
     int resetPwd(AccountRecord record);
 
@@ -57,7 +57,7 @@ public interface AccountSecureService extends BaseService<User> {
      * @param record 信息封装
      *               传入参数：新密码newPassword，旧密码oldPassword，验证码code, 当前时间currentTime
      * @return 是否更新成功
-     * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
+     * 参考参数：Operation.SUCCESSFULLY 成功
      */
     int modifyPwd(AccountRecord record);
 
@@ -75,7 +75,7 @@ public interface AccountSecureService extends BaseService<User> {
      * @param record 信息封装
      *               传入参数：新邮箱newEmail， 验证码code， 当前时间currentTime
      * @return 是否修改成功
-     * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
+     * 参考参数：Operation.SUCCESSFULLY 成功
      */
     int modifyEmail(AccountRecord record);
 
@@ -93,7 +93,7 @@ public interface AccountSecureService extends BaseService<User> {
      * @param record 信息封装
      *               传入参数：新手机phone，验证码code， 当前时间currentTime
      * @return 是否修改成功
-     * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
+     * 参考参数：Operation.SUCCESSFULLY 成功
      */
     int modifyPhone(AccountRecord record);
 }

@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 /**
  * Created by APone on 2018/2/9 0:42.
@@ -84,27 +83,30 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setAuthority(SystemRole.PERSON);
         user.setUserState(AvailableState.AVAILABLE);
         user.setUserKey(salt);
-        int row = mapper.insert(user);
 
         Person person = new Person();
-        person.setUserId(user.getUserId());
-        person.setPersonState(AvailableState.AUDITING);
+        person.setPersonState(AvailableState.AVAILABLE);
         person.setNickname(DefaultField.DEFAULT_NICKNAME + user.getUserId());
         person.setLogo(DefaultField.DEFAULT_LOGO);
         person.setGender(DefaultField.DEFAULT_GENDER);
         person.setBirthday(DefaultField.DEFAULT_TIME);
-        row += personMapper.insert(person);
+
+        try {
+            int row = mapper.insert(user);
+            person.setUserId(user.getUserId());
+            row += personMapper.insert(person);
+            if (row != 2) throw new CRUDException("普通用户注册数据插入数量异常，数量：" + row);
+        } catch (Exception e) {
+            throw new CRUDException(e.getMessage());
+        }
 
         //注册成功后直接存储注册用户身份会话信息，以便直接自动登录
-        if (row == 2) {
-            SessionContent.UserIdentity identity = SessionContent.createUID();
-            identity.setId(user.getUserId());
-            identity.setName(user.getUserName());
-            identity.setAuthority(user.getAuthority());
-            SessionLocal.local(session).createUserIdentity(identity);
-            return Operation.SUCCESSFULLY;
-        }
-        return Operation.FAILED;
+        SessionContent.UserIdentity identity = SessionContent.createUID();
+        identity.setId(user.getUserId());
+        identity.setName(user.getUserName());
+        identity.setAuthority(user.getAuthority());
+        SessionLocal.local(session).createUserIdentity(identity);
+        return Operation.SUCCESSFULLY;
     }
 
     @Override
@@ -122,22 +124,27 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setRegisterTime(reg.getRegisterTime());
         user.setPhone(reg.getPhone());
         user.setAuthority(SystemRole.SAU);
-        //测试用，现在默认为有效
-        user.setUserState(AvailableState.AUDITING);
+        user.setUserState(AvailableState.AVAILABLE);
         user.setUserKey(salt);
-        int row = mapper.insert(user);
 
         Sau sau = new Sau();
-        sau.setUserId(user.getUserId());
         sau.setSauName(reg.getSauName());
         sau.setAdminName(reg.getAdminName());
         sau.setFoundTime(reg.getRegisterTime());
         sau.setMembers(DefaultField.DEFAULT_MEMBERS);
         sau.setLogo(DefaultField.DEFAULT_LOGO);
         sau.setSauState(AvailableState.AVAILABLE);
-        row += sauMapper.insert(sau);
 
-        return row == 2 ? Operation.SUCCESSFULLY : Operation.FAILED;
+        try {
+            int row = mapper.insert(user);
+            sau.setUserId(user.getUserId());
+            row += sauMapper.insert(sau);
+            if (row != 2) throw new CRUDException("校社联用户注册数据插入数量异常，数量：" + row);
+        } catch (Exception e) {
+            throw new CRUDException(e.getMessage());
+        }
+
+        return Operation.SUCCESSFULLY;
     }
 
     @Override
@@ -164,10 +171,8 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setAuthority(SystemRole.CLUB);
         user.setUserState(AvailableState.AUDITING);
         user.setUserKey(salt);
-        int row = mapper.insert(user);
 
         Club club = new Club();
-        club.setUserId(user.getUserId());
         club.setClubName(reg.getClubName());
         club.setAdminName(reg.getAdminName());
         club.setFoundTime(reg.getRegisterTime());
@@ -178,28 +183,30 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         club.setClubView(DefaultField.DEFAULT_CLUB_OVERVIEW);
         club.setMembers(DefaultField.DEFAULT_MEMBERS);
         club.setLikeNumber(DefaultField.DEFAULT_MEMBERS);
-        row += clubMapper.insert(club);
 
-        String auditFileName;
-        try {
-            auditFileName = FileUploadUtil.fileHandle(reg.getAuditFile(), FIleDefaultPath.CLUB_AUDIT_FILE);
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new CRUDException();
-        }
         ClubAudit clubAudit = new ClubAudit();
-        clubAudit.setClubId(club.getClubId());
         clubAudit.setRegisterTime(reg.getRegisterTime());
-        clubAudit.setFile(auditFileName);
         clubAudit.setApplyName(reg.getAdminName());
         clubAudit.setAuditResult(AuditState.AUDITING);
         clubAudit.setAuditTitle(reg.getClubName() + " 注册申请审核");
         clubAudit.setAuditTime(reg.getRegisterTime());
         clubAudit.setAuditDescription(DefaultField.EMPTY);
         clubAudit.setAuditState(AvailableState.AUDITING);
-        row += clubAuditMapper.insert(clubAudit);
 
-        return row == 3 ? Operation.SUCCESSFULLY : Operation.FAILED;
+        try {
+            int row = mapper.insert(user);
+            club.setUserId(user.getUserId());
+            row += clubMapper.insert(club);
+            String auditFileName = FileUploadUtil.fileHandle(reg.getAuditFile(), FIleDefaultPath.CLUB_AUDIT_FILE);
+            clubAudit.setClubId(club.getClubId());
+            clubAudit.setFile(auditFileName);
+            row += clubAuditMapper.insert(clubAudit);
+            if (row != 3) throw new CRUDException("社团用户注册数据插入数量异常，数量：" + row);
+        } catch (Exception e) {
+            throw new CRUDException(e.getMessage());
+        }
+
+        return Operation.SUCCESSFULLY;
     }
 
     /**
@@ -224,10 +231,8 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
      * @param email  邮箱地址
      * @param type   注册种类
      * @param common 对象类型
-     * @return 发送状态
      */
-    private int sendRegCaptchaByEmail(String email, final String type, String common) {
-
+    private void sendRegCaptchaByEmail(String email, final String type, String common) {
         String code = new Captcha().getCode();
         SessionContent.Captcha captcha = SessionContent.createCaptcha();
         captcha.setCode(code);
@@ -241,17 +246,15 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         msg.setText("您获取的验证码为：" + code + "\n10分钟内有效，如果不是您提出的注册申请，请留意");
         msg.setTo(email);
         emailSender.send(msg);
-
-        return Operation.SUCCESSFULLY;
     }
 
     @Override
-    public int sendClubEmailCaptcha(String email) {
-        return sendRegCaptchaByEmail(email, CLUB_REG, "社团");
+    public void sendClubEmailCaptcha(String email) {
+        sendRegCaptchaByEmail(email, CLUB_REG, "社团");
     }
 
     @Override
-    public int sendPersonEmailCaptcha(String email) {
-        return sendRegCaptchaByEmail(email, PERSON_REG, "普通");
+    public void sendPersonEmailCaptcha(String email) {
+        sendRegCaptchaByEmail(email, PERSON_REG, "普通");
     }
 }
