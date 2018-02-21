@@ -40,11 +40,6 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
     EmailSender emailSender;
 
     /**
-     * 登录常量
-     */
-    private final static String LOGIN = "login";
-
-    /**
      * 忘记密码
      */
     private final static String RESET = "reset";
@@ -53,39 +48,6 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
      * 更新
      */
     private final static String UPDATE = "update";
-
-    @Override
-    public int login(AccountRecord record) {
-
-        //验证登录验证码是否正确
-        SessionLocal sessionLocal = SessionLocal.local(session);
-        SessionContent.Captcha captcha = SessionContent.createCaptcha();
-        captcha.setCode(record.getCode());
-        captcha.setCurrentTime(record.getCurrentTime());
-        if (!isValidCaptcha(captcha, LOGIN)) {
-            return Operation.CAPTCHA_INCORRECT;
-        }
-
-        //开始获取用户的存在
-        ExampleWrapper<User> example = new ExampleWrapper<>();
-        example.eq("user_name", record.getUserName());
-        User user = mapper.selectFirstByExample(example);
-        //拥有此用户信息且允许用户登录状态
-        if (user == null || user.getUserState() == AvailableState.AVAILABLE) {
-            return Operation.FAILED;
-        }
-
-        String password = MD5Util.md5(record.getPassword() + user.getUserKey());
-        if (user.getPassword().equals(password)) {
-            SessionContent.UserIdentity userIdentity = SessionContent.createUID();
-            userIdentity.setId(user.getUserId());
-            userIdentity.setAuthority(user.getAuthority());
-            userIdentity.setName(user.getUserName());
-            sessionLocal.createUserIdentity(userIdentity);
-            return Operation.SUCCESSFULLY;
-        }
-        return Operation.CAPTCHA_INCORRECT;
-    }
 
     /**
      * 验证验证码
@@ -103,36 +65,6 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
         return isValid;
     }
 
-    @Override
-    public boolean isLogin() {
-        SessionLocal sessionLocal = SessionLocal.local(session);
-        return sessionLocal.isExitUserIdentity();
-    }
-
-    @Override
-    public boolean logout() {
-        if (isLogin()) {
-            session.invalidate();
-        }
-        return true;
-    }
-
-    @Override
-    public void sendLoginCaptchaImage(OutputStream out) {
-        try {
-            Captcha captchaImg = CaptchaUtil.create();
-
-            SessionContent.Captcha captcha = SessionContent.createCaptcha();
-            captcha.setCode(captchaImg.getCode());
-            captcha.setCreateTime(System.currentTimeMillis());
-            captcha.setActiveTime(1000 * 60 * 5);
-            //先数据存储到session，再图片流发送到客户端，否则将引起sessionID不一致
-            SessionLocal.local(session).createCaptcha(captcha, LOGIN);
-            captchaImg.createCaptchaImg(out);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Throwable.class})
@@ -140,7 +72,6 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
         SessionContent.Captcha captcha = SessionContent.createCaptcha();
         captcha.setCode(record.getCode());
         captcha.setCurrentTime(record.getCurrentTime());
-
         if (!isValidCaptcha(captcha, RESET)) {
             return Operation.CAPTCHA_INCORRECT;
         }
@@ -164,14 +95,13 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
         example.eq("email", record.getEmail());
         int row = mapper.countByExample(example);
         if (row == 1) {
-
             String code = CaptchaUtil.create().getCode();
             SessionContent.Captcha captcha = SessionContent.createCaptcha();
             captcha.setCode(code);
             captcha.setCreateTime(TimeUtil.currentTime());
             captcha.setActiveTime(10 * 60 * 1000);
             captcha.setAuthorize(record.getEmail());
-            SessionLocal.local(session).createCaptcha(captcha, LOGIN);
+            SessionLocal.local(session).createCaptcha(captcha, RESET);
 
             EmailMsg msg = new EmailMsg();
             msg.setTo(record.getEmail());
@@ -198,7 +128,7 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
             captcha.setCreateTime(TimeUtil.currentTime());
             captcha.setActiveTime(10 * 60 * 1000);
             captcha.setAuthorize(record.getPhone());
-            SessionLocal.local(session).createCaptcha(captcha, LOGIN);
+            SessionLocal.local(session).createCaptcha(captcha, RESET);
             //此处添加手机发送工具
 
             return Operation.SUCCESSFULLY;
@@ -207,17 +137,17 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
     }
 
     @Override
-    public boolean confirmUpdatePwd() {
-        return false;
-    }
-
-    @Override
-    public int updatePwd(AccountRecord record) {
+    public int sendModifyPwdCaptcha() {
         return 0;
     }
 
     @Override
-    public boolean confirmUpdateEmail() {
+    public int modifyPwd(AccountRecord record) {
+        return 0;
+    }
+
+    @Override
+    public int sendModifyEmailCaptcha() {
         int uid = SessionLocal.local(session).getUserIdentity().getId();
         User user = mapper.selectByPrimaryKey(uid);
         if (user != null) {
@@ -233,13 +163,13 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
             msg.setSubject("修改邮箱安全验证码");
             msg.setText("您所申请修改邮箱安全验证码为：" + code + "\n有效期为10分钟，请勿泄露。如果此请求不是由您发出，请留意您的账户安全");
             emailSender.send(msg);
-            return true;
+            return Operation.SUCCESSFULLY;
         }
-        return false;
+        return Operation.FAILED;
     }
 
     @Override
-    public int updateEmail(AccountRecord record) {
+    public int modifyEmail(AccountRecord record) {
         SessionContent.Captcha captcha = SessionContent.createCaptcha();
         captcha.setCode(record.getCode());
         captcha.setCurrentTime(record.getCurrentTime());
@@ -250,18 +180,18 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
         int uid = SessionLocal.local(session).getUserIdentity().getId();
         User user = new User();
         user.setUserId(uid);
-        user.setEmail(record.getEmail());
+        user.setEmail(record.getNewEmail());
         int row = mapper.updateByPrimaryKeySelective(user);
         return row == 1 ? Operation.SUCCESSFULLY : Operation.FAILED;
     }
 
     @Override
-    public boolean confirmUpdatePhone() {
-        return false;
+    public int sendModifyPhoneCaptcha() {
+        return 0;
     }
 
     @Override
-    public int updatePhone(AccountRecord record) {
+    public int modifyPhone(AccountRecord record) {
         return 0;
     }
 }

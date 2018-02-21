@@ -1,9 +1,10 @@
 package com.fekpal.web.controller;
 
-import com.fekpal.api.AccountSecureService;
+import com.fekpal.api.AccountAccessService;
 
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.constant.ResponseCode;
+import com.fekpal.common.constant.SystemRole;
 import com.fekpal.common.json.JsonResult;
 import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.service.model.domain.AccountRecord;
@@ -25,7 +26,7 @@ import java.util.List;
 public class LoginController {
 
     @Autowired
-    private AccountSecureService accountSecureService;
+    private AccountAccessService accountAccessService;
 
     /**
      * 用户登录
@@ -34,7 +35,7 @@ public class LoginController {
      */
     @ResponseBody
     @RequestMapping(value = "/login/go", method = RequestMethod.POST)
-    public JsonResult<List> login(@RequestBody UserLogin login) {
+    public JsonResult<List> login(@RequestBody UserLogin login, HttpServletResponse response) {
 
         AccountRecord record = new AccountRecord();
         record.setUserName(login.getUserName());
@@ -43,7 +44,7 @@ public class LoginController {
         record.setCurrentTime(TimeUtil.currentTime());
 
         JsonResult<List> result = new JsonResult<>();
-        int state = accountSecureService.login(record);
+        int state = accountAccessService.login(record);
         if (state == Operation.CAPTCHA_INCORRECT) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "验证码错误");
         } else if (state == Operation.FAILED) {
@@ -54,6 +55,21 @@ public class LoginController {
         return result;
     }
 
+    private void redirect(int authority, HttpServletResponse response) {
+        try {
+            if (authority == SystemRole.SAU) {
+                response.sendRedirect("");
+            } else if (authority == SystemRole.CLUB) {
+                response.sendRedirect("");
+            } else if (authority == SystemRole.PERSON) {
+                response.sendRedirect("");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     /**
      * 用户的登出
      *
@@ -63,7 +79,7 @@ public class LoginController {
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public JsonResult<List> logout() {
         JsonResult<List> result = new JsonResult<>();
-        if (accountSecureService.logout()) {
+        if (accountAccessService.logout()) {
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "登出成功");
         } else {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "登出失败");
@@ -79,7 +95,7 @@ public class LoginController {
         try {
             response.setContentType("image/png");
             OutputStream outputStream = response.getOutputStream();
-            accountSecureService.sendLoginCaptchaImage(outputStream);
+            accountAccessService.sendLoginCaptchaImage(outputStream);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -95,7 +95,16 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         person.setBirthday(DefaultField.DEFAULT_TIME);
         row += personMapper.insert(person);
 
-        return row == 2 ? Operation.SUCCESSFULLY : Operation.FAILED;
+        //注册成功后直接存储注册用户身份会话信息，以便直接自动登录
+        if (row == 2) {
+            SessionContent.UserIdentity identity = SessionContent.createUID();
+            identity.setId(user.getUserId());
+            identity.setName(user.getUserName());
+            identity.setAuthority(user.getAuthority());
+            SessionLocal.local(session).createUserIdentity(identity);
+            return Operation.SUCCESSFULLY;
+        }
+        return Operation.FAILED;
     }
 
     @Override
@@ -113,6 +122,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setRegisterTime(reg.getRegisterTime());
         user.setPhone(reg.getPhone());
         user.setAuthority(SystemRole.SAU);
+        //测试用，现在默认为有效
         user.setUserState(AvailableState.AUDITING);
         user.setUserKey(salt);
         int row = mapper.insert(user);

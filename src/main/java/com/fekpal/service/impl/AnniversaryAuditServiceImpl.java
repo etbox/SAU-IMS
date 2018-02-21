@@ -14,5 +14,4 @@ import java.util.List;
  */
 @Service
 public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAuditMapper, AnniversaryAudit> implements AnniversaryAuditService {
-
 }

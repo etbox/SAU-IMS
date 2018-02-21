@@ -8,9 +8,11 @@ import com.fekpal.common.utils.IPUtil;
 import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.service.model.domain.ClubReg;
 import com.fekpal.service.model.domain.PersonReg;
+import com.fekpal.service.model.domain.SauReg;
 import com.fekpal.web.model.CaptchaMsg;
 import com.fekpal.web.model.ClubRegisterMsg;
 import com.fekpal.web.model.PersonRegisterMsg;
+import com.fekpal.web.model.SauRegisterMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -29,8 +31,14 @@ public class RegisterController {
     @Autowired
     private RegisterService registerService;
 
+    /**
+     * 社团注册常量
+     */
     private static final String CLUB = "club";
 
+    /**
+     * 普通用户注册常量
+     */
     private static final String PERSON = "person";
 
     /**
@@ -41,15 +49,15 @@ public class RegisterController {
      */
     @ResponseBody
     @RequestMapping(value = "/reg/{regType}/captcha", method = RequestMethod.POST)
-    public JsonResult<List> sendEmailCaptcha(@RequestBody CaptchaMsg msg, @PathVariable String regType) {
-        JsonResult<List> result = new JsonResult<>();
+    public JsonResult<List> sendEmailCaptcha(@RequestBody CaptchaMsg msg, @PathVariable("regType") String regType) {
         int state = Operation.FAILED;
-
         if (regType.equals(CLUB)) {
             state = registerService.sendClubEmailCaptcha(msg.getEmail());
         } else if (regType.equals(PERSON)) {
             state = registerService.sendPersonEmailCaptcha(msg.getEmail());
         }
+
+        JsonResult<List> result = new JsonResult<>();
         if (state == Operation.SUCCESSFULLY) {
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "验证码发送成功");
         } else if (state == Operation.FAILED) {
@@ -69,6 +77,7 @@ public class RegisterController {
     public JsonResult<List> clubRegister(@ModelAttribute ClubRegisterMsg clubRegisterMsg,
                                          HttpServletRequest request) {
         long time = TimeUtil.currentTime();
+        Timestamp timestamp = new Timestamp(time);
         String ip = IPUtil.getUserIP(request);
 
         ClubReg reg = new ClubReg();
@@ -79,9 +88,9 @@ public class RegisterController {
         reg.setCaptcha(clubRegisterMsg.getCaptcha());
         reg.setCurrentTime(time);
         reg.setLoginIp(ip);
-        reg.setLoginTime(new Timestamp(time));
+        reg.setLoginTime(timestamp);
         reg.setRegisterIp(ip);
-        reg.setRegisterTime(new Timestamp(time));
+        reg.setRegisterTime(timestamp);
 
         reg.setClubName(clubRegisterMsg.getClubName());
         reg.setAdminName(clubRegisterMsg.getRealName());
@@ -89,8 +98,42 @@ public class RegisterController {
         reg.setDescription(clubRegisterMsg.getDescription());
         reg.setAuditFile(clubRegisterMsg.getFile());
 
-        JsonResult<List> result = new JsonResult<>();
         int state = registerService.insertClubReg(reg);
+        JsonResult<List> result = new JsonResult<>();
+        setRegHintMsg(state, result);
+        return result;
+    }
+
+    /**
+     * 校社联注册的方法
+     *
+     * @param sauRegisterMsg 校社联用户注册信息封装
+     * @return 标准json数据
+     */
+    @ResponseBody
+    @RequestMapping(value = "/reg/sau", method = RequestMethod.POST)
+    public JsonResult<List> sauRegister(@RequestBody SauRegisterMsg sauRegisterMsg,
+                                        HttpServletRequest request) {
+        long time = TimeUtil.currentTime();
+        Timestamp timestamp = new Timestamp(time);
+        String ip = IPUtil.getUserIP(request);
+
+        SauReg reg=new SauReg();
+        reg.setUserName(sauRegisterMsg.getUserName());
+        reg.setPassword(sauRegisterMsg.getPassword());
+        reg.setEmail(sauRegisterMsg.getEmail());
+        reg.setPhone(sauRegisterMsg.getPhone());
+        reg.setLoginIp(ip);
+        reg.setLoginTime(timestamp);
+        reg.setRegisterIp(ip);
+        reg.setRegisterTime(timestamp);
+
+        reg.setDescription(sauRegisterMsg.getDescription());
+        reg.setAdminName(sauRegisterMsg.getAdminName());
+        reg.setSauName(sauRegisterMsg.getSauName());
+
+        int state = registerService.insertSauReg(reg);
+        JsonResult<List> result = new JsonResult<>();
         setRegHintMsg(state, result);
         return result;
     }
@@ -120,11 +163,13 @@ public class RegisterController {
         reg.setRegisterIp(ip);
         reg.setRegisterTime(timestamp);
 
-        JsonResult<List> result = new JsonResult<>();
         int state = registerService.insertPersonReg(reg);
+        JsonResult<List> result = new JsonResult<>();
         setRegHintMsg(state, result);
         return result;
     }
+
+
 
     /**
      * 操作结果

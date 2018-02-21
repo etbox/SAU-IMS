@@ -27,7 +27,7 @@ public class SauReg extends BaseModel {
 
     private String description;
 
-    private Timestamp loginTIme;
+    private Timestamp loginTime;
 
     private Timestamp registerTime;
 
@@ -41,12 +41,12 @@ public class SauReg extends BaseModel {
 
     private MultipartFile auditFile;
 
-    public Timestamp getLoginTIme() {
-        return loginTIme;
+    public Timestamp getLoginTime() {
+        return loginTime;
     }
 
-    public void setLoginTIme(Timestamp loginTIme) {
-        this.loginTIme = loginTIme;
+    public void setLoginTime(Timestamp loginTime) {
+        this.loginTime = loginTime;
     }
 
     public Timestamp getRegisterTime() {

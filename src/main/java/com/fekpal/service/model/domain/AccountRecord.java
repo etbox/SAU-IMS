@@ -37,9 +37,19 @@ public class AccountRecord extends BaseModel {
     private String phone;
 
     /**
+     * 新手机号码
+     */
+    private String newPhone;
+
+    /**
      * 邮箱地址
      */
     private String email;
+
+    /**
+     * 新邮箱地址
+     */
+    private String newEmail;
 
     /**
      * 验证码
@@ -50,6 +60,22 @@ public class AccountRecord extends BaseModel {
      * 当前时间
      */
     private long currentTime;
+
+    public String getNewPhone() {
+        return newPhone;
+    }
+
+    public void setNewPhone(String newPhone) {
+        this.newPhone = newPhone;
+    }
+
+    public String getNewEmail() {
+        return newEmail;
+    }
+
+    public void setNewEmail(String newEmail) {
+        this.newEmail = newEmail;
+    }
 
     public String getPassword() {
         return password;
