@@ -1,7 +1,8 @@
 header {
   background-color: #37a2fe;
-  box-shadow: 0 5px 12px rgba(0, 0, 0, 0.5);
-  position: fixed;
+  height: 65px;
+  box-shadow: 1px 5px 12px rgba(0, 0, 0, 0.5);
+  /* position: fixed; */
   z-index: 10;
   width: 100%;
   top: 0;
@@ -65,4 +66,31 @@ header > nav {
 
 .logIn:hover, .signUp:hover {
   background-color: #30617f;
+}
+
+/* 内部系统
+----------------------------------------------------------------------------- */
+
+.home {
+  float: left;
+}
+
+.info {
+  float: right;
+}
+
+.icon {
+  width: 65px;
+  height: 65px;
+}
+
+.logo-text {
+  display: inline-block;
+  font-size: 20px;
+}
+
+.avatar {
+  height: 50px;
+  width: 50px;
+  background-color: #abc;
 }
