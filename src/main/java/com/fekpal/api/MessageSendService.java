@@ -2,8 +2,7 @@ package com.fekpal.api;
 
 import com.fekpal.common.base.BaseService;
 import com.fekpal.dao.model.Message;
-import com.fekpal.dao.model.MessageReceive;
-import com.fekpal.service.model.domain.SMsgRecord;
+import com.fekpal.service.model.domain.SRMsgRecord;
 
 import java.io.OutputStream;
 import java.util.List;
@@ -40,25 +39,35 @@ public interface MessageSendService extends BaseService<Message> {
      *               传入参数：删除集合ids
      * @return 删除状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
      */
-    int deleteByMessageId(SMsgRecord record);
+    int deleteByMessageId(SRMsgRecord record);
+
 
     /**
-     * 发送校社联用户新的信息
+     * 发送全体公告的信息
      *
      * @param record 信息封装：信息标题messageTitle，信息内容messageContent，
      *               发送时间releaseTime，消息附件（可为空）messageAnnex
      * @return 添加状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
      */
-    int sendSauMessage(SMsgRecord record);
+    int sendGlobalMessage(SRMsgRecord record);
 
     /**
-     * 发送社团用户新的信息
+     * 发送组织内的信息
      *
      * @param record 信息封装：信息标题messageTitle，信息内容messageContent，
      *               发送时间releaseTime，消息附件（可为空）messageAnnex
      * @return 添加状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
      */
-    int sendClubMessage(SMsgRecord record);
+    int sendCustomMessage(SRMsgRecord record);
+
+    /**
+     * 发送指定接收人的信息
+     *
+     * @param record 信息封装：信息标题messageTitle，信息内容messageContent，
+     *               发送时间releaseTime，消息附件（可为空）messageAnnex
+     * @return 添加状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
+     */
+    int sendOrgMessage(SRMsgRecord record);
 
     /**
      * 根据信息标识获取该用户发送的有效信息附件
@@ -66,7 +75,7 @@ public interface MessageSendService extends BaseService<Message> {
      * @param outputStream 输出流
      * @param id           信息标识
      */
-    void getMessageAnnexByMessageId(int id, OutputStream outputStream);
+    void getAnnexByMessageId(int id, OutputStream outputStream);
 
     /**
      * 加载所有该用户发送的时间降序有效信息,分页获取

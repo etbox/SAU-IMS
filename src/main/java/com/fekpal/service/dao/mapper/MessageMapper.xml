@@ -38,12 +38,12 @@
     <insert id="insert" parameterType="Message" useGeneratedKeys="true" keyProperty="messageId" keyColumn="message_id">
         insert into message(
         message_title, message_content,
-        release_time, user_id,
+        release_time, org_id,
         message_type, message_annex,
         message_state, release_name)
         values (
         #{messageTitle}, #{messageContent},
-        #{releaseTime}, #{userId},
+        #{releaseTime}, #{orgId},
         #{messageType}, #{messageAnnex},
         #{messageState}, #{releaseName})
     </insert>
@@ -51,13 +51,13 @@
     <insert id="insertLoop" parameterType="list" useGeneratedKeys="true" keyProperty="messageId" keyColumn="message_id">
         insert into message(
         message_title, message_content,
-        release_time, user_id,
+        release_time, org_id,
         message_type, message_annex,
         message_state, release_name)
         values
         <foreach collection="list" item="item" separator=",">
             (#{item.messageTitle}, #{item.messageContent},
-            #{item.releaseTime}, #{item.userId},
+            #{item.releaseTime}, #{item.orgId},
             #{item.messageType}, #{item.messageAnnex},
             #{item.messageState}, #{item.releaseName})
         </foreach>
@@ -102,7 +102,7 @@
     <update id="deleteByPrimaryKey" parameterType="int">
         update message set
         message_state = 0
-        where message_id = #{id}
+        where message_id = #{id} and message_state != 0
     </update>
 
     <update id="deleteByExample">
@@ -115,7 +115,7 @@
 
     <resultMap id="result" type="Message">
         <id property="messageId" column="message_id"/>
-        <result property="userId" column="user_id"/>
+        <result property="orgId" column="org_id"/>
         <result property="messageTitle" column="message_title"/>
         <result property="messageContent" column="message_content"/>
         <result property="releaseTime" column="release_time"/>

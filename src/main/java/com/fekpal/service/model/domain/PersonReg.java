@@ -16,8 +16,6 @@ public class PersonReg extends BaseModel {
 
     private String password;
 
-    private String email;
-
     private String captcha;
 
     private long currentTime;
@@ -80,14 +78,6 @@ public class PersonReg extends BaseModel {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getCaptcha() {

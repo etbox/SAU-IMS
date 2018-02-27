@@ -66,46 +66,4 @@
             </props>
         </property>
     </bean>
-
-
-    <!-- 拦截器 -->
-    <mvc:interceptors>
-        <!-- 多个拦截器，顺序执行 -->
-        <!--登录拦截器-->
-        <mvc:interceptor>
-            <mvc:mapping path="/sau/**"/>
-            <mvc:mapping path="/club/**"/>
-            <mvc:mapping path="/member/**"/>
-            <mvc:mapping path="/msg/**"/>
-            <bean class="com.fekpal.web.interceptor.LoginInterceptor"/>
-        </mvc:interceptor>
-
-        <!--资源路径访问拦截器-->
-        <mvc:interceptor>
-            <mvc:mapping path="/sau/**"/>
-            <mvc:mapping path="/club/**"/>
-            <mvc:mapping path="/member/**"/>
-            <mvc:mapping path="/msg/**"/>
-            <bean class="com.fekpal.web.interceptor.URIInterceptor"/>
-        </mvc:interceptor>
-    </mvc:interceptors>
-
-    <!--前端资源路径映射-->
-    <!--
-    <mvc:resources mapping="/images/**" location="/images/"/>
-    <mvc:resources mapping="/javascripts/**" location="/javascripts/"/>
-    <mvc:resources mapping="/stylesheets/**" location="/stylesheets/"/>
-    <mvc:resources mapping="/component/**" location="/component/"/>
-    <mvc:resources mapping="/member_admin/**" location="/member_admin/"/>
-    <mvc:resources mapping="/club_admin/**" location="/club_admin/"/>
-    <mvc:resources mapping="/sau_admin/**" location="/sau_admin/"/>
-    -->
-
-    <!--上传资源路径映射-->
-    <!--图片类-->
-    <mvc:resources mapping="/resource/logo/*" location="/WEB-INF/resources/logo/"/>
-    <mvc:resources mapping="/resource/view/sau/*" location="/WEB-INF/resources/sau_view/"/>
-    <mvc:resources mapping="/resource/view/club/*" location="/WEB-INF/resources/club_view/"/>
-
-    <!--其他-->
 </beans>

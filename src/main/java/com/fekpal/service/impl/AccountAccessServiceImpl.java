@@ -2,19 +2,24 @@ package com.fekpal.service.impl;
 
 import com.fekpal.api.AccountAccessService;
 import com.fekpal.common.base.BaseServiceImpl;
-import com.fekpal.common.base.CRUDException;
 import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.common.constant.AvailableState;
 import com.fekpal.common.constant.Operation;
+import com.fekpal.common.constant.SystemRole;
 import com.fekpal.common.session.SessionContent;
 import com.fekpal.common.session.SessionLocal;
 import com.fekpal.common.utils.MD5Util;
 import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.common.utils.captcha.Captcha;
 import com.fekpal.common.utils.captcha.CaptchaUtil;
+import com.fekpal.dao.mapper.OrgMapper;
+import com.fekpal.dao.mapper.PersonMapper;
 import com.fekpal.dao.mapper.UserMapper;
+import com.fekpal.dao.model.Org;
+import com.fekpal.dao.model.Person;
 import com.fekpal.dao.model.User;
-import com.fekpal.service.model.domain.AccountRecord;
+import com.fekpal.service.model.domain.SecureMsg;
+import com.fekpal.service.model.domain.LoginResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,47 +36,66 @@ public class AccountAccessServiceImpl extends BaseServiceImpl<UserMapper, User> 
     @Autowired
     private HttpSession session;
 
+    @Autowired
+    private PersonMapper personMapper;
+
+    @Autowired
+    private OrgMapper orgMapper;
+
     /**
      * 登录常量
      */
     private final static String LOGIN = "login";
 
     @Override
-    public int login(AccountRecord record) {
-
+    public LoginResult login(SecureMsg record) {
         //验证登录验证码是否正确
         SessionContent.Captcha captcha = SessionContent.createCaptcha();
-        captcha.setCode(record.getCode());
+        captcha.setCode(record.getCaptcha());
         captcha.setCurrentTime(record.getCurrentTime());
+        LoginResult result = new LoginResult();
+        result.setResultState(Operation.FAILED);
+
         if (!isValidCaptcha(captcha, LOGIN)) {
-            return Operation.CAPTCHA_INCORRECT;
+            result.setResultState(Operation.CAPTCHA_INCORRECT);
+            return result;
         }
 
-        User user;
-        try {
-            //开始获取用户的存在
-            ExampleWrapper<User> example = new ExampleWrapper<>();
-            example.eq("user_name", record.getUserName());
-            user = mapper.selectFirstByExample(example);
-        } catch (Exception e) {
-            throw new CRUDException(e.getMessage());
-        }
-
+        ExampleWrapper<User> example = new ExampleWrapper<>();
+        example.eq("user_name", record.getUserName()).or().eq("email", record.getUserName());
+        User user = mapper.selectFirstByExample(example);
         //拥有此用户信息且允许用户登录状态
-        if (user == null || user.getUserState() == AvailableState.UNAVAIABLE) {
-            return Operation.FAILED;
+        if (user == null || user.getUserState() == AvailableState.UNAVAILABLE) {
+            return result;
         }
 
         String password = MD5Util.md5(record.getPassword() + user.getUserKey());
+
         if (user.getPassword().equals(password)) {
             SessionContent.UserIdentity userIdentity = SessionContent.createUID();
-            userIdentity.setId(user.getUserId());
-            userIdentity.setAuthority(user.getAuthority());
-            userIdentity.setName(user.getUserName());
+            int authority = user.getAuthority();
+            userIdentity.setAccId(user.getUserId());
+            userIdentity.setAuth(authority);
+
+            if (authority == SystemRole.PERSON) {
+                ExampleWrapper<Person> personExample = new ExampleWrapper<>();
+                personExample.eq("user_id", user.getUserId());
+                Person person = personMapper.selectFirstByExample(personExample);
+                userIdentity.setUid(person.getPersonId());
+
+            } else if (authority == SystemRole.CLUB || authority == SystemRole.SAU) {
+                ExampleWrapper<Org> orgExample = new ExampleWrapper<>();
+                orgExample.eq("user_id", user.getUserId());
+                Org org = orgMapper.selectFirstByExample(orgExample);
+                userIdentity.setUid(org.getOrgId());
+            }
+
             SessionLocal.local(session).createUserIdentity(userIdentity);
-            return Operation.SUCCESSFULLY;
+            result.setResultState(Operation.SUCCESSFULLY);
+            result.setAuthority(user.getAuthority());
+            return result;
         }
-        return Operation.FAILED;
+        return result;
     }
 
     /**

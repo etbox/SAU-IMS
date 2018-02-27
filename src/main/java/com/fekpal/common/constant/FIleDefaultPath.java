@@ -37,6 +37,11 @@ public class FIleDefaultPath {
     public static final String CLUB_ANN_AUDIT_OVERVIEW_FILE = WebAppPath.WEB_APP_ROOT + FILE_ROOT + "ann_ol/";
 
     /**
+     * 信息附件文件存放路径
+     */
+    public static final String MESSAGE_ANNEX_FILE = WebAppPath.WEB_APP_ROOT + FILE_ROOT + "msg_annex/";
+
+    /**
      * 社团用户头像文件存放路径
      */
     public static final String CLUB_LOGO_FILE = WebAppPath.WEB_APP_ROOT + IMAGES_ROOT + "logo/";

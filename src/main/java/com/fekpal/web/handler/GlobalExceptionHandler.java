@@ -1,6 +1,5 @@
 package com.fekpal.web.handler;
 
-import com.fekpal.common.base.CRUDException;
 import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,11 +22,11 @@ public class GlobalExceptionHandler {
      * @return json封装
      */
     @ResponseBody
-    @ExceptionHandler(CRUDException.class)
-    public JsonResult<List> customExceptionHandler(CRUDException e) {
+    @ExceptionHandler(value = {Exception.class})
+    public JsonResult<List> customExceptionHandler(Exception e) {
         e.printStackTrace();
         JsonResult<List> result = new JsonResult<>();
-        result.setStateCode(ResponseCode.RESPONSE_ERROR, "操作失败");
+        result.setStateCode(ResponseCode.REQUEST_ERROR, "操作失败");
         return result;
     }
 }

@@ -14,15 +14,15 @@ public class SystemRole {
     /**
      * 普通用户
      */
-    public static final int PERSON = 1;
+    public static final int PERSON = 0;
 
     /**
      * 社团用户
      */
-    public static final int CLUB = 2;
+    public static final int CLUB = 1;
 
     /**
      * 校社联用户
      */
-    public static final int SAU = 3;
+    public static final int SAU = 2;
 }

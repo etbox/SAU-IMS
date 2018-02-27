@@ -42,14 +42,16 @@
         birthday, description,
         address, department,
         major, student_id,
-        person_logo, person_state)
+        person_logo, person_state,
+        enrollment_year)
         values(
         #{userId}, #{realName},
         #{nickname}, #{gender},
         #{birthday}, #{description},
         #{address}, #{department},
         #{major}, #{studentId},
-        #{logo}, #{personState})
+        #{logo}, #{personState},
+        #{enrollmentYear})
     </insert>
 
     <insert id="insertLoop" parameterType="list" useGeneratedKeys="true" keyProperty="personId" keyColumn="person_id">
@@ -59,7 +61,8 @@
         birthday, description,
         address, department,
         major, student_id,
-        person_logo, person_state)
+        person_logo, person_state,
+        enrollment_year)
         values
         <foreach collection="list" item="item" separator=",">
             (#{item.item.userId}, #{item.realName},
@@ -67,7 +70,8 @@
             #{item.birthday}, #{item.description},
             #{item.address}, #{item.department},
             #{item.major}, #{item.studentId},
-            #{item.logo}, #{item.personState})
+            #{item.logo}, #{item.personState},
+            #{item.enrollmentYear})
         </foreach>
     </insert>
 
@@ -83,7 +87,8 @@
         major = #{major},
         student_id = #{studentId},
         person_logo = #{logo},
-        person_state = #{personState}
+        person_state = #{personState},
+        enrollment_year = #{enrollmentYear}
         where person_id = #{personId}
     </update>
 
@@ -123,6 +128,9 @@
             <if test="personState != null">
                 person_state = #{personState},
             </if>
+            <if test="enrollmentYear != null">
+                enrollment_year = #{enrollmentYear},
+            </if>
         </set>
         where person_id = #{personId}
     </update>
@@ -139,7 +147,8 @@
         major = #{obj.major},
         student_id = #{obj.studentId},
         person_logo = #{obj.logo},
-        person_state = #{obj.personState}
+        person_state = #{obj.personState},
+        enrollment_year = #{enrollmentYear}
         <where>
             ${ex.sqlSegment}
         </where>
@@ -181,6 +190,9 @@
             <if test="personState != null">
                 person_state = #{obj.personState},
             </if>
+            <if test="enrollmentYear != null">
+                enrollment_year = #{enrollmentYear},
+            </if>
         </set>
         <where>
             ${ex.sqlSegment}
@@ -190,7 +202,7 @@
     <update id="deleteByPrimaryKey" parameterType="int">
         update person_info set
         person_state = 0
-        where person_id = #{id}
+        where person_id = #{id} and person_state != 0
     </update>
 
     <update id="deleteByExample">
@@ -207,6 +219,7 @@
         <result property="realName" column="real_name"/>
         <result property="logo" column="person_logo"/>
         <result property="gender" column="gender"/>
+        <result property="enrollmentYear" column="enrollment_year"/>
         <result property="nickname" column="nickname"/>
         <result property="birthday" column="birthday"/>
         <result property="address" column="address"/>

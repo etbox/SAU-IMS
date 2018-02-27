@@ -9,7 +9,7 @@ public class AvailableState {
     /**
      * 无效的
      */
-    public static final int UNAVAIABLE = 0;
+    public static final int UNAVAILABLE = 0;
 
     /**
      * 有效的

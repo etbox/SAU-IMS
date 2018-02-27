@@ -30,9 +30,19 @@ public class Person extends BaseModel {
 
     private String studentId;
 
+    private int enrollmentYear;
+
     private int personState;
 
     private String logo;
+
+    public int getEnrollmentYear() {
+        return enrollmentYear;
+    }
+
+    public void setEnrollmentYear(int enrollmentYear) {
+        this.enrollmentYear = enrollmentYear;
+    }
 
     public int getUserId() {
         return userId;

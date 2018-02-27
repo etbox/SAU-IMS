@@ -1,6 +1,5 @@
 package com.fekpal.common.constant;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 
 /**
@@ -21,7 +20,7 @@ public class DefaultField {
     /**
      * 默认头像图片文件名
      */
-    public static final String DEFAULT_LOGO = "default_logo.png";
+    public static final String DEFAULT_LOGO = "default_logo.jpg";
 
     /**
      * 默认性别，性别男
@@ -41,7 +40,7 @@ public class DefaultField {
     /**
      * 默认社团预览图问文件名（展示图）
      */
-    public static final String DEFAULT_CLUB_OVERVIEW = "default_club_overview.png";
+    public static final String DEFAULT_CLUB_OVERVIEW = "default_overview.png";
 
     /**
      * 默认时间，以1970年开始

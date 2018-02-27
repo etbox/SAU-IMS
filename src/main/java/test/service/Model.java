@@ -17,9 +17,9 @@ class Model {
 
     protected static User anUser = new User();
 
-    protected static Club club = new Club();
+    protected static Org club = new Org();
 
-    protected static Sau sau = new Sau();
+    protected static Org sau = new Org();
 
     protected static Person person = new Person();
 
@@ -35,7 +35,7 @@ class Model {
 
     protected static MessageReceive messageReceive1 = new MessageReceive();
 
-    protected static ClubMember clubMember = new ClubMember();
+    protected static OrgMember orgMember = new OrgMember();
 
     static {
         user.setUserName("zjboy");
@@ -72,17 +72,17 @@ class Model {
 
 
         club.setAdminName("zj");
-        club.setClubName("IT社");
+        club.setOrgName("IT社");
         club.setFoundTime(Timestamp.valueOf("1996-1-2 01:01:01"));
 
-        clubAudit.setClubId(club.getClubId());
+        clubAudit.setOrgId(club.getOrgId());
         clubAudit.setFile("java部落");
         clubAudit.setRegisterTime(Timestamp.valueOf("1996-06-09 00:01:02"));
 
         anniversaryAudit.setSubmitTime(Timestamp.valueOf("1996-06-09 01:01:01"));
         anniversaryAudit.setSubmitDescription("这是it社重改版本");
         anniversaryAudit.setFileName("434DUHWDU4234HU");
-        anniversaryAudit.setClub(club);
+        anniversaryAudit.setOrgId(club.getOrgId());
 
         message.setMessageAnnex("附件");
         message.setMessageContent("百团大赛");
@@ -91,7 +91,7 @@ class Model {
         message.setMessageType(MessageType.ALL);
         message.setReleaseTime(Timestamp.valueOf("1996-06-09 00:01:02"));
         message.setMessageState(AvailableState.AVAILABLE);
-        message.setUserId(1);
+        message.setOrgId(1);
 
         message1.setMessageContent("开学大典");
         message1.setMessageTitle("校内通知");
@@ -99,9 +99,9 @@ class Model {
         message1.setMessageType(MessageType.CUSTOM);
         message1.setReleaseTime(Timestamp.valueOf("1996-06-09 00:01:02"));
         message1.setMessageState(AvailableState.AVAILABLE);
-        message1.setUserId(2);
+        message1.setOrgId(2);
 
-        clubMember.setJoinTime(Timestamp.valueOf("1995-01-06 12:12:12"));
+        orgMember.setJoinTime(Timestamp.valueOf("1995-01-06 12:12:12"));
     }
 }
 

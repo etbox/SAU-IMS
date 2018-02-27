@@ -1,10 +1,13 @@
 package com.fekpal.service.impl;
 
+import com.fekpal.api.ClubService;
 import com.fekpal.api.RegisterService;
+import com.fekpal.api.UserService;
 import com.fekpal.common.base.BaseServiceImpl;
 import com.fekpal.common.base.CRUDException;
+import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.common.constant.*;
-import com.fekpal.common.utils.FileUploadUtil;
+import com.fekpal.common.utils.FileUtil;
 import com.fekpal.common.utils.MD5Util;
 import com.fekpal.common.utils.RandomUtil;
 import com.fekpal.common.utils.TimeUtil;
@@ -35,10 +38,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
     HttpSession session;
 
     @Autowired
-    private SauMapper sauMapper;
-
-    @Autowired
-    private ClubMapper clubMapper;
+    private OrgMapper orgMapper;
 
     @Autowired
     private PersonMapper personMapper;
@@ -48,6 +48,12 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
 
     @Autowired
     private EmailSender emailSender;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private ClubService clubService;
 
     /**
      * 社团注册
@@ -59,22 +65,45 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
      */
     private static final String PERSON_REG = "person_reg";
 
+
+    @Override
+    public UniqueRegMsg checkExitInfo(UniqueRegMsg msg) {
+        UniqueRegMsg result = new UniqueRegMsg();
+        if (msg.getUserName() != null && userService.isExitAccount(msg.getUserName())) {
+            result.setUserName("该用户名已被注册");
+        }
+        if (msg.getEmail() != null && userService.isExitEmail(msg.getEmail())) {
+            result.setEmail("该邮箱已被使用");
+        }
+        if (msg.getClubName() != null && clubService.isExitClubName(msg.getClubName())) {
+            result.setUserName("该社团名称已被注册");
+        }
+        return result;
+    }
+
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int insertPersonReg(PersonReg reg) {
+        //检测注册信息是否存在已被注册
+        ExampleWrapper<User> example = new ExampleWrapper<>();
+        example.eq("user_name", reg.getUserName());
+        int exitCount = mapper.countByExample(example);
+        if (exitCount != 0) return Operation.FAILED;
+
         SessionContent.Captcha captcha = SessionContent.createCaptcha();
-        captcha.setAuthorize(reg.getEmail());
+        captcha.setAuthorize(reg.getUserName());
         captcha.setCode(reg.getCaptcha());
         captcha.setCurrentTime(reg.getCurrentTime());
         if (!isValidCaptcha(captcha, PERSON_REG)) {
             return Operation.CAPTCHA_INCORRECT;
         }
 
+        //开始进行注册信息插入
         String salt = RandomUtil.createSalt();
         User user = new User();
         user.setUserName(reg.getUserName());
         user.setPassword(MD5Util.md5(reg.getPassword() + salt));
-        user.setEmail(reg.getEmail());
+        user.setEmail(reg.getUserName());
         user.setLoginIp(reg.getLoginIp());
         user.setLoginTime(reg.getRegisterTime());
         user.setRegisterIp(reg.getRegisterIp());
@@ -83,28 +112,24 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setAuthority(SystemRole.PERSON);
         user.setUserState(AvailableState.AVAILABLE);
         user.setUserKey(salt);
+        int row = mapper.insert(user);
 
         Person person = new Person();
+        person.setUserId(user.getUserId());
         person.setPersonState(AvailableState.AVAILABLE);
         person.setNickname(DefaultField.DEFAULT_NICKNAME + user.getUserId());
         person.setLogo(DefaultField.DEFAULT_LOGO);
         person.setGender(DefaultField.DEFAULT_GENDER);
         person.setBirthday(DefaultField.DEFAULT_TIME);
+        row += personMapper.insert(person);
 
-        try {
-            int row = mapper.insert(user);
-            person.setUserId(user.getUserId());
-            row += personMapper.insert(person);
-            if (row != 2) throw new CRUDException("普通用户注册数据插入数量异常，数量：" + row);
-        } catch (Exception e) {
-            throw new CRUDException(e.getMessage());
-        }
+        if (row != 2) throw new CRUDException("普通用户注册数据插入数量异常，数量：" + row);
 
         //注册成功后直接存储注册用户身份会话信息，以便直接自动登录
         SessionContent.UserIdentity identity = SessionContent.createUID();
-        identity.setId(user.getUserId());
-        identity.setName(user.getUserName());
-        identity.setAuthority(user.getAuthority());
+        identity.setAccId(user.getUserId());
+        identity.setUid(person.getPersonId());
+        identity.setAuth(user.getAuthority());
         SessionLocal.local(session).createUserIdentity(identity);
         return Operation.SUCCESSFULLY;
     }
@@ -112,6 +137,15 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int insertSauReg(SauReg reg) {
+        //检测注册信息是否存在已被注册
+        ExampleWrapper<User> userExample = new ExampleWrapper<>();
+        userExample.eq("user_name", reg.getUserName()).or().eq("email", reg.getEmail());
+        int exitCount = mapper.countByExample(userExample);
+
+        ExampleWrapper<Org> sauExample = new ExampleWrapper<>();
+        sauExample.eq("org_name", reg.getSauName());
+        exitCount += orgMapper.countByExample(sauExample);
+        if (exitCount != 0) return Operation.FAILED;
 
         String salt = RandomUtil.createSalt();
         User user = new User();
@@ -126,30 +160,38 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setAuthority(SystemRole.SAU);
         user.setUserState(AvailableState.AVAILABLE);
         user.setUserKey(salt);
+        int row = mapper.insert(user);
 
-        Sau sau = new Sau();
-        sau.setSauName(reg.getSauName());
-        sau.setAdminName(reg.getAdminName());
-        sau.setFoundTime(reg.getRegisterTime());
-        sau.setMembers(DefaultField.DEFAULT_MEMBERS);
-        sau.setLogo(DefaultField.DEFAULT_LOGO);
-        sau.setSauState(AvailableState.AVAILABLE);
+        Org org = new Org();
+        org.setUserId(user.getUserId());
+        org.setOrgName(reg.getSauName());
+        org.setAdminName(reg.getAdminName());
+        org.setFoundTime(reg.getRegisterTime());
+        org.setOrgType("校社联");
+        org.setMembers(DefaultField.DEFAULT_MEMBERS);
+        org.setLikeClick(DefaultField.DEFAULT_MEMBERS);
+        org.setOrgLogo(DefaultField.DEFAULT_LOGO);
+        org.setOrgState(AvailableState.AVAILABLE);
+        org.setOrgAuth(SystemRole.SAU);
+        row += orgMapper.insert(org);
 
-        try {
-            int row = mapper.insert(user);
-            sau.setUserId(user.getUserId());
-            row += sauMapper.insert(sau);
-            if (row != 2) throw new CRUDException("校社联用户注册数据插入数量异常，数量：" + row);
-        } catch (Exception e) {
-            throw new CRUDException(e.getMessage());
-        }
-
+        if (row != 2) throw new CRUDException("校社联用户注册数据插入数量异常，数量：" + row);
         return Operation.SUCCESSFULLY;
     }
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int insertClubReg(ClubReg reg) {
+        //检测注册信息是否存在已被注册
+        ExampleWrapper<User> userExample = new ExampleWrapper<>();
+        userExample.eq("user_name", reg.getUserName()).or().eq("email", reg.getEmail());
+        int exitCount = mapper.countByExample(userExample);
+
+        ExampleWrapper<Org> clubExample = new ExampleWrapper<>();
+        clubExample.eq("org_name", reg.getClubName());
+        exitCount += orgMapper.countByExample(clubExample);
+        if (exitCount != 0) return Operation.FAILED;
+
         SessionContent.Captcha captcha = SessionContent.createCaptcha();
         captcha.setAuthorize(reg.getEmail());
         captcha.setCode(reg.getCaptcha());
@@ -171,41 +213,43 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setAuthority(SystemRole.CLUB);
         user.setUserState(AvailableState.AUDITING);
         user.setUserKey(salt);
+        int row = mapper.insert(user);
 
-        Club club = new Club();
-        club.setClubName(reg.getClubName());
-        club.setAdminName(reg.getAdminName());
-        club.setFoundTime(reg.getRegisterTime());
-        club.setDescription(reg.getDescription());
-        club.setClubType(reg.getClubType());
-        club.setLogo(DefaultField.DEFAULT_LOGO);
-        club.setClubState(AvailableState.AUDITING);
-        club.setClubView(DefaultField.DEFAULT_CLUB_OVERVIEW);
-        club.setMembers(DefaultField.DEFAULT_MEMBERS);
-        club.setLikeNumber(DefaultField.DEFAULT_MEMBERS);
+        Org org = new Org();
+        org.setUserId(user.getUserId());
+        org.setOrgName(reg.getClubName());
+        org.setAdminName(reg.getRealName());
+        org.setFoundTime(reg.getRegisterTime());
+        org.setDescription(reg.getDescription());
+        org.setOrgType(reg.getClubType());
+        org.setOrgLogo(DefaultField.DEFAULT_LOGO);
+        org.setOrgState(AvailableState.AUDITING);
+        org.setOrgView(DefaultField.DEFAULT_CLUB_OVERVIEW);
+        org.setMembers(DefaultField.DEFAULT_MEMBERS);
+        org.setLikeClick(DefaultField.DEFAULT_MEMBERS);
+        org.setOrgAuth(SystemRole.CLUB);
+        row += orgMapper.insert(org);
+
+        String auditFileName;
+        try {
+            auditFileName = FileUtil.fileHandle(reg.getFile(), FIleDefaultPath.CLUB_AUDIT_FILE);
+        } catch (Exception e) {
+            throw new CRUDException("储存社团注册文件出错：" + e.getMessage());
+        }
 
         ClubAudit clubAudit = new ClubAudit();
         clubAudit.setRegisterTime(reg.getRegisterTime());
-        clubAudit.setApplyName(reg.getAdminName());
+        clubAudit.setApplyName(reg.getRealName());
         clubAudit.setAuditResult(AuditState.AUDITING);
         clubAudit.setAuditTitle(reg.getClubName() + " 注册申请审核");
         clubAudit.setAuditTime(reg.getRegisterTime());
         clubAudit.setAuditDescription(DefaultField.EMPTY);
         clubAudit.setAuditState(AvailableState.AUDITING);
+        clubAudit.setOrgId(org.getOrgId());
+        clubAudit.setFile(auditFileName);
+        row += clubAuditMapper.insert(clubAudit);
 
-        try {
-            int row = mapper.insert(user);
-            club.setUserId(user.getUserId());
-            row += clubMapper.insert(club);
-            String auditFileName = FileUploadUtil.fileHandle(reg.getAuditFile(), FIleDefaultPath.CLUB_AUDIT_FILE);
-            clubAudit.setClubId(club.getClubId());
-            clubAudit.setFile(auditFileName);
-            row += clubAuditMapper.insert(clubAudit);
-            if (row != 3) throw new CRUDException("社团用户注册数据插入数量异常，数量：" + row);
-        } catch (Exception e) {
-            throw new CRUDException(e.getMessage());
-        }
-
+        if (row != 3) throw new CRUDException("社团用户注册数据插入数量异常，数量：" + row);
         return Operation.SUCCESSFULLY;
     }
 

@@ -1,6 +1,7 @@
 package com.fekpal.api;
 
 import com.fekpal.common.base.BaseService;
+import com.fekpal.dao.model.UniqueRegMsg;
 import com.fekpal.dao.model.User;
 import com.fekpal.service.model.domain.ClubReg;
 import com.fekpal.service.model.domain.PersonReg;
@@ -12,6 +13,13 @@ import com.fekpal.service.model.domain.SauReg;
  * 该接口用于提供注册普通用户，社团用户，校社联用户，以及发送注册验证码的操作
  */
 public interface RegisterService extends BaseService<User> {
+
+    /**
+     * 检测参数是否存在相同，不唯一
+     * @param msg 唯一信息封装
+     * @return 信息提示
+     */
+    UniqueRegMsg checkExitInfo(UniqueRegMsg msg);
 
     /**
      * 注册普通用户

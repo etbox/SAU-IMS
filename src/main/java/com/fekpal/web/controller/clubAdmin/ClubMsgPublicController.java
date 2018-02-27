@@ -1,6 +1,6 @@
 package com.fekpal.web.controller.clubAdmin;
 
-import com.fekpal.api.ClubMemberService;
+import com.fekpal.api.OrgMemberService;
 import com.fekpal.api.ClubService;
 import com.fekpal.api.MessageSendService;
 import com.fekpal.api.UserService;
@@ -21,8 +21,8 @@ public class ClubMsgPublicController {
     @Autowired
     private MessageSendService messageSendService;
 
-    @Autowired
-    private ClubMemberService clubMemberService;
+    //@Autowired
+    private OrgMemberService orgMemberService;
 
     @Autowired
     private ClubService clubService;

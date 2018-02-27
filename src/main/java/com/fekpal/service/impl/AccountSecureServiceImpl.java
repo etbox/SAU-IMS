@@ -4,17 +4,18 @@ import com.fekpal.api.AccountSecureService;
 import com.fekpal.common.base.BaseServiceImpl;
 import com.fekpal.common.base.CRUDException;
 import com.fekpal.common.base.ExampleWrapper;
-import com.fekpal.common.constant.AvailableState;
 import com.fekpal.common.constant.Operation;
-import com.fekpal.common.utils.MD5Util;
+import com.fekpal.common.constant.SystemRole;
 import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.common.utils.captcha.Captcha;
 import com.fekpal.common.utils.captcha.CaptchaUtil;
 import com.fekpal.common.utils.msg.email.EmailMsg;
 import com.fekpal.common.utils.msg.email.EmailSender;
+import com.fekpal.dao.mapper.OrgMapper;
 import com.fekpal.dao.mapper.UserMapper;
+import com.fekpal.dao.model.Org;
 import com.fekpal.dao.model.User;
-import com.fekpal.service.model.domain.AccountRecord;
+import com.fekpal.service.model.domain.SecureMsg;
 import com.fekpal.common.session.SessionContent;
 import com.fekpal.common.session.SessionLocal;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
 /**
  * Created by APone on 2018/2/7 2:06.
  */
@@ -34,10 +32,13 @@ import java.io.OutputStream;
 public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> implements AccountSecureService {
 
     @Autowired
-    HttpSession session;
+    private HttpSession session;
 
     @Autowired
-    EmailSender emailSender;
+    private EmailSender emailSender;
+
+    @Autowired
+    private OrgMapper orgMapper;
 
     /**
      * 忘记密码
@@ -68,10 +69,10 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
-    public int resetPwd(AccountRecord record) {
+    public int resetPwd(SecureMsg msg) {
         SessionContent.Captcha captcha = SessionContent.createCaptcha();
-        captcha.setCode(record.getCode());
-        captcha.setCurrentTime(record.getCurrentTime());
+        captcha.setCode(msg.getCaptcha());
+        captcha.setCurrentTime(msg.getCurrentTime());
         if (!isValidCaptcha(captcha, RESET)) {
             return Operation.CAPTCHA_INCORRECT;
         }
@@ -81,45 +82,17 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
         ExampleWrapper<User> example = new ExampleWrapper<>();
         example.eq("email", email);
         User user = new User();
-        user.setPassword(record.getNewPassword());
-        try {
-            int row = mapper.updateByExample(user, example);
-            if (row != 1) throw new CRUDException("更新数量异常，数量" + row);
-        } catch (Exception e) {
-            throw new CRUDException(e.getMessage());
-        }
+        user.setPassword(msg.getNewPassword());
 
+        int row = mapper.updateByExample(user, example);
+        if (row != 1) throw new CRUDException("更新数量异常，数量" + row);
         return Operation.SUCCESSFULLY;
     }
 
     @Override
-    public int forgetPwdByEmail(AccountRecord record) {
+    public int forgetPwdByEmail(SecureMsg msg) {
         ExampleWrapper<User> example = new ExampleWrapper<>();
-        example.eq("email", record.getEmail());
-        int row = mapper.countByExample(example);
-        if (row != 1)  return Operation.FAILED;
-
-        String code = CaptchaUtil.create().getCode();
-        SessionContent.Captcha captcha = SessionContent.createCaptcha();
-        captcha.setCode(code);
-        captcha.setCreateTime(TimeUtil.currentTime());
-        captcha.setActiveTime(10 * 60 * 1000);
-        captcha.setAuthorize(record.getEmail());
-        SessionLocal.local(session).createCaptcha(captcha, RESET);
-
-        EmailMsg msg = new EmailMsg();
-        msg.setTo(record.getEmail());
-        msg.setSubject("忘记密码邮箱验证");
-        msg.setText("您获取的验证码为：" + code + "\n有效期为10分钟，请勿泄露。如果此请求不是由您发出，请尽快修密码");
-        emailSender.send(msg);
-        return Operation.SUCCESSFULLY;
-    }
-
-    @Override
-    public int forgetPwdByPhone(AccountRecord record) {
-
-        ExampleWrapper<User> example = new ExampleWrapper<>();
-        example.eq("phone", record.getPhone());
+        example.eq("email", msg.getEmail());
         int row = mapper.countByExample(example);
         if (row != 1) return Operation.FAILED;
 
@@ -128,27 +101,38 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
         captcha.setCode(code);
         captcha.setCreateTime(TimeUtil.currentTime());
         captcha.setActiveTime(10 * 60 * 1000);
-        captcha.setAuthorize(record.getPhone());
+        captcha.setAuthorize(msg.getEmail());
         SessionLocal.local(session).createCaptcha(captcha, RESET);
-        //此处添加手机发送工具
+
+        EmailMsg emailMsg = new EmailMsg();
+        emailMsg.setTo(msg.getEmail());
+        emailMsg.setSubject("忘记密码邮箱验证");
+        emailMsg.setText("您获取的验证码为：" + code + "\n有效期为10分钟，请勿泄露。如果此请求不是由您发出，请尽快修密码");
+        emailSender.send(emailMsg);
         return Operation.SUCCESSFULLY;
     }
 
     @Override
-    public int sendModifyPwdCaptcha() {
-        return 0;
-    }
-
-    @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
-    public int modifyPwd(AccountRecord record) {
-        return 0;
+    public int modifyPwd(SecureMsg msg) {
+        int accId = SessionLocal.local(session).getUserIdentity().getAccId();
+        ExampleWrapper<User> example = new ExampleWrapper<>();
+        example.eq("user_id", accId).and().eq("password", msg.getOldPassword());
+        int row = mapper.countByExample(example);
+        if (row != 1) return Operation.FAILED;
+
+        User user = new User();
+        user.setUserId(accId);
+        user.setPassword(msg.getNewPassword());
+        row = mapper.updateByPrimaryKeySelective(user);
+        if (row != 1) throw new CRUDException("更新密码失败：" + row);
+        return Operation.SUCCESSFULLY;
     }
 
     @Override
     public int sendModifyEmailCaptcha() {
-        int uid = SessionLocal.local(session).getUserIdentity().getId();
-        User user = mapper.selectByPrimaryKey(uid);
+        int accId = SessionLocal.local(session).getUserIdentity().getAccId();
+        User user = mapper.selectByPrimaryKey(accId);
         if (user == null) return Operation.FAILED;
 
         String code = new Captcha().getCode();
@@ -168,36 +152,30 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
-    public int modifyEmail(AccountRecord record) {
+    public int modifyEmail(SecureMsg msg) {
         SessionContent.Captcha captcha = SessionContent.createCaptcha();
-        captcha.setCode(record.getCode());
-        captcha.setCurrentTime(record.getCurrentTime());
+        captcha.setCode(msg.getCaptcha());
+        captcha.setCurrentTime(msg.getCurrentTime());
         if (!isValidCaptcha(captcha, UPDATE)) {
             return Operation.CAPTCHA_INCORRECT;
         }
 
-        int uid = SessionLocal.local(session).getUserIdentity().getId();
+        SessionContent.UserIdentity userIdentity = SessionLocal.local(session).getUserIdentity();
         User user = new User();
-        user.setUserId(uid);
-        user.setEmail(record.getNewEmail());
-        try {
-            int row = mapper.updateByPrimaryKeySelective(user);
-            if (row != 1) throw new CRUDException("更新数量异常，数量：" + row);
-        } catch (Exception e) {
-            throw new CRUDException(e.getMessage());
+        user.setUserId(userIdentity.getAccId());
+        user.setEmail(msg.getNewEmail());
+        int row = mapper.updateByPrimaryKeySelective(user);
+
+        int auth = userIdentity.getAuth();
+        if (auth == SystemRole.CLUB || auth == SystemRole.SAU) {
+            Org org = new Org();
+            org.setOrgId(userIdentity.getUid());
+            org.setContactEmail(msg.getNewEmail());
+            row += orgMapper.updateByPrimaryKey(org);
+            if (row != 2) throw new CRUDException("更新邮箱异常，数量：" + row);
+        } else if (auth == SystemRole.PUBLIC) {
+            if (row != 1) throw new CRUDException("更新普通邮箱异常，数量：" + row);
         }
-
         return Operation.SUCCESSFULLY;
-    }
-
-    @Override
-    public int sendModifyPhoneCaptcha() {
-        return 0;
-    }
-
-    @Override
-    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
-    public int modifyPhone(AccountRecord record) {
-        return 0;
     }
 }

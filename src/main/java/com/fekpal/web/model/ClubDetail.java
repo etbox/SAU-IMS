@@ -3,11 +3,11 @@ package com.fekpal.web.model;
 import com.fekpal.common.base.BaseModel;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 /**
- * 这是社团详细信息的实体类
  * Created by hasee on 2017/8/15.
+ * 社团对外信息封装
  */
 @Component
 public class ClubDetail extends BaseModel{
@@ -28,7 +28,7 @@ public class ClubDetail extends BaseModel{
 
     private String phone;
 
-    private Date foundTime;
+    private Timestamp foundTime;
 
     private int members;
 
@@ -88,11 +88,11 @@ public class ClubDetail extends BaseModel{
         this.phone = phone;
     }
 
-    public Date getFoundTime() {
+    public Timestamp getFoundTime() {
         return foundTime;
     }
 
-    public void setFoundTime(Date foundTime) {
+    public void setFoundTime(Timestamp foundTime) {
         this.foundTime = foundTime;
     }
 

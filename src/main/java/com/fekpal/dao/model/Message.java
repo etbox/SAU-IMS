@@ -10,7 +10,7 @@ public class Message extends BaseModel {
 
     private int messageId;
 
-    private int userId;
+    private int orgId;
 
     private String messageTitle;
 
@@ -34,12 +34,12 @@ public class Message extends BaseModel {
         this.releaseName = releaseName;
     }
 
-    public int getUserId() {
-        return userId;
+    public int getOrgId() {
+        return orgId;
     }
 
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setOrgId(int orgId) {
+        this.orgId = orgId;
     }
 
     public int getMessageId() {

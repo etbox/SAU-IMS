@@ -6,20 +6,17 @@ import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
 import com.fekpal.common.utils.IPUtil;
 import com.fekpal.common.utils.TimeUtil;
+import com.fekpal.dao.model.UniqueRegMsg;
 import com.fekpal.service.model.domain.ClubReg;
 import com.fekpal.service.model.domain.PersonReg;
 import com.fekpal.service.model.domain.SauReg;
 import com.fekpal.web.model.CaptchaMsg;
-import com.fekpal.web.model.ClubRegisterMsg;
-import com.fekpal.web.model.PersonRegisterMsg;
-import com.fekpal.web.model.SauRegisterMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.sql.Timestamp;
-import java.util.*;
 
 /**
  * 注册的控制类
@@ -32,31 +29,31 @@ public class RegisterController {
     private RegisterService registerService;
 
     /**
-     * 社团注册常量
-     */
-    private static final String CLUB = "club";
-
-    /**
-     * 普通用户注册常量
-     */
-    private static final String PERSON = "person";
-
-    /**
-     * 按照注册类型发送邮箱验证码
+     * 发送普通用户注册验证码
      *
      * @param msg 验证来源封装
      * @return json数据封装
      */
     @ResponseBody
-    @RequestMapping(value = "/reg/{regType}/captcha", method = RequestMethod.POST)
-    public JsonResult<List> sendEmailCaptcha(@RequestBody CaptchaMsg msg, @PathVariable("regType") String regType) {
-        if (regType.equals(CLUB)) {
-            registerService.sendClubEmailCaptcha(msg.getEmail());
-        } else if (regType.equals(PERSON)) {
-            registerService.sendPersonEmailCaptcha(msg.getEmail());
-        }
+    @RequestMapping(value = "/reg/person/captcha", method = RequestMethod.POST)
+    public JsonResult<String> sendPersonCaptcha(@RequestBody CaptchaMsg msg) {
+        registerService.sendPersonEmailCaptcha(msg.getEmail());
+        JsonResult<String> result = new JsonResult<>();
+        result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "验证码发送成功");
+        return result;
+    }
 
-        JsonResult<List> result = new JsonResult<>();
+    /**
+     * 发送社团用户注册验证码
+     *
+     * @param msg 验证来源封装
+     * @return json数据封装
+     */
+    @ResponseBody
+    @RequestMapping(value = "/reg/club/captcha", method = RequestMethod.POST)
+    public JsonResult<String> sendClubCaptcha(@RequestBody CaptchaMsg msg) {
+        registerService.sendClubEmailCaptcha(msg.getEmail());
+        JsonResult<String> result = new JsonResult<>();
         result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "验证码发送成功");
         return result;
     }
@@ -64,37 +61,23 @@ public class RegisterController {
     /**
      * 社团注册的方法
      *
-     * @param clubRegisterMsg 社团用户注册信息封装
+     * @param reg 社团用户注册信息封装
      * @return 标准json数据
      */
     @ResponseBody
     @RequestMapping(value = "/reg/club", method = RequestMethod.POST)
-    public JsonResult<List> clubRegister(@ModelAttribute ClubRegisterMsg clubRegisterMsg,
-                                         HttpServletRequest request) {
+    public JsonResult<String> clubRegister(@ModelAttribute ClubReg reg, HttpServletRequest request) {
         long time = TimeUtil.currentTime();
         Timestamp timestamp = new Timestamp(time);
         String ip = IPUtil.getUserIP(request);
-
-        ClubReg reg = new ClubReg();
-        reg.setUserName(clubRegisterMsg.getUserName());
-        reg.setPassword(clubRegisterMsg.getPassword());
-        reg.setEmail(clubRegisterMsg.getEmail());
-        reg.setPhone(clubRegisterMsg.getPhone());
-        reg.setCaptcha(clubRegisterMsg.getCaptcha());
         reg.setCurrentTime(time);
         reg.setLoginIp(ip);
         reg.setLoginTime(timestamp);
         reg.setRegisterIp(ip);
         reg.setRegisterTime(timestamp);
 
-        reg.setClubName(clubRegisterMsg.getClubName());
-        reg.setAdminName(clubRegisterMsg.getRealName());
-        reg.setClubType(clubRegisterMsg.getClubType());
-        reg.setDescription(clubRegisterMsg.getDescription());
-        reg.setAuditFile(clubRegisterMsg.getFile());
-
         int state = registerService.insertClubReg(reg);
-        JsonResult<List> result = new JsonResult<>();
+        JsonResult<String> result = new JsonResult<>();
         setRegHintMsg(state, result);
         return result;
     }
@@ -102,33 +85,22 @@ public class RegisterController {
     /**
      * 校社联注册的方法
      *
-     * @param sauRegisterMsg 校社联用户注册信息封装
+     * @param reg 校社联用户注册信息封装
      * @return 标准json数据
      */
     @ResponseBody
     @RequestMapping(value = "/reg/sau", method = RequestMethod.POST)
-    public JsonResult<List> sauRegister(@RequestBody SauRegisterMsg sauRegisterMsg,
-                                        HttpServletRequest request) {
+    public JsonResult<String> sauRegister(@RequestBody SauReg reg, HttpServletRequest request) {
         long time = TimeUtil.currentTime();
         Timestamp timestamp = new Timestamp(time);
         String ip = IPUtil.getUserIP(request);
-
-        SauReg reg = new SauReg();
-        reg.setUserName(sauRegisterMsg.getUserName());
-        reg.setPassword(sauRegisterMsg.getPassword());
-        reg.setEmail(sauRegisterMsg.getEmail());
-        reg.setPhone(sauRegisterMsg.getPhone());
         reg.setLoginIp(ip);
         reg.setLoginTime(timestamp);
         reg.setRegisterIp(ip);
         reg.setRegisterTime(timestamp);
 
-        reg.setDescription(sauRegisterMsg.getDescription());
-        reg.setAdminName(sauRegisterMsg.getAdminName());
-        reg.setSauName(sauRegisterMsg.getSauName());
-
         int state = registerService.insertSauReg(reg);
-        JsonResult<List> result = new JsonResult<>();
+        JsonResult<String> result = new JsonResult<>();
         setRegHintMsg(state, result);
         return result;
     }
@@ -136,22 +108,15 @@ public class RegisterController {
     /**
      * 个人用户注册的方法
      *
-     * @param personRegisterMsg 个人登录信息
+     * @param reg 个人登录信息
      * @return 标准json数据
      */
     @ResponseBody
     @RequestMapping(value = "/reg/person", method = RequestMethod.POST)
-    public JsonResult<List> personRegister(@RequestBody PersonRegisterMsg personRegisterMsg,
-                                           HttpServletRequest request) {
+    public JsonResult<String> personRegister(@RequestBody PersonReg reg, HttpServletRequest request) {
         long time = TimeUtil.currentTime();
         Timestamp timestamp = new Timestamp(time);
         String ip = IPUtil.getUserIP(request);
-
-        PersonReg reg = new PersonReg();
-        reg.setUserName(personRegisterMsg.getUserName());
-        reg.setPassword(personRegisterMsg.getPassword());
-        reg.setEmail(personRegisterMsg.getUserName());
-        reg.setCaptcha(personRegisterMsg.getCaptcha());
         reg.setCurrentTime(time);
         reg.setLoginIp(ip);
         reg.setLoginTime(timestamp);
@@ -159,11 +124,26 @@ public class RegisterController {
         reg.setRegisterTime(timestamp);
 
         int state = registerService.insertPersonReg(reg);
-        JsonResult<List> result = new JsonResult<>();
+        JsonResult<String> result = new JsonResult<>();
         setRegHintMsg(state, result);
         return result;
     }
 
+    /**
+     * 检测是否存相同用户名
+     *
+     * @param msg 唯一信息封装
+     * @return 标准json
+     */
+    @ResponseBody
+    @RequestMapping(value = "/reg/check", method = RequestMethod.POST)
+    public JsonResult<UniqueRegMsg> checkExit(@RequestBody UniqueRegMsg msg) {
+        UniqueRegMsg data = registerService.checkExitInfo(msg);
+        JsonResult<UniqueRegMsg> result = new JsonResult<>();
+        result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "检测成功");
+        result.setData(data);
+        return result;
+    }
 
     /**
      * 操作结果
@@ -171,9 +151,11 @@ public class RegisterController {
      * @param state  操作状态
      * @param result json封装
      */
-    private static void setRegHintMsg(int state, JsonResult<List> result) {
+    private static void setRegHintMsg(int state, JsonResult<String> result) {
         if (state == Operation.SUCCESSFULLY) {
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "注册成功");
+        } else if (state == Operation.FAILED) {
+            result.setStateCode(ResponseCode.RESPONSE_ERROR, "注册失败");
         } else if (state == Operation.CAPTCHA_INCORRECT) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "验证码错误");
         }

@@ -5,11 +5,13 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 
+
 /**
  * Created by APone on 2018/2/19 17:43.
+ * 校社联对外信息封装
  */
 @Component
-public class SauDetail extends BaseModel{
+public class SauDetail extends BaseModel {
 
     private static final long serialVersionUID = -2469190456785094149L;
 
@@ -21,11 +23,21 @@ public class SauDetail extends BaseModel{
 
     private Timestamp foundTime;
 
+    private int members;
+
     private String description;
 
     private String contactEmail;
 
     private String contactNumber;
+
+    public int getMembers() {
+        return members;
+    }
+
+    public void setMembers(int members) {
+        this.members = members;
+    }
 
     public String getSauName() {
         return sauName;

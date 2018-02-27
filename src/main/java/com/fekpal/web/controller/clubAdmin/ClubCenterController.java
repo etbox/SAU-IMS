@@ -34,43 +34,41 @@ public class ClubCenterController {
     @ResponseBody
     @RequestMapping("/club/center/info")
     public Map<String, Object> getClubsCenterMsg() {
-       return null;
+
+        return null;
     }
 
     /**
      * 上传社团头像的方法
      *
-     * @param files   文件对象，用from-data表单
-     * @param request 请求
+     *
      * @return 图片文件名
      */
     @ResponseBody
     @RequestMapping(value = "/club/center/info/edit/head", method = RequestMethod.POST)
-    public Map<String, Object> uploadLogo(@RequestParam("file") MultipartFile[] files, HttpServletRequest request) {
+    public Map<String, Object> uploadLogo() {
         return null;
     }
 
     /**
      * 上传社团展示图片的方法
      *
-     * @param files   文件对象，用from-data表单
      * @return 图片文件名
      */
     @ResponseBody
     @RequestMapping(value = "/club/center/info/edit/view", method = RequestMethod.POST)
-    public Map<String, Object> uploadView(@RequestParam("file") MultipartFile[] files, HttpServletRequest request) {
+    public Map<String, Object> uploadView() {
         return null;
     }
 
     /**
      * 社团用来提交修改社团中心的信息
      *
-     * @param clubCenterMsg 社团中心信息
      * @return 是否提交成功
      */
     @ResponseBody
     @RequestMapping(value = "/club/center/info/edit", method = RequestMethod.PUT)
-    public Map<String, Object> subNewCenterMsg(@RequestParam Map<String, Object> clubCenterMsg, HttpSession session) {
+    public Map<String, Object> subNewCenterMsg() {
         return null;
     }
 }

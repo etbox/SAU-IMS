@@ -10,7 +10,7 @@ public class AnniversaryAudit extends BaseModel {
 
     private int id;
 
-    private Club club;
+    private int orgId;
 
     private String fileName;
 
@@ -32,12 +32,12 @@ public class AnniversaryAudit extends BaseModel {
         this.id = id;
     }
 
-    public Club getClub() {
-        return club;
+    public int getOrgId() {
+        return orgId;
     }
 
-    public void setClub(Club club) {
-        this.club = club;
+    public void setOrgId(int orgId) {
+        this.orgId = orgId;
     }
 
     public String getFileName() {

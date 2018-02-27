@@ -4,7 +4,6 @@ import com.fekpal.common.base.BaseMapper;
 import com.fekpal.dao.model.AnniversaryAudit;
 import org.springframework.stereotype.Repository;
 
-
 /**
  * Created by APone on 2017/8/23.
  */

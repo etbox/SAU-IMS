@@ -1,6 +1,7 @@
 package com.fekpal.web.model;
 
-import java.util.Date;
+
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 
@@ -11,7 +12,7 @@ import java.util.Map;
 public class ClubPublishedNewMsg {
     private String messageTitle;
     private String messageContent;
-    private Date sendTime;
+    private Timestamp sendTime;
     private List<Map<String,Integer>> publishedObject;
     public ClubPublishedNewMsg(){}
 
@@ -31,11 +32,11 @@ public class ClubPublishedNewMsg {
         this.messageContent = messageContent;
     }
 
-    public Date getSendTime() {
+    public Timestamp getSendTime() {
         return sendTime;
     }
 
-    public void setSendTime(Date sendTime) {
+    public void setSendTime(Timestamp sendTime) {
         this.sendTime = sendTime;
     }
 

@@ -150,7 +150,7 @@
     <update id="deleteByPrimaryKey" parameterType="int">
         update user set
         user_state = 0
-        where user_id = #{id}
+        where user_id = #{id} and user_state != 0
     </update>
 
     <update id="deleteByExample">

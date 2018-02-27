@@ -34,45 +34,42 @@ public class SessionContent {
         private static final long serialVersionUID = -2303162431945571719L;
 
         /**
-         * 用户id
+         * 账号用户标识
          */
-        private int id;
+        private int accId;
 
         /**
-         * 用户名
+         * 普通，社团，校社联用户id
          */
-        private String name;
+        private int uid;
 
         /**
          * 角色权限
          */
-        private int authority;
+        private int auth;
 
-        private UserIdentity() {
+        public int getAccId() {
+            return accId;
         }
 
-        public int getId() {
-            return id;
+        public void setAccId(int accId) {
+            this.accId = accId;
         }
 
-        public void setId(int id) {
-            this.id = id;
+        public int getUid() {
+            return uid;
         }
 
-        public String getName() {
-            return name;
+        public void setUid(int uid) {
+            this.uid = uid;
         }
 
-        public void setName(String name) {
-            this.name = name;
+        public int getAuth() {
+            return auth;
         }
 
-        public int getAuthority() {
-            return authority;
-        }
-
-        public void setAuthority(int authority) {
-            this.authority = authority;
+        public void setAuth(int auth) {
+            this.auth = auth;
         }
     }
 
@@ -87,11 +84,6 @@ public class SessionContent {
          * 验证码
          */
         private String code;
-
-        /**
-         * 哈希值
-         */
-        private String hashCode;
 
         /**
          * 有效时间
@@ -113,10 +105,6 @@ public class SessionContent {
          */
         private String authorize;
 
-        private Captcha() {
-
-        }
-
         public long getCurrentTime() {
             return currentTime;
         }
@@ -131,14 +119,6 @@ public class SessionContent {
 
         public void setCode(String code) {
             this.code = code;
-        }
-
-        public String getHashCode() {
-            return hashCode;
-        }
-
-        public void setHashCode(String hashCode) {
-            this.hashCode = hashCode;
         }
 
         public long getActiveTime() {

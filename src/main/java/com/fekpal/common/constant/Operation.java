@@ -21,4 +21,9 @@ public class Operation {
      * 验证码错误常量
      */
     public static final int CAPTCHA_INCORRECT = 2;
+
+    /**
+     * 输入错误、为空、不符合要求
+     */
+    public static final int INPUT_INCORRECT = 3;
 }

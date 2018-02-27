@@ -3,6 +3,7 @@ package com.fekpal.web.controller.sauAdmin;
 import com.fekpal.api.AnniversaryAuditService;
 import com.fekpal.api.ClubService;
 import com.fekpal.api.SauService;
+import com.fekpal.common.json.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -35,7 +36,7 @@ public class SauAnnAuditController {
      */
     @ResponseBody
     @RequestMapping(value = "/sau/audit/ann", method = RequestMethod.GET)
-    public Map<String, Object> getAllAuditMsg() {
+    public JsonResult<String> getAllAuditMsg() {
 
         return null;
     }

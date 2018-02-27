@@ -10,7 +10,7 @@ public class ClubAudit extends BaseModel {
 
     private int id;
 
-    private int clubId;
+    private int orgId;
 
     private String auditTitle;
 
@@ -36,12 +36,12 @@ public class ClubAudit extends BaseModel {
         this.id = id;
     }
 
-    public int getClubId() {
-        return clubId;
+    public int getOrgId() {
+        return orgId;
     }
 
-    public void setClubId(int clubId) {
-        this.clubId = clubId;
+    public void setOrgId(int orgId) {
+        this.orgId = orgId;
     }
 
     public int getAuditState() {

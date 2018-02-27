@@ -6,13 +6,6 @@
 <mapper namespace="com.fekpal.dao.com.fekpal.service.dao.mapper.LikeClubMapper">
     <cache/>
 
-    <insert id="addLikeClub">
-        insert into club_like (person_id,club_id)
-        values(#{arg0},#{arg1})
-    </insert>
 
-    <select id="loadAllLikeByPersonId" parameterType="int" resultType="int">
-        select club_id from club_like where  person_id = #{personId}
-    </select>
 
 </mapper>

@@ -2,7 +2,8 @@ package com.fekpal.api;
 
 import com.fekpal.common.base.BaseService;
 import com.fekpal.dao.model.User;
-import com.fekpal.service.model.domain.AccountRecord;
+import com.fekpal.service.model.domain.SecureMsg;
+import com.fekpal.service.model.domain.LoginResult;
 
 import java.io.OutputStream;
 
@@ -18,10 +19,13 @@ public interface AccountAccessService extends BaseService<User> {
      *
      * @param record 信息封装
      *               传入参数：用户名userName,密码password, 验证码code, 当前时间currentTime
-     * @return 是否登录成功
-     * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败 Operation.CAPTCHA_INCORRECT 验证码错误
+     * @return 登录结果
+     * 参考参数：登录状态loginState：Operation.SUCCESSFULLY 成功
+     * Operation.FAILED 失败
+     * Operation.CAPTCHA_INCORRECT 验证码错误
+     * 用户权限authority：系统的角色
      */
-    int login(AccountRecord record);
+    LoginResult login(SecureMsg record);
 
     /**
      * 生成登录验证码，图片形式

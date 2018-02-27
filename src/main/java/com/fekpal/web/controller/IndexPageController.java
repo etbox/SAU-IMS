@@ -2,7 +2,7 @@ package com.fekpal.web.controller;
 
 import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
-import com.fekpal.dao.model.Club;
+import com.fekpal.dao.model.Org;
 import com.fekpal.web.model.ClubDetail;
 import com.fekpal.web.model.ClubListMsg;
 import com.fekpal.api.ClubService;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 
@@ -21,7 +20,6 @@ import java.util.List;
  * Created by hasee on 2017/8/15.
  */
 @Controller
-@RequestMapping("/index")
 public class IndexPageController {
 
     @Autowired
@@ -33,23 +31,22 @@ public class IndexPageController {
      * @return 社团列表信息json
      */
     @ResponseBody
-    @RequestMapping(value = "/club", method = RequestMethod.GET)
-    public JsonResult<List> getClubList() {
-
-        List<Club> clubList = clubService.loadAllClub(0, 50);
-        JsonResult<List> result = new JsonResult<>();
+    @RequestMapping(value = "/index/club", method = RequestMethod.GET)
+    public JsonResult<List<ClubListMsg>> getClubList() {
+        List<Org> clubList = clubService.loadAllClub(0, 50);
+        JsonResult<List<ClubListMsg>> result = new JsonResult<>();
 
         if (clubList == null || clubList.size() == 0) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
         } else {
             List<ClubListMsg> results = new ArrayList<>();
-            for (Club club : clubList) {
+            for (Org club : clubList) {
                 ClubListMsg clubs = new ClubListMsg();
-                clubs.setClubId(club.getClubId());
-                clubs.setClubName(club.getClubName());
-                clubs.setClubView(club.getClubView());
+                clubs.setClubId(club.getOrgId());
+                clubs.setClubName(club.getOrgName());
+                clubs.setClubView(club.getOrgView());
                 clubs.setDescription(club.getDescription());
-                clubs.setLikeNumber(club.getLikeNumber());
+                clubs.setLikeNumber(club.getLikeClick());
                 clubs.setMembers(club.getMembers());
                 results.add(clubs);
             }
@@ -66,23 +63,22 @@ public class IndexPageController {
      * @return 社团信息封装
      */
     @ResponseBody
-    @RequestMapping(value = "/club/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/index/club/{id}", method = RequestMethod.GET)
     public JsonResult<ClubDetail> getClubDetail(@PathVariable("id") int clubId) {
-
-        Club club = clubService.selectByPrimaryKey(clubId);
+        Org club = clubService.selectByPrimaryKey(clubId);
         JsonResult<ClubDetail> result = new JsonResult<>();
 
         if (club == null) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
         } else {
             ClubDetail record = new ClubDetail();
-            record.setClubId(club.getClubId());
+            record.setClubId(club.getOrgId());
             record.setAdminName(club.getAdminName());
-            record.setClubLogo(club.getLogo());
-            record.setClubName(club.getClubName());
+            record.setClubLogo(club.getOrgLogo());
+            record.setClubName(club.getOrgName());
             record.setDescription(club.getDescription());
             record.setEmail(club.getContactEmail());
-            record.setFoundTime(new Date(club.getFoundTime().getTime()));
+            record.setFoundTime(club.getFoundTime());
             record.setMembers(club.getMembers());
 
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
@@ -97,7 +93,7 @@ public class IndexPageController {
      * @return 社团信息封装
      */
     @ResponseBody
-    @RequestMapping(value = "/sau", method = RequestMethod.GET)
+    @RequestMapping(value = "/index/sau", method = RequestMethod.GET)
     public JsonResult<SauDetail> getSauDetail() {
         JsonResult<SauDetail> result = new JsonResult<>();
         result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");

@@ -1,10 +1,8 @@
 package com.fekpal.dao.model;
 
-import com.fekpal.common.base.BaseModel;
+import java.util.List;
 
-import java.sql.Timestamp;
-
-public class MessageReceive extends BaseModel {
+public class MessageReceive extends Message {
 
     private static final long serialVersionUID = 7974631739775373072L;
 
@@ -12,48 +10,18 @@ public class MessageReceive extends BaseModel {
 
     private int receiveId;
 
-    private int messageId;
-
-    private String messageTitle;
-
-    private String releaseName;
-
-    private Timestamp releaseTime;
-
     private int available;
 
     private int readFlag;
 
-    public int getMessageId() {
-        return messageId;
+    private List<Integer> receives;
+
+    public List<Integer> getReceives() {
+        return receives;
     }
 
-    public void setMessageId(int messageId) {
-        this.messageId = messageId;
-    }
-
-    public Timestamp getReleaseTime() {
-        return releaseTime;
-    }
-
-    public void setReleaseTime(Timestamp releaseTime) {
-        this.releaseTime = releaseTime;
-    }
-
-    public String getMessageTitle() {
-        return messageTitle;
-    }
-
-    public void setMessageTitle(String messageTitle) {
-        this.messageTitle = messageTitle;
-    }
-
-    public String getReleaseName() {
-        return releaseName;
-    }
-
-    public void setReleaseName(String releaseName) {
-        this.releaseName = releaseName;
+    public void setReceives(List<Integer> receives) {
+        this.receives = receives;
     }
 
     public int getId() {

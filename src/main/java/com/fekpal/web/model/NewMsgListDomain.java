@@ -1,6 +1,7 @@
 package com.fekpal.web.model;
 
-import java.util.Date;
+
+import java.sql.Timestamp;
 
 /**
  * 消息列表的中的消息对象
@@ -9,7 +10,7 @@ import java.util.Date;
 public class NewMsgListDomain {
     private int messageId;
     private String messageTitle;
-    private Date sendTime;
+    private Timestamp sendTime;
     private String sendName;
     private int readFlag;
 
@@ -30,11 +31,11 @@ public class NewMsgListDomain {
         this.messageTitle = messageTitle;
     }
 
-    public Date getSendTime() {
+    public Timestamp getSendTime() {
         return sendTime;
     }
 
-    public void setSendTime(Date sendTime) {
+    public void setSendTime(Timestamp sendTime) {
         this.sendTime = sendTime;
     }
 

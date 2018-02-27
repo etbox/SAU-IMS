@@ -23,7 +23,7 @@ public class ClubReg extends BaseModel {
 
     private String clubName;
 
-    private String adminName;
+    private String realName;
 
     private String clubType;
 
@@ -41,14 +41,14 @@ public class ClubReg extends BaseModel {
 
     private long currentTime;
 
-    private MultipartFile auditFile;
+    private MultipartFile file;
 
-    public MultipartFile getAuditFile() {
-        return auditFile;
+    public MultipartFile getFile() {
+        return file;
     }
 
-    public void setAuditFile(MultipartFile auditFile) {
-        this.auditFile = auditFile;
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
 
     public Timestamp getLoginTime() {
@@ -127,12 +127,12 @@ public class ClubReg extends BaseModel {
         this.clubName = clubName;
     }
 
-    public String getAdminName() {
-        return adminName;
+    public String getRealName() {
+        return realName;
     }
 
-    public void setAdminName(String adminName) {
-        this.adminName = adminName;
+    public void setRealName(String realName) {
+        this.realName = realName;
     }
 
     public String getClubType() {

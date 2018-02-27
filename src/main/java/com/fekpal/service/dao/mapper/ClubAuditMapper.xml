@@ -39,7 +39,7 @@
 
     <insert id="insert" parameterType="ClubAudit" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         insert into club_audit(
-        club_id, register_time,
+        org_id, register_time,
         audit_time, audit_result,
         file, audit_description,
         audit_title, apply_name,
@@ -54,7 +54,7 @@
 
     <insert id="insertLoop" parameterType="list" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         insert into club_audit(
-        club_id, register_time,
+        org_id, register_time,
         audit_time, audit_result,
         file, audit_description,
         audit_title, apply_name,
@@ -132,7 +132,7 @@
     <update id="deleteByPrimaryKey" parameterType="int">
         update club_audit set
         audit_state = 0
-        where id = #{id}
+        where id = #{id} and audit_state != 0
     </update>
 
     <update id="deleteByExample">
@@ -145,7 +145,7 @@
 
     <resultMap id="result" type="ClubAudit">
         <id property="id" column="id"/>
-        <result property="clubId" column="club_id"/>
+        <result property="orgId" column="org_id"/>
         <result property="auditTitle" column="audit_title"/>
         <result property="registerTime" column="register_time"/>
         <result property="auditTime" column="audit_time"/>

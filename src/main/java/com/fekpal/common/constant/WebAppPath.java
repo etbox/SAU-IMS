@@ -1,7 +1,5 @@
 package com.fekpal.common.constant;
 
-import org.springframework.beans.factory.annotation.Value;
-
 /**
  * Created by hasee on 2017/8/15.
  */

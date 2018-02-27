@@ -10,30 +10,25 @@
     </settings>
 
     <typeAliases>
-        <typeAlias type="com.fekpal.dao.model.Role" alias="Role"/>
-        <typeAlias type="com.fekpal.dao.model.Authority" alias="Authority"/>
-        <typeAlias type="com.fekpal.dao.model.Resource" alias="Resource"/>
         <typeAlias type="com.fekpal.dao.model.User" alias="User"/>
-        <typeAlias type="com.fekpal.dao.model.Sau" alias="Sau"/>
-        <typeAlias type="com.fekpal.dao.model.Club" alias="Club"/>
+        <typeAlias type="com.fekpal.dao.model.Org" alias="Org"/>
         <typeAlias type="com.fekpal.dao.model.Person" alias="Person"/>
-        <typeAlias type="com.fekpal.dao.model.Department" alias="Department"/>
-        <typeAlias type="com.fekpal.dao.model.Major" alias="Major"/>
         <typeAlias type="com.fekpal.dao.model.AnniversaryAudit" alias="AnniversaryAudit"/>
         <typeAlias type="com.fekpal.dao.model.Message" alias="Message"/>
         <typeAlias type="com.fekpal.dao.model.MessageReceive" alias="MessageReceive"/>
-        <typeAlias type="com.fekpal.dao.model.ClubMember" alias="ClubMember"/>
+        <typeAlias type="com.fekpal.dao.model.OrgMember" alias="OrgMember"/>
+        <typeAlias type="com.fekpal.dao.model.MemberOrg" alias="MemberOrg"/>
         <typeAlias type="com.fekpal.dao.model.ClubAudit" alias="ClubAudit"/>
     </typeAliases>
 
     <!--映射文件-->
     <mappers>
         <mapper resource="com/fekpal/service/dao/mapper/UserMapper.xml"/>
-        <mapper resource="com/fekpal/service/dao/mapper/ClubMapper.xml"/>
+        <mapper resource="com/fekpal/service/dao/mapper/OrgMapper.xml"/>
         <mapper resource="com/fekpal/service/dao/mapper/PersonMapper.xml"/>
-        <mapper resource="com/fekpal/service/dao/mapper/SauMapper.xml"/>
         <mapper resource="com/fekpal/service/dao/mapper/ClubAuditMapper.xml"/>
         <mapper resource="com/fekpal/service/dao/mapper/MessageMapper.xml"/>
         <mapper resource="com/fekpal/service/dao/mapper/MessageReceiveMapper.xml"/>
+        <mapper resource="com/fekpal/service/dao/mapper/OrgMemberMapper.xml"/>
     </mappers>
 </configuration>
