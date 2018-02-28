@@ -28,14 +28,14 @@ public class SecurityController {
      * @return 标准json数据
      */
     @ResponseBody
-    @RequestMapping(value = "/security/resetpwd/captcha", method = RequestMethod.GET)
+    @RequestMapping(value = "/security/resetpwd/captcha", method = RequestMethod.POST)
     public JsonResult<String> sendResetPwdCaptcha(@RequestBody SecureMsg msg) {
         msg.setEmail(msg.getEmail());
         int state = accountSecureService.forgetPwdByEmail(msg);
 
         JsonResult<String> result = new JsonResult<>();
         if (state == Operation.SUCCESSFULLY) {
-            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "邮箱错误");
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "验证码发送成功");
         } else if (state == Operation.FAILED) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "验证码发送失败");
         }

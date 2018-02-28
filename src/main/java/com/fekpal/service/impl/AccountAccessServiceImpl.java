@@ -71,7 +71,7 @@ public class AccountAccessServiceImpl extends BaseServiceImpl<UserMapper, User> 
             return result;
         }
 
-        String password = MD5Util.md5(record.getPassword() + user.getUserKey());
+        String password = MD5Util.encryptPwd(record.getPassword(), user.getUserKey());
 
         if (user.getPassword().equals(password)) {
             SessionContent.UserIdentity userIdentity = SessionContent.createUID();

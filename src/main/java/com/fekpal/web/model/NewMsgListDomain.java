@@ -8,18 +8,18 @@ import java.sql.Timestamp;
  * Created by hasee on 2017/8/22.
  */
 public class NewMsgListDomain {
-    private int messageId;
+    private Integer messageId;
     private String messageTitle;
     private Timestamp sendTime;
     private String sendName;
-    private int readFlag;
+    private Integer readFlag;
 
     public NewMsgListDomain(){}
-    public int getMessageId() {
+    public Integer getMessageId() {
         return messageId;
     }
 
-    public void setMessageId(int messageId) {
+    public void setMessageId(Integer messageId) {
         this.messageId = messageId;
     }
 
@@ -47,11 +47,11 @@ public class NewMsgListDomain {
         this.sendName = sendName;
     }
 
-    public int getReadFlag() {
+    public Integer getReadFlag() {
         return readFlag;
     }
 
-    public void setReadFlag(int readFlag) {
+    public void setReadFlag(Integer readFlag) {
         this.readFlag = readFlag;
     }
 

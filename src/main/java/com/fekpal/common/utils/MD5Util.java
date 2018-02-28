@@ -4,7 +4,6 @@ import java.security.MessageDigest;
 
 /**
  * MD5加密工具类
- *
  */
 public class MD5Util {
 
@@ -30,6 +29,15 @@ public class MD5Util {
             e.printStackTrace();
             throw new RuntimeException(e);
         }
+    }
+
+    /**
+     * 利用盐按照一定规则加密密码
+     *
+     * @return 加密后的密码
+     */
+    public static String encryptPwd(String password, String salt) {
+        return md5(password + salt);
     }
 
     /**

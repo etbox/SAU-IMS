@@ -13,26 +13,26 @@ public class LoginResult extends BaseModel{
     /**
      * 登录结果
      */
-    private int resultState;
+    private Integer resultState;
 
     /**
      * 用户权限
      */
-    private int authority;
+    private Integer authority;
 
-    public int getResultState() {
+    public Integer getResultState() {
         return resultState;
     }
 
-    public void setResultState(int resultState) {
+    public void setResultState(Integer resultState) {
         this.resultState = resultState;
     }
 
-    public int getAuthority() {
+    public Integer getAuthority() {
         return authority;
     }
 
-    public void setAuthority(int authority) {
+    public void setAuthority(Integer authority) {
         this.authority = authority;
     }
 }

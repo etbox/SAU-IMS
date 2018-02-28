@@ -113,10 +113,10 @@
                 org_view = #{orgView},
             </if>
             <if test="contactEmail != null">
-                contact_email = #{obj.contactEmail},
+                contact_email = #{contactEmail},
             </if>
             <if test="contactNumber != null">
-                contact_number = #{obj.contactNumber},
+                contact_number = #{contactNumber},
             </if>
             <if test="likeClick != null">
                 like_click = #{likeClick},

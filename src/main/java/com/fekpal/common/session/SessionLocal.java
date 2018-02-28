@@ -115,7 +115,7 @@ public class SessionLocal {
         SessionContent.Captcha validCaptcha = getCaptcha(type);
         if (validCaptcha != null) {
             //是否超时
-            boolean timeOut = (captcha.getCreateTime() - validCaptcha.getCreateTime()) > validCaptcha.getActiveTime();
+            boolean timeOut = (captcha.getCurrentTime() - validCaptcha.getCreateTime()) > validCaptcha.getActiveTime();
             //如果验证码正确且无超时则返回真
             return captcha.getCode().equalsIgnoreCase(validCaptcha.getCode()) &&
                     !timeOut;
@@ -135,7 +135,7 @@ public class SessionLocal {
         SessionContent.Captcha validCaptcha = getCaptcha(type);
         if (validCaptcha != null && validCaptcha.getAuthorize() != null && captcha.getAuthorize() != null) {
             //是否超时
-            boolean timeOut = (captcha.getCreateTime() - validCaptcha.getCreateTime()) > validCaptcha.getActiveTime();
+            boolean timeOut = (captcha.getCurrentTime() - validCaptcha.getCreateTime()) > validCaptcha.getActiveTime();
             //如果验证码正确,授权对象一致且无超时则返回真
             return captcha.getCode().equalsIgnoreCase(validCaptcha.getCode()) &&
                     captcha.getAuthorize().equals(validCaptcha.getAuthorize()) &&

@@ -6,6 +6,7 @@ import com.fekpal.dao.model.Org;
 import com.fekpal.web.model.ClubDetail;
 import com.fekpal.web.model.ClubListMsg;
 import com.fekpal.api.ClubService;
+import com.fekpal.web.model.PageList;
 import com.fekpal.web.model.SauDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,8 +33,8 @@ public class IndexPageController {
      */
     @ResponseBody
     @RequestMapping(value = "/index/club", method = RequestMethod.GET)
-    public JsonResult<List<ClubListMsg>> getClubList() {
-        List<Org> clubList = clubService.loadAllClub(0, 50);
+    public JsonResult<List<ClubListMsg>> getClubList(PageList page) {
+        List<Org> clubList = clubService.loadAllClub(page.getOffset(), page.getLimit());
         JsonResult<List<ClubListMsg>> result = new JsonResult<>();
 
         if (clubList == null || clubList.size() == 0) {

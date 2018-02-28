@@ -23,7 +23,7 @@ public class SauDetail extends BaseModel {
 
     private Timestamp foundTime;
 
-    private int members;
+    private Integer members;
 
     private String description;
 
@@ -31,11 +31,11 @@ public class SauDetail extends BaseModel {
 
     private String contactNumber;
 
-    public int getMembers() {
+    public Integer getMembers() {
         return members;
     }
 
-    public void setMembers(int members) {
+    public void setMembers(Integer members) {
         this.members = members;
     }
 

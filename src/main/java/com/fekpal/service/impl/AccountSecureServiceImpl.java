@@ -4,7 +4,6 @@ import com.fekpal.api.AccountSecureService;
 import com.fekpal.common.base.BaseServiceImpl;
 import com.fekpal.common.base.CRUDException;
 import com.fekpal.common.base.ExampleWrapper;
-import com.fekpal.common.constant.AvailableState;
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.constant.SystemRole;
 import com.fekpal.common.utils.MD5Util;
@@ -72,6 +71,7 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int resetPwd(SecureMsg msg) {
+        String email = SessionLocal.local(session).getCaptcha(RESET).getAuthorize();
         SessionContent.Captcha captcha = SessionContent.createCaptcha();
         captcha.setCode(msg.getCaptcha());
         captcha.setCurrentTime(msg.getCurrentTime());
@@ -79,14 +79,15 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
             return Operation.CAPTCHA_INCORRECT;
         }
 
-        String email = SessionLocal.local(session).getCaptcha(RESET).getAuthorize();
-
         ExampleWrapper<User> example = new ExampleWrapper<>();
         example.eq("email", email);
-        User user = new User();
-        user.setPassword(msg.getNewPassword());
+        User user = mapper.selectFirstByExample(example);
+        String salt = user.getUserKey();
+        user = new User();
+        user.setUserId(user.getUserId());
+        user.setPassword(MD5Util.encryptPwd(msg.getNewPassword(), salt));
 
-        int row = mapper.updateByExample(user, example);
+        int row = mapper.updateByPrimaryKeySelective(user);
         if (row > 1) throw new CRUDException("更新数量异常，数量" + row);
         return row == 0 ? Operation.FAILED : Operation.SUCCESSFULLY;
     }
@@ -120,13 +121,13 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
         int accId = SessionLocal.local(session).getUserIdentity().getAccId();
         User user = mapper.selectByPrimaryKey(accId);
         String salt = user.getUserKey();
-        if (!user.getPassword().equals(MD5Util.md5(msg.getOldPassword() + salt))) {
+        if (!user.getPassword().equals(MD5Util.encryptPwd(msg.getOldPassword(), salt))) {
             return Operation.FAILED;
         }
 
         user = new User();
         user.setUserId(accId);
-        user.setPassword(MD5Util.md5(msg.getNewPassword() + salt));
+        user.setPassword(MD5Util.encryptPwd(msg.getNewPassword(), salt));
         int row = mapper.updateByPrimaryKeySelective(user);
         if (row > 1) throw new CRUDException("更新密码失败：" + row);
         return row == 0 ? Operation.FAILED : Operation.SUCCESSFULLY;
@@ -163,6 +164,11 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
             return Operation.CAPTCHA_INCORRECT;
         }
 
+        ExampleWrapper<User> example = new ExampleWrapper<>();
+        example.eq("email", msg.getNewEmail());
+        int exit = mapper.countByExample(example);
+        if (exit != 0) return Operation.FAILED;
+
         SessionContent.UserIdentity userIdentity = SessionLocal.local(session).getUserIdentity();
         User user = new User();
         user.setUserId(userIdentity.getAccId());
@@ -174,10 +180,14 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
             Org org = new Org();
             org.setOrgId(userIdentity.getUid());
             org.setContactEmail(msg.getNewEmail());
-            row += orgMapper.updateByPrimaryKey(org);
-            if (row != 2) throw new CRUDException("更新邮箱异常，数量：" + row);
-        } else if (auth == SystemRole.PUBLIC) {
-            if (row > 1) throw new CRUDException("更新普通邮箱异常，数量：" + row);
+            row += orgMapper.updateByPrimaryKeySelective(org);
+            if (row > 2 || row == 1) throw new CRUDException("更新邮箱异常，数量：" + row);
+        } else if (auth == SystemRole.PERSON) {
+            user = new User();
+            user.setUserId(userIdentity.getAccId());
+            user.setUserName(msg.getNewEmail());
+            row += mapper.updateByPrimaryKeySelective(user);
+            if (row > 2 || row == 1) throw new CRUDException("更新普通邮箱异常，数量：" + row);
         }
         return row == 0 ? Operation.FAILED : Operation.SUCCESSFULLY;
     }

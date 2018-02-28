@@ -102,7 +102,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         String salt = RandomUtil.createSalt();
         User user = new User();
         user.setUserName(reg.getUserName());
-        user.setPassword(MD5Util.md5(reg.getPassword() + salt));
+        user.setPassword(MD5Util.encryptPwd(reg.getPassword(), salt));
         user.setEmail(reg.getUserName());
         user.setLoginIp(reg.getLoginIp());
         user.setLoginTime(reg.getRegisterTime());
@@ -150,7 +150,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         String salt = RandomUtil.createSalt();
         User user = new User();
         user.setUserName(reg.getUserName());
-        user.setPassword(MD5Util.md5(reg.getPassword() + salt));
+        user.setPassword(MD5Util.encryptPwd(reg.getPassword(), salt));
         user.setEmail(reg.getEmail());
         user.setLoginIp(reg.getLoginIp());
         user.setLoginTime(reg.getRegisterTime());
@@ -158,6 +158,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setRegisterTime(reg.getRegisterTime());
         user.setPhone(reg.getPhone());
         user.setAuthority(SystemRole.SAU);
+        //测试使用，为直接通过注册
         user.setUserState(AvailableState.AVAILABLE);
         user.setUserKey(salt);
         int row = mapper.insert(user);
@@ -168,6 +169,8 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         org.setAdminName(reg.getAdminName());
         org.setFoundTime(reg.getRegisterTime());
         org.setOrgType("校社联");
+        org.setContactEmail(user.getEmail());
+        org.setContactNumber(user.getPhone());
         org.setMembers(DefaultField.DEFAULT_MEMBERS);
         org.setLikeClick(DefaultField.DEFAULT_MEMBERS);
         org.setOrgLogo(DefaultField.DEFAULT_LOGO);
@@ -204,7 +207,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         String salt = RandomUtil.createSalt();
         User user = new User();
         user.setUserName(reg.getUserName());
-        user.setPassword(MD5Util.md5(reg.getPassword() + salt));
+        user.setPassword(MD5Util.encryptPwd(reg.getPassword(), salt));
         user.setEmail(reg.getEmail());
         user.setLoginIp(reg.getLoginIp());
         user.setLoginTime(reg.getRegisterTime());
@@ -212,7 +215,8 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setRegisterTime(reg.getRegisterTime());
         user.setPhone(reg.getPhone());
         user.setAuthority(SystemRole.CLUB);
-        user.setUserState(AvailableState.AUDITING);
+        //测试使用，为直接通过注册
+        user.setUserState(AvailableState.AVAILABLE);
         user.setUserKey(salt);
         int row = mapper.insert(user);
 
@@ -223,6 +227,8 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         org.setFoundTime(reg.getRegisterTime());
         org.setDescription(reg.getDescription());
         org.setOrgType(reg.getClubType());
+        org.setContactEmail(user.getEmail());
+        org.setContactNumber(user.getPhone());
         org.setOrgLogo(DefaultField.DEFAULT_LOGO);
         //测试使用，为直接通过注册
         org.setOrgState(AvailableState.AVAILABLE);
@@ -246,6 +252,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         clubAudit.setAuditTitle(reg.getClubName() + " 注册申请审核");
         clubAudit.setAuditTime(reg.getRegisterTime());
         clubAudit.setAuditDescription(DefaultField.EMPTY);
+        //测试使用，为直接通过注册
         clubAudit.setAuditState(AvailableState.AVAILABLE);
         clubAudit.setOrgId(org.getOrgId());
         clubAudit.setFile(auditFileName);
@@ -279,6 +286,11 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
      * @param common 对象类型
      */
     private void sendRegCaptchaByEmail(String email, final String type, String common) {
+        ExampleWrapper<User> example = new ExampleWrapper<>();
+        example.eq("email", email);
+        int row = mapper.countByExample(example);
+        if (row != 0) return;
+
         String code = new Captcha().getCode();
         SessionContent.Captcha captcha = SessionContent.createCaptcha();
         captcha.setCode(code);

@@ -14,7 +14,7 @@ public class ClubDetail extends BaseModel{
 
     private static final long serialVersionUID = -4455173302218110760L;
 
-    private int clubId;
+    private Integer clubId;
 
     private String clubName;
 
@@ -32,7 +32,7 @@ public class ClubDetail extends BaseModel{
 
     private Timestamp foundTime;
 
-    private int members;
+    private Integer members;
 
     public String getView() {
         return view;
@@ -42,11 +42,11 @@ public class ClubDetail extends BaseModel{
         this.view = view;
     }
 
-    public int getClubId() {
+    public Integer getClubId() {
         return clubId;
     }
 
-    public void setClubId(int clubId) {
+    public void setClubId(Integer clubId) {
         this.clubId = clubId;
     }
 
@@ -106,11 +106,11 @@ public class ClubDetail extends BaseModel{
         this.foundTime = foundTime;
     }
 
-    public int getMembers() {
+    public Integer getMembers() {
         return members;
     }
 
-    public void setMembers(int members) {
+    public void setMembers(Integer members) {
         this.members = members;
     }
 }

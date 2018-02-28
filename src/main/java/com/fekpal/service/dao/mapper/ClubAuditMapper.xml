@@ -45,7 +45,7 @@
         audit_title, apply_name,
         audit_state)
         values (
-        #{clubId}, #{registerTime},
+        #{orgId}, #{registerTime},
         #{auditTime}, #{auditResult},
         #{file}, #{auditDescription},
         #{auditTitle}, #{applyName},
@@ -61,7 +61,7 @@
         audit_state)
         values
         <foreach collection="list" item="item" separator=",">
-            (#{item.clubId}, #{item.registerTime},
+            (#{item.orgId}, #{item.registerTime},
             #{item.auditTime}, #{item.auditResult},
             #{item.file}, #{item.auditDescription},
             #{item.auditTitle}, #{item.applyName},

@@ -22,7 +22,7 @@ public class GlobalExceptionHandler {
      * @return json封装
      */
     @ResponseBody
-    @ExceptionHandler(value = {Exception.class})
+    @ExceptionHandler(Exception.class)
     public JsonResult<List> customExceptionHandler(Exception e) {
         e.printStackTrace();
         JsonResult<List> result = new JsonResult<>();

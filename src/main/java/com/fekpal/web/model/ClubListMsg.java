@@ -15,27 +15,15 @@ public class ClubListMsg extends BaseModel {
 
     private String clubName;
 
-    private int clubId;
+    private Integer clubId;
 
     private String clubView;
 
     private String description;
 
-    private int members;
+    private Integer members;
 
-    private int likeNumber;
-
-    public void setClubId(int clubId) {
-        this.clubId = clubId;
-    }
-
-    public void setMembers(int members) {
-        this.members = members;
-    }
-
-    public void setLikeNumber(int likeNumber) {
-        this.likeNumber = likeNumber;
-    }
+    private Integer likeNumber;
 
     public String getClubName() {
         return clubName;
@@ -43,9 +31,6 @@ public class ClubListMsg extends BaseModel {
 
     public void setClubName(String clubName) {
         this.clubName = clubName;
-    }
-
-    public ClubListMsg() {
     }
 
     public Integer getClubId() {
