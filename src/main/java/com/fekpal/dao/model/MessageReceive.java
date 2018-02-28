@@ -6,13 +6,13 @@ public class MessageReceive extends Message {
 
     private static final long serialVersionUID = 7974631739775373072L;
 
-    private int id;
+    private Integer id;
 
-    private int receiveId;
+    private Integer receiveId;
 
-    private int available;
+    private Integer available;
 
-    private int readFlag;
+    private Integer readFlag;
 
     private List<Integer> receives;
 
@@ -24,35 +24,35 @@ public class MessageReceive extends Message {
         this.receives = receives;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getReceiveId() {
+    public Integer getReceiveId() {
         return receiveId;
     }
 
-    public void setReceiveId(int receiveId) {
+    public void setReceiveId(Integer receiveId) {
         this.receiveId = receiveId;
     }
 
-    public int getAvailable() {
+    public Integer getAvailable() {
         return available;
     }
 
-    public void setAvailable(int available) {
+    public void setAvailable(Integer available) {
         this.available = available;
     }
 
-    public int getReadFlag() {
+    public Integer getReadFlag() {
         return readFlag;
     }
 
-    public void setReadFlag(int readFlag) {
+    public void setReadFlag(Integer readFlag) {
         this.readFlag = readFlag;
     }
 }

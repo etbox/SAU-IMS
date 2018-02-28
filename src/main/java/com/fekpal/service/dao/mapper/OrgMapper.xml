@@ -152,37 +152,37 @@
     <update id="updateByExampleSelective">
         update org_info
         <set>
-            <if test="orgName != null">
+            <if test="obj.rgName != null">
                 org_name = #{obj.orgName},
             </if>
-            <if test="foundTime != null">
+            <if test="obj.foundTime != null">
                 found_time = #{obj.foundTime},
             </if>
-            <if test="description != null">
+            <if test="obj.description != null">
                 description = #{obj.description},
             </if>
-            <if test="adminName != null">
+            <if test="obj.adminName != null">
                 admin_name = #{obj.adminName},
             </if>
-            <if test="orgLogo != null">
+            <if test="obj.orgLogo != null">
                 org_logo = #{obj.orgLogo},
             </if>
-            <if test="orgView != null">
+            <if test="obj.orgView != null">
                 org_view = #{obj.orgView},
             </if>
-            <if test="contactEmail != null">
+            <if test="obj.contactEmail != null">
                 contact_email = #{obj.contactEmail},
             </if>
-            <if test="contactNumber != null">
+            <if test="obj.contactNumber != null">
                 contact_number = #{obj.contactNumber},
             </if>
-            <if test="likeClick != null">
+            <if test="obj.likeClick != null">
                 like_click = #{obj.likeClick},
             </if>
-            <if test="members != null">
+            <if test="obj.members != null">
                 members = #{obj.members},
             </if>
-            <if test="orgState != null">
+            <if test="obj.orgState != null">
                 org_state = #{obj.orgState},
             </if>
         </set>

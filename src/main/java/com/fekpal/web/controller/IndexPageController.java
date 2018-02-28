@@ -74,7 +74,7 @@ public class IndexPageController {
             ClubDetail record = new ClubDetail();
             record.setClubId(club.getOrgId());
             record.setAdminName(club.getAdminName());
-            record.setClubLogo(club.getOrgLogo());
+            record.setLogo(club.getOrgLogo());
             record.setClubName(club.getOrgName());
             record.setDescription(club.getDescription());
             record.setEmail(club.getContactEmail());

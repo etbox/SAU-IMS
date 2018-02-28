@@ -22,6 +22,8 @@ import com.fekpal.service.model.domain.SecureMsg;
 import com.fekpal.service.model.domain.LoginResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;

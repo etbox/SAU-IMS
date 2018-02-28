@@ -11,9 +11,9 @@ public class Org extends BaseModel{
     
     private static final long serialVersionUID = -3403405786128549267L;
 
-    private int orgId;
+    private Integer orgId;
 
-    private int userId;
+    private Integer userId;
 
     private String orgName;
 
@@ -27,13 +27,13 @@ public class Org extends BaseModel{
 
     private String orgView;
 
-    private int likeClick;
+    private Integer likeClick;
 
-    private int members;
+    private Integer members;
 
-    private int orgState;
+    private Integer orgState;
 
-    private int orgAuth;
+    private Integer orgAuth;
 
     private String orgLogo;
 
@@ -41,19 +41,19 @@ public class Org extends BaseModel{
 
     private String contactNumber;
 
-    public int getOrgId() {
+    public Integer getOrgId() {
         return orgId;
     }
 
-    public void setOrgId(int orgId) {
+    public void setOrgId(Integer orgId) {
         this.orgId = orgId;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -105,35 +105,35 @@ public class Org extends BaseModel{
         this.orgView = orgView;
     }
 
-    public int getLikeClick() {
+    public Integer getLikeClick() {
         return likeClick;
     }
 
-    public void setLikeClick(int likeClick) {
+    public void setLikeClick(Integer likeClick) {
         this.likeClick = likeClick;
     }
 
-    public int getMembers() {
+    public Integer getMembers() {
         return members;
     }
 
-    public void setMembers(int members) {
+    public void setMembers(Integer members) {
         this.members = members;
     }
 
-    public int getOrgState() {
+    public Integer getOrgState() {
         return orgState;
     }
 
-    public void setOrgState(int orgState) {
+    public void setOrgState(Integer orgState) {
         this.orgState = orgState;
     }
 
-    public int getOrgAuth() {
+    public Integer getOrgAuth() {
         return orgAuth;
     }
 
-    public void setOrgAuth(int orgAuth) {
+    public void setOrgAuth(Integer orgAuth) {
         this.orgAuth = orgAuth;
     }
 

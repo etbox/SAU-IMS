@@ -157,40 +157,40 @@
     <update id="updateByExampleSelective">
         update person_info
         <set>
-            <if test="realName != null">
+            <if test="obj.realName != null">
                 real_name = #{obj.realName},
             </if>
-            <if test="nickname != null">
+            <if test="obj.nickname != null">
                 nickname = #{obj.nickname},
             </if>
-            <if test="gender != null">
+            <if test="obj.gender != null">
                 gender = #{obj.gender},
             </if>
-            <if test="birthday != null">
+            <if test="obj.birthday != null">
                 birthday = #{obj.birthday},
             </if>
-            <if test="description != null">
+            <if test="obj.description != null">
                 description = #{obj.description},
             </if>
-            <if test="address != null">
+            <if test="obj.address != null">
                 address = #{obj.address},
             </if>
-            <if test="department != null">
+            <if test="obj.department != null">
                 department = #{obj.department},
             </if>
-            <if test="major != null">
+            <if test="obj.major != null">
                 major = #{obj.major},
             </if>
-            <if test="studentId != null">
+            <if test="obj.studentId != null">
                 student_id = #{obj.studentId},
             </if>
-            <if test="logo != null">
+            <if test="obj.logo != null">
                 person_logo = #{obj.logo},
             </if>
-            <if test="personState != null">
+            <if test="obj.personState != null">
                 person_state = #{obj.personState},
             </if>
-            <if test="enrollmentYear != null">
+            <if test="obj.enrollmentYear != null">
                 enrollment_year = #{enrollmentYear},
             </if>
         </set>

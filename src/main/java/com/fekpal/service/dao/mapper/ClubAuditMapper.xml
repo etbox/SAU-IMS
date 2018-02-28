@@ -102,7 +102,7 @@
         audit_time = #{obj.auditTime},
         audit_result = #{obj.auditResult},
         audit_description = #{obj.auditDescription},
-        audit_state = #{auditState}
+        audit_state = #{obj.auditState}
         <where>
             ${ex.sqlSegment}
         </where>
@@ -111,17 +111,17 @@
     <update id="updateByExampleSelective" parameterType="map">
         update club_audit
         <set>
-            <if test="auditTime != null">
-                audit_time = #{auditTime},
+            <if test="obj.auditTime != null">
+                audit_time = #{obj.auditTime},
             </if>
-            <if test="auditResult != null">
-                audit_result = #{auditResult},
+            <if test="obj.auditResult != null">
+                audit_result = #{obj.auditResult},
             </if>
-            <if test="auditDescription != null">
-                audit_description = #{auditDescription},
+            <if test="obj.auditDescription != null">
+                audit_description = #{obj.auditDescription},
             </if>
-            <if test="auditState != null">
-                audit_state = #{auditState},
+            <if test="obj.auditState != null">
+                audit_state = #{obj.auditState},
             </if>
         </set>
         <where>

@@ -14,6 +14,7 @@ import com.fekpal.dao.mapper.PersonMapper;
 import com.fekpal.dao.model.MemberOrg;
 import com.fekpal.dao.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +25,7 @@ import java.util.List;
 /**
  * Created by APone on 2018/2/28 3:01.
  */
+@Service
 public class MemberOrgServiceImpl extends BaseServiceImpl<MemberOrgMapper, MemberOrg> implements MemberOrgService {
 
     @Autowired

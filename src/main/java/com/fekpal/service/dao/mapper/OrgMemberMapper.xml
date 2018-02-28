@@ -83,7 +83,7 @@
     </update>
 
     <update id="updateByPrimaryKeySelective" parameterType="OrgMember">
-        update org_member set
+        update org_member
         <set>
             <if test="memberDuty != null">
                 member_duty = #{memberDuty},
@@ -101,7 +101,7 @@
                 org_department = #{orgDepartment},
             </if>
             <if test="available != null">
-                available = #{available}
+                available = #{available},
             </if>
         </set>
         where id = #{id}
@@ -121,25 +121,25 @@
     </update>
 
     <update id="updateByExampleSelective">
-        update org_member set
+        update org_member
         <set>
-            <if test="memberDuty != null">
-                member_duty = #{memberDuty},
+            <if test="obj.memberDuty != null">
+                member_duty = #{obj.memberDuty},
             </if>
-            <if test="memberState != null">
-                member_state = #{memberState},
+            <if test="obj.memberState != null">
+                member_state = #{obj.memberState},
             </if>
-            <if test="joinTime != null">
-                join_time = #{joinTime},
+            <if test="obj.joinTime != null">
+                join_time = #{obj.joinTime},
             </if>
-            <if test="leaveTime != null">
-                leave_time = #{leaveTime},
+            <if test="obj.leaveTime != null">
+                leave_time = #{obj.leaveTime},
             </if>
-            <if test="orgDepartment != null">
-                org_department = #{orgDepartment},
+            <if test="obj.orgDepartment != null">
+                org_department = #{obj.orgDepartment},
             </if>
-            <if test="available != null">
-                available = #{available}
+            <if test="obj.available != null">
+                available = #{obj.available},
             </if>
         </set>
         <where>

@@ -8,15 +8,15 @@ public class Person extends BaseModel {
 
     private static final long serialVersionUID = -2838490592387366128L;
 
-    private int personId;
+    private Integer personId;
 
-    private int userId;
+    private Integer userId;
 
     private String realName;
 
     private String nickname;
 
-    private int gender;
+    private Integer gender;
 
     private Timestamp birthday;
 
@@ -30,33 +30,33 @@ public class Person extends BaseModel {
 
     private String studentId;
 
-    private int enrollmentYear;
+    private Integer enrollmentYear;
 
-    private int personState;
+    private Integer personState;
 
     private String logo;
 
-    public int getEnrollmentYear() {
+    public Integer getEnrollmentYear() {
         return enrollmentYear;
     }
 
-    public void setEnrollmentYear(int enrollmentYear) {
+    public void setEnrollmentYear(Integer enrollmentYear) {
         this.enrollmentYear = enrollmentYear;
     }
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
-    public int getPersonState() {
+    public Integer getPersonState() {
         return personState;
     }
 
-    public void setPersonState(int personState) {
+    public void setPersonState(Integer personState) {
         this.personState = personState;
     }
 
@@ -72,11 +72,11 @@ public class Person extends BaseModel {
         return nickname;
     }
 
-    public int getPersonId() {
+    public Integer getPersonId() {
         return personId;
     }
 
-    public void setPersonId(int personId) {
+    public void setPersonId(Integer personId) {
         this.personId = personId;
     }
 
@@ -96,11 +96,11 @@ public class Person extends BaseModel {
         this.nickname = nickname;
     }
 
-    public int getGender() {
+    public Integer getGender() {
         return gender;
     }
 
-    public void setGender(int gender) {
+    public void setGender(Integer gender) {
         this.gender = gender;
     }
 

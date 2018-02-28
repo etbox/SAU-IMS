@@ -2,6 +2,7 @@ package test.dao;
 
 import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.common.constant.AvailableState;
+import com.fekpal.common.utils.MD5Util;
 import com.fekpal.dao.mapper.MessageMapper;
 import com.fekpal.dao.mapper.MessageReceiveMapper;
 import com.fekpal.dao.model.Message;
@@ -33,7 +34,7 @@ public class TestMessage extends TestDao {
         list.add(Model.message1);
         messageMapper.insertLoop(list);
         */
-
+/*
         List<Integer> receives = new ArrayList<>();
         for (int i = 0; i < 1365; i++) {
             receives.add(i);
@@ -54,13 +55,12 @@ public class TestMessage extends TestDao {
             row += receiveMapper.insertLoopOnlyWithReceiveId(receive);
         }
         System.out.println(row);
-
+*/
         //receiveMapper.insertLoopOnlyWithReceiveId(receive);
     }
-
     @Test
     public void test1() {
-
+System.out.println(MD5Util.md5("12345"+"B7NIO6OGawvB1YhZI1xT7g=="));
         /*
         messageMapper.selectByPrimaryKey(Model.message.getMessageId());
         messageMapper.selectByExample(new ExampleWrapper<>(), 0, 10);

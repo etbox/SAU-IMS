@@ -8,9 +8,9 @@ public class Message extends BaseModel {
 
     private static final long serialVersionUID = 7490442249324832127L;
 
-    private int messageId;
+    private Integer messageId;
 
-    private int orgId;
+    private Integer orgId;
 
     private String messageTitle;
 
@@ -20,11 +20,11 @@ public class Message extends BaseModel {
 
     private String releaseName;
 
-    private int messageType;
+    private Integer messageType;
 
     private String messageAnnex;
 
-    private int messageState;
+    private Integer messageState;
 
     public String getReleaseName() {
         return releaseName;
@@ -34,19 +34,19 @@ public class Message extends BaseModel {
         this.releaseName = releaseName;
     }
 
-    public int getOrgId() {
+    public Integer getOrgId() {
         return orgId;
     }
 
-    public void setOrgId(int orgId) {
+    public void setOrgId(Integer orgId) {
         this.orgId = orgId;
     }
 
-    public int getMessageId() {
+    public Integer getMessageId() {
         return messageId;
     }
 
-    public void setMessageId(int messageId) {
+    public void setMessageId(Integer messageId) {
         this.messageId = messageId;
     }
 
@@ -74,11 +74,11 @@ public class Message extends BaseModel {
         this.releaseTime = releaseTime;
     }
 
-    public int getMessageType() {
+    public Integer getMessageType() {
         return messageType;
     }
 
-    public void setMessageType(int messageType) {
+    public void setMessageType(Integer messageType) {
         this.messageType = messageType;
     }
 
@@ -90,11 +90,11 @@ public class Message extends BaseModel {
         this.messageAnnex = messageAnnex;
     }
 
-    public int getMessageState() {
+    public Integer getMessageState() {
         return messageState;
     }
 
-    public void setMessageState(int messageState) {
+    public void setMessageState(Integer messageState) {
         this.messageState = messageState;
     }
 }

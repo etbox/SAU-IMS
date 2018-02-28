@@ -123,22 +123,22 @@
     <update id="updateByExampleSelective">
         update user
         <set>
-            <if test="password != null">
+            <if test="obj.password != null">
                 password = #{obj.password},
             </if>
-            <if test="email != null">
+            <if test="obj.email != null">
                 email = #{obj.email},
             </if>
-            <if test="phone != null">
+            <if test="obj.phone != null">
                 phone = #{obj.phone},
             </if>
-            <if test="loginIp != null">
+            <if test="obj.loginIp != null">
                 login_ip = #{obj.loginIp},
             </if>
-            <if test="loginTime != null">
+            <if test="obj.loginTime != null">
                 login_time = #{obj.loginTime},
             </if>
-            <if test="userState != null">
+            <if test="obj.userState != null">
                 user_state = #{obj.userState},
             </if>
         </set>
@@ -164,9 +164,13 @@
     <resultMap id="result" type="User">
         <id property="userId" column="user_id"/>
         <result property="userName" column="user_name"/>
+        <result property="password" column="password"/>
         <result property="loginIp" column="login_ip"/>
         <result property="loginTime" column="login_time"/>
         <result property="userKey" column="user_key"/>
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="authority" column="authority"/>
         <result property="registerIp" column="register_ip"/>
         <result property="registerTime" column="register_time"/>
         <result property="userState" column="user_state"/>

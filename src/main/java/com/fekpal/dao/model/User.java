@@ -8,7 +8,7 @@ public class User extends BaseModel {
 
     private static final long serialVersionUID = -6379875187449194006L;
 
-    private int userId;
+    private Integer userId;
 
     private String userName;
 
@@ -28,15 +28,15 @@ public class User extends BaseModel {
 
     private Timestamp registerTime;
 
-    private int authority;
+    private Integer authority;
 
-    private int userState;
+    private Integer userState;
 
-    public int getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -112,19 +112,19 @@ public class User extends BaseModel {
         this.registerTime = registerTime;
     }
 
-    public int getAuthority() {
+    public Integer getAuthority() {
         return authority;
     }
 
-    public void setAuthority(int authority) {
+    public void setAuthority(Integer authority) {
         this.authority = authority;
     }
 
-    public int getUserState() {
+    public Integer getUserState() {
         return userState;
     }
 
-    public void setUserState(int userState) {
+    public void setUserState(Integer userState) {
         this.userState = userState;
     }
 }

@@ -116,10 +116,10 @@
     <update id="updateByExampleSelective">
         update message_receive
         <set>
-            <if test="readFlag != null">
+            <if test="obj.readFlag != null">
                 read_flag = #{obj.readFlag},
             </if>
-            <if test="available != null">
+            <if test="obj.available != null">
                 available = #{obj.available},
             </if>
         </set>

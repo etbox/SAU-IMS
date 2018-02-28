@@ -8,9 +8,9 @@ public class ClubAudit extends BaseModel {
 
     private static final long serialVersionUID = -8822913989759898229L;
 
-    private int id;
+    private Integer id;
 
-    private int orgId;
+    private Integer orgId;
 
     private String auditTitle;
 
@@ -18,7 +18,7 @@ public class ClubAudit extends BaseModel {
 
     private Timestamp auditTime;
 
-    private int auditResult;
+    private Integer auditResult;
 
     private String file;
 
@@ -26,29 +26,29 @@ public class ClubAudit extends BaseModel {
 
     private String applyName;
 
-    private int auditState;
+    private Integer auditState;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getOrgId() {
+    public Integer getOrgId() {
         return orgId;
     }
 
-    public void setOrgId(int orgId) {
+    public void setOrgId(Integer orgId) {
         this.orgId = orgId;
     }
 
-    public int getAuditState() {
+    public Integer getAuditState() {
         return auditState;
     }
 
-    public void setAuditState(int auditState) {
+    public void setAuditState(Integer auditState) {
         this.auditState = auditState;
     }
 
@@ -84,11 +84,11 @@ public class ClubAudit extends BaseModel {
         this.auditTime = auditTime;
     }
 
-    public int getAuditResult() {
+    public Integer getAuditResult() {
         return auditResult;
     }
 
-    public void setAuditResult(int auditResult) {
+    public void setAuditResult(Integer auditResult) {
         this.auditResult = auditResult;
     }
 

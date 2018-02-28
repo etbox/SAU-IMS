@@ -171,6 +171,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         org.setMembers(DefaultField.DEFAULT_MEMBERS);
         org.setLikeClick(DefaultField.DEFAULT_MEMBERS);
         org.setOrgLogo(DefaultField.DEFAULT_LOGO);
+        //测试用，可直接注册有效
         org.setOrgState(AvailableState.AVAILABLE);
         org.setOrgAuth(SystemRole.SAU);
         row += orgMapper.insert(org);
@@ -223,7 +224,8 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         org.setDescription(reg.getDescription());
         org.setOrgType(reg.getClubType());
         org.setOrgLogo(DefaultField.DEFAULT_LOGO);
-        org.setOrgState(AvailableState.AUDITING);
+        //测试使用，为直接通过注册
+        org.setOrgState(AvailableState.AVAILABLE);
         org.setOrgView(DefaultField.DEFAULT_CLUB_OVERVIEW);
         org.setMembers(DefaultField.DEFAULT_MEMBERS);
         org.setLikeClick(DefaultField.DEFAULT_MEMBERS);
@@ -244,7 +246,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         clubAudit.setAuditTitle(reg.getClubName() + " 注册申请审核");
         clubAudit.setAuditTime(reg.getRegisterTime());
         clubAudit.setAuditDescription(DefaultField.EMPTY);
-        clubAudit.setAuditState(AvailableState.AUDITING);
+        clubAudit.setAuditState(AvailableState.AVAILABLE);
         clubAudit.setOrgId(org.getOrgId());
         clubAudit.setFile(auditFileName);
         row += clubAuditMapper.insert(clubAudit);

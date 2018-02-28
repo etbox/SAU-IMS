@@ -10,13 +10,13 @@ public class MemberOrg extends Org {
 
     private static final long serialVersionUID = 6300840844736636054L;
 
-    private int id;
+    private Integer id;
 
-    private int personId;
+    private Integer personId;
 
-    private int memberDuty;
+    private Integer memberDuty;
 
-    private int memberState;
+    private Integer memberState;
 
     private Timestamp joinTime;
 
@@ -24,37 +24,37 @@ public class MemberOrg extends Org {
 
     private String orgDepartment;
 
-    private int available;
+    private Integer available;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getPersonId() {
+    public Integer getPersonId() {
         return personId;
     }
 
-    public void setPersonId(int personId) {
+    public void setPersonId(Integer personId) {
         this.personId = personId;
     }
 
-    public int getMemberDuty() {
+    public Integer getMemberDuty() {
         return memberDuty;
     }
 
-    public void setMemberDuty(int memberDuty) {
+    public void setMemberDuty(Integer memberDuty) {
         this.memberDuty = memberDuty;
     }
 
-    public int getMemberState() {
+    public Integer getMemberState() {
         return memberState;
     }
 
-    public void setMemberState(int memberState) {
+    public void setMemberState(Integer memberState) {
         this.memberState = memberState;
     }
 
@@ -82,11 +82,11 @@ public class MemberOrg extends Org {
         this.orgDepartment = orgDepartment;
     }
 
-    public int getAvailable() {
+    public Integer getAvailable() {
         return available;
     }
 
-    public void setAvailable(int available) {
+    public void setAvailable(Integer available) {
         this.available = available;
     }
 }

@@ -4,6 +4,7 @@ import com.fekpal.common.base.BaseServiceImpl;
 import com.fekpal.common.base.CRUDException;
 import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.api.ClubService;
+import com.fekpal.common.constant.AvailableState;
 import com.fekpal.common.constant.FIleDefaultPath;
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.constant.SystemRole;
@@ -76,14 +77,18 @@ public class ClubServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements 
     @Override
     public Org selectByClubName(String name) {
         ExampleWrapper<Org> example = new ExampleWrapper<>();
-        example.eq("org_name", name).and().eq("org_auth", SystemRole.CLUB);
+        example.eq("org_name", name)
+                .and().eq("org_auth", SystemRole.CLUB)
+                .and().eq("org_state", AvailableState.AVAILABLE);
         return mapper.selectFirstByExample(example);
     }
 
     @Override
     public List<Org> queryByClubName(String name, int offset, int limit) {
         ExampleWrapper<Org> example = new ExampleWrapper<>();
-        example.like("org_name", name).and().eq("org_auth", SystemRole.CLUB);
+        example.like("org_name", name)
+                .and().eq("org_auth", SystemRole.CLUB)
+                .and().eq("org_state", AvailableState.AVAILABLE);
         return mapper.selectByExample(example, offset, limit);
     }
 
@@ -98,7 +103,7 @@ public class ClubServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements 
     @Override
     public List<Org> loadAllClub(int offset, int limit) {
         ExampleWrapper<Org> example = new ExampleWrapper<>();
-        example.eq("org_auth", SystemRole.CLUB);
+        example.eq("org_auth", SystemRole.CLUB).and().eq("org_state", AvailableState.AVAILABLE);
         return mapper.selectByExample(example, offset, limit);
     }
 }

@@ -60,7 +60,7 @@ public class LoginController {
     /**
      * 生成登陆验证码
      */
-    @RequestMapping(value = "/login/code", method = RequestMethod.GET)
+    @RequestMapping(value = "/login/captcha", method = RequestMethod.GET)
     public void captcha(HttpServletResponse response) {
         try {
             response.setContentType("image/png");
@@ -77,7 +77,7 @@ public class LoginController {
      * @return json数据
      */
     @ResponseBody
-    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public JsonResult<String> logout() {
         JsonResult<String> result = new JsonResult<>();
         if (accountAccessService.logout()) {

@@ -18,7 +18,9 @@ public class ClubDetail extends BaseModel{
 
     private String clubName;
 
-    private String clubLogo;
+    private String logo;
+
+    private String view;
 
     private String description;
 
@@ -31,6 +33,14 @@ public class ClubDetail extends BaseModel{
     private Timestamp foundTime;
 
     private int members;
+
+    public String getView() {
+        return view;
+    }
+
+    public void setView(String view) {
+        this.view = view;
+    }
 
     public int getClubId() {
         return clubId;
@@ -48,12 +58,12 @@ public class ClubDetail extends BaseModel{
         this.clubName = clubName;
     }
 
-    public String getClubLogo() {
-        return clubLogo;
+    public String getLogo() {
+        return logo;
     }
 
-    public void setClubLogo(String clubLogo) {
-        this.clubLogo = clubLogo;
+    public void setLogo(String logo) {
+        this.logo = logo;
     }
 
     public String getDescription() {

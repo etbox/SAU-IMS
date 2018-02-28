@@ -17,7 +17,7 @@ public interface AccountSecureService extends BaseService<User> {
      * @param record 信息封装
      *               传入参数：新密码newPassword, 验证码code, 当前时间currentTime
      * @return 是否修改成功
-     * 参考参数：Operation.SUCCESSFULLY 成功
+     * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败 Operation.CAPTCHA_INCORRECT 验证码错误
      */
     int resetPwd(SecureMsg record);
 
@@ -55,7 +55,7 @@ public interface AccountSecureService extends BaseService<User> {
      * @param record 信息封装
      *               传入参数：新邮箱newEmail， 验证码code， 当前时间currentTime
      * @return 是否修改成功
-     * 参考参数：Operation.SUCCESSFULLY 成功 Operation.CAPTCHA_INCORRECT 验证码错误
+     * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败 Operation.CAPTCHA_INCORRECT 验证码错误
      */
     int modifyEmail(SecureMsg record);
 }

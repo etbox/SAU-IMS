@@ -5,6 +5,7 @@ import com.fekpal.common.base.BaseServiceImpl;
 import com.fekpal.dao.mapper.OrgMemberMapper;
 import com.fekpal.dao.model.OrgMember;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
 /**
  * Created by APone on 2018/2/26 19:20.
  */
+@Service
 public class OrgMemberAuditServiceImpl extends BaseServiceImpl<OrgMemberMapper, OrgMember> implements OrgMemberAuditService {
 
     @Autowired

@@ -83,7 +83,7 @@ public class RegisterController {
     }
 
     /**
-     * 校社联注册的方法
+     * 校社联注册的方法,目前测试用
      *
      * @param reg 校社联用户注册信息封装
      * @return 标准json数据

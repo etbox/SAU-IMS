@@ -90,7 +90,7 @@
     <update id="updateByExampleSelective">
         update message
         <set>
-            <if test="messageState != null">
+            <if test="obj.messageState != null">
                 message_state = #{obj.messageState},
             </if>
         </set>

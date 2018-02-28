@@ -8,13 +8,13 @@ public class AnniversaryAudit extends BaseModel {
 
     private static final long serialVersionUID = -2315766494340261103L;
 
-    private int id;
+    private Integer id;
 
-    private int orgId;
+    private Integer orgId;
 
     private String fileName;
 
-    private int auditState;
+    private Integer auditState;
 
     private Timestamp auditTime;
 
@@ -24,19 +24,19 @@ public class AnniversaryAudit extends BaseModel {
 
     private String submitDescription;
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public int getOrgId() {
+    public Integer getOrgId() {
         return orgId;
     }
 
-    public void setOrgId(int orgId) {
+    public void setOrgId(Integer orgId) {
         this.orgId = orgId;
     }
 
@@ -48,11 +48,11 @@ public class AnniversaryAudit extends BaseModel {
         this.fileName = fileName;
     }
 
-    public int getAuditState() {
+    public Integer getAuditState() {
         return auditState;
     }
 
-    public void setAuditState(int auditState) {
+    public void setAuditState(Integer auditState) {
         this.auditState = auditState;
     }
 

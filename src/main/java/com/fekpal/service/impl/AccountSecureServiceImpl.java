@@ -4,8 +4,10 @@ import com.fekpal.api.AccountSecureService;
 import com.fekpal.common.base.BaseServiceImpl;
 import com.fekpal.common.base.CRUDException;
 import com.fekpal.common.base.ExampleWrapper;
+import com.fekpal.common.constant.AvailableState;
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.constant.SystemRole;
+import com.fekpal.common.utils.MD5Util;
 import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.common.utils.captcha.Captcha;
 import com.fekpal.common.utils.captcha.CaptchaUtil;
@@ -85,8 +87,8 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
         user.setPassword(msg.getNewPassword());
 
         int row = mapper.updateByExample(user, example);
-        if (row != 1) throw new CRUDException("更新数量异常，数量" + row);
-        return Operation.SUCCESSFULLY;
+        if (row > 1) throw new CRUDException("更新数量异常，数量" + row);
+        return row == 0 ? Operation.FAILED : Operation.SUCCESSFULLY;
     }
 
     @Override
@@ -116,17 +118,18 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int modifyPwd(SecureMsg msg) {
         int accId = SessionLocal.local(session).getUserIdentity().getAccId();
-        ExampleWrapper<User> example = new ExampleWrapper<>();
-        example.eq("user_id", accId).and().eq("password", msg.getOldPassword());
-        int row = mapper.countByExample(example);
-        if (row != 1) return Operation.FAILED;
+        User user = mapper.selectByPrimaryKey(accId);
+        String salt = user.getUserKey();
+        if (!user.getPassword().equals(MD5Util.md5(msg.getOldPassword() + salt))) {
+            return Operation.FAILED;
+        }
 
-        User user = new User();
+        user = new User();
         user.setUserId(accId);
-        user.setPassword(msg.getNewPassword());
-        row = mapper.updateByPrimaryKeySelective(user);
-        if (row != 1) throw new CRUDException("更新密码失败：" + row);
-        return Operation.SUCCESSFULLY;
+        user.setPassword(MD5Util.md5(msg.getNewPassword() + salt));
+        int row = mapper.updateByPrimaryKeySelective(user);
+        if (row > 1) throw new CRUDException("更新密码失败：" + row);
+        return row == 0 ? Operation.FAILED : Operation.SUCCESSFULLY;
     }
 
     @Override
@@ -174,8 +177,8 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
             row += orgMapper.updateByPrimaryKey(org);
             if (row != 2) throw new CRUDException("更新邮箱异常，数量：" + row);
         } else if (auth == SystemRole.PUBLIC) {
-            if (row != 1) throw new CRUDException("更新普通邮箱异常，数量：" + row);
+            if (row > 1) throw new CRUDException("更新普通邮箱异常，数量：" + row);
         }
-        return Operation.SUCCESSFULLY;
+        return row == 0 ? Operation.FAILED : Operation.SUCCESSFULLY;
     }
 }
