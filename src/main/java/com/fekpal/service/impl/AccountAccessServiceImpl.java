@@ -1,7 +1,7 @@
 package com.fekpal.service.impl;
 
-import com.fekpal.api.AccountAccessService;
-import com.fekpal.common.base.BaseServiceImpl;
+import com.fekpal.api.*;
+import com.fekpal.common.base.CRUDException;
 import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.common.constant.AvailableState;
 import com.fekpal.common.constant.Operation;
@@ -12,9 +12,6 @@ import com.fekpal.common.utils.MD5Util;
 import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.common.utils.captcha.Captcha;
 import com.fekpal.common.utils.captcha.CaptchaUtil;
-import com.fekpal.dao.mapper.OrgMapper;
-import com.fekpal.dao.mapper.PersonMapper;
-import com.fekpal.dao.mapper.UserMapper;
 import com.fekpal.dao.model.Org;
 import com.fekpal.dao.model.Person;
 import com.fekpal.dao.model.User;
@@ -28,21 +25,28 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.Timestamp;
 
 /**
  * Created by APone on 2018/2/19 21:15.
  */
 @Service
-public class AccountAccessServiceImpl extends BaseServiceImpl<UserMapper, User> implements AccountAccessService {
+public class AccountAccessServiceImpl implements AccountAccessService {
 
     @Autowired
     private HttpSession session;
 
     @Autowired
-    private PersonMapper personMapper;
+    private UserService userService;
 
     @Autowired
-    private OrgMapper orgMapper;
+    private PersonService personService;
+
+    @Autowired
+    private ClubService clubService;
+
+    @Autowired
+    private SauService sauService;
 
     /**
      * 登录常量
@@ -50,6 +54,7 @@ public class AccountAccessServiceImpl extends BaseServiceImpl<UserMapper, User> 
     private final static String LOGIN = "login";
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public LoginResult login(SecureMsg record) {
         //验证登录验证码是否正确
         SessionContent.Captcha captcha = SessionContent.createCaptcha();
@@ -65,7 +70,7 @@ public class AccountAccessServiceImpl extends BaseServiceImpl<UserMapper, User> 
 
         ExampleWrapper<User> example = new ExampleWrapper<>();
         example.eq("user_name", record.getUserName()).or().eq("email", record.getUserName());
-        User user = mapper.selectFirstByExample(example);
+        User user = userService.selectFirstByExample(example);
         //拥有此用户信息且允许用户登录状态
         if (user == null || user.getUserState() == AvailableState.UNAVAILABLE) {
             return result;
@@ -82,19 +87,32 @@ public class AccountAccessServiceImpl extends BaseServiceImpl<UserMapper, User> 
             if (authority == SystemRole.PERSON) {
                 ExampleWrapper<Person> personExample = new ExampleWrapper<>();
                 personExample.eq("user_id", user.getUserId());
-                Person person = personMapper.selectFirstByExample(personExample);
+                Person person = personService.selectFirstByExample(personExample);
                 userIdentity.setUid(person.getPersonId());
 
-            } else if (authority == SystemRole.CLUB || authority == SystemRole.SAU) {
+            } else if (authority == SystemRole.CLUB) {
                 ExampleWrapper<Org> orgExample = new ExampleWrapper<>();
                 orgExample.eq("user_id", user.getUserId());
-                Org org = orgMapper.selectFirstByExample(orgExample);
+                Org org = clubService.selectFirstByExample(orgExample);
+                userIdentity.setUid(org.getOrgId());
+
+            } else if (authority == SystemRole.SAU) {
+                ExampleWrapper<Org> orgExample = new ExampleWrapper<>();
+                orgExample.eq("user_id", user.getUserId());
+                Org org = sauService.selectFirstByExample(orgExample);
                 userIdentity.setUid(org.getOrgId());
             }
 
+            user = new User();
+            user.setUserId(userIdentity.getAccId());
+            user.setLoginIp(record.getLoginIp());
+            user.setLoginTime(new Timestamp(record.getCurrentTime()));
+            int row = userService.updateByPrimaryKeySelective(user);
+            if (row != 1) throw new CRUDException("更新用户登录信息异常：" + row);
+
             SessionLocal.local(session).createUserIdentity(userIdentity);
             result.setResultState(Operation.SUCCESSFULLY);
-            result.setAuthority(user.getAuthority());
+            result.setAuthority(authority);
             return result;
         }
         return result;

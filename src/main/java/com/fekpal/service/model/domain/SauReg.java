@@ -37,7 +37,7 @@ public class SauReg extends BaseModel {
 
     private String code;
 
-    private long currentTime;
+    private Long currentTime;
 
     private MultipartFile auditFile;
 
@@ -141,11 +141,11 @@ public class SauReg extends BaseModel {
         this.code = code;
     }
 
-    public long getCurrentTime() {
+    public Long getCurrentTime() {
         return currentTime;
     }
 
-    public void setCurrentTime(long currentTime) {
+    public void setCurrentTime(Long currentTime) {
         this.currentTime = currentTime;
     }
 

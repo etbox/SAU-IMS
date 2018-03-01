@@ -5,10 +5,8 @@ import com.fekpal.dao.mapper.UserMapper;
 import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.dao.model.User;
 import com.fekpal.api.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -17,9 +15,6 @@ import java.util.List;
  */
 @Service
 public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implements UserService {
-
-    @Autowired
-    HttpSession session;
 
     @Override
     public User selectByUserName(String userName) {
@@ -64,6 +59,22 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         example.eq("email", email);
         int row = mapper.countByExample(example);
         return row >= 1;
+    }
+
+    @Override
+    public boolean isUnique(String userName, String email) {
+        ExampleWrapper<User> example = new ExampleWrapper<>();
+        example.eq("user_name", userName).or().eq("email", email);
+        int row = mapper.countByExample(example);
+        return row == 0;
+    }
+
+    @Override
+    public int updateLastLoginById(User user) {
+        if (user.getUserId() != null && user.getLoginIp() != null && user.getLoginTime() != null) {
+            return mapper.updateByPrimaryKeySelective(user);
+        }
+        return 0;
     }
 
     @Override

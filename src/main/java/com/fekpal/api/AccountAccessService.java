@@ -12,7 +12,7 @@ import java.io.OutputStream;
  * 账号认证接口
  * 该接口提供账号的登录，登出，验证码的操作
  */
-public interface AccountAccessService extends BaseService<User> {
+public interface AccountAccessService {
 
     /**
      * 用户身份信息进行用户登录

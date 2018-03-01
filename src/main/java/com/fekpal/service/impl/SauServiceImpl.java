@@ -30,6 +30,13 @@ public class SauServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements S
     @Autowired
     private HttpSession session;
 
+    @Override
+    public boolean isExitSauName(String name) {
+        ExampleWrapper<Org> example = new ExampleWrapper<>();
+        example.eq("org_name", name);
+        int row = mapper.countByExample(example);
+        return row >= 1;
+    }
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})

@@ -59,7 +59,20 @@ public class SecureMsg extends BaseModel {
     /**
      * 当前时间
      */
-    private long currentTime;
+    private Long currentTime;
+
+    /**
+     * 登录ip
+     */
+    private String loginIp;
+
+    public String getLoginIp() {
+        return loginIp;
+    }
+
+    public void setLoginIp(String loginIp) {
+        this.loginIp = loginIp;
+    }
 
     public String getNewPhone() {
         return newPhone;
@@ -133,11 +146,11 @@ public class SecureMsg extends BaseModel {
         this.captcha = captcha;
     }
 
-    public long getCurrentTime() {
+    public Long getCurrentTime() {
         return currentTime;
     }
 
-    public void setCurrentTime(long currentTime) {
+    public void setCurrentTime(Long currentTime) {
         this.currentTime = currentTime;
     }
 }

@@ -24,6 +24,14 @@ public interface SauService extends BaseService<Org> {
     String updateLogo(SauMsg msg);
 
     /**
+     * 是否有相同的校社联名称的校社联
+     *
+     * @param name 校社联名称
+     * @return 是否存在
+     */
+    boolean isExitSauName(String name);
+
+    /**
      * 更新校社联用户信息
      *
      * @param msg 校社联修改信息封装

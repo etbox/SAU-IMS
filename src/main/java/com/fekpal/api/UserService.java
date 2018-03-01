@@ -61,6 +61,24 @@ public interface UserService extends BaseService<User> {
     boolean isExitPhone(String phone);
 
     /**
+     * 是否不存在相同必要信息，既用户的关键信息唯一,尚未出现在数据库
+     *
+     * @param userName 用户名
+     * @param email    邮箱
+     * @return 是否成立
+     */
+    boolean isUnique(String userName, String email);
+
+    /**
+     * 根据用户标识更新用户最后一次登录信息
+     *
+     * @param user 用户身份记录
+     *             传入参数：用户标识 userId 登录ip loginIp 登录时间 loginTime
+     * @return 更新状态
+     */
+    int updateLastLoginById(User user);
+
+    /**
      * 获取所有用户身份记录集，按分页获取
      *
      * @param offset Integer 跳过读数

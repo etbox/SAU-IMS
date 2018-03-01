@@ -1,11 +1,7 @@
 package com.fekpal.service.impl;
 
-import com.fekpal.api.ClubService;
-import com.fekpal.api.RegisterService;
-import com.fekpal.api.UserService;
-import com.fekpal.common.base.BaseServiceImpl;
+import com.fekpal.api.*;
 import com.fekpal.common.base.CRUDException;
-import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.common.constant.*;
 import com.fekpal.common.utils.FileUtil;
 import com.fekpal.common.utils.MD5Util;
@@ -14,7 +10,6 @@ import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.common.utils.captcha.Captcha;
 import com.fekpal.common.utils.msg.email.EmailMsg;
 import com.fekpal.common.utils.msg.email.EmailSender;
-import com.fekpal.dao.mapper.*;
 import com.fekpal.dao.model.*;
 import com.fekpal.service.model.domain.ClubReg;
 import com.fekpal.service.model.domain.PersonReg;
@@ -32,19 +27,10 @@ import javax.servlet.http.HttpSession;
  * Created by APone on 2018/2/9 0:42.
  */
 @Service
-public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> implements RegisterService {
+public class RegisterServiceImpl implements RegisterService {
 
     @Autowired
     HttpSession session;
-
-    @Autowired
-    private OrgMapper orgMapper;
-
-    @Autowired
-    private PersonMapper personMapper;
-
-    @Autowired
-    private ClubAuditMapper clubAuditMapper;
 
     @Autowired
     private EmailSender emailSender;
@@ -53,7 +39,16 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
     private UserService userService;
 
     @Autowired
+    private PersonService personService;
+
+    @Autowired
     private ClubService clubService;
+
+    @Autowired
+    private SauService sauService;
+
+    @Autowired
+    private ClubAuditService clubAuditService;
 
     /**
      * 社团注册
@@ -67,6 +62,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
 
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public UniqueRegMsg checkExitInfo(UniqueRegMsg msg) {
         UniqueRegMsg result = new UniqueRegMsg();
         if (msg.getUserName() != null && userService.isExitAccount(msg.getUserName())) {
@@ -84,18 +80,17 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int insertPersonReg(PersonReg reg) {
-        //检测注册信息是否存在已被注册
-        ExampleWrapper<User> example = new ExampleWrapper<>();
-        example.eq("user_name", reg.getUserName());
-        int exitCount = mapper.countByExample(example);
-        if (exitCount != 0) return Operation.FAILED;
-
         SessionContent.Captcha captcha = SessionContent.createCaptcha();
         captcha.setAuthorize(reg.getUserName());
         captcha.setCode(reg.getCaptcha());
         captcha.setCurrentTime(reg.getCurrentTime());
         if (!isValidCaptcha(captcha, PERSON_REG)) {
             return Operation.CAPTCHA_INCORRECT;
+        }
+
+        //检测注册信息是否存在已被注册
+        if (!userService.isUnique(reg.getUserName(), reg.getUserName())) {
+            return Operation.FAILED;
         }
 
         //开始进行注册信息插入
@@ -112,7 +107,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         user.setAuthority(SystemRole.PERSON);
         user.setUserState(AvailableState.AVAILABLE);
         user.setUserKey(salt);
-        int row = mapper.insert(user);
+        int row = userService.insert(user);
 
         Person person = new Person();
         person.setUserId(user.getUserId());
@@ -121,10 +116,9 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         person.setLogo(DefaultField.DEFAULT_LOGO);
         person.setGender(DefaultField.DEFAULT_GENDER);
         person.setBirthday(DefaultField.DEFAULT_TIME);
-        row += personMapper.insert(person);
+        row += personService.insert(person);
 
         if (row != 2) throw new CRUDException("普通用户注册数据插入数量异常，数量：" + row);
-
         //注册成功后直接存储注册用户身份会话信息，以便直接自动登录
         SessionContent.UserIdentity identity = SessionContent.createUID();
         identity.setAccId(user.getUserId());
@@ -138,14 +132,9 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int insertSauReg(SauReg reg) {
         //检测注册信息是否存在已被注册
-        ExampleWrapper<User> userExample = new ExampleWrapper<>();
-        userExample.eq("user_name", reg.getUserName()).or().eq("email", reg.getEmail());
-        int exitCount = mapper.countByExample(userExample);
-
-        ExampleWrapper<Org> sauExample = new ExampleWrapper<>();
-        sauExample.eq("org_name", reg.getSauName());
-        exitCount += orgMapper.countByExample(sauExample);
-        if (exitCount != 0) return Operation.FAILED;
+        if (!userService.isUnique(reg.getUserName(), reg.getEmail()) || sauService.isExitSauName(reg.getSauName())) {
+            return Operation.FAILED;
+        }
 
         String salt = RandomUtil.createSalt();
         User user = new User();
@@ -161,7 +150,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         //测试使用，为直接通过注册
         user.setUserState(AvailableState.AVAILABLE);
         user.setUserKey(salt);
-        int row = mapper.insert(user);
+        int row = userService.insert(user);
 
         Org org = new Org();
         org.setUserId(user.getUserId());
@@ -177,7 +166,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         //测试用，可直接注册有效
         org.setOrgState(AvailableState.AVAILABLE);
         org.setOrgAuth(SystemRole.SAU);
-        row += orgMapper.insert(org);
+        row += sauService.insert(org);
 
         if (row != 2) throw new CRUDException("校社联用户注册数据插入数量异常，数量：" + row);
         return Operation.SUCCESSFULLY;
@@ -186,22 +175,17 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int insertClubReg(ClubReg reg) {
-        //检测注册信息是否存在已被注册
-        ExampleWrapper<User> userExample = new ExampleWrapper<>();
-        userExample.eq("user_name", reg.getUserName()).or().eq("email", reg.getEmail());
-        int exitCount = mapper.countByExample(userExample);
-
-        ExampleWrapper<Org> clubExample = new ExampleWrapper<>();
-        clubExample.eq("org_name", reg.getClubName());
-        exitCount += orgMapper.countByExample(clubExample);
-        if (exitCount != 0) return Operation.FAILED;
-
         SessionContent.Captcha captcha = SessionContent.createCaptcha();
         captcha.setAuthorize(reg.getEmail());
         captcha.setCode(reg.getCaptcha());
         captcha.setCurrentTime(reg.getCurrentTime());
         if (!isValidCaptcha(captcha, CLUB_REG)) {
             return Operation.CAPTCHA_INCORRECT;
+        }
+
+        //检测注册信息是否存在已被注册
+        if (!userService.isUnique(reg.getUserName(), reg.getEmail()) || clubService.isExitClubName(reg.getClubName())) {
+            return Operation.FAILED;
         }
 
         String salt = RandomUtil.createSalt();
@@ -218,7 +202,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         //测试使用，为直接通过注册
         user.setUserState(AvailableState.AVAILABLE);
         user.setUserKey(salt);
-        int row = mapper.insert(user);
+        int row = userService.insert(user);
 
         Org org = new Org();
         org.setUserId(user.getUserId());
@@ -236,7 +220,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         org.setMembers(DefaultField.DEFAULT_MEMBERS);
         org.setLikeClick(DefaultField.DEFAULT_MEMBERS);
         org.setOrgAuth(SystemRole.CLUB);
-        row += orgMapper.insert(org);
+        row += clubService.insert(org);
 
         String auditFileName;
         try {
@@ -256,7 +240,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         clubAudit.setAuditState(AvailableState.AVAILABLE);
         clubAudit.setOrgId(org.getOrgId());
         clubAudit.setFile(auditFileName);
-        row += clubAuditMapper.insert(clubAudit);
+        row += clubAuditService.insert(clubAudit);
 
         if (row != 3) throw new CRUDException("社团用户注册数据插入数量异常，数量：" + row);
         return Operation.SUCCESSFULLY;
@@ -271,10 +255,7 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
     private boolean isValidCaptcha(SessionContent.Captcha captcha, final String type) {
         SessionLocal sessionLocal = SessionLocal.local(session);
         boolean isValid = sessionLocal.isValidCaptchaWithAuth(captcha, type);
-        //正确则清除原有验证信息
-        if (isValid) {
-            sessionLocal.clear(type);
-        }
+        if (isValid) sessionLocal.clear(type);
         return isValid;
     }
 
@@ -285,11 +266,8 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
      * @param type   注册种类
      * @param common 对象类型
      */
-    private void sendRegCaptchaByEmail(String email, final String type, String common) {
-        ExampleWrapper<User> example = new ExampleWrapper<>();
-        example.eq("email", email);
-        int row = mapper.countByExample(example);
-        if (row != 0) return;
+    private int sendRegCaptchaByEmail(String email, final String type, String common) {
+        if (userService.isExitEmail(email)) return Operation.FAILED;
 
         String code = new Captcha().getCode();
         SessionContent.Captcha captcha = SessionContent.createCaptcha();
@@ -304,15 +282,16 @@ public class RegisterServiceImpl extends BaseServiceImpl<UserMapper, User> imple
         msg.setText("您获取的验证码为：" + code + "\n10分钟内有效，如果不是您提出的注册申请，请留意");
         msg.setTo(email);
         emailSender.send(msg);
+        return Operation.SUCCESSFULLY;
     }
 
     @Override
-    public void sendClubEmailCaptcha(String email) {
-        sendRegCaptchaByEmail(email, CLUB_REG, "社团");
+    public int sendClubEmailCaptcha(String email) {
+        return sendRegCaptchaByEmail(email, CLUB_REG, "社团");
     }
 
     @Override
-    public void sendPersonEmailCaptcha(String email) {
-        sendRegCaptchaByEmail(email, PERSON_REG, "普通");
+    public int sendPersonEmailCaptcha(String email) {
+        return sendRegCaptchaByEmail(email, PERSON_REG, "普通");
     }
 }

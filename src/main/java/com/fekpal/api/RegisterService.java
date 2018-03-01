@@ -1,8 +1,6 @@
 package com.fekpal.api;
 
-import com.fekpal.common.base.BaseService;
 import com.fekpal.dao.model.UniqueRegMsg;
-import com.fekpal.dao.model.User;
 import com.fekpal.service.model.domain.ClubReg;
 import com.fekpal.service.model.domain.PersonReg;
 import com.fekpal.service.model.domain.SauReg;
@@ -12,10 +10,11 @@ import com.fekpal.service.model.domain.SauReg;
  * 注册服务接口
  * 该接口用于提供注册普通用户，社团用户，校社联用户，以及发送注册验证码的操作
  */
-public interface RegisterService extends BaseService<User> {
+public interface RegisterService {
 
     /**
      * 检测参数是否存在相同，不唯一
+     *
      * @param msg 唯一信息封装
      * @return 信息提示
      */
@@ -27,7 +26,7 @@ public interface RegisterService extends BaseService<User> {
      * @param reg 普通注册信息封装
      *            传入参数：用户名userName，密码password，邮箱地址email，验证码captcha，当前时间currentTime，
      *            登录地址loginIp，登录时间loginTime，注册地址registerIp，注册时间registerTime
-     * @return 注册状态 Operation.SUCCESSFULLY 成功 Operation.CAPTCHA_INCORRECT 验证码错误
+     * @return 注册状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败 Operation.CAPTCHA_INCORRECT 验证码错误
      */
     int insertPersonReg(PersonReg reg);
 
@@ -38,7 +37,7 @@ public interface RegisterService extends BaseService<User> {
      *            传入参数：用户名userName，密码password，社长adminName，邮箱地址email，手机号码phone，
      *            校社联名称sauName，描述description，验证码captcha，当前时间currentTime，校社联注册审核文件auditFile，
      *            登录地址loginIp，登录时间loginTime，注册地址registerIp，注册时间registerTime
-     * @return 注册状态 Operation.SUCCESSFULLY 成功 Operation.CAPTCHA_INCORRECT 验证码错误
+     * @return 注册状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败 Operation.CAPTCHA_INCORRECT 验证码错误
      */
     int insertSauReg(SauReg reg);
 
@@ -50,7 +49,7 @@ public interface RegisterService extends BaseService<User> {
      *            社团名称clubName，社团类型clubType，描述description，验证码captcha，当前时间currentTime，
      *            社团注册审核文件auditFile，登录地址loginIp，登录时间loginTime，注册地址registerIp，
      *            注册时间registerTime
-     * @return 注册状态 Operation.SUCCESSFULLY 成功 Operation.CAPTCHA_INCORRECT 验证码错误
+     * @return 注册状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败 Operation.CAPTCHA_INCORRECT 验证码错误
      */
     int insertClubReg(ClubReg reg);
 
@@ -58,13 +57,15 @@ public interface RegisterService extends BaseService<User> {
      * 邮箱发送普通用户注册验证码
      *
      * @param email 邮箱地址
+     * @return 发送状态状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
      */
-    void sendClubEmailCaptcha(String email);
+    int sendClubEmailCaptcha(String email);
 
     /**
      * 邮箱发送社团用户注册验证码
      *
      * @param email 邮箱地址
+     * @return 发送状态状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
      */
-    void sendPersonEmailCaptcha(String email);
+    int sendPersonEmailCaptcha(String email);
 }

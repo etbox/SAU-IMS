@@ -1,7 +1,6 @@
 package com.fekpal.service.impl;
 
-import com.fekpal.api.AccountSecureService;
-import com.fekpal.common.base.BaseServiceImpl;
+import com.fekpal.api.*;
 import com.fekpal.common.base.CRUDException;
 import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.common.constant.Operation;
@@ -12,8 +11,6 @@ import com.fekpal.common.utils.captcha.Captcha;
 import com.fekpal.common.utils.captcha.CaptchaUtil;
 import com.fekpal.common.utils.msg.email.EmailMsg;
 import com.fekpal.common.utils.msg.email.EmailSender;
-import com.fekpal.dao.mapper.OrgMapper;
-import com.fekpal.dao.mapper.UserMapper;
 import com.fekpal.dao.model.Org;
 import com.fekpal.dao.model.User;
 import com.fekpal.service.model.domain.SecureMsg;
@@ -30,7 +27,7 @@ import javax.servlet.http.HttpSession;
  * Created by APone on 2018/2/7 2:06.
  */
 @Service
-public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> implements AccountSecureService {
+public class AccountSecureServiceImpl implements AccountSecureService {
 
     @Autowired
     private HttpSession session;
@@ -39,7 +36,13 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
     private EmailSender emailSender;
 
     @Autowired
-    private OrgMapper orgMapper;
+    private UserService userService;
+
+    @Autowired
+    private ClubService clubService;
+
+    @Autowired
+    private SauService sauService;
 
     /**
      * 忘记密码
@@ -81,23 +84,20 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
 
         ExampleWrapper<User> example = new ExampleWrapper<>();
         example.eq("email", email);
-        User user = mapper.selectFirstByExample(example);
+        User user = userService.selectFirstByExample(example);
         String salt = user.getUserKey();
         user = new User();
         user.setUserId(user.getUserId());
         user.setPassword(MD5Util.encryptPwd(msg.getNewPassword(), salt));
 
-        int row = mapper.updateByPrimaryKeySelective(user);
+        int row = userService.updateByPrimaryKeySelective(user);
         if (row > 1) throw new CRUDException("更新数量异常，数量" + row);
         return row == 0 ? Operation.FAILED : Operation.SUCCESSFULLY;
     }
 
     @Override
     public int forgetPwdByEmail(SecureMsg msg) {
-        ExampleWrapper<User> example = new ExampleWrapper<>();
-        example.eq("email", msg.getEmail());
-        int row = mapper.countByExample(example);
-        if (row != 1) return Operation.FAILED;
+        if (!userService.isExitEmail(msg.getEmail())) return Operation.FAILED;
 
         String code = CaptchaUtil.create().getCode();
         SessionContent.Captcha captcha = SessionContent.createCaptcha();
@@ -119,7 +119,7 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int modifyPwd(SecureMsg msg) {
         int accId = SessionLocal.local(session).getUserIdentity().getAccId();
-        User user = mapper.selectByPrimaryKey(accId);
+        User user = userService.selectByPrimaryKey(accId);
         String salt = user.getUserKey();
         if (!user.getPassword().equals(MD5Util.encryptPwd(msg.getOldPassword(), salt))) {
             return Operation.FAILED;
@@ -128,7 +128,7 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
         user = new User();
         user.setUserId(accId);
         user.setPassword(MD5Util.encryptPwd(msg.getNewPassword(), salt));
-        int row = mapper.updateByPrimaryKeySelective(user);
+        int row = userService.updateByPrimaryKeySelective(user);
         if (row > 1) throw new CRUDException("更新密码失败：" + row);
         return row == 0 ? Operation.FAILED : Operation.SUCCESSFULLY;
     }
@@ -136,7 +136,7 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
     @Override
     public int sendModifyEmailCaptcha() {
         int accId = SessionLocal.local(session).getUserIdentity().getAccId();
-        User user = mapper.selectByPrimaryKey(accId);
+        User user = userService.selectByPrimaryKey(accId);
         if (user == null) return Operation.FAILED;
 
         String code = new Captcha().getCode();
@@ -164,29 +164,34 @@ public class AccountSecureServiceImpl extends BaseServiceImpl<UserMapper, User> 
             return Operation.CAPTCHA_INCORRECT;
         }
 
-        ExampleWrapper<User> example = new ExampleWrapper<>();
-        example.eq("email", msg.getNewEmail());
-        int exit = mapper.countByExample(example);
-        if (exit != 0) return Operation.FAILED;
+        if (userService.isExitEmail(msg.getEmail())) return Operation.FAILED;
 
         SessionContent.UserIdentity userIdentity = SessionLocal.local(session).getUserIdentity();
         User user = new User();
         user.setUserId(userIdentity.getAccId());
         user.setEmail(msg.getNewEmail());
-        int row = mapper.updateByPrimaryKeySelective(user);
+        int row = userService.updateByPrimaryKeySelective(user);
 
         int auth = userIdentity.getAuth();
-        if (auth == SystemRole.CLUB || auth == SystemRole.SAU) {
+        if (auth == SystemRole.SAU) {
             Org org = new Org();
             org.setOrgId(userIdentity.getUid());
             org.setContactEmail(msg.getNewEmail());
-            row += orgMapper.updateByPrimaryKeySelective(org);
-            if (row > 2 || row == 1) throw new CRUDException("更新邮箱异常，数量：" + row);
+            row += sauService.updateByPrimaryKeySelective(org);
+            if (row > 2 || row == 1) throw new CRUDException("更新社团邮箱异常，数量：" + row);
+
+        } else if (auth == SystemRole.CLUB) {
+            Org org = new Org();
+            org.setOrgId(userIdentity.getUid());
+            org.setContactEmail(msg.getNewEmail());
+            row += clubService.updateByPrimaryKeySelective(org);
+            if (row > 2 || row == 1) throw new CRUDException("更新校社联邮箱异常，数量：" + row);
+
         } else if (auth == SystemRole.PERSON) {
             user = new User();
             user.setUserId(userIdentity.getAccId());
             user.setUserName(msg.getNewEmail());
-            row += mapper.updateByPrimaryKeySelective(user);
+            row += userService.updateByPrimaryKeySelective(user);
             if (row > 2 || row == 1) throw new CRUDException("更新普通邮箱异常，数量：" + row);
         }
         return row == 0 ? Operation.FAILED : Operation.SUCCESSFULLY;

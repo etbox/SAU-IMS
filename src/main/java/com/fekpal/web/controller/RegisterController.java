@@ -37,9 +37,13 @@ public class RegisterController {
     @ResponseBody
     @RequestMapping(value = "/reg/person/captcha", method = RequestMethod.POST)
     public JsonResult<String> sendPersonCaptcha(@RequestBody CaptchaMsg msg) {
-        registerService.sendPersonEmailCaptcha(msg.getEmail());
+        int state = registerService.sendPersonEmailCaptcha(msg.getEmail());
         JsonResult<String> result = new JsonResult<>();
-        result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "验证码发送成功");
+        if (state == Operation.SUCCESSFULLY) {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "验证码发送成功");
+        } else if (state == Operation.FAILED) {
+            result.setStateCode(ResponseCode.RESPONSE_ERROR, "此邮箱已被注册");
+        }
         return result;
     }
 
@@ -52,9 +56,13 @@ public class RegisterController {
     @ResponseBody
     @RequestMapping(value = "/reg/club/captcha", method = RequestMethod.POST)
     public JsonResult<String> sendClubCaptcha(@RequestBody CaptchaMsg msg) {
-        registerService.sendClubEmailCaptcha(msg.getEmail());
+        int state = registerService.sendClubEmailCaptcha(msg.getEmail());
         JsonResult<String> result = new JsonResult<>();
-        result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "验证码发送成功");
+        if (state == Operation.SUCCESSFULLY) {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "验证码发送成功");
+        } else if (state == Operation.FAILED) {
+            result.setStateCode(ResponseCode.RESPONSE_ERROR, "此邮箱已被注册");
+        }
         return result;
     }
 

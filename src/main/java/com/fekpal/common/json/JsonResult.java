@@ -27,18 +27,12 @@ public class JsonResult<Result> implements Serializable {
     private Result data;
 
     /**
-     * 跳转路径
-     */
-    private String url;
-
-    /**
      * 构造函数
      */
     public JsonResult() {
         this.code = 0;
         this.msg = "";
         this.data = null;
-        this.url = "";
     }
 
     /**
@@ -50,14 +44,6 @@ public class JsonResult<Result> implements Serializable {
     public void setStateCode(int code, String msg) {
         this.code = code;
         this.msg = msg;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
     }
 
     public int getCode() {

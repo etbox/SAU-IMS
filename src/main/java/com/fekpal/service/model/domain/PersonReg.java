@@ -18,7 +18,7 @@ public class PersonReg extends BaseModel {
 
     private String captcha;
 
-    private long currentTime;
+    private Long currentTime;
 
     private Timestamp loginTime;
 
@@ -88,11 +88,11 @@ public class PersonReg extends BaseModel {
         this.captcha = captcha;
     }
 
-    public long getCurrentTime() {
+    public Long getCurrentTime() {
         return currentTime;
     }
 
-    public void setCurrentTime(long currentTime) {
+    public void setCurrentTime(Long currentTime) {
         this.currentTime = currentTime;
     }
 }

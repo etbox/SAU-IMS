@@ -4,8 +4,8 @@ import com.fekpal.api.AccountAccessService;
 
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.constant.ResponseCode;
-import com.fekpal.common.constant.SystemRole;
 import com.fekpal.common.json.JsonResult;
+import com.fekpal.common.utils.IPUtil;
 import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.service.model.domain.SecureMsg;
 import com.fekpal.service.model.domain.LoginResult;
@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -34,9 +35,10 @@ public class LoginController {
      */
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public JsonResult<String> login(@RequestBody SecureMsg msg) {
+    public JsonResult<Integer> login(@RequestBody SecureMsg msg, HttpServletRequest request) {
         msg.setCurrentTime(TimeUtil.currentTime());
-        JsonResult<String> result = new JsonResult<>();
+        msg.setLoginIp(IPUtil.getUserIP(request));
+        JsonResult<Integer> result = new JsonResult<>();
 
         LoginResult state = accountAccessService.login(msg);
         if (state.getResultState() == Operation.CAPTCHA_INCORRECT) {
@@ -45,14 +47,7 @@ public class LoginController {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "用户名或密码错误");
         } else if (state.getResultState() == Operation.SUCCESSFULLY) {
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "登录成功");
-
-            if (state.getAuthority() == SystemRole.CLUB) {
-                result.setUrl("club.html");
-            } else if (state.getAuthority() == SystemRole.PERSON) {
-                result.setUrl("person.html");
-            } else if (state.getAuthority() == SystemRole.SAU) {
-                result.setUrl("sau.html");
-            }
+            result.setData(state.getAuthority());
         }
         return result;
     }
@@ -77,7 +72,7 @@ public class LoginController {
      * @return json数据
      */
     @ResponseBody
-    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public JsonResult<String> logout() {
         JsonResult<String> result = new JsonResult<>();
         if (accountAccessService.logout()) {

@@ -9,7 +9,7 @@ import com.fekpal.service.model.domain.SecureMsg;
  * 账号安全服务接口
  * 该接口提供账号用户安全修改操作
  */
-public interface AccountSecureService extends BaseService<User> {
+public interface AccountSecureService {
 
     /**
      * 重置身份记录密码,适用于未登录的用户

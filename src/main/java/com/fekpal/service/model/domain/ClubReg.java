@@ -39,7 +39,7 @@ public class ClubReg extends BaseModel {
 
     private String captcha;
 
-    private long currentTime;
+    private Long currentTime;
 
     private MultipartFile file;
 
@@ -159,11 +159,11 @@ public class ClubReg extends BaseModel {
         this.captcha = captcha;
     }
 
-    public long getCurrentTime() {
+    public Long getCurrentTime() {
         return currentTime;
     }
 
-    public void setCurrentTime(long currentTime) {
+    public void setCurrentTime(Long currentTime) {
         this.currentTime = currentTime;
     }
 }
