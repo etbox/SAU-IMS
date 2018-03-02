@@ -11,7 +11,7 @@ import java.util.*;
  * Created by hasee on 2017/8/23.
  */
 @Controller
-public class SauClubMsgController {
+public class SauSendCustomMsgController {
 
     /**
      * 返回社团信息列表的方法

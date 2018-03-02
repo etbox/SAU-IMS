@@ -11,7 +11,7 @@ import java.util.*;
  * Created by hasee on 2017/8/26.
  */
 @Controller
-public class SauMsgPublicController {
+public class SauSendPublicMsgController {
 
     /**
      * 根据用户id和消息类型，返回发布对象

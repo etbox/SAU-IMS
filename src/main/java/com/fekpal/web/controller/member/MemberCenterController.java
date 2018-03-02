@@ -2,6 +2,7 @@ package com.fekpal.web.controller.member;
 
 import com.fekpal.api.PersonService;
 import com.fekpal.common.json.JsonResult;
+import com.fekpal.service.model.domain.PersonMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,12 +41,12 @@ public class MemberCenterController {
     /**
      * 上传成员个人头像的方法
      *
-     * @param files   文件对象
+     * @param msg 普通用户信息封装
      * @return 图片文件名
      */
     @ResponseBody
     @RequestMapping(value = "/member/center/info/head", method = RequestMethod.POST)
-    public Map<String, Object> uploadLogo(@RequestParam("file") MultipartFile[] files) {
+    public JsonResult<String> uploadLogo(PersonMsg msg) {
 
         return null;
     }
@@ -53,12 +54,12 @@ public class MemberCenterController {
     /**
      * 普通成员或者社团成员用来提交修改个人中心的信息
      *
-     * @param memberCenterMsg 个人中心信息
+     * @param msg 普通用户信息封装
      * @return 是否提交成功
      */
     @ResponseBody
     @RequestMapping(value = "/member/center/info", method = RequestMethod.PUT)
-    public Map<String, Object> subNewCenterMsg(@RequestParam Map<String, Object> memberCenterMsg) {
+    public Map<String, Object> subNewCenterMsg(PersonMsg msg) {
 
         return null;
     }

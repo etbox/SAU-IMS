@@ -14,7 +14,7 @@ import java.util.*;
  * Created by hasee on 2017/8/22.
  */
 @Controller
-public class NewMsgController {
+public class ReceiveMsgController {
 
     @Autowired
     private MessageSendService messageSendService;

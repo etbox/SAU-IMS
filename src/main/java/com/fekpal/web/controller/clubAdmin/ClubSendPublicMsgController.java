@@ -16,7 +16,7 @@ import java.util.*;
  * Created by hasee on 2017/8/26.
  */
 @Controller
-public class ClubMsgPublicController {
+public class ClubSendPublicMsgController {
 
     @Autowired
     private MessageSendService messageSendService;
