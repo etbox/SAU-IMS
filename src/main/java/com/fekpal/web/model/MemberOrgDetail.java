@@ -13,6 +13,8 @@ public class MemberOrgDetail extends BaseModel {
 
     private static final long serialVersionUID = 5789348944392927037L;
 
+    private int orgId;
+
     private String orgName;
 
     private String logo;
@@ -26,6 +28,14 @@ public class MemberOrgDetail extends BaseModel {
     private Timestamp leaveTime;
 
     private String orgDepartment;
+
+    public int getOrgId() {
+        return orgId;
+    }
+
+    public void setOrgId(int orgId) {
+        this.orgId = orgId;
+    }
 
     public String getOrgName() {
         return orgName;

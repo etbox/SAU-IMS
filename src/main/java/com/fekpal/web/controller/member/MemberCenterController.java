@@ -113,6 +113,7 @@ public class MemberCenterController {
         List<MemberOrgDetail> details = new ArrayList<>();
         for (MemberOrg memberOrg : list) {
             MemberOrgDetail detail = new MemberOrgDetail();
+            detail.setOrgId(memberOrg.getOrgId());
             detail.setOrgName(memberOrg.getOrgName());
             detail.setOrgDepartment(memberOrg.getOrgDepartment());
             detail.setJoinTime(memberOrg.getJoinTime());

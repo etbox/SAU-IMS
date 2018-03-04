@@ -1,6 +1,6 @@
 package com.fekpal.api;
 
-import com.fekpal.dao.model.UniqueRegMsg;
+import com.fekpal.dao.model.UniqueMsg;
 import com.fekpal.service.model.domain.ClubReg;
 import com.fekpal.service.model.domain.PersonReg;
 import com.fekpal.service.model.domain.SauReg;
@@ -18,7 +18,7 @@ public interface RegisterService {
      * @param msg 唯一信息封装
      * @return 信息提示
      */
-    UniqueRegMsg checkExitInfo(UniqueRegMsg msg);
+    UniqueMsg checkExitInfo(UniqueMsg msg);
 
     /**
      * 注册普通用户

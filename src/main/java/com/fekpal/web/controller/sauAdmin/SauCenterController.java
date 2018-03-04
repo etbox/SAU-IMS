@@ -7,7 +7,7 @@ import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
 import com.fekpal.dao.model.Org;
 import com.fekpal.service.model.domain.SauMsg;
-import com.fekpal.web.model.SauDetail;
+import com.fekpal.web.model.OrgDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -48,21 +48,22 @@ public class SauCenterController {
      */
     @ResponseBody
     @RequestMapping(value = "/sau/center/info", method = RequestMethod.GET)
-    public JsonResult<List<SauDetail>> getSauCenterMsg() {
+    public JsonResult<List<OrgDetail>> getSauCenterMsg() {
         List<Org> list = sauService.loadAllSau(0, 1);
 
-        JsonResult<List<SauDetail>> result = new JsonResult<>();
+        JsonResult<List<OrgDetail>> result = new JsonResult<>();
         if (list == null || list.size() == 0) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
         } else {
-            List<SauDetail> sauDetails = new ArrayList<>();
+            List<OrgDetail> sauDetails = new ArrayList<>();
             for (Org sau : list) {
-                SauDetail sauDetail = new SauDetail();
-                sauDetail.setSauName(sau.getOrgName());
+                OrgDetail sauDetail = new OrgDetail();
+                sauDetail.setOrgName(sau.getOrgName());
                 sauDetail.setLogo(sau.getOrgLogo());
                 sauDetail.setDescription(sau.getDescription());
                 sauDetail.setAdminName(sau.getAdminName());
-                sauDetail.setContactEmail(sau.getContactEmail());
+                sauDetail.setEmail(sau.getContactEmail());
+                sauDetail.setPhone(sau.getContactNumber());
                 sauDetail.setFoundTime(sau.getFoundTime());
                 sauDetail.setMembers(sau.getMembers());
                 sauDetails.add(sauDetail);

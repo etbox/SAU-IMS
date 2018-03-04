@@ -63,8 +63,8 @@ public class RegisterServiceImpl implements RegisterService {
 
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
-    public UniqueRegMsg checkExitInfo(UniqueRegMsg msg) {
-        UniqueRegMsg result = new UniqueRegMsg();
+    public UniqueMsg checkExitInfo(UniqueMsg msg) {
+        UniqueMsg result = new UniqueMsg();
         if (msg.getUserName() != null && userService.isExitAccount(msg.getUserName())) {
             result.setUserName("该用户名已被注册");
         }

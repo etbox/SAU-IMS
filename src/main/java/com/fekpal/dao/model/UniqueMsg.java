@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  * 既该字段的信息在数据库中是唯一的
  */
 @Component
-public class UniqueRegMsg extends BaseModel{
+public class UniqueMsg extends BaseModel{
 
     private static final long serialVersionUID = 7855293806664844884L;
 

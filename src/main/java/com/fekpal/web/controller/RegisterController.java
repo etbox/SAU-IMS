@@ -6,7 +6,7 @@ import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
 import com.fekpal.common.utils.IPUtil;
 import com.fekpal.common.utils.TimeUtil;
-import com.fekpal.dao.model.UniqueRegMsg;
+import com.fekpal.dao.model.UniqueMsg;
 import com.fekpal.service.model.domain.ClubReg;
 import com.fekpal.service.model.domain.PersonReg;
 import com.fekpal.service.model.domain.SauReg;
@@ -145,9 +145,9 @@ public class RegisterController {
      */
     @ResponseBody
     @RequestMapping(value = "/reg/check", method = RequestMethod.POST)
-    public JsonResult<UniqueRegMsg> checkExit(@RequestBody UniqueRegMsg msg) {
-        UniqueRegMsg data = registerService.checkExitInfo(msg);
-        JsonResult<UniqueRegMsg> result = new JsonResult<>();
+    public JsonResult<UniqueMsg> checkExit(@RequestBody UniqueMsg msg) {
+        UniqueMsg data = registerService.checkExitInfo(msg);
+        JsonResult<UniqueMsg> result = new JsonResult<>();
         result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "检测成功");
         result.setData(data);
         return result;
