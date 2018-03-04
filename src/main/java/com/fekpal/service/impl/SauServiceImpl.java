@@ -44,7 +44,7 @@ public class SauServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements S
         ExampleWrapper<Org> example = new ExampleWrapper<>();
         example.eq("org_name", msg.getSauName());
         int row = mapper.countByExample(example);
-        if (row != 0) return Operation.FAILED;
+        if (row != 0) return Operation.INPUT_INCORRECT;
 
         int uid = SessionLocal.local(session).getUserIdentity().getUid();
         Org org = new Org();
@@ -55,8 +55,8 @@ public class SauServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements S
         org.setFoundTime(msg.getFoundTime());
         row = mapper.updateByPrimaryKeySelective(org);
 
-        if (row != 1) throw new CRUDException("更新校社联信息失败：" + row);
-        return Operation.SUCCESSFULLY;
+        if (row > 1) throw new CRUDException("更新校社联信息失败：" + row);
+        return row == 0 ? Operation.FAILED : Operation.SUCCESSFULLY;
     }
 
     @Override

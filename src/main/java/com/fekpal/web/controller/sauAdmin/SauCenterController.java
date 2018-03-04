@@ -32,14 +32,12 @@ public class SauCenterController {
      */
     @ResponseBody
     @RequestMapping(value = "/sau/center/info/head", method = RequestMethod.POST)
-    public JsonResult<Map<String, String>> uploadLogo(@ModelAttribute SauMsg sauMsg) {
+    public JsonResult<String> uploadLogo(@ModelAttribute SauMsg sauMsg) {
         String logoName = sauService.updateLogo(sauMsg);
-        Map<String, String> map = new HashMap<>();
-        map.put("logo", logoName);
 
-        JsonResult<Map<String, String>> result = new JsonResult<>();
+        JsonResult<String> result = new JsonResult<>();
         result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "更新头像成功");
-        result.setData(map);
+        result.setData(logoName);
         return result;
     }
 
@@ -85,11 +83,14 @@ public class SauCenterController {
     @RequestMapping(value = "/sau/center/info", method = RequestMethod.PUT)
     public JsonResult<String> subNewCenterMsg(@RequestBody SauMsg sauMsg) {
         int state = sauService.updateSauInfo(sauMsg);
+
         JsonResult<String> result = new JsonResult<>();
         if (state == Operation.SUCCESSFULLY) {
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "修改成功");
         } else if (state == Operation.FAILED) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "修改失败");
+        } else if (state == Operation.INPUT_INCORRECT) {
+            result.setStateCode(ResponseCode.RESPONSE_ERROR, "校社联名称已被使用");
         }
         return result;
     }

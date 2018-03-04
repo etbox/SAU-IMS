@@ -1,16 +1,15 @@
-package com.fekpal.service.model.domain;
+package com.fekpal.web.model;
 
 import com.fekpal.common.base.BaseModel;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;
 
 /**
- * Created by APone on 2018/2/23 16:50.
+ * Created by APone on 2018/3/4 14:06.
  */
-public class PersonMsg extends BaseModel {
+public class PersonDetail extends BaseModel {
 
-    private static final long serialVersionUID = -4430170524723540991L;
+    private static final long serialVersionUID = -7196594701803590414L;
 
     private String realName;
 
@@ -32,7 +31,7 @@ public class PersonMsg extends BaseModel {
 
     private Integer enrollmentYear;
 
-    private MultipartFile logo;
+    private String logo;
 
     public String getRealName() {
         return realName;
@@ -114,11 +113,11 @@ public class PersonMsg extends BaseModel {
         this.enrollmentYear = enrollmentYear;
     }
 
-    public MultipartFile getLogo() {
+    public String getLogo() {
         return logo;
     }
 
-    public void setLogo(MultipartFile logo) {
+    public void setLogo(String logo) {
         this.logo = logo;
     }
 }

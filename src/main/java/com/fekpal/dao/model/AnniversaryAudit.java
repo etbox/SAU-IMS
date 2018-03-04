@@ -12,6 +12,8 @@ public class AnniversaryAudit extends BaseModel {
 
     private Integer orgId;
 
+    private String auditTitle;
+
     private String fileName;
 
     private Integer auditState;
@@ -23,6 +25,14 @@ public class AnniversaryAudit extends BaseModel {
     private Timestamp submitTime;
 
     private String submitDescription;
+
+    public String getAuditTitle() {
+        return auditTitle;
+    }
+
+    public void setAuditTitle(String auditTitle) {
+        this.auditTitle = auditTitle;
+    }
 
     public Integer getId() {
         return id;

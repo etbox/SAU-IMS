@@ -36,7 +36,7 @@ public interface ClubService extends BaseService<Org> {
      *
      * @param msg 社团修改信息封装
      *            传入参数：
-     * @return 更新状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
+     * @return 更新状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败 Operation.INPUT_INCORRECT存在相同的社团名称
      */
     int updateClubInfo(ClubMsg msg);
 

@@ -32,7 +32,7 @@ public interface MemberOrgService extends BaseService<MemberOrg> {
      * 根据组织标识申请加入
      *
      * @param id 组织标识
-     * @return 加入状态
+     * @return 加入状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败 Operation.INPUT_INCORRECT 还未完善信息
      */
     int joinOrganizationByOrgId(int id);
 

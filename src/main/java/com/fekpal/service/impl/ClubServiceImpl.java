@@ -59,7 +59,7 @@ public class ClubServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements 
         ExampleWrapper<Org> example = new ExampleWrapper<>();
         example.eq("org_name", msg.getClubName());
         int row = mapper.countByExample(example);
-        if (row > 0) return Operation.FAILED;
+        if (row != 0) return Operation.INPUT_INCORRECT;
 
         int uid = SessionLocal.local(session).getUserIdentity().getUid();
         Org org = new Org();
@@ -70,8 +70,8 @@ public class ClubServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements 
         org.setDescription(msg.getDescription());
         row = mapper.updateByPrimaryKeySelective(org);
 
-        if (row != 1) throw new CRUDException("社团信息更新异常:" + row);
-        return Operation.SUCCESSFULLY;
+        if (row > 1) throw new CRUDException("社团信息更新异常:" + row);
+        return row == 0 ? Operation.FAILED : Operation.SUCCESSFULLY;
     }
 
     @Override

@@ -3,8 +3,10 @@ package test.dao;
 import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.common.constant.AvailableState;
 import com.fekpal.common.utils.MD5Util;
+import com.fekpal.dao.mapper.AuditsViewMapper;
 import com.fekpal.dao.mapper.MessageMapper;
 import com.fekpal.dao.mapper.MessageReceiveMapper;
+import com.fekpal.dao.model.AuditsView;
 import com.fekpal.dao.model.Message;
 import com.fekpal.dao.model.MessageReceive;
 import org.junit.Before;
@@ -25,8 +27,13 @@ public class TestMessage extends TestDao {
     @Autowired
     private MessageReceiveMapper receiveMapper;
 
+    @Autowired
+    private AuditsViewMapper auditsViewMapper;
+
     @Before
     public void init() {
+        ExampleWrapper<AuditsView> exampleWrapper = new ExampleWrapper<>();
+        System.out.println(auditsViewMapper.selectByExample(exampleWrapper, 0, 40));
         /*
         messageMapper.insert(Model.message);
         List<Message> list = new ArrayList<>();
@@ -58,9 +65,10 @@ public class TestMessage extends TestDao {
 */
         //receiveMapper.insertLoopOnlyWithReceiveId(receive);
     }
+
     @Test
     public void test1() {
-System.out.println(MD5Util.md5("12345"+"B7NIO6OGawvB1YhZI1xT7g=="));
+        //System.out.println(MD5Util.md5("12345" + "B7NIO6OGawvB1YhZI1xT7g=="));
         /*
         messageMapper.selectByPrimaryKey(Model.message.getMessageId());
         messageMapper.selectByExample(new ExampleWrapper<>(), 0, 10);

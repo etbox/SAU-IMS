@@ -36,7 +36,7 @@ public interface SauService extends BaseService<Org> {
      *
      * @param msg 校社联修改信息封装
      *            传入参数：
-     * @return 更新状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
+     * @return 更新状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败 Operation.INPUT_INCORRECT 存在相同校社联名称
      */
     int updateSauInfo(SauMsg msg);
 
