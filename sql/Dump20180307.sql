@@ -27,6 +27,7 @@ DROP TABLE IF EXISTS `anniversary_audit`;
 CREATE TABLE `anniversary_audit` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `org_id` int(11) NOT NULL,
+  `audit_title` varchar(50) NOT NULL,
   `file_name` varchar(50) NOT NULL,
   `audit_state` int(11) NOT NULL DEFAULT '2',
   `audit_result` varchar(100) NOT NULL DEFAULT '无',
@@ -87,7 +88,7 @@ CREATE TABLE `club_audit` (
   `apply_name` varchar(50) NOT NULL,
   `audit_state` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -118,6 +119,27 @@ CREATE TABLE `major` (
   `department_id` int(11) NOT NULL,
   `major_available` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`major_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `member`
+--
+
+DROP TABLE IF EXISTS `member`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `member` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `org_id` int(11) NOT NULL,
+  `person_id` int(11) NOT NULL,
+  `member_duty` int(11) NOT NULL DEFAULT '0',
+  `member_state` int(11) NOT NULL DEFAULT '1',
+  `join_time` datetime NOT NULL,
+  `leave_time` datetime DEFAULT NULL,
+  `org_department` varchar(100) DEFAULT NULL,
+  `available` int(11) NOT NULL DEFAULT '2',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -156,7 +178,7 @@ CREATE TABLE `message_receive` (
   `read_flag` int(11) NOT NULL DEFAULT '0',
   `available` int(11) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3158 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,7 +206,7 @@ CREATE TABLE `org_info` (
   `org_auth` int(11) NOT NULL,
   PRIMARY KEY (`org_id`),
   UNIQUE KEY `club_name_UNIQUE` (`org_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -199,27 +221,6 @@ CREATE TABLE `org_like` (
   `person_id` int(11) NOT NULL,
   `org_id` int(11) NOT NULL,
   `available` int(11) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Table structure for table `org_member`
---
-
-DROP TABLE IF EXISTS `org_member`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `org_member` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `org_id` int(11) NOT NULL,
-  `person_id` int(11) NOT NULL,
-  `member_duty` int(11) NOT NULL DEFAULT '0',
-  `member_state` int(11) NOT NULL DEFAULT '1',
-  `join_time` datetime NOT NULL,
-  `leave_time` datetime DEFAULT NULL,
-  `org_department` varchar(100) DEFAULT NULL,
-  `available` int(11) NOT NULL DEFAULT '2',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -247,7 +248,7 @@ CREATE TABLE `person_info` (
   `person_logo` varchar(50) NOT NULL,
   `person_state` int(11) NOT NULL,
   PRIMARY KEY (`person_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -320,7 +321,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_name_UNIQUE` (`user_name`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -332,4 +333,4 @@ CREATE TABLE `user` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-02-28 20:27:22
+-- Dump completed on 2018-03-07  0:05:22
