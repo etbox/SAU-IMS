@@ -205,6 +205,11 @@
         </where>
     </update>
 
+    <select id="selectByPrimaryIdForPerson" parameterType="int" resultMap="exResult">
+        select * from org_info
+        where org_id = #{id}
+    </select>
+
     <resultMap id="result" type="Org">
         <id property="orgId" column="org_id"/>
         <result property="userId" column="user_id"/>
@@ -220,5 +225,8 @@
         <result property="members" column="members"/>
         <result property="orgState" column="org_state"/>
         <result property="orgAuth" column="org_auth"/>
+    </resultMap>
+
+    <resultMap id="exResult" type="PersonOrgView" extends="result">
     </resultMap>
 </mapper>

@@ -1,6 +1,7 @@
 package com.fekpal.service.model.domain;
 
 import com.fekpal.common.base.BaseModel;
+import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Timestamp;

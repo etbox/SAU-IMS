@@ -40,15 +40,15 @@ public class FileUtil {
      *
      * @param files    传输的文件集
      * @param savePath 存放路径
-     * @param fileName 不含后缀文件名
+     * @param fileName 后缀文件名
      * @return 返回文件名集
      */
     public static List<String> fileHandle(MultipartFile[] files, String savePath, String fileName) throws IOException {
         List<String> fileNames = new ArrayList<>();
         for (MultipartFile file : files) {
-            if (!file.isEmpty()) {
+            if (file != null && !file.isEmpty()) {
                 String[] originalFileName = file.getOriginalFilename().split("\\.");
-                fileName = (fileName == null || fileName.length() == 0) ? RandomUtil.createFileName() : fileName + "." + originalFileName[1];
+                fileName = (fileName == null || fileName.length() == 0) ? RandomUtil.createFileName() + "." + originalFileName[1] : fileName;
                 file.transferTo(new File(savePath, fileName));
                 fileNames.add(fileName);
             }
@@ -62,13 +62,13 @@ public class FileUtil {
      *
      * @param file     传输的文件
      * @param savePath 存放路径
-     * @param fileName 不含后缀文件名
+     * @param fileName 后缀文件名
      * @return 返回文件名
      */
     public static String fileHandle(MultipartFile file, String savePath, String fileName) throws IOException {
-        if (!file.isEmpty()) {
+        if (file != null && !file.isEmpty()) {
             String[] originalFileName = file.getOriginalFilename().split("\\.");
-            fileName = (fileName == null || fileName.length() == 0) ? RandomUtil.createFileName() : fileName + "." + originalFileName[1];
+            fileName = (fileName == null || fileName.length() == 0) ? RandomUtil.createFileName() + "." + originalFileName[1] : fileName;
             file.transferTo(new File(savePath, fileName));
             return fileName;
         }

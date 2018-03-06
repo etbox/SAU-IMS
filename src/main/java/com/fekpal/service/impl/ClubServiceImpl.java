@@ -32,6 +32,12 @@ public class ClubServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements 
     private HttpSession session;
 
     @Override
+    public Org selectByPrimaryId() {
+        int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        return mapper.selectByPrimaryKey(uid);
+    }
+
+    @Override
     public String updateLogo(ClubMsg msg) {
         try {
             int uid = SessionLocal.local(session).getUserIdentity().getUid();

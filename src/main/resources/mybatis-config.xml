@@ -20,6 +20,8 @@
         <typeAlias type="com.fekpal.dao.model.MemberOrg" alias="MemberOrg"/>
         <typeAlias type="com.fekpal.dao.model.ClubAudit" alias="ClubAudit"/>
         <typeAlias type="com.fekpal.dao.model.AuditsView" alias="AuditsView"/>
+        <typeAlias type="com.fekpal.dao.model.PersonOrgView" alias="PersonOrgView"/>
+        <typeAlias type="com.fekpal.dao.model.Member" alias="Member"/>
     </typeAliases>
 
     <!--映射文件-->
@@ -32,5 +34,8 @@
         <mapper resource="com/fekpal/service/dao/mapper/MessageReceiveMapper.xml"/>
         <mapper resource="com/fekpal/service/dao/mapper/OrgMemberMapper.xml"/>
         <mapper resource="com/fekpal/service/dao/mapper/AuditsViewMapper.xml"/>
+        <mapper resource="com/fekpal/service/dao/mapper/MemberOrgMapper.xml"/>
+        <mapper resource="com/fekpal/service/dao/mapper/OrgMemberMapper.xml"/>
+        <mapper resource="com/fekpal/service/dao/mapper/MemberMapper.xml"/>
     </mappers>
 </configuration>

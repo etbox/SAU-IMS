@@ -107,6 +107,7 @@ public class SecurityController {
     @ResponseBody
     @RequestMapping(value = "/security/pwd", method = RequestMethod.PUT)
     public JsonResult<String> modifyPwd(@RequestBody SecureMsg msg) {
+        System.out.println(msg);
         int state = accountSecureService.modifyPwd(msg);
 
         JsonResult<String> result = new JsonResult<>();

@@ -31,6 +31,12 @@ public class SauServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements S
     private HttpSession session;
 
     @Override
+    public Org selectByPrimaryId() {
+        int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        return mapper.selectByPrimaryKey(uid);
+    }
+
+    @Override
     public boolean isExitSauName(String name) {
         ExampleWrapper<Org> example = new ExampleWrapper<>();
         example.eq("org_name", name);

@@ -2,6 +2,7 @@ package com.fekpal.web.controller.member;
 
 import com.fekpal.api.MemberOrgService;
 import com.fekpal.api.OrgService;
+import com.fekpal.common.constant.Operation;
 import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
 import com.fekpal.dao.model.Org;
@@ -45,6 +46,7 @@ public class MemberOrgMsgController {
 
         if (orgList == null || orgList.size() == 0) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
+
         } else {
             List<OrgListMsg> lists = new ArrayList<>();
             for (Org org : orgList) {
@@ -75,7 +77,7 @@ public class MemberOrgMsgController {
     @ResponseBody
     @RequestMapping(value = "/member/org/{id}", method = RequestMethod.GET)
     public JsonResult<OrgDetail> getOneOrgMsg(@PathVariable int id) {
-        PersonOrgView org = orgService.selectByIdInPerson(id);
+        PersonOrgView org = orgService.selectByIdForPerson(id);
 
         JsonResult<OrgDetail> result = new JsonResult<>();
         if (org == null) {
@@ -112,8 +114,17 @@ public class MemberOrgMsgController {
     @ResponseBody
     @RequestMapping(value = "/member/org/{id}/join", method = RequestMethod.POST)
     public JsonResult<String> joinClub(@PathVariable int id) {
+        int state = memberOrgService.joinOrganizationByOrgId(id);
 
-        return null;
+        JsonResult<String> result = new JsonResult<>();
+        if (state == Operation.SUCCESSFULLY) {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "申请成功，请留意审核通知");
+        } else if (state == Operation.FAILED) {
+            result.setStateCode(ResponseCode.RESPONSE_ERROR, "申请失败，请稍后再试");
+        } else if (state == Operation.INPUT_INCORRECT) {
+            result.setStateCode(ResponseCode.RESPONSE_ERROR, "请完善资料再进行申请");
+        }
+        return result;
     }
 
     /**
@@ -125,7 +136,17 @@ public class MemberOrgMsgController {
     @ResponseBody
     @RequestMapping(value = "/member/org/{id}/star", method = RequestMethod.POST)
     public JsonResult<String> likeClub(@PathVariable int id) {
-        return null;
+        int state = orgService.likeByOrgId(id);
+
+        JsonResult<String> result = new JsonResult<>();
+        if (state == Operation.SUCCESSFULLY) {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "点赞成功");
+        } else if (state == Operation.FAILED) {
+            result.setStateCode(ResponseCode.RESPONSE_ERROR, "点赞失败");
+        } else if (state == Operation.CANCEL) {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "取消点赞");
+        }
+        return result;
     }
 
     /**
@@ -137,19 +158,20 @@ public class MemberOrgMsgController {
     @ResponseBody
     @RequestMapping(value = "/member/org/search", method = RequestMethod.GET)
     public JsonResult<List<OrgListMsg>> searchMsg(SearchPage page) {
-        List<Org> orgList = orgService.loadAllOrg(page.getOffset(), page.getLimit());
+        List<Org> orgList = orgService.selectByOrgName(page.getKey(), page.getOffset(), page.getLimit());
         JsonResult<List<OrgListMsg>> result = new JsonResult<>();
 
         if (orgList == null || orgList.size() == 0) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
+
         } else {
             List<OrgListMsg> lists = new ArrayList<>();
             for (Org org : orgList) {
                 OrgListMsg msg = new OrgListMsg();
                 msg.setOrgId(org.getOrgId());
                 msg.setOrgName(org.getOrgName());
-                msg.setLogo(org.getOrgLogo());
                 msg.setMembers(org.getMembers());
+                msg.setLogo(org.getOrgLogo());
                 msg.setLikeClick(org.getLikeClick());
                 //点赞功能暂时不实现，默认全部已点赞
                 msg.setIsClick(1);

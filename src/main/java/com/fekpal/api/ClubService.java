@@ -14,6 +14,13 @@ import java.util.List;
 public interface ClubService extends BaseService<Org> {
 
     /**
+     * 根据社团用户标识获得个人
+     *
+     * @return 社团用户记录
+     */
+    Org selectByPrimaryId();
+
+    /**
      * 根据社团用户标识更新社团头像
      *
      * @param msg 社团修改信息封装

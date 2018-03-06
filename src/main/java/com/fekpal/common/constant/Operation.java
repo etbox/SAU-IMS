@@ -26,4 +26,9 @@ public class Operation {
      * 输入错误、为空、不符合要求
      */
     public static final int INPUT_INCORRECT = 3;
+
+    /**
+     * 操作取消
+     */
+    public static final int CANCEL = 4;
 }

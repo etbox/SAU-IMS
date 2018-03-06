@@ -13,9 +13,7 @@ import com.fekpal.web.model.PageList;
 import com.fekpal.web.model.PersonDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -68,13 +66,16 @@ public class MemberCenterController {
      * @return 图片文件名
      */
     @ResponseBody
-    @RequestMapping(value = "/member/center/info/head", method = RequestMethod.PUT)
-    public JsonResult<String> uploadLogo(PersonMsg msg) {
+    @RequestMapping(value = "/member/center/info/head", method = RequestMethod.POST)
+    public JsonResult<String> uploadLogo(@ModelAttribute PersonMsg msg) {
         String logoName = personService.updateLogo(msg);
-
         JsonResult<String> result = new JsonResult<>();
-        result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "修改头像成功");
-        result.setData(logoName);
+        if (logoName == null) {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "修改头像失败");
+        } else {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "修改头像成功");
+            result.setData(logoName);
+        }
         return result;
     }
 
@@ -86,12 +87,28 @@ public class MemberCenterController {
      */
     @ResponseBody
     @RequestMapping(value = "/member/center/info", method = RequestMethod.PUT)
-    public JsonResult<String> subNewCenterMsg(PersonMsg msg) {
+    public JsonResult<PersonDetail> subNewCenterMsg(@RequestBody PersonMsg msg) {
         int state = personService.updatePersonInfo(msg);
 
-        JsonResult<String> result = new JsonResult<>();
+        JsonResult<PersonDetail> result = new JsonResult<>();
         if (state == Operation.SUCCESSFULLY) {
+            Person person = personService.selectByPrimaryId();
+            PersonDetail detail = new PersonDetail();
+            detail.setAddress(person.getAddress());
+            detail.setBirthday(person.getBirthday());
+            detail.setDepartment(person.getDepartment());
+            detail.setDescription(person.getDescription());
+            detail.setEnrollmentYear(person.getEnrollmentYear());
+            detail.setGender(person.getGender());
+            detail.setLogo(person.getLogo());
+            detail.setMajor(person.getMajor());
+            detail.setNickname(person.getNickname());
+            detail.setRealName(person.getRealName());
+            detail.setStudentId(person.getStudentId());
+
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "修改个人信息成功");
+            result.setData(detail);
+
         } else if (state == Operation.FAILED) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "修改个人信息失败");
         } else if (state == Operation.INPUT_INCORRECT) {

@@ -34,6 +34,7 @@ public class PersonServiceImpl extends BaseServiceImpl<PersonMapper, Person> imp
             Person person = mapper.selectByPrimaryKey(uid);
             return ImageFileUtil.handle(msg.getLogo(), FIleDefaultPath.PERSON_LOGO_FILE, person.getLogo());
         } catch (Exception e) {
+            e.printStackTrace();
             throw new CRUDException(e.getMessage());
         }
     }

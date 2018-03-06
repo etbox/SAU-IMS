@@ -3,31 +3,23 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.fekpal.dao.mapper.MemberOrgMapper">
+<mapper namespace="com.fekpal.dao.mapper.MemberMapper">
     <cache/>
 
-    <sql id="union">
-        org_info right join member on org_info.org_id = member.org_id
-    </sql>
-
     <select id="selectByPrimaryKey" parameterType="int" resultMap="result">
-        select * from
-        <include refid="union"/>
+        select * from member
         where id = #{id}
     </select>
 
     <select id="selectFirstByExample" resultMap="result">
-        select * from
-        <include refid="union"/>
+        select * from member
         <where>
             ${ex.sqlSegment}
         </where>
-        limit 1
     </select>
 
     <select id="selectByExample" resultMap="result">
-        select * from
-        <include refid="union"/>
+        select * from member
         <where>
             id >= #{offset}
             ${ex.sqlSegment}
@@ -36,15 +28,14 @@
     </select>
 
     <select id="countByExample" resultType="int">
-        select count(*) from
-        <include refid="union"/>
+        select count(*) from member
         <where>
             ${ex.sqlSegment}
         </where>
     </select>
 
-    <insert id="insert" parameterType="OrgMember" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        insert into org_member(
+    <insert id="insert" parameterType="Member" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        insert into member(
         org_id, person_id,
         member_duty, member_state,
         join_time, leave_time,
@@ -57,7 +48,7 @@
     </insert>
 
     <insert id="insertLoop" parameterType="list" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        insert into org_member(
+        insert into member(
         org_id, person_id,
         member_duty, member_state,
         join_time, leave_time,
@@ -71,28 +62,24 @@
         </foreach>
     </insert>
 
-    <update id="updateByPrimaryKey" parameterType="OrgMember">
-        update org_member set
+    <update id="updateByPrimaryKey" parameterType="Member">
+        update member set
         member_duty = #{memberDuty},
         member_state = #{memberState},
-        join_time = #{joinTime},
         leave_time = #{leaveTime},
         org_department = #{orgDepartment},
         available = #{available}
         where id = #{id}
     </update>
 
-    <update id="updateByPrimaryKeySelective" parameterType="OrgMember">
-        update org_member
+    <update id="updateByPrimaryKeySelective" parameterType="Member">
+        update member
         <set>
             <if test="memberDuty != null">
                 member_duty = #{memberDuty},
             </if>
             <if test="memberState != null">
                 member_state = #{memberState},
-            </if>
-            <if test="joinTime != null">
-                join_time = #{joinTime},
             </if>
             <if test="leaveTime != null">
                 leave_time = #{leaveTime},
@@ -108,38 +95,34 @@
     </update>
 
     <update id="updateByExample">
-        update org_member set
-        member_duty = #{obj.memberDuty},
-        member_state = #{obj.memberState},
-        join_time = #{obj.joinTime},
-        leave_time = #{obj.leaveTime},
-        org_department = #{obj.orgDepartment},
-        available = #{obj.available}
+        update member set
+        member_duty = #{memberDuty},
+        member_state = #{memberState},
+        leave_time = #{leaveTime},
+        org_department = #{orgDepartment},
+        available = #{available}
         <where>
             ${ex.sqlSegment}
         </where>
     </update>
 
     <update id="updateByExampleSelective">
-        update org_member
+        update member
         <set>
-            <if test="obj.memberDuty != null">
-                member_duty = #{obj.memberDuty},
+            <if test="memberDuty != null">
+                member_duty = #{memberDuty},
             </if>
-            <if test="obj.memberState != null">
-                member_state = #{obj.memberState},
+            <if test="memberState != null">
+                member_state = #{memberState},
             </if>
-            <if test="obj.joinTime != null">
-                join_time = #{obj.joinTime},
+            <if test="leaveTime != null">
+                leave_time = #{leaveTime},
             </if>
-            <if test="obj.leaveTime != null">
-                leave_time = #{obj.leaveTime},
+            <if test="orgDepartment != null">
+                org_department = #{orgDepartment},
             </if>
-            <if test="obj.orgDepartment != null">
-                org_department = #{obj.orgDepartment},
-            </if>
-            <if test="obj.available != null">
-                available = #{obj.available},
+            <if test="available != null">
+                available = #{available},
             </if>
         </set>
         <where>
@@ -148,27 +131,28 @@
     </update>
 
     <update id="deleteByPrimaryKey" parameterType="int">
-        update org_member set
+        update member set
         available = 0
         where id = #{id} and available != 0
     </update>
 
     <update id="deleteByExample">
-        update org_member set
+        update member set
         available = 0
         <where>
             ${ex.sqlSegment}
         </where>
     </update>
 
-    <resultMap id="result" type="MemberOrg" extends="com.fekpal.dao.mapper.OrgMapper.result">
+    <resultMap id="result" type="Member">
         <id property="id" column="id"/>
         <result property="personId" column="person_id"/>
+        <result property="orgId" column="org_id"/>
+        <result property="joinTime" column="join_time"/>
+        <result property="leaveTime" column="leave_time"/>
         <result property="memberDuty" column="member_duty"/>
         <result property="memberState" column="member_state"/>
         <result property="orgDepartment" column="org_department"/>
-        <result property="joinTime" column="join_time"/>
-        <result property="leaveTime" column="leave_time"/>
         <result property="available" column="available"/>
     </resultMap>
 </mapper>

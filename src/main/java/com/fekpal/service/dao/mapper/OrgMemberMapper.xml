@@ -7,7 +7,7 @@
     <cache/>
 
     <sql id="union">
-        person_info right join org_member on person_info.person_id = org_member.person_id
+        person_info right join member on person_info.person_id = member.person_id
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="int" resultMap="result">
@@ -161,7 +161,7 @@
         </where>
     </update>
 
-    <resultMap id="result" type="OrgMember">
+    <resultMap id="result" type="OrgMember" extends="com.fekpal.dao.mapper.PersonMapper.result">
         <id property="id" column="id"/>
         <result property="orgId" column="org_id"/>
         <result property="memberDuty" column="member_duty"/>
@@ -170,19 +170,5 @@
         <result property="leaveTime" column="leave_time"/>
         <result property="memberState" column="member_state"/>
         <result property="available" column="available"/>
-
-        <result property="personId" column="person_id"/>
-        <result property="userId" column="user_id"/>
-        <result property="realName" column="real_name"/>
-        <result property="logo" column="person_logo"/>
-        <result property="gender" column="gender"/>
-        <result property="nickname" column="nickname"/>
-        <result property="birthday" column="birthday"/>
-        <result property="address" column="address"/>
-        <result property="description" column="description"/>
-        <result property="department" column="department"/>
-        <result property="major" column="major"/>
-        <result property="studentId" column="student_id"/>
-        <result property="personState" column="person_state"/>
     </resultMap>
 </mapper>

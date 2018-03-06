@@ -1,5 +1,6 @@
 package com.fekpal.web.controller;
 
+import com.fekpal.api.ClubService;
 import com.fekpal.api.OrgService;
 import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
@@ -23,7 +24,7 @@ import java.util.List;
 public class IndexPageController {
 
     @Autowired
-    private OrgService orgService;
+    private ClubService clubService;
 
     /**
      * 得到社团列表信息
@@ -33,7 +34,7 @@ public class IndexPageController {
     @ResponseBody
     @RequestMapping(value = "/index/club", method = RequestMethod.GET)
     public JsonResult<List<OrgListMsg>> getClubList(PageList page) {
-        List<Org> clubList = orgService.loadAllOrg(page.getOffset(), page.getLimit());
+        List<Org> clubList = clubService.loadAllClub(page.getOffset(),page.getLimit());
         JsonResult<List<OrgListMsg>> result = new JsonResult<>();
 
         if (clubList == null || clubList.size() == 0) {
@@ -45,6 +46,7 @@ public class IndexPageController {
                 clubs.setOrgId(club.getOrgId());
                 clubs.setOrgName(club.getOrgName());
                 clubs.setView(club.getOrgView());
+                clubs.setLogo(club.getOrgLogo());
                 clubs.setDescription(club.getDescription());
                 clubs.setLikeClick(club.getLikeClick());
                 clubs.setMembers(club.getMembers());
@@ -65,7 +67,7 @@ public class IndexPageController {
     @ResponseBody
     @RequestMapping(value = "/index/club/{id}", method = RequestMethod.GET)
     public JsonResult<OrgDetail> getClubDetail(@PathVariable int id) {
-        Org club = orgService.selectByPrimaryKey(id);
+        Org club = clubService.selectByPrimaryKey(id);
         JsonResult<OrgDetail> result = new JsonResult<>();
 
         if (club == null) {
@@ -75,11 +77,15 @@ public class IndexPageController {
             record.setOrgId(club.getOrgId());
             record.setAdminName(club.getAdminName());
             record.setLogo(club.getOrgLogo());
+            record.setView(club.getOrgView());
             record.setOrgName(club.getOrgName());
             record.setDescription(club.getDescription());
             record.setEmail(club.getContactEmail());
             record.setFoundTime(club.getFoundTime());
             record.setMembers(club.getMembers());
+            record.setOrgType(club.getOrgType());
+            record.setPhone(club.getContactNumber());
+            record.setLikeClick(club.getLikeClick());
 
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
             result.setData(record);

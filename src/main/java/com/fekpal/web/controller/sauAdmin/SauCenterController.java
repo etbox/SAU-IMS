@@ -12,8 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
-
 /**
  * 校社联中心信息的控制类
  * Created by hasee on 2017/8/19.
@@ -27,16 +25,16 @@ public class SauCenterController {
     /**
      * 上传校社联头像的
      *
-     * @param sauMsg 校社联修改信息封装
+     * @param msg 校社联修改信息封装
      * @return 图片文件名
      */
     @ResponseBody
     @RequestMapping(value = "/sau/center/info/head", method = RequestMethod.POST)
-    public JsonResult<String> uploadLogo(@ModelAttribute SauMsg sauMsg) {
-        String logoName = sauService.updateLogo(sauMsg);
+    public JsonResult<String> uploadLogo(@ModelAttribute SauMsg msg) {
+        String logoName = sauService.updateLogo(msg);
 
         JsonResult<String> result = new JsonResult<>();
-        result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "更新头像成功");
+        result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "上传校社联头像成功");
         result.setData(logoName);
         return result;
     }
@@ -48,28 +46,25 @@ public class SauCenterController {
      */
     @ResponseBody
     @RequestMapping(value = "/sau/center/info", method = RequestMethod.GET)
-    public JsonResult<List<OrgDetail>> getSauCenterMsg() {
-        List<Org> list = sauService.loadAllSau(0, 1);
+    public JsonResult<OrgDetail> getSauCenterMsg() {
+        Org org = sauService.selectByPrimaryId();
 
-        JsonResult<List<OrgDetail>> result = new JsonResult<>();
-        if (list == null || list.size() == 0) {
+        JsonResult<OrgDetail> result = new JsonResult<>();
+        if (org == null) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
         } else {
-            List<OrgDetail> sauDetails = new ArrayList<>();
-            for (Org sau : list) {
-                OrgDetail sauDetail = new OrgDetail();
-                sauDetail.setOrgName(sau.getOrgName());
-                sauDetail.setLogo(sau.getOrgLogo());
-                sauDetail.setDescription(sau.getDescription());
-                sauDetail.setAdminName(sau.getAdminName());
-                sauDetail.setEmail(sau.getContactEmail());
-                sauDetail.setPhone(sau.getContactNumber());
-                sauDetail.setFoundTime(sau.getFoundTime());
-                sauDetail.setMembers(sau.getMembers());
-                sauDetails.add(sauDetail);
-            }
+            OrgDetail detail = new OrgDetail();
+            detail.setOrgName(org.getOrgName());
+            detail.setLogo(org.getOrgLogo());
+            detail.setDescription(org.getDescription());
+            detail.setAdminName(org.getAdminName());
+            detail.setEmail(org.getContactEmail());
+            detail.setPhone(org.getContactNumber());
+            detail.setFoundTime(org.getFoundTime());
+            detail.setMembers(org.getMembers());
+
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
-            result.setData(sauDetails);
+            result.setData(detail);
         }
         return result;
     }
@@ -77,13 +72,13 @@ public class SauCenterController {
     /**
      * 修改校社联信息
      *
-     * @param sauMsg 校社联修改信息封装
+     * @param msg 校社联修改信息封装
      * @return 是否提交成功
      */
     @ResponseBody
     @RequestMapping(value = "/sau/center/info", method = RequestMethod.PUT)
-    public JsonResult<String> subNewCenterMsg(@RequestBody SauMsg sauMsg) {
-        int state = sauService.updateSauInfo(sauMsg);
+    public JsonResult<String> subNewCenterMsg(@RequestBody SauMsg msg) {
+        int state = sauService.updateSauInfo(msg);
 
         JsonResult<String> result = new JsonResult<>();
         if (state == Operation.SUCCESSFULLY) {

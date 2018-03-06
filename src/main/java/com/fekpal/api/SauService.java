@@ -15,6 +15,13 @@ import java.util.List;
 public interface SauService extends BaseService<Org> {
 
     /**
+     * 根据校社联用户标识获得个人
+     *
+     * @return 校社联用户记录
+     */
+    Org selectByPrimaryId();
+
+    /**
      * 根据校社联用户标识更新校社联头像
      *
      * @param msg 校社联修改信息封装

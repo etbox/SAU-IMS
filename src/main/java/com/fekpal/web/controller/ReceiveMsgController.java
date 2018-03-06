@@ -49,7 +49,7 @@ public class ReceiveMsgController {
      */
     @ResponseBody
     @RequestMapping(value = "/msg/{messageId}", method = RequestMethod.GET)
-    public JsonResult<String> getMsgById(@PathVariable Integer messageId) {
+    public JsonResult<String> getMsgById(@PathVariable Integer id) {
         return null;
     }
 

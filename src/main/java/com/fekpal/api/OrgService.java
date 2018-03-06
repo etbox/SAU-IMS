@@ -19,7 +19,7 @@ public interface OrgService extends BaseService<Org> {
      * @param id 组织标识
      * @return 普通用户范围组织记录
      */
-    PersonOrgView selectByIdInPerson(int id);
+    PersonOrgView selectByIdForPerson(int id);
 
     /**
      * 根据组织名称进行模糊搜索获取组织列表，按分页获取，用于普通用户
@@ -29,7 +29,7 @@ public interface OrgService extends BaseService<Org> {
      * @param limit  读取数
      * @return 组织记录
      */
-    PersonOrgView selectByOrgName(String name, int offset, int limit);
+    List<Org> selectByOrgName(String name, int offset, int limit);
 
     /**
      * 根据组织标识获取组织记录详细，用于校社联和社团用户
@@ -37,7 +37,15 @@ public interface OrgService extends BaseService<Org> {
      * @param id 组织标识
      * @return 普通用户范围组织记录
      */
-    Org selectByIdInOrg(int id);
+    Org selectByIdForOrg(int id);
+
+    /**
+     * 根据组织标识进行点赞该组织
+     *
+     * @param id 组织标识
+     * @return 点赞状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败 Operation.CANCEL 取消
+     */
+    int likeByOrgId(int id);
 
     /**
      * 加载所有组织记录，按分页获取
