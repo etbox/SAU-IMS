@@ -44,4 +44,9 @@ https://documenter.getpostman.com/view/3892535/collection/RVnVDzZm
 <a target="_blank" href="https://documenter.getpostman.com/view/3892535/collection/RVnVDzZn">
 https://documenter.getpostman.com/view/3892535/collection/RVnVDzZn
 </a>
-
+注意事项
+<h4>注意事项<h4/>
+公开注意事项地址
+<a target="_blank" href="https://documenter.getpostman.com/view/3892535/collection/RVu4F9Ak">
+https://documenter.getpostman.com/view/3892535/collection/RVu4F9Ak
+</a>
