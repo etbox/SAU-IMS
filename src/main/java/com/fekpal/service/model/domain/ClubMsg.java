@@ -24,6 +24,24 @@ public class ClubMsg extends BaseModel{
 
     private Timestamp foundTime;
 
+    private String orgType;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public ClubMsg() {
+    }
+
+    public String getOrgType() {
+        return orgType;
+
+    }
+
+    public void setOrgType(String orgType) {
+        this.orgType = orgType;
+    }
+
     public String getClubName() {
         return clubName;
     }

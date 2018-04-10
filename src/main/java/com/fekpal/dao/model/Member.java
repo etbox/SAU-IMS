@@ -1,6 +1,7 @@
 package com.fekpal.dao.model;
 
 import com.fekpal.common.base.BaseModel;
+import com.fekpal.common.constant.AuditState;
 
 import java.sql.Timestamp;
 
@@ -19,6 +20,9 @@ public class Member extends BaseModel {
 
     private Integer memberDuty;
 
+    /**
+     * 成员状态（0，拒绝。1：通过。2：审核中。3：删除），用户社团审核状态
+     */
     private Integer memberState;
 
     private Timestamp joinTime;
@@ -27,6 +31,9 @@ public class Member extends BaseModel {
 
     private String orgDepartment;
 
+    /**
+     * 离开状态（0，离开。1.还在该社团）
+     */
     private Integer available;
 
     public Integer getId() {

@@ -1,16 +1,19 @@
 package com.fekpal.web.controller.member;
 
+import com.fekpal.api.LikeOrgService;
 import com.fekpal.api.MemberOrgService;
 import com.fekpal.api.OrgService;
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
+import com.fekpal.dao.model.LikeOrg;
 import com.fekpal.dao.model.Org;
 import com.fekpal.dao.model.PersonOrgView;
 import com.fekpal.web.model.OrgDetail;
 import com.fekpal.web.model.OrgListMsg;
 import com.fekpal.web.model.PageList;
 import com.fekpal.web.model.SearchPage;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -26,11 +29,18 @@ import java.util.List;
 @Controller
 public class MemberOrgMsgController {
 
+    private Logger logger = Logger.getLogger(MemberCenterController.class);
+
     @Autowired
     private OrgService orgService;
 
     @Autowired
     private MemberOrgService memberOrgService;
+
+    @Autowired
+    private LikeOrgService likeOrgService;
+
+    private LikeOrg likeOrg;
 
     /**
      * 返回组织信息列表的方法
@@ -46,7 +56,6 @@ public class MemberOrgMsgController {
 
         if (orgList == null || orgList.size() == 0) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
-
         } else {
             List<OrgListMsg> lists = new ArrayList<>();
             for (Org org : orgList) {
@@ -56,9 +65,8 @@ public class MemberOrgMsgController {
                 msg.setLogo(org.getOrgLogo());
                 msg.setMembers(org.getMembers());
                 msg.setLikeClick(org.getLikeClick());
-                //点赞功能暂时不实现，默认全部已点赞
-                msg.setIsClick(1);
-
+                likeOrg = likeOrgService.selectByOrgId(org.getOrgId());
+                msg.setIsClick(likeOrg.getAvailable());
                 lists.add(msg);
             }
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
@@ -136,7 +144,7 @@ public class MemberOrgMsgController {
     @ResponseBody
     @RequestMapping(value = "/member/org/{id}/star", method = RequestMethod.POST)
     public JsonResult<String> likeClub(@PathVariable int id) {
-        int state = orgService.likeByOrgId(id);
+        int state = likeOrgService.likeByOrgIdAndState(id);
 
         JsonResult<String> result = new JsonResult<>();
         if (state == Operation.SUCCESSFULLY) {
@@ -163,9 +171,9 @@ public class MemberOrgMsgController {
 
         if (orgList == null || orgList.size() == 0) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
-
         } else {
             List<OrgListMsg> lists = new ArrayList<>();
+
             for (Org org : orgList) {
                 OrgListMsg msg = new OrgListMsg();
                 msg.setOrgId(org.getOrgId());
@@ -173,8 +181,8 @@ public class MemberOrgMsgController {
                 msg.setMembers(org.getMembers());
                 msg.setLogo(org.getOrgLogo());
                 msg.setLikeClick(org.getLikeClick());
-                //点赞功能暂时不实现，默认全部已点赞
-                msg.setIsClick(1);
+                likeOrg = likeOrgService.selectByOrgId(org.getOrgId());
+                msg.setIsClick(likeOrg.getAvailable());
 
                 lists.add(msg);
             }

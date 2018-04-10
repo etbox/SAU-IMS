@@ -36,28 +36,25 @@ public class ClubCenterController {
     @ResponseBody
     @RequestMapping("/club/center/info")
     public JsonResult<OrgDetail> getClubsCenterMsg() {
-        Org org = clubService.selectByPrimaryId();
-
         JsonResult<OrgDetail> result = new JsonResult<>();
-        if (org == null) {
-            result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
+        Org org = clubService.selectByPrimaryId();
+        if (org == null) {result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");return result; }
+        OrgDetail detail = new OrgDetail();
+        detail.setOrgName(org.getOrgName());
+        detail.setLogo(org.getOrgLogo());
+        detail.setDescription(org.getDescription());
+        detail.setAdminName(org.getAdminName());
+        detail.setEmail(org.getContactEmail());
+        detail.setPhone(org.getContactNumber());
+        detail.setFoundTime(org.getFoundTime());
+        detail.setMembers(org.getMembers());
+        detail.setView(org.getOrgView());
+        detail.setOrgType(org.getOrgType());
+        detail.setLikeClick(org.getLikeClick());
 
-        } else {
-            OrgDetail detail = new OrgDetail();
-            detail.setOrgName(org.getOrgName());
-            detail.setLogo(org.getOrgLogo());
-            detail.setDescription(org.getDescription());
-            detail.setAdminName(org.getAdminName());
-            detail.setEmail(org.getContactEmail());
-            detail.setPhone(org.getContactNumber());
-            detail.setFoundTime(org.getFoundTime());
-            detail.setMembers(org.getMembers());
-            detail.setView(org.getOrgView());
-
-            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
-            result.setData(detail);
-        }
-        return result;
+         result.setCode(ResponseCode.RESPONSE_SUCCESS);
+         result.setData(detail);
+         return result;
     }
 
     /**
@@ -69,11 +66,14 @@ public class ClubCenterController {
     @ResponseBody
     @RequestMapping(value = "/club/center/info/head", method = RequestMethod.POST)
     public JsonResult<String> uploadLogo(@ModelAttribute ClubMsg msg) {
-        String logoName = clubService.updateLogo(msg);
-
         JsonResult<String> result = new JsonResult<>();
-        result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "上传社团头像成功");
-        result.setData(logoName);
+        String logoName = clubService.updateLogo(msg);
+        if (logoName == null) {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "修改头像失败");
+        } else {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "修改头像成功");
+            result.setData(logoName);
+        }
         return result;
     }
 
@@ -84,8 +84,16 @@ public class ClubCenterController {
      */
     @ResponseBody
     @RequestMapping(value = "/club/center/info/view", method = RequestMethod.POST)
-    public JsonResult<String> uploadView() {
-        return null;
+    public JsonResult<String> uploadView(@ModelAttribute ClubMsg msg) {
+        JsonResult<String> result = new JsonResult<>();
+        String viewName = clubService.updateView(msg);
+        if (viewName == null) {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "修改展示失败");
+        } else {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "修改展示成功");
+            result.setData(viewName);
+        }
+        return result;
     }
 
     /**
@@ -97,10 +105,12 @@ public class ClubCenterController {
     @RequestMapping(value = "/club/center/info", method = RequestMethod.PUT)
     public JsonResult<OrgDetail> subNewCenterMsg(@RequestBody ClubMsg msg) {
         int state = clubService.updateClubInfo(msg);
-
         JsonResult<OrgDetail> result = new JsonResult<>();
         if (state == Operation.SUCCESSFULLY) {
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "修改成功");
+            //获取一次自己的信息返回给前端修改
+            JsonResult<OrgDetail> getClubsCenterMsgResult = this.getClubsCenterMsg();
+            result.setData(getClubsCenterMsgResult.getData());
         } else if (state == Operation.FAILED) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "修改失败");
         } else if (state == Operation.INPUT_INCORRECT) {

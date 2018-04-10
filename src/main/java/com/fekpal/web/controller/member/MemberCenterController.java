@@ -11,6 +11,7 @@ import com.fekpal.service.model.domain.PersonMsg;
 import com.fekpal.web.model.MemberOrgDetail;
 import com.fekpal.web.model.PageList;
 import com.fekpal.web.model.PersonDetail;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +25,8 @@ import java.util.List;
  */
 @Controller
 public class MemberCenterController {
+
+    private Logger logger = Logger.getLogger(MemberCenterController.class);
 
     @Autowired
     private PersonService personService;
@@ -120,12 +123,13 @@ public class MemberCenterController {
     /**
      * 获取加入组织的成员状态信息
      *
-     * @param page 分页
+     * @param page 获取条数
      * @return 成员组织信息封装
      */
     @ResponseBody
-    @RequestMapping(value = "/member/center/org", method = RequestMethod.GET)
-    public JsonResult getOrgPersonJoin(PageList page) {
+    @RequestMapping(value = "/member/center/info/org", method = RequestMethod.GET)
+    public JsonResult<List<MemberOrgDetail>> getOrgPersonJoin(PageList page) {
+        logger.info("执行了查询加入组织的成员");
         List<MemberOrg> list = memberOrgService.loadAllOrg(page.getOffset(), page.getLimit());
         List<MemberOrgDetail> details = new ArrayList<>();
         for (MemberOrg memberOrg : list) {

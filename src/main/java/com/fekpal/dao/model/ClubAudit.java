@@ -18,7 +18,7 @@ public class ClubAudit extends BaseModel {
 
     private Timestamp auditTime;
 
-    private Integer auditResult;
+    private String auditResult;
 
     private String file;
 
@@ -26,6 +26,9 @@ public class ClubAudit extends BaseModel {
 
     private String applyName;
 
+    /**
+     * 审核状态（0， 为拒绝。1为通过。2为待审核。3为删除）
+     */
     private Integer auditState;
 
     public Integer getId() {
@@ -84,11 +87,11 @@ public class ClubAudit extends BaseModel {
         this.auditTime = auditTime;
     }
 
-    public Integer getAuditResult() {
+    public String getAuditResult() {
         return auditResult;
     }
 
-    public void setAuditResult(Integer auditResult) {
+    public void setAuditResult(String auditResult) {
         this.auditResult = auditResult;
     }
 

@@ -88,10 +88,6 @@ public class Person extends BaseModel {
         this.realName = realName;
     }
 
-    public String getNickName() {
-        return nickname;
-    }
-
     public void setNickname(String nickname) {
         this.nickname = nickname;
     }

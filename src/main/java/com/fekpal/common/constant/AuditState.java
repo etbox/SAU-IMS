@@ -20,4 +20,9 @@ public class AuditState {
      * 待审（审核中）
      */
     public static final int AUDITING = 2;
+
+    /**
+     * 已经删除了
+     */
+    public static final int DELETE=3;
 }

@@ -15,6 +15,10 @@ public class LikeOrg extends BaseModel {
 
     private Integer orgId;
 
+    /**
+     * 默认为0，不点赞
+     * 1 为点赞
+     */
     private Integer available;
 
     public Integer getId() {

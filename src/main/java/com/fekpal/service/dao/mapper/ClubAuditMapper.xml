@@ -153,6 +153,6 @@
         <result property="auditDescription" column="audit_description"/>
         <result property="file" column="file"/>
         <result property="applyName" column="apply_name"/>
-        <result property="auditState" column="auditState"/>
+        <result property="auditState" column="audit_state"/>
     </resultMap>
 </mapper>

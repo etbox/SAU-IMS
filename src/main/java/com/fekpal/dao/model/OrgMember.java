@@ -12,7 +12,10 @@ public class OrgMember extends Person {
 
     private Integer memberDuty;
 
-    private Integer memberState;
+    /**
+     * 默认状态是存在的
+     */
+    private Integer memberState=1;
 
     private Timestamp joinTime;
 

@@ -48,6 +48,9 @@ public class AccountAccessServiceImpl implements AccountAccessService {
     @Autowired
     private SauService sauService;
 
+    @Autowired
+    MessageReceiveService messageReceiveService;
+
     /**
      * 登录常量
      */

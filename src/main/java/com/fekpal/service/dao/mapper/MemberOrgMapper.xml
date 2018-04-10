@@ -44,7 +44,7 @@
     </select>
 
     <insert id="insert" parameterType="OrgMember" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        insert into org_member(
+        insert into member(
         org_id, person_id,
         member_duty, member_state,
         join_time, leave_time,
@@ -57,7 +57,7 @@
     </insert>
 
     <insert id="insertLoop" parameterType="list" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
-        insert into org_member(
+        insert into member(
         org_id, person_id,
         member_duty, member_state,
         join_time, leave_time,
@@ -72,7 +72,7 @@
     </insert>
 
     <update id="updateByPrimaryKey" parameterType="OrgMember">
-        update org_member set
+        update member set
         member_duty = #{memberDuty},
         member_state = #{memberState},
         join_time = #{joinTime},
@@ -83,7 +83,7 @@
     </update>
 
     <update id="updateByPrimaryKeySelective" parameterType="OrgMember">
-        update org_member
+        update member
         <set>
             <if test="memberDuty != null">
                 member_duty = #{memberDuty},
@@ -108,7 +108,7 @@
     </update>
 
     <update id="updateByExample">
-        update org_member set
+        update member set
         member_duty = #{obj.memberDuty},
         member_state = #{obj.memberState},
         join_time = #{obj.joinTime},
@@ -121,7 +121,7 @@
     </update>
 
     <update id="updateByExampleSelective">
-        update org_member
+        update member
         <set>
             <if test="obj.memberDuty != null">
                 member_duty = #{obj.memberDuty},
@@ -148,13 +148,13 @@
     </update>
 
     <update id="deleteByPrimaryKey" parameterType="int">
-        update org_member set
+        update member set
         available = 0
         where id = #{id} and available != 0
     </update>
 
     <update id="deleteByExample">
-        update org_member set
+        update member set
         available = 0
         <where>
             ${ex.sqlSegment}

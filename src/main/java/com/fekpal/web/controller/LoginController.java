@@ -9,6 +9,7 @@ import com.fekpal.common.utils.IPUtil;
 import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.service.model.domain.SecureMsg;
 import com.fekpal.service.model.domain.LoginResult;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,8 @@ import java.io.OutputStream;
 @Controller
 public class LoginController {
 
+    private Logger logger = Logger.getLogger(LoginController.class);
+
     @Autowired
     private AccountAccessService accountAccessService;
 
@@ -36,6 +39,7 @@ public class LoginController {
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public JsonResult<Integer> login(@RequestBody SecureMsg msg, HttpServletRequest request) {
+        logger.info("登录的urI为："+request.getRequestURI());
         msg.setCurrentTime(TimeUtil.currentTime());
         msg.setLoginIp(IPUtil.getUserIP(request));
         JsonResult<Integer> result = new JsonResult<>();
@@ -72,7 +76,7 @@ public class LoginController {
      * @return json数据
      */
     @ResponseBody
-    @RequestMapping(value = "/logout", method = RequestMethod.POST)
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public JsonResult<String> logout() {
         JsonResult<String> result = new JsonResult<>();
         if (accountAccessService.logout()) {

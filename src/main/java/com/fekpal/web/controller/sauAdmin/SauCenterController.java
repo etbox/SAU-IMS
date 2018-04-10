@@ -8,6 +8,7 @@ import com.fekpal.common.json.JsonResult;
 import com.fekpal.dao.model.Org;
 import com.fekpal.service.model.domain.SauMsg;
 import com.fekpal.web.model.OrgDetail;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class SauCenterController {
     @Autowired
     private SauService sauService;
 
+    Logger logger = Logger.getLogger(SauCenterController.class);
     /**
      * 上传校社联头像的
      *
@@ -32,10 +34,13 @@ public class SauCenterController {
     @RequestMapping(value = "/sau/center/info/head", method = RequestMethod.POST)
     public JsonResult<String> uploadLogo(@ModelAttribute SauMsg msg) {
         String logoName = sauService.updateLogo(msg);
-
         JsonResult<String> result = new JsonResult<>();
-        result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "上传校社联头像成功");
-        result.setData(logoName);
+        if (logoName == null) {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "修改头像失败");
+        } else {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "修改头像成功");
+            result.setData(logoName);
+        }
         return result;
     }
 

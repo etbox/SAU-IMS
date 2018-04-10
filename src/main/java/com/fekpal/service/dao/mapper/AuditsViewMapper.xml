@@ -9,7 +9,7 @@
     <sql id="union">
         (select id, audit_title as title, apply_name as name, register_time as time, 0, audit_result as result from club_audit)union
         (select id, real_name as title, real_name as name, join_time as time, 1, available as result
-         from org_member left join person_info on org_member.person_id = person_info.person_id)
+         from member left join person_info on member.person_id = person_info.person_id)
     </sql>
 
     <select id="selectFirstByExample" resultMap="result">

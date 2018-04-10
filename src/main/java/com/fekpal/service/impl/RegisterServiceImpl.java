@@ -199,8 +199,7 @@ public class RegisterServiceImpl implements RegisterService {
         user.setRegisterTime(reg.getRegisterTime());
         user.setPhone(reg.getPhone());
         user.setAuthority(SystemRole.CLUB);
-        //测试使用，为直接通过注册
-        user.setUserState(AvailableState.AVAILABLE);
+        user.setUserState(AvailableState.AUDITING);
         user.setUserKey(salt);
         int row = userService.insert(user);
 
@@ -214,8 +213,7 @@ public class RegisterServiceImpl implements RegisterService {
         org.setContactEmail(user.getEmail());
         org.setContactNumber(user.getPhone());
         org.setOrgLogo(DefaultField.DEFAULT_LOGO);
-        //测试使用，为直接通过注册
-        org.setOrgState(AvailableState.AVAILABLE);
+        org.setOrgState(AvailableState.AUDITING);
         org.setOrgView(DefaultField.DEFAULT_CLUB_OVERVIEW);
         org.setMembers(DefaultField.DEFAULT_MEMBERS);
         org.setLikeClick(DefaultField.DEFAULT_MEMBERS);
@@ -232,12 +230,12 @@ public class RegisterServiceImpl implements RegisterService {
         ClubAudit clubAudit = new ClubAudit();
         clubAudit.setRegisterTime(reg.getRegisterTime());
         clubAudit.setApplyName(reg.getRealName());
-        clubAudit.setAuditResult(AuditState.AUDITING);
+        clubAudit.setAuditResult("");
+        clubAudit.setAuditState(AuditState.AUDITING);
         clubAudit.setAuditTitle(reg.getClubName() + " 注册申请审核");
         clubAudit.setAuditTime(reg.getRegisterTime());
         clubAudit.setAuditDescription(DefaultField.EMPTY);
-        //测试使用，为直接通过注册
-        clubAudit.setAuditState(AvailableState.AVAILABLE);
+        clubAudit.setAuditState(AvailableState.AUDITING);
         clubAudit.setOrgId(org.getOrgId());
         clubAudit.setFile(auditFileName);
         row += clubAuditService.insert(clubAudit);

@@ -25,6 +25,18 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
+    <!--监听session-->
+    <filter>
+        <filter-name>springSessionRepositoryFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>springSessionRepositoryFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
+
     <!-- springMVC接受put和delete的方法-->
     <filter>
         <filter-name>HiddenHttpMethodFilter</filter-name>
@@ -49,16 +61,22 @@
         <servlet-name>SAU_IMS</servlet-name>
     </filter-mapping>
 
-    <!--监听session-->
+    <!--  处理get请求乱码问题的，自定义过滤器进行编码格式的设置 -->
     <filter>
-        <filter-name>springSessionRepositoryFilter</filter-name>
-        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <filter-name>EncodingFilter</filter-name>
+        <filter-class>com.fekpal.web.filter.EncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
     </filter>
     <filter-mapping>
-        <filter-name>springSessionRepositoryFilter</filter-name>
+        <filter-name>EncodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
-        <dispatcher>REQUEST</dispatcher>
-        <dispatcher>ERROR</dispatcher>
     </filter-mapping>
 
     <!-- 用于获取项目根目录的监听器配置-->

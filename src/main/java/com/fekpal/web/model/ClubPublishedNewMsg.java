@@ -6,15 +6,32 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 校社联发布新消息的实体类
- * Created by hasee on 2017/8/26.
+ * 社团发布新消息的实体类，暂时跟校社联的一样
+ * @author kanlon
+ * @time 2018/4/9
  */
 public class ClubPublishedNewMsg {
     private String messageTitle;
     private String messageContent;
     private Timestamp sendTime;
-    private List<Map<String,Integer>> publishedObject;
+    private String publishedObject;
     public ClubPublishedNewMsg(){}
+
+    public String getPublishedObject() {
+        return publishedObject;
+    }
+
+    public void setPublishedObject(String publishedObject) {
+        this.publishedObject = publishedObject;
+    }
+
+    public ClubPublishedNewMsg(String messageTitle, String messageContent, Timestamp sendTime, String publishedObject) {
+
+        this.messageTitle = messageTitle;
+        this.messageContent = messageContent;
+        this.sendTime = sendTime;
+        this.publishedObject = publishedObject;
+    }
 
     public String getMessageTitle() {
         return messageTitle;
@@ -40,13 +57,9 @@ public class ClubPublishedNewMsg {
         this.sendTime = sendTime;
     }
 
-    public List<Map<String,Integer>> getPublishedObject() {
-        return publishedObject;
-    }
 
-    public void setPublishedObject(List<Map<String,Integer>> publishedObject) {
-        this.publishedObject = publishedObject;
-    }
+
+
 
     @Override
     public String toString() {

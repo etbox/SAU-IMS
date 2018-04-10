@@ -22,6 +22,9 @@ public class Message extends BaseModel {
 
     private Integer messageType;
 
+    /**
+     * 消息附件
+     */
     private String messageAnnex;
 
     private Integer messageState;

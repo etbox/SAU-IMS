@@ -1,5 +1,15 @@
 package com.fekpal.web.controller.sauAdmin;
 
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
+import com.fekpal.api.*;
+import com.fekpal.common.constant.AuditState;
+import com.fekpal.common.constant.Operation;
+import com.fekpal.common.constant.ResponseCode;
+import com.fekpal.common.constant.SystemRole;
+import com.fekpal.common.json.JsonResult;
+import com.fekpal.dao.model.*;
+import com.fekpal.web.model.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,14 +22,62 @@ import java.util.*;
  */
 @Controller
 public class SauAuditRegController {
+
+    @Autowired
+    private  ClubAuditService clubAuditService;
+    @Autowired
+    private  UserService userService;
+    @Autowired
+    private  PersonService personService;
+    @Autowired
+    private  OrgMemberService orgMemberService;
+    @Autowired
+    private  OrgService orgService;
+
+
     /**
      * 查看全部审核的信息的方法
      * @return 审核信息列表
      */
     @ResponseBody
     @RequestMapping(value = "/sau/audit/reg", method = RequestMethod.GET)
-    public Map<String, Object> getAllAuditMsg() {
-        return null;
+    public JsonResult<List<ClubAuditListMsg>> getAllAuditMsg(PageList page) {
+        JsonResult<List<ClubAuditListMsg>> result = new JsonResult<>();
+        List<ClubAuditListMsg> auditList = new ArrayList<>();
+        //社团审核
+        List<ClubAudit> clubAudits = clubAuditService.loadAllClubAudit(page.getOffset(),page.getLimit());
+        //个人审核 //暂时个人审核的先全部加载
+        List<OrgMember> orgMemberList = orgMemberService.loadAllUnAuditMember(1,100000);
+        if((clubAudits==null || clubAudits.size()==0) && (orgMemberList== null || orgMemberList.size()==0)){result.setStateCode(ResponseCode.REQUEST_ERROR,"暂无审核消息"); return result;}
+        if(clubAudits!=null) {
+            for (ClubAudit clubAudit : clubAudits) {
+                ClubAuditListMsg audit = new ClubAuditListMsg();
+                audit.setAuditMsgId(clubAudit.getId());
+                audit.setAuditState(clubAudit.getAuditState());
+                audit.setAuditTitle(clubAudit.getAuditTitle());
+                audit.setRegisterName(clubAudit.getApplyName());
+                audit.setRegisterTime(clubAudit.getRegisterTime());
+                audit.setRole(SystemRole.CLUB);
+                auditList.add(audit);
+            }
+        }
+        if(orgMemberList !=null){
+            for(OrgMember orgMember : orgMemberList){
+                ClubAuditListMsg audit = new ClubAuditListMsg();
+                audit.setAuditMsgId(orgMember.getId());
+                audit.setAuditState(orgMember.getAvailable());
+                int personId = orgMember.getPersonId();
+                Person person = personService.selectByPrimaryKey(personId);
+                audit.setAuditTitle(person.getRealName());
+                audit.setRegisterName(null);
+                audit.setRegisterTime(orgMember.getJoinTime());
+                audit.setRole(SystemRole.PERSON);
+                auditList.add(audit);
+            }
+        }
+        result.setCode(ResponseCode.RESPONSE_SUCCESS);
+        result.setData(auditList);
+        return result;
     }
 
     /**
@@ -29,42 +87,117 @@ public class SauAuditRegController {
      */
     @ResponseBody
     @RequestMapping(value = "/sau/audit/join/{auditMsgId}/{role}", method = RequestMethod.GET)
-    public Map<String, Object> getAuditMsgDetail(@PathVariable("auditMsgId") int auditMsgId, @PathVariable(value = "role") int role) {
-        return null;
+    public JsonResult getAuditMsgDetail(@PathVariable("auditMsgId") int auditMsgId, @PathVariable(value = "role") int role) {
+        JsonResult<PersonJoinAuditDetail> personResult = new JsonResult<>();
+        JsonResult<SauClubAuditDetail> clubResult = new JsonResult<>();
+        PersonJoinAuditDetail personDetail = new PersonJoinAuditDetail();
+        SauClubAuditDetail clubDetail = new SauClubAuditDetail();
+        if(role == SystemRole.PERSON) {
+             OrgMember orgMember = orgMemberService.selectById(auditMsgId);
+             personDetail.setAuditId(auditMsgId);
+             Person person = personService.selectByPrimaryKey(orgMember.getPersonId());
+             User user  = userService.selectByPrimaryKey(person.getUserId());
+             personDetail.setAddress(person.getAddress());
+             personDetail.setBirthday(person.getBirthday());
+             personDetail.setDepartmentName(person.getDepartment());
+             personDetail.setEmail(user.getEmail());
+             personDetail.setGender(person.getGender() == 0 ? "男" : "女");
+             personDetail.setMajorName(person.getMajor());
+             personDetail.setPersonLogo(person.getLogo());
+             personDetail.setPhone(user.getPhone());
+             personDetail.setRealName(person.getRealName());
+             personDetail.setRegisterTime(orgMember.getJoinTime());
+             personDetail.setStudentId(person.getStudentId());
+             personDetail.setUserName(user.getUserName());
+             personDetail.setAuditSate(person.getPersonState());
+
+             personResult.setData(personDetail);
+             personResult.setCode(ResponseCode.RESPONSE_SUCCESS);
+             return personResult;
+        }else if(role == SystemRole.CLUB){
+            ClubAudit clubAudit = clubAuditService.selectByPrimaryKey(auditMsgId);
+            if(clubAudit == null){clubResult.setStateCode(ResponseCode.REQUEST_ERROR,"操作失败"); return clubResult;}
+            Org org = orgService.selectByPrimaryKey(clubAudit.getOrgId());
+            User user = userService.selectByPrimaryKey(org.getUserId());
+            clubDetail = new SauClubAuditDetail();
+            clubDetail.setAudtiMsgId(auditMsgId);
+            clubDetail.setClubName(org.getOrgName());
+            clubDetail.setClubType(org.getOrgType());
+            clubDetail.setDescription(org.getDescription());
+            clubDetail.setEmail(user.getEmail());
+            clubDetail.setFile(clubAudit.getFile());
+            clubDetail.setPhone(user.getPhone());
+            clubDetail.setRegisterTime(clubAudit.getRegisterTime());
+            clubDetail.setRealName(clubAudit.getApplyName());
+            clubDetail.setAuditSate(clubAudit.getAuditState());
+            clubDetail.setAuditResult(clubAudit.getAuditResult());
+
+            clubResult.setData(clubDetail);
+            clubResult.setCode(ResponseCode.RESPONSE_SUCCESS);
+            return clubResult;
+        }
+        //如果执行到这里，则返回错误
+        personResult.setStateCode(ResponseCode.REQUEST_ERROR,"操作错误");
+        return personResult;
     }
 
     /**
      * 发送审核结果，得到审核结果
      * @param auditMsgId 审核消息id
-     * @param resultMap 结果的map集合
+     * @param auditResult 结果的map集合
      * @return 是否成功
      */
     @ResponseBody
-    @RequestMapping(value = "/sau/audit/reg/{auditMsgId}", method = RequestMethod.PUT)
-    public Map<String, Object> sendAuditMsgResult(@PathVariable("auditMsgId") int auditMsgId,@RequestParam Map<String,Object> resultMap)  {
-        return null;
+    @RequestMapping(value = "/sau/audit/reg/{auditMsgId}/{role}", method = RequestMethod.PUT)
+    public JsonResult<String> sendAuditMsgResult(@PathVariable int auditMsgId, @PathVariable int role, @RequestBody AuditResult auditResult)  {
+        JsonResult<String> result = new JsonResult<>();
+        int state = 0;
+        if(auditResult == null){result.setStateCode(ResponseCode.REQUEST_ERROR,"发送审核结果错误");}
+        if(role==SystemRole.CLUB){
+            ClubAuditResultMsg clubAuditResultMsg = new ClubAuditResultMsg();
+            clubAuditResultMsg.setAuditResult(auditResult.getAuditResult());
+            clubAuditResultMsg.setAuditState(auditResult.getAuditState());
+            state = clubAuditService.passOrRejectClubAuditByIdAndResultMsg(auditMsgId,clubAuditResultMsg);
+            if(state == Operation.FAILED ){ result.setStateCode(ResponseCode.REQUEST_ERROR,"操作非法"); return result;}
+            result.setCode(ResponseCode.RESPONSE_SUCCESS);
+            return result;
+        }else if(role == SystemRole.PERSON){
+            state = orgMemberService.passOrRejectAuditByIdAndModel(auditMsgId,auditResult);
+            if(state == Operation.FAILED ){ result.setStateCode(ResponseCode.REQUEST_ERROR,"操作非法");return result;}
+            result.setCode(ResponseCode.RESPONSE_SUCCESS);
+            return result;
+        }
+        result.setStateCode(ResponseCode.REQUEST_ERROR,"链接错误");
+        return result;
     }
 
     /**
      * 在线预览审核文件，
      * @param auditMsgId 审核消息id
-     * @param file 审核文件名称
      * @param response 响应
      * html文件的输出流，直接输出到浏览器
      */
     @RequestMapping(value = "/sau/audit/reg/{auditMsgId}/file/online", method = RequestMethod.GET)
-    public void openOnlineFile(@PathVariable("auditMsgId") int auditMsgId, @RequestParam(required = false) String file, HttpServletResponse response) {
+    public void openOnlineFile(@PathVariable("auditMsgId") int auditMsgId, HttpServletResponse response) {
+        int state = clubAuditService.viewClubAuditFileById(auditMsgId,response);
+        if (state==Operation.FAILED){
+            throw new RuntimeException("预览失败，请重新尝试");
+        }
+
     }
 
     /**
      * 下载某个审核消息的审核文件，向浏览器输出下载信息
      * @param auditMsgId 审核消息id
-     * @param fileName 文件名
      * @param response 响应
      */
     @RequestMapping(value = "/sau/audit/reg/{auditMsgId}/file",method = RequestMethod.GET)
-    public void downFile(@PathVariable int auditMsgId, @RequestParam(value = "file",required = false) String fileName, HttpServletResponse response){
-
+    public void downFile(@PathVariable int auditMsgId, HttpServletResponse response){
+        //只有社团才有文件下载
+        int state = clubAuditService.getClubAuditFileById(auditMsgId,response);
+        if(state == Operation.FAILED){
+            throw new RuntimeException("下载失败，请重新尝试");
+        }
     }
 
     /**
@@ -74,22 +207,42 @@ public class SauAuditRegController {
      */
     @ResponseBody
     @RequestMapping(value = "/sau/audit/reg/search",method = RequestMethod.GET)
-    public Map<String,Object> searchAuditMsg(@RequestParam String findContent){
-        return null;
+    public JsonResult<List<ClubAuditListMsg>> searchAuditMsg(@RequestParam String findContent,@RequestParam int offset,@RequestParam int limit){
+        JsonResult<List<ClubAuditListMsg>> result = new JsonResult<>();
+        List<ClubAuditListMsg> auditList = new ArrayList<>();
+        //社团审核
+        List<ClubAudit> clubAudits = clubAuditService.queryByClubName(findContent,offset,limit);
+        //个人审核 //暂时个人审核的先全部加载
+        List<OrgMember> orgMemberList = orgMemberService.queryByRealName(findContent,1,100000);
+        if((clubAudits==null || clubAudits.size()==0) && (orgMemberList== null || orgMemberList.size()==0)){result.setStateCode(ResponseCode.REQUEST_ERROR,"搜索不到审核消息"); return result;}
+        if(clubAudits!=null) {
+            for (ClubAudit clubAudit : clubAudits) {
+                ClubAuditListMsg audit = new ClubAuditListMsg();
+                audit.setAuditMsgId(clubAudit.getId());
+                audit.setAuditState(clubAudit.getAuditState());
+                audit.setAuditTitle(clubAudit.getAuditTitle());
+                audit.setRegisterName(clubAudit.getApplyName());
+                audit.setRegisterTime(clubAudit.getRegisterTime());
+                audit.setRole(SystemRole.CLUB);
+                auditList.add(audit);
+            }
+        }
+        if(orgMemberList !=null){
+            for(OrgMember orgMember : orgMemberList){
+                ClubAuditListMsg audit = new ClubAuditListMsg();
+                audit.setAuditMsgId(orgMember.getId());
+                audit.setAuditState(orgMember.getAvailable());
+                int personId = orgMember.getPersonId();
+                Person person = personService.selectByPrimaryKey(personId);
+                audit.setAuditTitle(person.getRealName());
+                audit.setRegisterName(null);
+                audit.setRegisterTime(orgMember.getJoinTime());
+                audit.setRole(SystemRole.PERSON);
+                auditList.add(audit);
+            }
+        }
+        result.setCode(ResponseCode.RESPONSE_SUCCESS);
+        result.setData(auditList);
+        return result;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }

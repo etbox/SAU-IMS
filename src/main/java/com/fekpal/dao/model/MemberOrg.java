@@ -16,13 +16,19 @@ public class MemberOrg extends Org {
 
     private Integer memberDuty;
 
-    private Integer memberState;
+    /**
+     * 默认状态是在部门里面
+     */
+    private Integer memberState=1;
 
     private Timestamp joinTime;
 
     private Timestamp leaveTime;
 
-    private String orgDepartment;
+    /**
+     * 默认部分为无
+     */
+    private String orgDepartment="无";
 
     private Integer available;
 

@@ -8,6 +8,7 @@ import com.fekpal.dao.model.Org;
 import com.fekpal.web.model.OrgDetail;
 import com.fekpal.web.model.OrgListMsg;
 import com.fekpal.web.model.PageList;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,14 @@ import java.util.List;
 @Controller
 public class IndexPageController {
 
+    private static Logger logger = Logger.getLogger(IndexPageController.class);
+
+
     @Autowired
     private ClubService clubService;
+
+    @Autowired
+    private OrgService orgService;
 
     /**
      * 得到社团列表信息
@@ -34,7 +41,7 @@ public class IndexPageController {
     @ResponseBody
     @RequestMapping(value = "/index/club", method = RequestMethod.GET)
     public JsonResult<List<OrgListMsg>> getClubList(PageList page) {
-        List<Org> clubList = clubService.loadAllClub(page.getOffset(),page.getLimit());
+        List<Org> clubList = orgService.loadAllOrg(page.getOffset(),page.getLimit());
         JsonResult<List<OrgListMsg>> result = new JsonResult<>();
 
         if (clubList == null || clubList.size() == 0) {
@@ -55,6 +62,7 @@ public class IndexPageController {
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
             result.setData(results);
         }
+        logger.info("执行了获取社团列表信息");
         return result;
     }
 
@@ -90,19 +98,7 @@ public class IndexPageController {
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
             result.setData(record);
         }
-        return result;
-    }
-
-    /**
-     * 获取校社联信息
-     *
-     * @return 社团信息封装
-     */
-    @ResponseBody
-    @RequestMapping(value = "/index/sau", method = RequestMethod.GET)
-    public JsonResult<OrgDetail> getSauDetail() {
-        JsonResult<OrgDetail> result = new JsonResult<>();
-        result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
+        logger.info("执行了获取某社团信息");
         return result;
     }
 }

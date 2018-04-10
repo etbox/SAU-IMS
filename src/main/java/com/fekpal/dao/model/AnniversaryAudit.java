@@ -8,14 +8,29 @@ public class AnniversaryAudit extends BaseModel {
 
     private static final long serialVersionUID = -2315766494340261103L;
 
+    /**
+     * 自增id
+     */
     private Integer id;
 
+    /**
+     * 提交的组织id
+     */
     private Integer orgId;
 
+    /**
+     * 审核标题 varchar
+     */
     private String auditTitle;
 
+    /**
+     * 文件名称 varchar（.docx）
+     */
     private String fileName;
 
+    /**
+     * 审核状态 0:否决，1，通过，2，待审（暂定：3，删除）
+     */
     private Integer auditState;
 
     private Timestamp auditTime;

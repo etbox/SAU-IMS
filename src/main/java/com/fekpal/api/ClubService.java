@@ -2,6 +2,8 @@ package com.fekpal.api;
 
 import com.fekpal.common.base.BaseService;
 import com.fekpal.dao.model.Org;
+import com.fekpal.dao.model.Person;
+import com.fekpal.dao.model.PersonOrgView;
 import com.fekpal.service.model.domain.ClubMsg;
 
 import java.util.List;
@@ -81,4 +83,18 @@ public interface ClubService extends BaseService<Org> {
      * @return 社团信息记录集
      */
     List<Org> loadAllClub(int offset, int limit);
+
+    /**
+     * 只用于社团用户和普通用户用，返回不括校社联的信息
+     * 根据社团id返回社团详细信息
+     * @param orgId 社团id
+     * @return 组织信息和加入状态
+     */
+    PersonOrgView selectByIdForPerson(int orgId);
+
+    /**
+     * 得到本社团所有人的个人信息，仅仅社团用户用
+     * @return 本社团社员个人信息记录集
+     */
+    List<Person> getClubAllMemberPersonMsg();
 }

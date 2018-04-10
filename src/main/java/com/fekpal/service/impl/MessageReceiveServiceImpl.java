@@ -34,10 +34,10 @@ public class MessageReceiveServiceImpl extends BaseServiceImpl<MessageReceiveMap
 
     @Override
     public MessageReceive selectById(int id) {
-        int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        int accId = SessionLocal.local(session).getUserIdentity().getAccId();
         ExampleWrapper<MessageReceive> example = new ExampleWrapper<>();
         example.eq("id", id)
-                .and().eq("user_id", uid)
+                .and().eq("receive_id", accId)
                 .and().eq("available", AvailableState.AVAILABLE)
                 .and().eq("message_state", AvailableState.AVAILABLE);
 
@@ -55,7 +55,7 @@ public class MessageReceiveServiceImpl extends BaseServiceImpl<MessageReceiveMap
     @Override
     public List<MessageReceive> selectByUserId(int id, int offset, int limit) {
         ExampleWrapper<MessageReceive> example = new ExampleWrapper<>();
-        example.eq("user_id", id)
+        example.eq("receive_id", id)
                 .and().eq("available", AvailableState.AVAILABLE)
                 .and().eq("message_state", AvailableState.AVAILABLE)
                 .orderBy("release_time", false);
@@ -64,9 +64,9 @@ public class MessageReceiveServiceImpl extends BaseServiceImpl<MessageReceiveMap
 
     @Override
     public int countUnReadMessage() {
-        int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        int accId = SessionLocal.local(session).getUserIdentity().getAccId();
         ExampleWrapper<MessageReceive> example = new ExampleWrapper<>();
-        example.eq("user_id", uid)
+        example.eq("receive_id", accId)
                 .and().eq("available", AvailableState.AVAILABLE)
                 .and().eq("message_state", AvailableState.AVAILABLE)
                 .and().eq("read_flag", MessageType.UN_READ);
@@ -76,9 +76,9 @@ public class MessageReceiveServiceImpl extends BaseServiceImpl<MessageReceiveMap
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public void updateReceiveNote() {
-        int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        int accId = SessionLocal.local(session).getUserIdentity().getAccId();
         MessageReceive receive = new MessageReceive();
-        receive.setReceiveId(uid);
+        receive.setReceiveId(accId);
         receive.setReadFlag(MessageType.UN_READ);
         receive.setAvailable(AvailableState.AVAILABLE);
         executorService.submit(() -> mapper.insertCommittedNote(receive));
@@ -86,20 +86,20 @@ public class MessageReceiveServiceImpl extends BaseServiceImpl<MessageReceiveMap
 
     @Override
     public int deleteById(SRMsgRecord record) {
-        int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        int accId = SessionLocal.local(session).getUserIdentity().getAccId();
         ExampleWrapper<MessageReceive> receiveExample = new ExampleWrapper<>();
         receiveExample.in("id", record.getIds())
-                .and().eq("user_id", uid)
+                .and().eq("receive_id", accId)
                 .and().eq("available", AvailableState.AVAILABLE);
         int row = mapper.deleteByExample(receiveExample);
-        return row == 1 ? Operation.SUCCESSFULLY : Operation.FAILED;
+        return row >= 1 ? Operation.SUCCESSFULLY : Operation.FAILED;
     }
 
     @Override
     public List<MessageReceive> queryByMessageTitle(String title, int offset, int limit) {
-        int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        int accId = SessionLocal.local(session).getUserIdentity().getAccId();
         ExampleWrapper<MessageReceive> example = new ExampleWrapper<>();
-        example.eq("user_id", uid)
+        example.eq("receive_id", accId)
                 .and().like("message_title", title)
                 .and().eq("message_state", AvailableState.AVAILABLE)
                 .and().eq("available", AvailableState.AVAILABLE)
@@ -109,9 +109,9 @@ public class MessageReceiveServiceImpl extends BaseServiceImpl<MessageReceiveMap
 
     @Override
     public List<MessageReceive> queryByReleaseName(String name, int offset, int limit) {
-        int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        int accId = SessionLocal.local(session).getUserIdentity().getAccId();
         ExampleWrapper<MessageReceive> example = new ExampleWrapper<>();
-        example.eq("user_id", uid)
+        example.eq("receive_id", accId)
                 .and().like("release_name", name)
                 .and().eq("message_state", AvailableState.AVAILABLE)
                 .and().eq("available", AvailableState.AVAILABLE)
@@ -121,10 +121,10 @@ public class MessageReceiveServiceImpl extends BaseServiceImpl<MessageReceiveMap
 
     @Override
     public void getAnnexById(int id, OutputStream outputStream) {
-        int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        int accId = SessionLocal.local(session).getUserIdentity().getAccId();
         ExampleWrapper<MessageReceive> example = new ExampleWrapper<>();
         example.eq("id", id)
-                .and().eq("user_id", uid)
+                .and().eq("receive_id", accId)
                 .and().eq("message_state", AvailableState.AVAILABLE)
                 .and().eq("available", AvailableState.AVAILABLE);
         MessageReceive receive = mapper.selectFirstByExample(example);
@@ -135,9 +135,9 @@ public class MessageReceiveServiceImpl extends BaseServiceImpl<MessageReceiveMap
 
     @Override
     public List<MessageReceive> loadAllReceiveMessage(int offset, int limit) {
-        int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        int accId = SessionLocal.local(session).getUserIdentity().getAccId();
         ExampleWrapper<MessageReceive> example = new ExampleWrapper<>();
-        example.eq("user_id", uid)
+        example.eq("receive_id", accId)
                 .and().eq("available", AvailableState.AVAILABLE)
                 .and().eq("message_state", AvailableState.AVAILABLE)
                 .orderBy("release_time", false);

@@ -10,6 +10,8 @@ import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import static java.lang.System.out;
+
 /**
  * Created by APone on 2017/8/14.
  * word文档转html
@@ -37,6 +39,8 @@ public class WordFileUtil {
         try {
             //读取word文件流
             FileInputStream fileInputStream = new FileInputStream(wordFileName);
+            out.println(wordFileName);
+            if(fileInputStream==null){throw  new RuntimeException("输入流为空");}
             //创建文档对象，并创建word配置对象
             XWPFDocument document = new XWPFDocument(fileInputStream);
             XHTMLOptions options = XHTMLOptions.create();

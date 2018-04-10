@@ -44,7 +44,7 @@ public class SessionContent {
         private int uid;
 
         /**
-         * 角色权限
+         * 角色权限，0普通，1，社团，2校社联
          */
         private int auth;
 

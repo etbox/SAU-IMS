@@ -41,12 +41,15 @@ public class PersonServiceImpl extends BaseServiceImpl<PersonMapper, Person> imp
 
     @Override
     public int updatePersonInfo(PersonMsg msg) {
-        ExampleWrapper<Person> example = new ExampleWrapper<>();
-        example.eq("nickname", msg.getNickname());
-        int row = mapper.countByExample(example);
-        if (row != 0) return Operation.INPUT_INCORRECT;
-
         int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        ExampleWrapper<Person> example = new ExampleWrapper<>();
+        example.eq("nickname", msg.getNickname()).and().ne("person_id",uid);
+        int row = mapper.countByExample(example);
+
+        if  (row != 0  ){
+            return Operation.INPUT_INCORRECT;
+        }
+
         Person person = new Person();
         person.setPersonId(uid);
         person.setRealName(msg.getRealName());

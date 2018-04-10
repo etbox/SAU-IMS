@@ -13,6 +13,7 @@ import com.fekpal.dao.mapper.MemberOrgMapper;
 import com.fekpal.dao.mapper.PersonMapper;
 import com.fekpal.dao.model.MemberOrg;
 import com.fekpal.dao.model.Person;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -27,6 +28,8 @@ import java.util.List;
  */
 @Service
 public class MemberOrgServiceImpl extends BaseServiceImpl<MemberOrgMapper, MemberOrg> implements MemberOrgService {
+
+    Logger logger = Logger.getLogger(MemberOrgService.class);
 
     @Autowired
     private HttpSession session;
@@ -87,6 +90,7 @@ public class MemberOrgServiceImpl extends BaseServiceImpl<MemberOrgMapper, Membe
     @Override
     public List<MemberOrg> loadAllOrg(int offset, int limit) {
         int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        logger.info("执行了查询某个人加入的所有社团，他的uid为"+uid);
         ExampleWrapper<MemberOrg> example = new ExampleWrapper<>();
         example.eq("person_id", uid).and().eq("available", AvailableState.AVAILABLE);
         return mapper.selectByExample(example, offset, limit);

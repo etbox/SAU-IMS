@@ -86,8 +86,6 @@ public class AccountSecureServiceImpl implements AccountSecureService {
         example.eq("email", email);
         User user = userService.selectFirstByExample(example);
         String salt = user.getUserKey();
-        user = new User();
-        user.setUserId(user.getUserId());
         user.setPassword(MD5Util.encryptPwd(msg.getNewPassword(), salt));
 
         int row = userService.updateByPrimaryKeySelective(user);

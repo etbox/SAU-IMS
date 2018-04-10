@@ -17,7 +17,7 @@ public class SauPublishedNewMsg {
 
     private Timestamp sendTime;
 
-    private List<Map<String,Integer>> publishedObject;
+    private String publishedObject;
 
     public String getMessageTitle() {
         return messageTitle;
@@ -43,11 +43,11 @@ public class SauPublishedNewMsg {
         this.sendTime = sendTime;
     }
 
-    public List<Map<String,Integer>> getPublishedObject() {
+    public String getPublishedObject() {
         return publishedObject;
     }
 
-    public void setPublishedObject(List<Map<String,Integer>> publishedObject) {
+    public void setPublishedObject(String publishedObject) {
         this.publishedObject = publishedObject;
     }
 }

@@ -153,6 +153,7 @@
         <result property="messageType" column="message_type"/>
         <result property="messageAnnex" column="message_annex"/>
         <result property="messageState" column="message_state"/>
+
         <result property="receiveId" column="receive_id"/>
         <result property="readFlag" column="read_flag"/>
         <result property="available" column="available"/>

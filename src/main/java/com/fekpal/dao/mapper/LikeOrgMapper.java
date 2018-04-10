@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 /**
  * Created by APone on 2017/9/5.
+ *
  */
 @Repository
 public interface LikeOrgMapper extends BaseMapper<LikeOrg> {
