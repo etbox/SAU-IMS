@@ -41,6 +41,9 @@ public class IndexPageController {
     @ResponseBody
     @RequestMapping(value = "/index/club", method = RequestMethod.GET)
     public JsonResult<List<OrgListMsg>> getClubList(PageList page) {
+        //前端传的offset是页码，转化为跳过的条数
+        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
+
         List<Org> clubList = orgService.loadAllOrg(page.getOffset(),page.getLimit());
         JsonResult<List<OrgListMsg>> result = new JsonResult<>();
 

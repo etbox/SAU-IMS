@@ -50,6 +50,9 @@ public class ClubAnnRegisterController {
     @ResponseBody
     @RequestMapping(value = "/club/ann", method = RequestMethod.GET)
     public JsonResult<List<AnnAuditListModel>> getAllAuditMsg(PageList page) {
+        //将前端发送过来的页码offset，转化为跳过数offset
+        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
+
         int uid = SessionLocal.local(session).getUserIdentity().getUid();
         JsonResult<List<AnnAuditListModel>> result = new JsonResult<>();
         List<AnnAuditListModel> clubAuditList = new ArrayList<>();
@@ -110,16 +113,17 @@ public class ClubAnnRegisterController {
     /**
      * 根据查找内容查找年度审核消息
      *
-     * @param findContent 查找内容
-     * @param offset 开始条数
-     * @param limit 共条数
+     * @param page 查找内容
      * @return 返回审核消息列表
      */
     @ResponseBody
     @RequestMapping(value = "/club/ann/search", method = RequestMethod.GET)
-    public JsonResult<List<AnnAuditListModel>> searchAuditMsg(@RequestParam String findContent,int offset,int limit) {
+    public JsonResult<List<AnnAuditListModel>> searchAuditMsg(SearchPage page) {
+        //将前端发送的页码offset，转化为跳过条数offset
+        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
+
         JsonResult<List<AnnAuditListModel>> result = new JsonResult<>();
-        List<AnniversaryAudit> auditList = auditService.queryByAuditTitle(findContent,offset,limit);
+        List<AnniversaryAudit> auditList = auditService.queryByAuditTitle(page.getFindContent(),page.getOffset(),page.getLimit());
         List<AnnAuditListModel> sauAuditList = new ArrayList<>();
         if(auditList==null || auditList.size()==0){result.setStateCode(ResponseCode.REQUEST_ERROR,"搜索结果为空"); return result;}
         Calendar c = Calendar.getInstance();

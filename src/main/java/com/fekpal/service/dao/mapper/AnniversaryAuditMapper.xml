@@ -22,10 +22,9 @@
         <select id="selectByExample" resultMap="result">
             select * from anniversary_audit
             <where>
-                id >= #{offset}
                 ${ex.sqlSegment}
             </where>
-            limit #{limit}
+            limit #{offset},#{limit}
         </select>
 
         <select id="countByExample" resultType="int">

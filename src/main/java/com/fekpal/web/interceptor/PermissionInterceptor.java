@@ -49,6 +49,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
 		open_urls.add("/security/resetpwd");
         open_urls.add("/reg");
         open_urls.add("/index");
+        open_urls.add("/resource");
         //如果是公开地址，则放行
         for(String open_url:open_urls){
             if(url.indexOf(open_url)>=0){

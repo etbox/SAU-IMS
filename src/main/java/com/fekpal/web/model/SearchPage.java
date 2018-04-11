@@ -10,18 +10,18 @@ public class SearchPage extends PageList {
 
     private static final long serialVersionUID = -4855087708286906790L;
 
-    private String key;
+    private String findContent;
 
     public SearchPage() {
         super();
-        this.key = "";
+        this.findContent = "";
     }
 
-    public String getKey() {
-        return key;
+    public String getFindContent() {
+        return findContent;
     }
 
-    public void setKey(String key) {
-        this.key = key;
+    public void setFindContent(String findContent) {
+        this.findContent = findContent;
     }
 }

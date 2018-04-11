@@ -13,6 +13,7 @@ import com.fekpal.dao.model.Org;
 import com.fekpal.web.model.AnnAuditListModel;
 import com.fekpal.web.model.PageList;
 import com.fekpal.web.model.SauAnnAuditDetail;
+import com.fekpal.web.model.SearchPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -50,6 +51,9 @@ public class SauAnnAuditController {
     @ResponseBody
     @RequestMapping(value = "/sau/audit/ann", method = RequestMethod.GET)
     public JsonResult<List<AnnAuditListModel>> getAllAuditMsg(PageList page) {
+        //将前端发送过来的页码offset，转化为跳过数offset
+        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
+
         JsonResult<List<AnnAuditListModel>> result = new JsonResult<>();
         List<AnnAuditListModel> sauAuditList = new ArrayList<>();
         List<AnniversaryAudit> auditList = auditService.loadAllAudit(page.getOffset(),page.getLimit());
@@ -136,14 +140,17 @@ public class SauAnnAuditController {
     /**
      * 根据查找内容查找年度审核消息
      *
-     * @param findContent 查找内容
+     * @param page 查找内容
      * @return 返回审核消息列表
      */
     @ResponseBody
     @RequestMapping(value = "/sau/audit/ann/reg/search", method = RequestMethod.GET)
-    public JsonResult<List<AnnAuditListModel>> searchAuditMsg(@RequestParam String findContent,@RequestParam int offset,@RequestParam int limit) {
+    public JsonResult<List<AnnAuditListModel>> searchAuditMsg(SearchPage page) {
+        //将前端发送的页码offset，转化为跳过条数offset
+        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
+
         JsonResult<List<AnnAuditListModel>> result = new JsonResult<>();
-        List<AnniversaryAudit> auditList = auditService.queryByAuditTitle(findContent,offset,limit);
+        List<AnniversaryAudit> auditList = auditService.queryByAuditTitle(page.getFindContent(),page.getOffset(),page.getLimit());
         List<AnnAuditListModel> sauAuditList = new ArrayList<>();
         if(auditList==null || auditList.size()==0){result.setStateCode(ResponseCode.REQUEST_ERROR,"搜索结果为空"); return result;}
         Calendar c = Calendar.getInstance();

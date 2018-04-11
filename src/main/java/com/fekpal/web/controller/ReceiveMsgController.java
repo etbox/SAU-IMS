@@ -11,6 +11,7 @@ import com.fekpal.dao.model.MessageReceive;
 import com.fekpal.service.model.domain.SRMsgRecord;
 import com.fekpal.web.model.DeleteMsgIdsModel;
 import com.fekpal.web.model.PageList;
+import com.fekpal.web.model.SearchPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,8 @@ public class ReceiveMsgController {
     @ResponseBody
     @RequestMapping(value = "/msg", method = RequestMethod.GET)
     public JsonResult<List<MessageReceive>> getAllMsg(PageList page) {
+        //前端传的offset是页码，转化为跳过的条数
+        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
         List<MessageReceive> messagesList = messageReceiveService.loadAllReceiveMessage(page.getOffset(),page.getLimit());
         JsonResult<List<MessageReceive>> jsonResult = new JsonResult<>();
 
@@ -119,17 +122,21 @@ public class ReceiveMsgController {
      */
     @ResponseBody
     @RequestMapping(value = "/msg/search", method = RequestMethod.GET)
-    public JsonResult<List<MessageReceive>> searchMsg(@RequestParam String findContent,@RequestParam int offset,@RequestParam int limit) {
+    public JsonResult<List<MessageReceive>> searchMsg(SearchPage page) {
+        //将前端发送的页码offset，转化为跳过条数offset
+        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
+
+        if(page!=null){page.setOffset( (page.getOffset()-1) * page.getLimit());};
         JsonResult<List<MessageReceive>> jsonResult = new JsonResult<>();
         //如果搜索的为空，那样执行查询全部消息
-        if(StringUtil.isEmpty(findContent)){
+        if(StringUtil.isEmpty(page.getFindContent())){
             PageList pageList = new PageList();
-            pageList.setOffset(offset);
-            pageList.setLimit(limit);
+            pageList.setOffset(page.getOffset());
+            pageList.setLimit(page.getLimit());
             return this.getAllMsg(pageList);
         }
-        logger.info("要查找的内容是："+findContent);
-        List<MessageReceive> messageReceiveList =  messageReceiveService.queryByMessageTitle(findContent,offset,limit);
+        logger.info("要查找的内容是："+page.getFindContent());
+        List<MessageReceive> messageReceiveList =  messageReceiveService.queryByMessageTitle(page.getFindContent(),page.getOffset(),page.getLimit());
         if(messageReceiveList == null || messageReceiveList.size() == 0 ){
             jsonResult.setStateCode(ResponseCode.RESPONSE_ERROR,"查询到的数据为空");
         }else{

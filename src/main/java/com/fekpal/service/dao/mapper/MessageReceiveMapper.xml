@@ -39,10 +39,9 @@
         select * from
         <include refid="union"/>
         <where>
-            id >= #{offset}
             ${ex.sqlSegment}
         </where>
-        limit #{limit}
+        limit #{offset},#{limit}
     </select>
 
     <select id="countByExample" resultType="int">

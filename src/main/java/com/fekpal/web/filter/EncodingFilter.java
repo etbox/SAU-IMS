@@ -13,7 +13,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
  * 自定义编码过滤器，解决乱码问题，主要处理get请求乱码问题
- * Created by hasee on 2017/8/23.
+ * @author  kanlon
+ * @2018/4/11
  */
 public class EncodingFilter extends OncePerRequestFilter {
 

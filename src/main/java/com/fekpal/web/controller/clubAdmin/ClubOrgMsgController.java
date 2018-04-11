@@ -39,6 +39,9 @@ public class ClubOrgMsgController {
     @ResponseBody
     @RequestMapping(value = "/club/other", method = RequestMethod.GET)
     public JsonResult<List<OrgListMsg>> getAllClubMsg(PageList page) {
+        //将前端发送过来的页码offset，转化为跳过数offset
+        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
+
         List<Org> orgList = clubService.loadAllClub(page.getOffset(), page.getLimit());
         JsonResult<List<OrgListMsg>> result = new JsonResult<>();
 
@@ -106,7 +109,10 @@ public class ClubOrgMsgController {
     @ResponseBody
     @RequestMapping(value = "/club/other/search", method = RequestMethod.GET)
     public JsonResult<List<OrgListMsg>> searchMsg(SearchPage page) {
-        List<Org> orgList = clubService.queryByClubName(page.getKey(), page.getOffset(), page.getLimit());
+        //将前端发送的页码offset，转化为跳过条数offset
+        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
+
+        List<Org> orgList = clubService.queryByClubName(page.getFindContent(), page.getOffset(), page.getLimit());
         JsonResult<List<OrgListMsg>> result = new JsonResult<>();
         if (orgList == null || orgList.size() == 0) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");

@@ -1,7 +1,6 @@
 package test.controller;
 
 import org.junit.Test;
-import sun.util.resources.CalendarData;
 
 import java.util.Calendar;
 

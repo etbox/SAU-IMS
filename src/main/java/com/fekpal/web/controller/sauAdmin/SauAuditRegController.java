@@ -42,6 +42,9 @@ public class SauAuditRegController {
     @ResponseBody
     @RequestMapping(value = "/sau/audit/reg", method = RequestMethod.GET)
     public JsonResult<List<ClubAuditListMsg>> getAllAuditMsg(PageList page) {
+        //将前端发送过来的页码offset，转化为跳过数offset
+        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
+
         JsonResult<List<ClubAuditListMsg>> result = new JsonResult<>();
         List<ClubAuditListMsg> auditList = new ArrayList<>();
         //社团审核
@@ -202,18 +205,21 @@ public class SauAuditRegController {
 
     /**
      * 根据查找内容查找审核消息
-     * @param findContent 查找内容
+     * @param page 查找内容
      * @return 返回审核消息列表
      */
     @ResponseBody
     @RequestMapping(value = "/sau/audit/reg/search",method = RequestMethod.GET)
-    public JsonResult<List<ClubAuditListMsg>> searchAuditMsg(@RequestParam String findContent,@RequestParam int offset,@RequestParam int limit){
+    public JsonResult<List<ClubAuditListMsg>> searchAuditMsg(SearchPage page){
+        //将前端发送的页码offset，转化为跳过条数offset
+        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
+
         JsonResult<List<ClubAuditListMsg>> result = new JsonResult<>();
         List<ClubAuditListMsg> auditList = new ArrayList<>();
         //社团审核
-        List<ClubAudit> clubAudits = clubAuditService.queryByClubName(findContent,offset,limit);
+        List<ClubAudit> clubAudits = clubAuditService.queryByClubName(page.getFindContent(),page.getOffset(),page.getLimit());
         //个人审核 //暂时个人审核的先全部加载
-        List<OrgMember> orgMemberList = orgMemberService.queryByRealName(findContent,1,100000);
+        List<OrgMember> orgMemberList = orgMemberService.queryByRealName(page.getFindContent(),0,100000);
         if((clubAudits==null || clubAudits.size()==0) && (orgMemberList== null || orgMemberList.size()==0)){result.setStateCode(ResponseCode.REQUEST_ERROR,"搜索不到审核消息"); return result;}
         if(clubAudits!=null) {
             for (ClubAudit clubAudit : clubAudits) {

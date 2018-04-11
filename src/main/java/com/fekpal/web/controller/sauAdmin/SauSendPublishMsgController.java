@@ -83,6 +83,9 @@ public class SauSendPublishMsgController {
     @ResponseBody
     @RequestMapping(value = "/sau/msg/old",method = RequestMethod.GET)
     public JsonResult<List<OldPublishMsg>> getAllOldMsg(PageList page){
+        //将前端发送过来的页码offset，转化为跳过数offset
+        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
+
         logger.info("page的参数"+page.getOffset()+",limit:"+page.getLimit());
         List<Message> messageList = messageSendService.loadAllMessage(page.getOffset(),page.getLimit());
         JsonResult<List<OldPublishMsg>> result = new JsonResult<>();
@@ -241,15 +244,16 @@ public class SauSendPublishMsgController {
 
     /**
      *根据查找内容查找消息
-     * @param findContent 查找内容
-     * @param offset 开始的第几条
-     * @param limit  要查询几条
+     * @param page 查找内容
      * @return 返回消息列表
      */
     @ResponseBody
     @RequestMapping(value = "/sau/msg/old/search",method = RequestMethod.GET)
-    public JsonResult<List<OldPublishMsg>> searchMsg (@RequestParam String findContent,int offset,int limit) {
-        List<Message> messageList = messageSendService.queryByMessageTitle(findContent,offset,limit);
+    public JsonResult<List<OldPublishMsg>> searchMsg (SearchPage page) {
+        //将前端发送的页码offset，转化为跳过条数offset
+        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
+
+        List<Message> messageList = messageSendService.queryByMessageTitle(page.getFindContent(),page.getOffset(),page.getLimit());
         JsonResult<List<OldPublishMsg>> result = new JsonResult<>();
         List<OldPublishMsg> oldPublishMsgList = new ArrayList<>();
         if (messageList == null || messageList.size() == 0) {
