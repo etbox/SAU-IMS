@@ -260,6 +260,9 @@ to {width: 10px; height: 50px;opacity: 1;}
 from {width: 313px; height: 50px;opacity: 1;}
 to {width: 10px; height: 50px;opacity: 0;}
 }
+.m:hover{
+     background-color: #8fc9fb;
+}
 
 
 .m{
@@ -270,7 +273,9 @@ to {width: 10px; height: 50px;opacity: 0;}
      font-family:微软雅黑,宋体,Arial,Helvetica,Verdana,sans-serif; 
      font-size:17px;
      color: black;
-     position: absolute;
+     position: relative;
+      margin-top: 10px;
+     margin-left: 12px;
      text-decoration:none;  /*超链接无下划线*/
     /* padding: 10px 100px;*/
      -webkit-transition:all linear 0.30s;  
@@ -293,10 +298,13 @@ to {width: 10px; height: 50px;opacity: 0;}
         left: 8px;
 }
 .MTIME{
+  width: 28px;
+  height: 40px;
         font-size: 12px;
         position: absolute;
         top: 18px;
         left: 260px;
+        overflow: hidden;
 
   }
   .MCHECK{
@@ -306,7 +314,8 @@ to {width: 10px; height: 50px;opacity: 0;}
         opacity:0.6;
         filter:alpha(opacity=50);
         background:#000;
-        left: 273px; z-index: 20;
+        left: 265px; z-index: 20;
+       top:10px;
        
 
   } 
@@ -318,30 +327,7 @@ to {width: 10px; height: 50px;opacity: 0;}
     font-size: 18px;
     color: #ff6666;
   }
-  #mCheck{top: 12px;}
-  #m1Check{top: 72px;}
-  #m2Check{top: 132px;}
-  #m3Check{top: 192px;}
 
- #m{
-    
-     left:10px;
-     top: 0px;
-     
-}
-  
- #m1{   
-     left:10px;
-     top: 60px;    
-}  
- #m2{  
-     left:10px;
-     top: 120px;    
-}
-  #m3{   
-     left:10px;
-     top: 180px;  
-}
    #RightHead{
         position:absolute;
         background-color: white;
@@ -460,7 +446,7 @@ to {width: 10px; height: 50px;opacity: 0;}
   .pass{
      position: relative;
      margin-top: 8px;
-     left: 0px;
+     left: 100px;
      font-family: "微软雅黑";
      font-size: 12px;
      color: #ff6666;
