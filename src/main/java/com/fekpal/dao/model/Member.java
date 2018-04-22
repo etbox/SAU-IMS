@@ -21,7 +21,7 @@ public class Member extends BaseModel {
     private Integer memberDuty;
 
     /**
-     * 成员状态（0，拒绝。1：通过。2：审核中。3：删除），用户社团审核状态
+     * 离开状态（0，离开。1.还在该社团）
      */
     private Integer memberState;
 
@@ -30,9 +30,8 @@ public class Member extends BaseModel {
     private Timestamp leaveTime;
 
     private String orgDepartment;
-
     /**
-     * 离开状态（0，离开。1.还在该社团）
+     * 审核状态（0，拒绝。1：通过。2：审核中。3：删除），用户社团审核状态
      */
     private Integer available;
 

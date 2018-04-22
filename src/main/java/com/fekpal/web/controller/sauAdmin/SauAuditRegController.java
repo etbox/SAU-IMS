@@ -50,7 +50,7 @@ public class SauAuditRegController {
         //社团审核
         List<ClubAudit> clubAudits = clubAuditService.loadAllClubAudit(page.getOffset(),page.getLimit());
         //个人审核 //暂时个人审核的先全部加载
-        List<OrgMember> orgMemberList = orgMemberService.loadAllUnAuditMember(1,100000);
+        List<OrgMember> orgMemberList = orgMemberService.loadAllAuditMember(1,100000);
         if((clubAudits==null || clubAudits.size()==0) && (orgMemberList== null || orgMemberList.size()==0)){result.setStateCode(ResponseCode.REQUEST_ERROR,"暂无审核消息"); return result;}
         if(clubAudits!=null) {
             for (ClubAudit clubAudit : clubAudits) {
@@ -68,7 +68,7 @@ public class SauAuditRegController {
             for(OrgMember orgMember : orgMemberList){
                 ClubAuditListMsg audit = new ClubAuditListMsg();
                 audit.setAuditMsgId(orgMember.getId());
-                audit.setAuditState(orgMember.getAvailable());
+                audit.setAuditState(orgMember.getMemberState());
                 int personId = orgMember.getPersonId();
                 Person person = personService.selectByPrimaryKey(personId);
                 audit.setAuditTitle(person.getRealName());
@@ -237,7 +237,7 @@ public class SauAuditRegController {
             for(OrgMember orgMember : orgMemberList){
                 ClubAuditListMsg audit = new ClubAuditListMsg();
                 audit.setAuditMsgId(orgMember.getId());
-                audit.setAuditState(orgMember.getAvailable());
+                audit.setAuditState(orgMember.getMemberState());
                 int personId = orgMember.getPersonId();
                 Person person = personService.selectByPrimaryKey(personId);
                 audit.setAuditTitle(person.getRealName());

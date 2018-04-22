@@ -97,4 +97,27 @@ public interface ClubService extends BaseService<Org> {
      * @return 本社团社员个人信息记录集
      */
     List<Person> getClubAllMemberPersonMsg();
+
+
+    /**
+     * 根据社团id计算社团内部男生的数量
+     * @return 社团内男生的人数
+     */
+    int countClubManNum();
+
+    /**
+     * 计算社团内部女生的数量
+     * @return 社团内女生的人数
+     */
+    int countClubWomanNum();
+
+
+    /**
+     * 根据年级数计算社团内部年级的数量
+     *
+     * @param grade 年级 如1,2,3,4,
+     * @return 社团内各个年级的人数
+     */
+    int countClubGradeNum(int grade);
+
 }

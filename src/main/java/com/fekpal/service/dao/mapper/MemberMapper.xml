@@ -33,6 +33,36 @@
         </where>
     </select>
 
+    <select id="countOrgManNum" parameterType="int" resultType="int">
+         SELECT COUNT(member.person_id) FROM member,person_info
+          WHERE member.person_id=person_info.person_id
+          AND member.org_id=#{orgId}
+          AND person_info.gender=0
+          AND member.available = 1
+          AND member.member_state=1
+          AND person_info.person_state=1
+    </select>
+
+    <select id="countOrgWomanNum" parameterType="int" resultType="int">
+         SELECT COUNT(member.person_id) FROM member,person_info
+          WHERE member.person_id=person_info.person_id
+          AND member.org_id=#{orgId}
+          AND person_info.gender=1
+          AND member.available = 1
+          AND member.member_state=1
+          AND person_info.person_state=1
+    </select>
+
+    <select id="countOrgGradeNum" resultType="int">
+         SELECT COUNT(member.person_id) FROM member,person_info
+          WHERE member.person_id=person_info.person_id
+          AND member.org_id=#{orgId}
+          AND person_info.student_id LIKE #{grade}
+          AND member.available = 1
+          AND member.member_state=1
+          AND person_info.person_state=1
+    </select>
+
     <insert id="insert" parameterType="Member" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         insert into member(
         org_id, person_id,

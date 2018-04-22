@@ -64,6 +64,14 @@ public interface OrgMemberService extends BaseService<OrgMember> {
     List<OrgMember> loadAllUnAuditMember(int offset,int limit);
 
     /**
+     * 加载所有该组织的所有审核的组织成员，按页获取
+     * @param offset 跳过读数
+     * @param limit 读取数
+     * @return 组织成员记录集
+     */
+    List<OrgMember> loadAllAuditMember(int offset,int limit);
+
+    /**
      * 根据真实姓名用模糊搜索个人名姓名
      * @param realName 真实姓名
      * @param offset 跳过读数

@@ -37,6 +37,91 @@ public class OrgDetail extends BaseModel {
 
     private String phone;
 
+    /**
+     * 社团内男生数量
+     */
+    private Integer manNum;
+    /**
+     * 社团内女生数量
+     */
+    private Integer womanNum;
+    /**
+     * 社团内大一，即一年级学生的数量
+     */
+    private Integer firstGradeNum;
+    /**
+     * 社团内大二，即二年级学生的数量
+     */
+    private Integer secondGradeNum;
+    /**
+     * 社团内大三，即三年级学生的数量
+     */
+    private Integer threeGradeNum;
+    /**
+     * 社团内大四，即四年级学生的数量
+     */
+    private Integer fourGradeNum;
+    /**
+     * 社团内已经毕业的学生的数量
+     */
+    private Integer graduatedNum;
+
+    public Integer getManNum() {
+        return manNum;
+    }
+
+    public void setManNum(Integer manNum) {
+        this.manNum = manNum;
+    }
+
+    public Integer getWomanNum() {
+        return womanNum;
+    }
+
+    public void setWomanNum(Integer womanNum) {
+        this.womanNum = womanNum;
+    }
+
+    public Integer getFirstGradeNum() {
+        return firstGradeNum;
+    }
+
+    public void setFirstGradeNum(Integer firstGradeNum) {
+        this.firstGradeNum = firstGradeNum;
+    }
+
+    public Integer getSecondGradeNum() {
+        return secondGradeNum;
+    }
+
+    public void setSecondGradeNum(Integer secondGradeNum) {
+        this.secondGradeNum = secondGradeNum;
+    }
+
+    public Integer getThreeGradeNum() {
+        return threeGradeNum;
+    }
+
+    public void setThreeGradeNum(Integer threeGradeNum) {
+        this.threeGradeNum = threeGradeNum;
+    }
+
+    public Integer getFourGradeNum() {
+        return fourGradeNum;
+    }
+
+    public void setFourGradeNum(Integer fourGradeNum) {
+        this.fourGradeNum = fourGradeNum;
+    }
+
+    public Integer getGraduatedNum() {
+        return graduatedNum;
+    }
+
+    public void setGraduatedNum(Integer graduatedNum) {
+        this.graduatedNum = graduatedNum;
+    }
+
     private int joinState;
 
     public String getView() {

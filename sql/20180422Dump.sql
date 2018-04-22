@@ -35,7 +35,7 @@ CREATE TABLE `anniversary_audit` (
 
 /*Data for the table `anniversary_audit` */
 
-insert  into `anniversary_audit`(`id`,`org_id`,`audit_title`,`file_name`,`audit_state`,`audit_result`,`submit_time`,`submit_description`,`audit_time`) values (1,12,'2017精英年度审核修改的','2017_12.docx',2,'无','2018-04-07 16:03:25','2017精英年度审核的修改的描述','2018-04-07 11:10:15'),(2,17,'2017乒乓球协会年度审核','2017_53.docx',2,'这是审核的驳回理由','2018-04-07 18:05:04','乒乓球协会年度审核描述','2018-04-07 11:12:14'),(3,12,'2016广金Idea精英汇年度审核','48.docx',2,'','2017-03-11 18:05:04','广金Idea精英汇年度审核描述',NULL),(4,17,'2016乒乓球协会年度审核','53.docx',2,'','2017-03-11 18:05:04','乒乓球协会年度审核描述',NULL),(5,12,'2015广金Idea精英汇年度审核','2015_48.docx',2,'','2016-03-11 18:05:04','广金Idea精英汇年度审核描述',NULL),(6,17,'2015乒乓球协会年度审核','2015_53.docx',2,'','2016-03-11 18:05:04','乒乓球协会年度审核描述',NULL),(7,12,'2018精英年度审核','2018_12.docx',2,'','2018-04-07 14:45:39','2018精英年度审核的描述',NULL);
+insert  into `anniversary_audit`(`id`,`org_id`,`audit_title`,`file_name`,`audit_state`,`audit_result`,`submit_time`,`submit_description`,`audit_time`) values (1,12,'2017精英年度审核修改的','2017_12.doc',2,'无','2018-04-21 17:20:59','2017精英年度审核的修改的描述','2018-04-07 11:10:15'),(2,17,'2017乒乓球协会年度审核','2017_53.docx',2,'这是审核的驳回理由','2018-04-07 18:05:04','乒乓球协会年度审核描述','2018-04-07 11:12:14'),(3,12,'2016广金Idea精英汇年度审核','48.docx',2,'','2017-03-11 18:05:04','广金Idea精英汇年度审核描述',NULL),(4,17,'2016乒乓球协会年度审核','53.docx',2,'','2017-03-11 18:05:04','乒乓球协会年度审核描述',NULL),(5,12,'2015广金Idea精英汇年度审核','2015_48.docx',2,'','2016-03-11 18:05:04','广金Idea精英汇年度审核描述',NULL),(6,17,'2015乒乓球协会年度审核','2015_53.docx',2,'','2016-03-11 18:05:04','乒乓球协会年度审核描述',NULL),(7,12,'2018精英年度审核','2018_12.docx',2,'','2018-04-07 14:45:39','2018精英年度审核的描述',NULL);
 
 /*Table structure for table `authority` */
 
@@ -80,11 +80,11 @@ CREATE TABLE `club_audit` (
   `apply_name` varchar(50) NOT NULL,
   `audit_state` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 /*Data for the table `club_audit` */
 
-insert  into `club_audit`(`id`,`org_id`,`register_time`,`audit_time`,`audit_result`,`file`,`audit_description`,`audit_title`,`apply_name`,`audit_state`) values (9,18,'2014-03-11 18:05:04','2015-03-11 18:05:04','','18_club_audit.docx','篮球审核描述','篮球协会 注册申请审核','篮球协会负责人姓名',2),(10,19,'2016-03-11 18:05:04','2016-03-11 18:05:04','','19_club_audit.docx','台球协会审核描述','台球协会 注册申请审核','台球球协会负责人姓名',2),(11,20,'2013-04-11 18:05:04',NULL,'','20_club_audit.docx','社交审核描述','社交协会 注册申请审核','社交协会负责人姓名',2),(12,21,'2018-02-11 18:05:04',NULL,'','21_club_audit.docx','桌游协会审核描述','桌游协会 注册申请审核','桌游协会负责人姓名',2),(13,24,'2013-05-11 18:05:04',NULL,'','24_club_audit.docx','羽毛球协会审核描述','羽毛球协会 注册申请审核','羽毛球协会负责人姓名',1),(14,25,'2018-07-11 18:05:04',NULL,'','25_club_audit.docx','乒乓球协会2审核描述','乒乓球协会2 注册申请审核','乒乓球协会2负责人姓名',1);
+insert  into `club_audit`(`id`,`org_id`,`register_time`,`audit_time`,`audit_result`,`file`,`audit_description`,`audit_title`,`apply_name`,`audit_state`) values (9,18,'2014-03-11 18:05:04','2015-03-11 18:05:04','','18_club_audit.docx','篮球审核描述','篮球协会 注册申请审核','篮球协会负责人姓名',2),(10,19,'2016-03-11 18:05:04','2016-03-11 18:05:04','','19_club_audit.docx','台球协会审核描述','台球协会 注册申请审核','台球球协会负责人姓名',2),(11,20,'2013-04-11 18:05:04',NULL,'','20_club_audit.docx','社交审核描述','社交协会 注册申请审核','社交协会负责人姓名',2),(12,21,'2018-02-11 18:05:04',NULL,'','21_club_audit.docx','桌游协会审核描述','桌游协会 注册申请审核','桌游协会负责人姓名',2),(13,24,'2013-05-11 18:05:04',NULL,'','24_club_audit.docx','羽毛球协会审核描述','羽毛球协会 注册申请审核','羽毛球协会负责人姓名',1),(14,25,'2018-07-11 18:05:04',NULL,'','25_club_audit.docx','乒乓球协会2审核描述','乒乓球协会2 注册申请审核','乒乓球协会2负责人姓名',1),(15,26,'2018-04-16 21:21:15','2018-04-16 21:21:15','','fTDefBvgcfN6UNHenxqU.docx','无','apone协会 注册申请审核','张三san',1);
 
 /*Table structure for table `deparment` */
 
@@ -109,11 +109,11 @@ CREATE TABLE `like_org` (
   `org_id` int(11) NOT NULL,
   `available` int(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 /*Data for the table `like_org` */
 
-insert  into `like_org`(`id`,`person_id`,`org_id`,`available`) values (1,7,12,1),(2,7,17,0),(3,8,12,0);
+insert  into `like_org`(`id`,`person_id`,`org_id`,`available`) values (1,7,12,1),(2,7,17,0),(3,8,12,0),(4,12,11,0),(5,12,12,0),(6,12,17,0),(7,12,24,0),(8,12,25,0),(9,12,26,0);
 
 /*Table structure for table `major` */
 
@@ -144,11 +144,11 @@ CREATE TABLE `member` (
   `org_department` varchar(100) DEFAULT NULL,
   `available` int(11) NOT NULL DEFAULT '2',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
 
 /*Data for the table `member` */
 
-insert  into `member`(`id`,`org_id`,`person_id`,`member_duty`,`member_state`,`join_time`,`leave_time`,`org_department`,`available`) values (8,11,12,0,2,'2007-10-10 12:00:00','2007-10-10 12:00:00','无',1),(9,11,13,0,2,'2008-10-10 12:00:00','2007-10-10 12:00:00','无',1),(10,12,12,0,1,'2007-10-10 12:00:00','2007-10-10 12:00:00','无',1),(11,12,13,0,2,'2008-10-10 12:00:00','2007-10-10 12:00:00','无',1),(12,12,14,0,2,'2009-10-10 12:00:00','2007-10-10 12:00:00','无',1),(13,12,15,0,2,'2006-10-10 12:00:00','2007-10-10 12:00:00','无',1);
+insert  into `member`(`id`,`org_id`,`person_id`,`member_duty`,`member_state`,`join_time`,`leave_time`,`org_department`,`available`) values (8,11,12,0,2,'2007-10-10 12:00:00','2007-10-10 12:00:00','无',1),(9,11,13,0,2,'2008-10-10 12:00:00','2007-10-10 12:00:00','无',1),(10,12,12,0,1,'2007-10-10 12:00:00','2007-10-10 12:00:00','无',1),(11,12,13,0,1,'2008-10-10 12:00:00','2007-10-10 12:00:00','无',1),(12,12,14,0,2,'2009-10-10 12:00:00','2007-10-10 12:00:00','无',1),(13,12,15,0,2,'2006-10-10 12:00:00','2007-10-10 12:00:00','无',1),(14,26,12,0,1,'2018-04-16 23:35:19',NULL,'无',1);
 
 /*Table structure for table `message` */
 
@@ -186,7 +186,7 @@ CREATE TABLE `message_receive` (
 
 /*Data for the table `message_receive` */
 
-insert  into `message_receive`(`id`,`message_id`,`receive_id`,`read_flag`,`available`) values (1,1,48,1,1),(2,1,47,0,0),(3,2,48,0,1),(4,2,54,0,1),(15,17,47,0,0),(16,17,48,0,1),(17,17,53,0,1),(18,17,54,0,1),(19,17,55,0,1),(20,18,54,0,1),(21,18,47,0,1),(22,18,48,0,1),(23,19,47,0,1),(24,19,48,0,1),(25,20,47,0,1),(26,20,48,0,0),(27,20,53,0,1),(28,20,54,0,1),(29,20,55,0,1),(30,20,58,0,1),(31,20,59,0,1),(32,22,58,0,1),(33,22,59,0,1),(34,23,58,0,1),(35,24,58,0,1),(36,24,59,0,1),(37,25,47,0,1),(38,25,48,0,0),(39,25,53,0,1),(40,25,54,0,1),(41,25,55,0,1),(42,25,58,0,1),(43,25,59,0,1);
+insert  into `message_receive`(`id`,`message_id`,`receive_id`,`read_flag`,`available`) values (1,1,48,1,1),(2,1,47,0,0),(3,2,48,0,1),(4,2,54,0,1),(15,17,47,0,0),(16,17,48,0,1),(17,17,53,0,1),(18,17,54,0,1),(19,17,55,0,1),(20,18,54,1,1),(21,18,47,0,1),(22,18,48,0,1),(23,19,47,0,1),(24,19,48,0,1),(25,20,47,0,0),(26,20,48,0,0),(27,20,53,0,1),(28,20,54,0,1),(29,20,55,0,1),(30,20,58,0,1),(31,20,59,0,1),(32,22,58,1,0),(33,22,59,0,1),(34,23,58,1,1),(35,24,58,0,1),(36,24,59,0,1),(37,25,47,0,1),(38,25,48,0,0),(39,25,53,0,1),(40,25,54,0,1),(41,25,55,0,1),(42,25,58,0,0),(43,25,59,0,1);
 
 /*Table structure for table `org_info` */
 
@@ -210,11 +210,11 @@ CREATE TABLE `org_info` (
   `org_auth` int(11) NOT NULL,
   PRIMARY KEY (`org_id`),
   UNIQUE KEY `club_name_UNIQUE` (`org_name`)
-) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
 
 /*Data for the table `org_info` */
 
-insert  into `org_info`(`org_id`,`user_id`,`org_name`,`found_time`,`description`,`org_type`,`admin_name`,`org_logo`,`org_view`,`like_click`,`members`,`contact_email`,`contact_number`,`org_state`,`org_auth`) values (11,47,'校社联','2017-04-06 14:34:48','我是更新后的社团描述','管理类','更新张三','default_logo.jpg','default_view.jpg',1,1,'Canlong2015@126.com','18316821383',1,2),(12,48,'广金Idea精英汇协会','2018-04-08 21:55:51','广金Idea精英汇协会的描述','综合实践类','张三','default_logo.jpg','default_view.jpg',1,1,'Canlong2015@126.com','12345678901',1,1),(17,53,'乒乓球协会','2015-03-10 14:01:27','这是乒乓球协会的描述','体育','张三q1','default_logo.jpg','default_view.jpg',0,0,'s199612346@126.com','18316821839',1,1),(18,54,'篮球协会','2014-03-11 18:05:04','热爱篮球的人的聚合体','体育','篮球协会负责人姓名','default_logo.jpg','default_view.jpg',1,1,'Canlong2015@126.com','1234567890',2,1),(19,55,'台球协会','2013-03-11 18:05:04','热爱台球球的人的聚合体','体育','台球协会负责人姓名','default_logo.jpg','default_view.jpg',1,1,'gdufxsc106@163.com','1234567891',2,1),(20,62,'社交协会','2015-02-11 18:05:04','热爱社交的人的聚合体','体育','社交协会负责人姓名','default_logo.jpg','default_view.jpg',1,1,'shejiao@126.com','1234567893',2,1),(21,63,'桌游协会','2017-04-11 18:05:04','热爱桌游的人的聚合体','体育','桌游协会负责人姓名','default_logo.jpg','default_view.jpg',1,1,'zhuoyou@163.com','1234567894',2,1),(24,64,'羽毛球协会','2015-02-11 18:05:04','热爱羽毛球的人的聚合体','体育','羽毛球协会负责人姓名','19.jpg','19.jpg',1,1,'yumaoqiu@126.com','1234567893',1,1),(25,65,'乒乓球协会2','2017-04-11 18:05:04','热爱乒乓球的人的聚合体','体育','乒乓球协会负责人姓名','20.jpg','20.jpg',1,1,'pingpangqiu@163.com','1234567894',1,1);
+insert  into `org_info`(`org_id`,`user_id`,`org_name`,`found_time`,`description`,`org_type`,`admin_name`,`org_logo`,`org_view`,`like_click`,`members`,`contact_email`,`contact_number`,`org_state`,`org_auth`) values (11,47,'广金校社联','2018-04-06 14:34:48','我是更新后的校社联描述','管理类','张三','f5QWgAehml1_s_fnXHNW.jpg','default_overview.png',1,0,'Canlong2015@126.com','18316821383',1,2),(12,48,'广金Idea精英汇协会','2018-04-08 21:55:51','广金Idea精英汇协会的描述','综合实践类','张三','qSDiqX2WYS9NRWAl7jBX.jpg','default_overview.png',1,1,'Canlong2015@126.com','12345678901',1,1),(17,53,'乒乓球协会','2015-03-10 14:01:27','这是乒乓球协会的描述','体育','张三q1','default_logo.jpg','default_overview.png',0,0,'s199612346@126.com','18316821839',1,1),(18,54,'篮球协会','2014-03-11 18:05:04','热爱篮球的人的聚合体','体育','篮球协会负责人姓名','default_logo.jpg','default_overview.png',1,1,'Canlong2015@126.com','1234567890',2,1),(19,55,'台球协会','2013-03-11 18:05:04','热爱台球球的人的聚合体','体育','台球协会负责人姓名','default_logo.jpg','default_overview.png',1,1,'gdufxsc106@163.com','1234567891',2,1),(20,62,'社交协会','2015-02-11 18:05:04','热爱社交的人的聚合体','体育','社交协会负责人姓名','default_logo.jpg','default_overview.png',1,1,'shejiao@126.com','1234567893',2,1),(21,63,'桌游协会','2017-04-11 18:05:04','热爱桌游的人的聚合体','体育','桌游协会负责人姓名','default_logo.jpg','default_overview.png',1,1,'zhuoyou@163.com','1234567894',2,1),(24,64,'羽毛球协会','2015-02-11 18:05:04','热爱羽毛球的人的聚合体','体育','羽毛球协会负责人姓名','19.jpg','default_overview.png',1,1,'yumaoqiu@126.com','1234567893',1,1),(25,65,'乒乓球协会2','2017-04-11 18:05:04','热爱乒乓球的人的聚合体','体育','乒乓球协会负责人姓名','20.jpg','default_overview.png',1,1,'pingpangqiu@163.com','1234567894',1,1),(26,67,'apone协会2','2018-04-08 21:55:51','修改apone协会描述2','体育','apone1','rxTYjprQfMTBsReOBSXU.jpg','h1DMQu8sZp4gNyxKBNgS.jpg',0,1,'s19961234@126.com','18316821839',1,1);
 
 /*Table structure for table `person_info` */
 
@@ -236,11 +236,11 @@ CREATE TABLE `person_info` (
   `person_logo` varchar(50) NOT NULL,
   `person_state` int(11) NOT NULL,
   PRIMARY KEY (`person_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 
 /*Data for the table `person_info` */
 
-insert  into `person_info`(`person_id`,`user_id`,`real_name`,`nickname`,`gender`,`birthday`,`description`,`enrollment_year`,`address`,`department`,`major`,`student_id`,`person_logo`,`person_state`) values (12,58,'个人用户1','个人用户1的昵称',0,'2007-10-10 12:00:00','个人用户1的描述',2015,'个人用户1的地址','会计学院','会计学','151612290','default_logo.jpg',1),(13,59,'个人用户2','个人用户2的昵称',1,'2007-10-10 12:00:00','个人用户2的描述,是女生',2015,'个人用户2的地址','会计学院','会计学','151612291','default_logo.jpg',1),(14,58,'个人用户3','个人用户3的昵称',0,'2006-10-10 12:00:00','个人用户3的描述',2016,'个人用户3的地址','金融数学与统计学院','会计学','151612290','default_logo.jpg',2),(15,59,'个人用户4','个人用户4的昵称',1,'2005-10-10 12:00:00','个人用户4的描述,是女生',2017,'个人用户4的地址','金融数学与统计学院','会计学','151612291','default_logo.jpg',2);
+insert  into `person_info`(`person_id`,`user_id`,`real_name`,`nickname`,`gender`,`birthday`,`description`,`enrollment_year`,`address`,`department`,`major`,`student_id`,`person_logo`,`person_state`) values (12,58,'王五','wangwu',0,'2018-03-11 18:05:04','hahaha',2012,'8#111','金融学院与统计学院','信息与计算科学','151612222','eRr6Q47BHQDeAuY0VQlQ.jpg',1),(13,59,'个人用户2','个人用户2的昵称',0,'2007-10-10 12:00:00','个人用户2的描述,是男',2015,'个人用户2的地址','会计学院','会计学','151612291','default_logo.jpg',1),(14,58,'个人用户3','个人用户3的昵称',0,'2006-10-10 12:00:00','个人用户3的描述',2016,'个人用户3的地址','金融数学与统计学院','会计学','151612290','default_logo.jpg',2),(15,59,'个人用户4','个人用户4的昵称',1,'2005-10-10 12:00:00','个人用户4的描述,是女生',2017,'个人用户4的地址','金融数学与统计学院','会计学','151612291','default_logo.jpg',2),(16,66,NULL,'sauims_66',0,'1970-01-01 08:00:00',NULL,NULL,NULL,NULL,NULL,NULL,'default_logo.jpg',1);
 
 /*Table structure for table `resource` */
 
@@ -303,11 +303,11 @@ CREATE TABLE `user` (
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `user_name_UNIQUE` (`user_name`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
 
 /*Data for the table `user` */
 
-insert  into `user`(`user_id`,`user_name`,`password`,`phone`,`email`,`user_key`,`login_ip`,`login_time`,`register_ip`,`register_time`,`authority`,`user_state`) values (47,'sauims_admin','1fe41c99f47af4fbc9a0ede37e2ca153','18316821383','Canlong2015@126.com','12345','127.0.0.1','2018-04-11 14:24:41','0.0.0.0','2017-03-09 18:30:00',2,1),(48,'abc','8cfa2282b17de0a598c010f5f0109e7d','12345678901','Canlong2015@qq.com','12345','127.0.0.1','2018-04-09 23:00:50','0.0.0.0','2017-03-09 18:30:00',1,1),(53,'admin','774e9c6d12380d300258fdfee932e85b','18316821839','s199612346@126.com','nv9cKjIG34HvZkCAGRmY7g==','127.0.0.1','2018-03-10 14:01:27','127.0.0.1','2018-03-10 14:01:27',1,1),(54,'lanqiu','8cfa2282b17de0a598c010f5f0109e7d','','Canlong20156@126.com','12345','127.0.0.1','2018-04-07 14:14:56','127.0.0.1','2018-03-10 14:25:48',1,2),(55,'taiqiu','a512eac93b40e7d53c69063987e3acbd','','gdufxsc106@163.com','crSweuudfnz1wv3GNFgtlA==','127.0.0.1','2018-03-19 23:13:17','127.0.0.1','2018-03-19 23:13:17',1,2),(58,'person1@126.com','8cfa2282b17de0a598c010f5f0109e7d','1234567892','person1@126.com','12345','127.0.0.1','2018-04-07 09:50:35','127.0.0.1','2017-03-09 18:30:00',0,1),(59,'person2@126.com','8cfa2282b17de0a598c010f5f0109e7d','1234567892','person2@126.com','12345','127.0.0.1','2018-04-07 09:50:35','127.0.0.1','2017-03-09 18:30:00',0,1),(60,'person3@126.com','8cfa2282b17de0a598c010f5f0109e7d','1234567892','person3@126.com','12345','127.0.0.1','2016-04-07 09:50:35','127.0.0.1','2016-03-09 18:30:00',0,2),(61,'person4@126.com','8cfa2282b17de0a598c010f5f0109e7d','1234567892','person4@126.com','12345','127.0.0.1','2015-04-07 09:50:35','127.0.0.1','2015-03-09 18:30:00',0,2),(62,'shejiao','8cfa2282b17de0a598c010f5f0109e7d','1234567893','shejiao@126.com','12345','127.0.0.1','2013-04-07 09:50:35','127.0.0.1','2013-03-09 18:30:00',0,2),(63,'zhuoyou','8cfa2282b17de0a598c010f5f0109e7d','1234567894','zhuoyou@126.com','12345','127.0.0.1','2018-04-07 09:50:35','127.0.0.1','2018-03-09 18:30:00',0,2),(64,'yumaoqiu','8cfa2282b17de0a598c010f5f0109e7d','1234567893','yumaoqiu@126.com','12345','127.0.0.1','2013-05-07 09:50:35','127.0.0.1','2013-04-09 18:30:00',0,1),(65,'pingpangqiu','8cfa2282b17de0a598c010f5f0109e7d','1234567894','pingpangqiu@126.com','12345','127.0.0.1','2018-07-07 09:50:35','127.0.0.1','2018-07-09 18:30:00',0,1);
+insert  into `user`(`user_id`,`user_name`,`password`,`phone`,`email`,`user_key`,`login_ip`,`login_time`,`register_ip`,`register_time`,`authority`,`user_state`) values (47,'sauims_admin','1fe41c99f47af4fbc9a0ede37e2ca153','18316821383','Canlong2015@126.com','12345','127.0.0.1','2018-04-21 20:13:59','0.0.0.0','2017-03-09 18:30:00',2,1),(48,'abc','8cfa2282b17de0a598c010f5f0109e7d','12345678901','Canlong2015@qq.com','12345','127.0.0.1','2018-04-21 19:24:04','0.0.0.0','2017-03-09 18:30:00',1,1),(53,'admin','774e9c6d12380d300258fdfee932e85b','18316821839','s199612346@126.com','nv9cKjIG34HvZkCAGRmY7g==','127.0.0.1','2018-03-10 14:01:27','127.0.0.1','2018-03-10 14:01:27',1,1),(54,'lanqiu','8cfa2282b17de0a598c010f5f0109e7d','','Canlong20156@126.com','12345','127.0.0.1','2018-04-07 14:14:56','127.0.0.1','2018-03-10 14:25:48',1,2),(55,'taiqiu','a512eac93b40e7d53c69063987e3acbd','','gdufxsc106@163.com','crSweuudfnz1wv3GNFgtlA==','127.0.0.1','2018-03-19 23:13:17','127.0.0.1','2018-03-19 23:13:17',1,2),(58,'person1@126.com','8cfa2282b17de0a598c010f5f0109e7d','1234567892','person1@126.com','12345','127.0.0.1','2018-04-18 15:07:06','127.0.0.1','2017-03-09 18:30:00',0,1),(59,'person2@126.com','8cfa2282b17de0a598c010f5f0109e7d','1234567892','person2@126.com','12345','127.0.0.1','2018-04-07 09:50:35','127.0.0.1','2017-03-09 18:30:00',0,1),(60,'person3@126.com','8cfa2282b17de0a598c010f5f0109e7d','1234567892','person3@126.com','12345','127.0.0.1','2016-04-07 09:50:35','127.0.0.1','2016-03-09 18:30:00',0,2),(61,'person4@126.com','8cfa2282b17de0a598c010f5f0109e7d','1234567892','person4@126.com','12345','127.0.0.1','2015-04-07 09:50:35','127.0.0.1','2015-03-09 18:30:00',0,2),(62,'shejiao','8cfa2282b17de0a598c010f5f0109e7d','1234567893','shejiao@126.com','12345','127.0.0.1','2013-04-07 09:50:35','127.0.0.1','2013-03-09 18:30:00',0,2),(63,'zhuoyou','8cfa2282b17de0a598c010f5f0109e7d','1234567894','zhuoyou@126.com','12345','127.0.0.1','2018-04-07 09:50:35','127.0.0.1','2018-03-09 18:30:00',0,2),(64,'yumaoqiu','8cfa2282b17de0a598c010f5f0109e7d','1234567893','yumaoqiu@126.com','12345','127.0.0.1','2013-05-07 09:50:35','127.0.0.1','2013-04-09 18:30:00',0,1),(65,'pingpangqiu','8cfa2282b17de0a598c010f5f0109e7d','1234567894','pingpangqiu@126.com','12345','127.0.0.1','2018-07-07 09:50:35','127.0.0.1','2018-07-09 18:30:00',0,1),(66,'2078697336@qq.com','cde7f551f3ba21118a1d1eab70ea7411','','2078697336@qq.com','MLNggwQgL6KIe5RIfoXKCA==','127.0.0.1','2018-04-16 21:15:03','127.0.0.1','2018-04-16 21:12:06',0,1),(67,'apone','8531af7b93029a83bb27d390c1178bc8','18316821839','s19961234@126.com','sj48NIIZy4yOHpJXemdcRQ==','127.0.0.1','2018-04-21 15:58:49','127.0.0.1','2018-04-16 21:21:15',1,1);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

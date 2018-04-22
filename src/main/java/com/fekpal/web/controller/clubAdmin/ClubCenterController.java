@@ -24,6 +24,7 @@ import java.util.Map;
 @Controller
 public class ClubCenterController {
 
+
     @Autowired
     private ClubService clubService;
 
@@ -34,7 +35,7 @@ public class ClubCenterController {
      * @return 社团的一些基本信息
      */
     @ResponseBody
-    @RequestMapping("/club/center/info")
+    @RequestMapping(value = "/club/center/info",method = RequestMethod.GET)
     public JsonResult<OrgDetail> getClubsCenterMsg() {
         JsonResult<OrgDetail> result = new JsonResult<>();
         Org org = clubService.selectByPrimaryId();
@@ -51,6 +52,19 @@ public class ClubCenterController {
         detail.setView(org.getOrgView());
         detail.setOrgType(org.getOrgType());
         detail.setLikeClick(org.getLikeClick());
+        detail.setManNum(clubService.countClubManNum());
+        detail.setWomanNum(clubService.countClubWomanNum());
+        int firstGradeNum = clubService.countClubGradeNum(1);
+        int secondGradeNum = clubService.countClubGradeNum(2);
+        int threeGradeNum = clubService.countClubGradeNum(3);
+        int fourGradeNum = clubService.countClubGradeNum(4);
+        //已经毕业的人数由社团总人数减去各个年级的人数
+        int graduatedNum = org.getMembers()-firstGradeNum-secondGradeNum-threeGradeNum-fourGradeNum;
+        detail.setFirstGradeNum(firstGradeNum);
+        detail.setSecondGradeNum(secondGradeNum);
+        detail.setThreeGradeNum(threeGradeNum);
+        detail.setFourGradeNum(fourGradeNum);
+        detail.setGraduatedNum(graduatedNum >=0? graduatedNum : 0);
 
          result.setCode(ResponseCode.RESPONSE_SUCCESS);
          result.setData(detail);
@@ -64,7 +78,7 @@ public class ClubCenterController {
      * @return 图片文件名
      */
     @ResponseBody
-    @RequestMapping(value = "/club/center/info/head", method = RequestMethod.POST)
+    @RequestMapping(value = "/club/center/info/logo", method = RequestMethod.POST)
     public JsonResult<String> uploadLogo(@ModelAttribute ClubMsg msg) {
         JsonResult<String> result = new JsonResult<>();
         String logoName = clubService.updateLogo(msg);

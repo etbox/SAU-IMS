@@ -2,6 +2,8 @@ package com.fekpal.web.controller.member;
 
 import com.fekpal.api.MemberOrgService;
 import com.fekpal.api.PersonService;
+import com.fekpal.api.UserService;
+import com.fekpal.common.constant.FIleDefaultPath;
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
@@ -16,6 +18,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +38,9 @@ public class MemberCenterController {
     @Autowired
     private MemberOrgService memberOrgService;
 
+    @Autowired
+    UserService userService;
+
     /**
      * 得到普通成员和社团成员中心的信息的方法
      *
@@ -42,21 +49,8 @@ public class MemberCenterController {
     @ResponseBody
     @RequestMapping(value = "/member/center/info", method = RequestMethod.GET)
     public JsonResult<PersonDetail> getMemberCenterMsg() {
-        Person person = personService.selectByPrimaryId();
-        PersonDetail detail = new PersonDetail();
-        detail.setAddress(person.getAddress());
-        detail.setBirthday(person.getBirthday());
-        detail.setDepartment(person.getDepartment());
-        detail.setDescription(person.getDescription());
-        detail.setEnrollmentYear(person.getEnrollmentYear());
-        detail.setGender(person.getGender());
-        detail.setLogo(person.getLogo());
-        detail.setMajor(person.getMajor());
-        detail.setNickname(person.getNickname());
-        detail.setRealName(person.getRealName());
-        detail.setStudentId(person.getStudentId());
-
         JsonResult<PersonDetail> result = new JsonResult<>();
+        PersonDetail detail = personService.selectPersonDetailByPrimaryId();
         result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
         result.setData(detail);
         return result;
@@ -121,7 +115,7 @@ public class MemberCenterController {
     }
 
     /**
-     * 获取加入组织的成员状态信息
+     * 获取加入组织的社团列表状态信息
      *
      * @param page 获取条数
      * @return 成员组织信息封装
@@ -129,7 +123,10 @@ public class MemberCenterController {
     @ResponseBody
     @RequestMapping(value = "/member/center/info/org", method = RequestMethod.GET)
     public JsonResult<List<MemberOrgDetail>> getOrgPersonJoin(PageList page) {
-        logger.info("执行了查询加入组织的成员");
+        //将前端发送过来的页码offset，转化为跳过数offset
+        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
+
+        JsonResult<List<MemberOrgDetail>> result = new JsonResult<>();
         List<MemberOrg> list = memberOrgService.loadAllOrg(page.getOffset(), page.getLimit());
         List<MemberOrgDetail> details = new ArrayList<>();
         for (MemberOrg memberOrg : list) {
@@ -144,11 +141,24 @@ public class MemberCenterController {
             detail.setMemberState(memberOrg.getMemberState());
             details.add(detail);
         }
-
-        JsonResult<List<MemberOrgDetail>> result = new JsonResult<>();
         result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
         result.setData(details);
         return result;
+    }
+
+    /**
+     * 输出个人头像
+     */
+    @RequestMapping(value = "/member/logo", method = RequestMethod.GET)
+    public void captcha(HttpServletResponse response) {
+        try {
+            response.setContentType("image/png");
+            OutputStream outputStream = response.getOutputStream();
+            int state = personService.getPersonLogo(outputStream);
+            if(state == Operation.FAILED){ throw new IOException("输出头像错误"); }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 

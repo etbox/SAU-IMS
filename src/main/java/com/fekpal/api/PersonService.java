@@ -3,7 +3,9 @@ package com.fekpal.api;
 import com.fekpal.common.base.BaseService;
 import com.fekpal.dao.model.Person;
 import com.fekpal.service.model.domain.PersonMsg;
+import com.fekpal.web.model.PersonDetail;
 
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -82,4 +84,16 @@ public interface PersonService extends BaseService<Person> {
     List<Person> loadAllPerson(int offset, int limit);
 
 
+    /**
+     * 得到个人中心的的详细信息
+     * @return 个人中心的详细信息类
+     */
+    PersonDetail selectPersonDetailByPrimaryId();
+
+    /**
+     * 得到个人头像
+     * @param output 输出流
+     * @return 是否成功
+     */
+    int getPersonLogo(OutputStream output);
 }

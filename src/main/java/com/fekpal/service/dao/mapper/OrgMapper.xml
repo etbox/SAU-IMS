@@ -204,10 +204,14 @@
         </where>
     </update>
 
+
     <select id="selectByPrimaryIdForPerson" parameterType="int" resultMap="exResult">
         select * from org_info
         where org_id = #{id}
     </select>
+
+
+
 
     <resultMap id="result" type="Org">
         <id property="orgId" column="org_id"/>

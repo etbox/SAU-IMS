@@ -10,8 +10,10 @@ import com.fekpal.common.constant.MemberState;
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.session.SessionLocal;
 import com.fekpal.common.utils.TimeUtil;
+import com.fekpal.dao.mapper.OrgMapper;
 import com.fekpal.dao.mapper.OrgMemberMapper;
 import com.fekpal.dao.mapper.PersonMapper;
+import com.fekpal.dao.model.Org;
 import com.fekpal.dao.model.OrgMember;
 import com.fekpal.dao.model.Person;
 import com.fekpal.web.model.AuditResult;
@@ -36,6 +38,9 @@ public class OrgMemberServiceImpl extends BaseServiceImpl<OrgMemberMapper, OrgMe
 
     @Autowired
     private PersonMapper personMapper;
+
+    @Autowired
+    private OrgMapper orgMapper;
 
     @Override
     public OrgMember selectByPersonId(int id) {
@@ -117,6 +122,23 @@ public class OrgMemberServiceImpl extends BaseServiceImpl<OrgMemberMapper, OrgMe
     }
 
     /**
+     * 加载所有该组织的所有审核的组织成员，按页获取
+     *
+     * @param offset 跳过读数
+     * @param limit  读取数
+     * @return 组织成员记录集
+     */
+    @Override
+    public List<OrgMember> loadAllAuditMember(int offset, int limit) {
+        int orgId = SessionLocal.local(session).getUserIdentity().getUid();
+        ExampleWrapper<OrgMember> example = new ExampleWrapper<>();
+        example.and().eq("org_id",orgId)
+                .orderBy("join_time",false);
+        List<OrgMember> orgMemberList = mapper.selectByExample(example,offset,limit);
+        return orgMemberList;
+    }
+
+    /**
      * 根据真实姓名用模糊搜索个人名姓名和审核状态为未审核的
      *
      * @param realName 真实姓名
@@ -149,6 +171,7 @@ public class OrgMemberServiceImpl extends BaseServiceImpl<OrgMemberMapper, OrgMe
      * @return 操作状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
      */
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int passOrRejectAuditByIdAndModel(int auditId,AuditResult auditResult) {
         int orgId = SessionLocal.local(session).getUserIdentity().getUid();
         //如果该id的审核已经是通过，拒绝或者删除了的，则不能操作
@@ -158,6 +181,12 @@ public class OrgMemberServiceImpl extends BaseServiceImpl<OrgMemberMapper, OrgMe
 
         OrgMember orgMember = mapper.selectByPrimaryKey(auditId);
         orgMember.setMemberState(auditResult.getAuditState());
+        //如果状态是通过的话，在社团表内也增加人数
+        if(auditResult.getAuditState()== AuditState.PASS){
+            Org org = orgMapper.selectByPrimaryKey(orgId);
+            org.setMembers(org.getMembers()+1);
+            orgMapper.updateByPrimaryKey(org);
+        }
         ExampleWrapper<OrgMember> exampleUpdate = new ExampleWrapper<>();
         exampleUpdate.eq("org_id",orgId).and().eq("id",auditId);
         int row  = mapper.updateByExample(orgMember,exampleUpdate);

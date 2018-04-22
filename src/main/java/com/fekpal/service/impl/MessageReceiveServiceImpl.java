@@ -33,10 +33,10 @@ public class MessageReceiveServiceImpl extends BaseServiceImpl<MessageReceiveMap
     private HttpSession session;
 
     @Override
-    public MessageReceive selectById(int id) {
+    public MessageReceive selectById(int Id) {
         int accId = SessionLocal.local(session).getUserIdentity().getAccId();
         ExampleWrapper<MessageReceive> example = new ExampleWrapper<>();
-        example.eq("id", id)
+        example.eq("id", Id)
                 .and().eq("receive_id", accId)
                 .and().eq("available", AvailableState.AVAILABLE)
                 .and().eq("message_state", AvailableState.AVAILABLE);
@@ -45,7 +45,7 @@ public class MessageReceiveServiceImpl extends BaseServiceImpl<MessageReceiveMap
         MessageReceive message = mapper.selectFirstByExample(example);
         if (message != null && message.getReadFlag() == MessageType.UN_READ) {
             MessageReceive receive = new MessageReceive();
-            receive.setId(id);
+            receive.setId(Id);
             receive.setReadFlag(MessageType.HAVE_READ);
             mapper.updateByPrimaryKeySelective(receive);
         }

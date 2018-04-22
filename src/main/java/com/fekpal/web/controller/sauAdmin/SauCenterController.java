@@ -1,11 +1,13 @@
 package com.fekpal.web.controller.sauAdmin;
 
 
+import com.fekpal.api.OrgService;
 import com.fekpal.api.SauService;
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
 import com.fekpal.dao.model.Org;
+import com.fekpal.service.model.domain.ClubMsg;
 import com.fekpal.service.model.domain.SauMsg;
 import com.fekpal.web.model.OrgDetail;
 import org.apache.log4j.Logger;
@@ -24,25 +26,7 @@ public class SauCenterController {
     private SauService sauService;
 
     Logger logger = Logger.getLogger(SauCenterController.class);
-    /**
-     * 上传校社联头像的
-     *
-     * @param msg 校社联修改信息封装
-     * @return 图片文件名
-     */
-    @ResponseBody
-    @RequestMapping(value = "/sau/center/info/head", method = RequestMethod.POST)
-    public JsonResult<String> uploadLogo(@ModelAttribute SauMsg msg) {
-        String logoName = sauService.updateLogo(msg);
-        JsonResult<String> result = new JsonResult<>();
-        if (logoName == null) {
-            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "修改头像失败");
-        } else {
-            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "修改头像成功");
-            result.setData(logoName);
-        }
-        return result;
-    }
+
 
     /**
      * 得到校社联中心的信息
@@ -67,7 +51,19 @@ public class SauCenterController {
             detail.setPhone(org.getContactNumber());
             detail.setFoundTime(org.getFoundTime());
             detail.setMembers(org.getMembers());
-
+            detail.setManNum(sauService.countSauManNum());
+            detail.setWomanNum(sauService.countSauWomanNum());
+            int firstGradeNum = sauService.countSauGradeNum(1);
+            int secondGradeNum = sauService.countSauGradeNum(2);
+            int threeGradeNum = sauService.countSauGradeNum(3);
+            int fourGradeNum = sauService.countSauGradeNum(4);
+            //校社联内已经毕业了的学生的人数
+            int graduatedNum = org.getMembers()-firstGradeNum-secondGradeNum-threeGradeNum-fourGradeNum;
+            detail.setFirstGradeNum(firstGradeNum);
+            detail.setSecondGradeNum(secondGradeNum);
+            detail.setThreeGradeNum(threeGradeNum);
+            detail.setFourGradeNum(fourGradeNum);
+            detail.setGraduatedNum(graduatedNum>0?graduatedNum:0);
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
             result.setData(detail);
         }
@@ -92,6 +88,45 @@ public class SauCenterController {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "修改失败");
         } else if (state == Operation.INPUT_INCORRECT) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "校社联名称已被使用");
+        }
+        return result;
+    }
+
+    /**
+     * 上传校社联头像的
+     *
+     * @param msg 校社联修改信息封装
+     * @return 图片文件名
+     */
+    @ResponseBody
+    @RequestMapping(value = "/sau/center/info/head", method = RequestMethod.POST)
+    public JsonResult<String> uploadLogo(@ModelAttribute SauMsg msg) {
+        String logoName = sauService.updateLogo(msg);
+        JsonResult<String> result = new JsonResult<>();
+        if (logoName == null) {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "修改头像失败");
+        } else {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "修改头像成功");
+            result.setData(logoName);
+        }
+        return result;
+    }
+
+    /**
+     * 上传校社联展示图片的方法
+     *
+     * @return 图片文件名
+     */
+    @ResponseBody
+    @RequestMapping(value = "/sau/center/info/view", method = RequestMethod.POST)
+    public JsonResult<String> uploadView(@ModelAttribute SauMsg msg) {
+        JsonResult<String> result = new JsonResult<>();
+        String viewName = sauService.updateView(msg);
+        if (viewName == null) {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "修改展示失败");
+        } else {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "修改展示成功");
+            result.setData(viewName);
         }
         return result;
     }

@@ -31,6 +31,15 @@ public interface SauService extends BaseService<Org> {
     String updateLogo(SauMsg msg);
 
     /**
+     * 根据校社联用户标识更新校社联展示
+     *
+     * @param msg 校社联修改信息封装
+     *            传入参数：头像文件logo
+     * @return 头像名
+     */
+    String updateView(SauMsg msg);
+
+    /**
      * 是否有相同的校社联名称的校社联
      *
      * @param name 校社联名称
@@ -55,4 +64,29 @@ public interface SauService extends BaseService<Org> {
      * @return 校社联信息记录集
      */
     List<Org> loadAllSau(int offset, int limit);
+
+
+
+    /**
+     * 根据社团id计算校社联内部男生的数量
+     * @return 校社联内男生的人数
+     */
+    int countSauManNum();
+
+    /**
+     * 计算校社联内部女生的数量
+     * @return 校社联内女生的人数
+     */
+    int countSauWomanNum();
+
+
+    /**
+     * 根据年级数计算校社联内部年级的数量
+     *
+     * @param grade 年级 如1,2,3,4,
+     * @return 校社联内各个年级的人数
+     */
+    int countSauGradeNum(int grade);
+
+
 }

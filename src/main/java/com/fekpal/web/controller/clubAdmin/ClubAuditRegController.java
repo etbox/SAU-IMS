@@ -52,7 +52,7 @@ public class ClubAuditRegController {
 
         JsonResult<List<ClubRegisterAuditListMsg>> result = new JsonResult<>();
         List<ClubRegisterAuditListMsg> auditList = new ArrayList<>();
-        List<OrgMember> orgMemberList = orgMemberService.loadAllUnAuditMember(page.getOffset(), page.getLimit());
+        List<OrgMember> orgMemberList = orgMemberService.loadAllAuditMember(page.getOffset(), page.getLimit());
         if (orgMemberList.size() == 0 || orgMemberList == null) {
             result.setStateCode(ResponseCode.REQUEST_ERROR, "暂未审核消息");
         }
@@ -148,7 +148,7 @@ public class ClubAuditRegController {
         for (OrgMember orgMember : orgMemberList) {
             ClubRegisterAuditListMsg audit = new ClubRegisterAuditListMsg();
             audit.setAuditMsgId(orgMember.getId());
-            audit.setAuditState(orgMember.getAvailable());
+            audit.setAuditState(orgMember.getMemberState());
             int personId = orgMember.getPersonId();
             Person person = personService.selectByPrimaryKey(personId);
             audit.setAuditTitle(person.getRealName());

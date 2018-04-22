@@ -6,6 +6,7 @@ import com.fekpal.common.base.CRUDException;
 import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.common.constant.AvailableState;
 import com.fekpal.common.constant.ClubRole;
+import com.fekpal.common.constant.MemberState;
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.session.SessionLocal;
 import com.fekpal.common.utils.TimeUtil;
@@ -69,6 +70,7 @@ public class MemberOrgServiceImpl extends BaseServiceImpl<MemberOrgMapper, Membe
         memberOrg.setOrgId(id);
         memberOrg.setMemberDuty(ClubRole.MEMBER);
         memberOrg.setJoinTime(new Timestamp(TimeUtil.currentTime()));
+        memberOrg.setMemberState(MemberState.STILL_BEING);
         memberOrg.setAvailable(AvailableState.AUDITING);
         int row = mapper.insert(memberOrg);
         if (row > 1) throw new CRUDException("加入组织操作异常：" + row);
