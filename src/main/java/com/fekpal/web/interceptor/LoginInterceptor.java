@@ -25,7 +25,6 @@ public class LoginInterceptor implements HandlerInterceptor {
     //用于执行handle之前来执行，用于用户认证检验/用户授权检验
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-       logger.info("执行了 loginInterceptor");
         String url = request.getRequestURI();
        //获取到公开的地址
         if(url.equalsIgnoreCase("/")){ return true;}
@@ -43,6 +42,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         //临时开放链接，用来测试
         open_urls.add("/favicon.ico");
         open_urls.add("/inner_system.html");
+        open_urls.add("/clubNews.html");
         //如果是公开地址，则放行
         for(String open_url:open_urls){
             if(url.indexOf(open_url)>=0){
@@ -55,7 +55,6 @@ public class LoginInterceptor implements HandlerInterceptor {
             logger.info("session为空,用户没有登录，准备跳转");
             response.sendRedirect("/index.html");
         }else{
-            logger.info("session为"+session);
             SessionLocal local=SessionLocal.local(session);
             if(local.isExitUserIdentity()){
                 logger.info("用户已经登录");

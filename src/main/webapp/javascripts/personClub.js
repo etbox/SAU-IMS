@@ -2,7 +2,7 @@
   'use strict';
   var $ = window.jQuery;
   var echarts = window.echarts;
-
+ var json = {}; //全局
   function row(i, id) {
     var $div0 = $('<div></div>', {
       'class': 'm',
@@ -47,7 +47,12 @@
       })
       .done(function(Json) {
           console.log('success');//操作
-          return Json;
+           if (Json.code != 0) {
+          alert(data.msg); // FIXME: data为定义！！！
+        }
+        json=Json;
+       load();
+         
       })
       .fail(function() {
           console.log('error');
@@ -58,11 +63,11 @@
 
   }
 
-  var json = {};
+  getNewsData();
  
 
   function load() { //加载
-    json=getNewsData();    //获取服务器数据
+   
 
     var clubId; //没错 这就是真正的数据 // FIXME: 变量未使用
     var clubName;
@@ -146,7 +151,7 @@
 
     }
   }
-  load();
+
 
   function addNewsClick(json) {
     var checkID = '';
@@ -202,7 +207,6 @@
     }
   }
   addNewsClick(json);
-
   function news(a, b, c, d, e, f, g) { // FIXME: 变量未使用
     $('.rightHeadTitle').text(a);
     $('.rightHeadIntroduce').text(b);
@@ -221,8 +225,37 @@
 
   }
 
+var searchData1={};
+
+  function getSearchData() { // FIXME: 变量未使用
+    $.ajax(
+      {
+        url: '/member/club/search',
+        type: 'get',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        dataType: 'json',
+        data: {
+          'findContent': '' + $('.search-bar').val()
+        },
+      })
+      .done(function(searchData) {
+        earchData1=searchData;
+        search();
+      })
+      .fail(function() {
+        console.log('error');
+      })
+      .always(function() {
+        console.log('complete');
+      });
+
+
+  }
+
   function search() {
-    var searchData=getSearchData();
+   
     /*var searchData = { //测试用
       'code': 0,
       'msg': '',
@@ -265,39 +298,13 @@
       }
     }
 
-    addNewsClick(searchData);
+    addNewsClick(searchData1);
 
   }
 
 
 
 
-
-  function getSearchData() { // FIXME: 变量未使用
-    $.ajax(
-      {
-        url: '/member/club/search',
-        type: 'get',
-        headers: {
-          'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        },
-        dataType: 'json',
-        data: {
-          'findContent': '' + $('.search-bar').val()
-        },
-      })
-      .done(function(searchData) {
-        return searchData;
-      })
-      .fail(function() {
-        console.log('error');
-      })
-      .always(function() {
-        console.log('complete');
-      });
-
-
-  }
 
   function addHandler(id, action, func, x) {
     var domID = document.querySelector(`#${id}`);
@@ -311,7 +318,7 @@
 
   function init() {
     addHandler('refresh', 'click', refresh);
-    addHandler('search', 'click', search);
+    addHandler('search', 'click', getSearchData);
 
   }
 

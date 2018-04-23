@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   var $ = window.jQuery;
-
+ var json = {}; //全局
   function row(i, id) {
     var $div0 = $('<div></div>', {
       'class': 'm',
@@ -51,7 +51,12 @@
       })
       .done(function(Json) {
         console.log('success'); //操作
-        return Json;
+         if (Json.code != 0) {
+          alert(data.msg); // FIXME: data为定义！！！
+        }
+        json=Json;
+       load();
+       
       })
       .fail(function() {
         console.log('error');
@@ -61,11 +66,11 @@
       });
 
   }
-  var json = {};
-  // var Json = {};
+  getNewsData();
+
 
   function load() { //加载
-    json = getNewsData(); //获取服务器数据
+ 
 
     var auditMsgId; //没错 这就是真正的数据
     var auditTitle;
@@ -110,7 +115,7 @@
 
     }
   }
-  load();
+
   var checkID;
 
   function addNewsClick(json) {
@@ -241,7 +246,7 @@
       });
 
   }
-
+var searchData1={};
   
   function getSearchData() {
     $.ajax(
@@ -257,7 +262,8 @@
         },
       })
       .done(function(searchData) {
-        return searchData;
+        earchData1=searchData;
+        search();
       })
       .fail(function() {
         console.log('error');
@@ -268,9 +274,10 @@
 
 
   }
+   
 
   function search() {
-    searchData = getSearchData();
+    
   
 
     $('.middleSide').children('div').remove();
@@ -296,7 +303,7 @@
       }
     }
 
-    addNewsClick(searchData);
+    addNewsClick(searchData1);
 
   }
 
@@ -314,7 +321,7 @@
     addHandler('refresh', 'click', refresh);
     addHandler('agree', 'click', agree);
     addHandler('disagree', 'click', disagree);
-    addHandler('search', 'click', search);
+    addHandler('search', 'click', getSearchData);
   }
   init();
 

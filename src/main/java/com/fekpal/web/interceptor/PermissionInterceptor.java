@@ -34,7 +34,6 @@ public class PermissionInterceptor implements HandlerInterceptor {
     //用于用户认证校验、用户权限校验
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        logger.info("执行了 PermissionInterceptor");
         String url = request.getRequestURI();
         logger.info("url为："+url);
         if(url.equalsIgnoreCase("/")){ return true;}
@@ -53,13 +52,13 @@ public class PermissionInterceptor implements HandlerInterceptor {
         //临时开放链接，用来测试
         open_urls.add("/favicon.ico");
         open_urls.add("/inner_system.html");
+        open_urls.add("/clubNews.html");
         //如果是公开地址，则放行
         for(String open_url:open_urls){
             if(url.indexOf(open_url)>=0){
                 return true;
             }
         }
-        logger.info("从配置文件获取公共访问地址");
         //从配置文件获取公共访问地址
         List<String> common_urls = new ArrayList<>();
         common_urls.add("/msg");
@@ -68,17 +67,14 @@ public class PermissionInterceptor implements HandlerInterceptor {
         common_urls.add("/logout");
         for(String common_url : common_urls){
             if(url.indexOf(common_url)>=0){
-                out.println("执行了 公共访问地址");
                 return true;
             }
         }
-        logger.info("执行判断权限访问地址");
         //权限访问地址
         HttpSession session = request.getSession(false);
         int permissionId = SessionLocal.local(session).getUserIdentity().getAuth();
         String permission_url = permissionMap.get(permissionId);
         if(url.indexOf(permission_url)>=0){
-            out.println("执行了权限访问地址");
             return true;
         }
        //执行到这里拦截，跳转到无权访问的提示页面

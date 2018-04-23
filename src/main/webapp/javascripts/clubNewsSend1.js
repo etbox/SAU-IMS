@@ -1,7 +1,7 @@
 (function(){
  'use strict';
   var $ = window.jQuery;
-
+ var json = {};
   function row(i, id) {
     var $div0 = $('<div></div>', {
       'class': 'm',
@@ -51,7 +51,11 @@ function getNewsData() { //从服务器获取数据
       })
       .done(function(Json) {
         console.log('success'); //操作
-        return Json;
+         if (Json.code != 0) {
+          alert(data.msg); // FIXME: data为定义！！！
+        }
+        json=Json;
+       load();
       })
       .fail(function() {
         console.log('error');
@@ -61,12 +65,11 @@ function getNewsData() { //从服务器获取数据
       });
 
   }
-
-  var json = {};
-  // var Json = {};
+getNewsData();
+ 
 
   function load() { //加载
-    json = getNewsData(); //获取服务器数据
+   
 
     var auditMsgId; //没错 这就是真正的数据
     var auditTitle;
@@ -103,7 +106,7 @@ function getNewsData() { //从服务器获取数据
 
     }
   }
- load();
+
 
  
 
@@ -163,7 +166,7 @@ var checkID;
 
 
 
- 
+ var searchData1={};
   function getSearchData() {
     $.ajax(
       {
@@ -176,7 +179,8 @@ var checkID;
        
       })
       .done(function(searchData) {
-        return searchData;
+        searchData1=searchData;
+        search();
       })
       .fail(function() {
         console.log('error');
@@ -187,8 +191,9 @@ var checkID;
 
 
   }
+  
   function search() {
-    searchData = getSearchData();
+    
   
 
     $('.middleSide').children('div').remove();
@@ -214,7 +219,7 @@ var checkID;
       }
     }
 
-    addNewsClick(searchData);
+    addNewsClick(searchData1);
 
   }
 
@@ -361,6 +366,7 @@ function  contact() {
         addHandler('sendPicture1','click',sendGroup);
         addHandler('sendPicture2','click',sendAll);
         addHandler('peoplePic','click',contact);
+        addHandler('search', 'click', getSearchData);
   
       }
 init();

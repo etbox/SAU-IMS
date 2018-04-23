@@ -101,6 +101,7 @@
     load(); // FIXME: load没定义！！！
 
   }
+    var searchData1 ={};
  function getSearchData() {
     $.ajax(
       {
@@ -115,7 +116,8 @@
         },
       })
       .done(function(searchData) {
-        return searchData;
+        searchData1=searchData;
+        search();
       })
       .fail(function() {
         console.log('error');
@@ -130,7 +132,7 @@
 
 
   function search() {
-    var searchData = getSearchData();
+    
     /*searchData={           //测试用
                    'code':0,
     				'msg': '',
@@ -172,7 +174,7 @@
       }
     }
 
-    addNewsClick(searchData);
+    addNewsClick(searchData1);
 
   }
 
@@ -191,7 +193,7 @@
   function init() {
     addHandler('deleteButton', 'click', delMessage);
     addHandler('refresh', 'click', refresh);
-    addHandler('search', 'click', search);
+    addHandler('search', 'click', getSearchData);
   }
   init();
 }());

@@ -38,7 +38,8 @@
 
     return $div0;
 
-  }
+  } 
+   var json = {};
 function getNewsData(){       //从服务器获取数据
 
      $.ajax({
@@ -49,7 +50,8 @@ function getNewsData(){       //从服务器获取数据
       })
       .done(function(Json) {
           console.log('success');//操作
-          return Json;
+           json=Json;
+       load();
       })
       .fail(function() {
           console.log('error');
@@ -59,11 +61,11 @@ function getNewsData(){       //从服务器获取数据
       });
 
   }
-  var json = {};
+getNewsData();
   
 
   function load() { //加载
-    json=getNewsData();    //获取服务器数据
+    //json=getNewsData();    //获取服务器数据
 
     var registerName; //没错 这就是真正的数据
     var registerTitle;
@@ -98,7 +100,7 @@ function getNewsData(){       //从服务器获取数据
 
     }
   }
-  load();
+
 
   var checkID;
 
@@ -221,8 +223,39 @@ function getNewsData(){       //从服务器获取数据
 
   }
 
-  function search() {
-    var searchData=getSearchData();
+
+var searchData1={};
+
+function getSearchData() {
+    $.ajax(
+      {
+        url: '/sau/audit/ann/search',
+        type: 'get',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        dataType: 'json',
+        data: {
+          'findContent': '' + $('.search-bar').val()
+        },
+      })
+      .done(function(searchData) {
+        searchData1=searchData;
+        search();
+      })
+      .fail(function() {
+        console.log('error');
+      })
+      .always(function() {
+        console.log('complete');
+      });
+
+
+  }
+
+  
+function search() {
+ 
 
     $('#middleSide').children('div').remove();
     var registerTitle; //没错 这就是真正的数据
@@ -246,35 +279,10 @@ function getNewsData(){       //从服务器获取数据
       }
     }
 
-    addNewsClick(searchData);
+    addNewsClick(searchData1);
 
   }
-
-  function getSearchData() {
-    $.ajax(
-      {
-        url: '/sau/audit/ann/search',
-        type: 'get',
-        headers: {
-          'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        },
-        dataType: 'json',
-        data: {
-          'findContent': '' + $('.search-bar').val()
-        },
-      })
-      .done(function(searchData) {
-        return searchData;
-      })
-      .fail(function() {
-        console.log('error');
-      })
-      .always(function() {
-        console.log('complete');
-      });
-
-
-  }
+  
 
   function file() {
     $.ajax(
@@ -333,7 +341,7 @@ function getNewsData(){       //从服务器获取数据
     addHandler('refresh', 'click', refresh);
     addHandler('agree', 'click', agree);
     addHandler('disagree', 'click', disagree);
-    addHandler('search', 'click', search);
+   addHandler('search', 'click', getSearchData);
     addHandler('fujian', 'click', file);
   }
   init();

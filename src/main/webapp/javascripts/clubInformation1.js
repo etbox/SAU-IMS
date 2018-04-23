@@ -2,7 +2,7 @@
   'use strict';
   var $ = window.jQuery;
   var echarts = window.echarts;
-
+  var json = {};
   function row(i, id) {
     var $div0 = $('<div></div>', {
       'class': 'm',
@@ -47,7 +47,11 @@
       })
       .done(function(Json) {
           console.log('success');//操作
-          return Json;
+          if (Json.code != 0) {
+          alert(data.msg); // FIXME: data为定义！！！
+        }
+        json=Json;
+       load();
       })
       .fail(function() {
           console.log('error');
@@ -58,11 +62,11 @@
 
   }
 
+getNewsData();
 
-  var json = {};
 
   function load() { //加载
-    json=getNewsData();    //获取服务器数据
+  
 
     var clubId; //没错 这就是真正的数据 // FIXME: 变量未使用
     var clubName;
@@ -102,7 +106,7 @@
 
     }
   }
-  load();
+
 
   function addNewsClick(json) {
     for (var i = 0; i < json.data.length; i++) {
@@ -169,7 +173,7 @@
     load();
 
   }
-
+ var searchData1={};
   function getSearchData() { // FIXME: 变量未使用
     $.ajax(
       {
@@ -184,7 +188,8 @@
         },
       })
       .done(function(searchData) {
-        return searchData;
+          searchData1=searchData;
+        search();
       })
       .fail(function() {
         console.log('error');
@@ -196,7 +201,7 @@
 
   }
   function search() {
-    var searchData=getSearchData();
+   
   /*  var searchData = { //测试用
       'code': 0,
       'msg': '',
@@ -233,7 +238,7 @@
       }
     }
 
-    addNewsClick(searchData);
+    addNewsClick(searchData1);
 
   }
 
@@ -252,7 +257,7 @@
 
   function init() {
     addHandler('refresh', 'click', refresh);
-    addHandler('search', 'click', search);
+    addHandler('search', 'click', getSearchData);
 
   }
 

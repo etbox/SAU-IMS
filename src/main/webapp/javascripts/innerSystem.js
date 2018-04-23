@@ -64,7 +64,7 @@
 
   };
 
-
+ var json = {}; //全局
 function getNewsData() { //从服务器获取数据
 
     $.ajax(
@@ -80,9 +80,9 @@ function getNewsData() { //从服务器获取数据
         console.log('success'); //操作
         if (Json.code != 0) {
           alert(data.msg); // FIXME: data为定义！！！
-            load();
         }
-        return Json;
+        json=Json;
+       load();
       })
       .fail(function() {
         console.log('error');
@@ -93,14 +93,14 @@ function getNewsData() { //从服务器获取数据
 
   }
 
+getNewsData();
 
 
 
 
-
-   var json = {}; //全局
+  
   var load = function() { //加载
-    json = getNewsData(); //获取服务器数据
+    //json = getNewsData(); //获取服务器数据
 
     var messageId; //没错 这就是真正的数据 // FIXME: 变量未使用
     var messageTitle;
@@ -136,7 +136,7 @@ function getNewsData() { //从服务器获取数据
       messageId = json.data[i].messageId; //没错 这就是真正的数据
       messageTitle = json.data[i].messageTitle;
       releaseTime = json.data[i].releaseTime;
-      releaseName = json.data[i].releaseName;
+      releaseNamee = json.data[i].releaseName;
       readFlag = json.data[i].readFlag;
 
       /*获取数据后操作dom*/
@@ -147,8 +147,6 @@ function getNewsData() { //从服务器获取数据
 
     }
   };
-
-
 
 
 
