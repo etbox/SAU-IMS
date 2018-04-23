@@ -66,11 +66,10 @@
       });
 
   }
-  getNewsData();
-
+ getNewsData();
 
   function load() { //加载
- 
+  
 
     var auditMsgId; //没错 这就是真正的数据
     var auditTitle;
@@ -246,8 +245,8 @@
       });
 
   }
-var searchData1={};
-  
+
+  var searchData1={};
   function getSearchData() {
     $.ajax(
       {
@@ -262,7 +261,7 @@ var searchData1={};
         },
       })
       .done(function(searchData) {
-        earchData1=searchData;
+         earchData1=searchData;
         search();
       })
       .fail(function() {
@@ -274,10 +273,9 @@ var searchData1={};
 
 
   }
-   
 
   function search() {
-    
+  
   
 
     $('.middleSide').children('div').remove();

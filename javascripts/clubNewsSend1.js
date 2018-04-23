@@ -1,7 +1,7 @@
 (function(){
  'use strict';
   var $ = window.jQuery;
- var json = {}; //全局
+ var json = {};
   function row(i, id) {
     var $div0 = $('<div></div>', {
       'class': 'm',
@@ -38,12 +38,11 @@
     return $div0; 
 
   }
-
 function getNewsData() { //从服务器获取数据
 
     $.ajax(
       {
-        url: 'sau/msg/old?offset=1&limit=10',
+        url: '/club/msg/old?offset=1&limit=10',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -52,7 +51,7 @@ function getNewsData() { //从服务器获取数据
       })
       .done(function(Json) {
         console.log('success'); //操作
-       if (Json.code != 0) {
+         if (Json.code != 0) {
           alert(data.msg); // FIXME: data为定义！！！
         }
         json=Json;
@@ -66,8 +65,9 @@ function getNewsData() { //从服务器获取数据
       });
 
   }
-
 getNewsData();
+ 
+
   function load() { //加载
    
 
@@ -107,6 +107,7 @@ getNewsData();
     }
   }
 
+
  
 
   function refresh() { //刷新按钮
@@ -125,7 +126,7 @@ var checkID;
       $('#' + json.data[i].messageId).click(function() {
         $.ajax(
           {
-            url: '/sau/msg/old/' + this.id + '',
+            url: '/club/msg/old/' + this.id + '',
             type: 'get',
             headers: {
               'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -150,7 +151,7 @@ var checkID;
       });
     }
   }
- addNewsClick(json);
+  addNewsClick(json);
 
   function news(a, b, c, d) {
     $('#rightHeadTitle').text(a);
@@ -165,11 +166,11 @@ var checkID;
 
 
 
- 
+ var searchData1={};
   function getSearchData() {
     $.ajax(
       {
-        url: '/sau/msg/old/search?findContent='+$('.search-bar').val()+'&offset=1&limit=-1',
+        url: '/club/msg/old/search?findContent='+$('.search-bar').val()+'&offset=1&limit=-1',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -178,7 +179,8 @@ var checkID;
        
       })
       .done(function(searchData) {
-        return searchData;
+        searchData1=searchData;
+        search();
       })
       .fail(function() {
         console.log('error');
@@ -189,8 +191,9 @@ var checkID;
 
 
   }
+  
   function search() {
-    searchData = getSearchData();
+    
   
 
     $('.middleSide').children('div').remove();
@@ -223,7 +226,7 @@ var checkID;
 
 function sendPerson () {
   $.ajax({
-    url: 'sau/clubs?messageType=2',
+    url: '/club/msg/new/person',
     type: 'POST',
     dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
     data: {
@@ -248,7 +251,7 @@ function sendPerson () {
 
 function sendGroup() {
   $.ajax({
-    url: 'sau/msg/new/group',
+    url: '/club/msg/new/group',
     type: 'POST',
     dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
     data: {
@@ -273,7 +276,7 @@ function sendGroup() {
 
 function sendAll () {
   $.ajax({
-    url: 'sau/msg/new/all',
+    url: '/club/msg/new/all',
     type: 'POST',
     dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
     data: {
@@ -300,7 +303,7 @@ function sendAll () {
 
 function  contact() {
   $.ajax({
-    url: 'sau/clubs?messageType=2',
+    url: 'club/members?messageType=2',
     type: 'GET',
     dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
    
@@ -363,6 +366,7 @@ function  contact() {
         addHandler('sendPicture1','click',sendGroup);
         addHandler('sendPicture2','click',sendAll);
         addHandler('peoplePic','click',contact);
+        addHandler('search', 'click', getSearchData);
   
       }
 init();

@@ -46,7 +46,7 @@
   }
 
 
-
+  var json = {};
 
   function getNewsData(){       //从服务器获取数据
 
@@ -58,7 +58,8 @@
       })
       .done(function(Json) {
           console.log('success');//操作
-          return Json;
+           json=Json;
+       load();
       })
       .fail(function() {
           console.log('error');
@@ -68,11 +69,11 @@
       });
 
   }
-  var json = {};
-  
+
+   getNewsData();
 
   function load() { //加载
-    json=getNewsData();    //获取服务器数据
+    //json=getNewsData();    //获取服务器数据
 
     var auditMsgId; //没错 这就是真正的数据 // FIXME: 变量未使用
     var auditTitle;
@@ -126,7 +127,7 @@
 
     }
   }
-  load();
+
 
   // var checkID;
 
@@ -194,10 +195,36 @@
     }
   }
 
+   var searchData1={};
+  function getSearchData() {
+    $.ajax(
+      {
+        url: '/club/ann/search',
+        type: 'get',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        dataType: 'json',
+        data: {
+          'findContent': '' + $('.search-bar').val()
+        },
+      })
+      .done(function(searchData) {
+         searchData1=searchData;
+         search();
+      })
+      .fail(function() {
+        console.log('error');
+      })
+      .always(function() {
+        console.log('complete');
+      });
 
+
+  }
+  
   function search() {
-    var searchData=getSearchData();
-
+  
     $('#middleSide').children('div').remove();
     var auditMsgId; //没错 这就是真正的数据 // FIXME: 变量未使用
     var auditTitle;
@@ -230,35 +257,11 @@
       }
     }
 
-    addNewsClick(searchData);
+    addNewsClick(searchData1);
 
   }
 
-  function getSearchData() {
-    $.ajax(
-      {
-        url: '/club/ann/search',
-        type: 'get',
-        headers: {
-          'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        },
-        dataType: 'json',
-        data: {
-          'findContent': '' + $('.search-bar').val()
-        },
-      })
-      .done(function(searchData) {
-        return searchData;
-      })
-      .fail(function() {
-        console.log('error');
-      })
-      .always(function() {
-        console.log('complete');
-      });
 
-
-  }
 
   function refresh() { //刷新按钮
     $('#middleSide').children('div').remove();
@@ -319,6 +322,7 @@
     addHandler('search', 'click', search);
     addHandler('add', 'click', edit);
     addHandler('sendPic', 'click', sendCheck);
+    addHandler('search', 'click', getSearchData);
   }
   init();
 

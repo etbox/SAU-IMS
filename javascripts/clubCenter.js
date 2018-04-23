@@ -2,7 +2,7 @@
   'use strict';
   var $ = window.jQuery;
   var echarts = window.echarts;
-
+  var json = {};
 
   function getNewsData(){       //从服务器获取数据
 
@@ -14,7 +14,11 @@
       })
       .done(function(Json) {
           console.log('success');//操作
-          return Json;
+        if (Json.code != 0) {
+          alert(data.msg); // FIXME: data为定义！！！
+        }
+        json=Json;
+       load();
       })
       .fail(function() {
           console.log('error');
@@ -24,16 +28,14 @@
       });
 
   }
+getNewsData();
 
 
 
 
-
-  var json = {};
-  // var Json = {};
 
   function load() {
-    json=getNewsData();    //获取服务器数据
+    
     var clubName;
     var setTime;
     var bossName;
@@ -77,7 +79,7 @@
 
   }
 
-  load();
+
 
 
 

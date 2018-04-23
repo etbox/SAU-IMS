@@ -98,6 +98,7 @@
     'use strict';
     var notOK = document.getElementById('pswNotNull');
     var notOKimg = document.getElementById('F1');
+    var yzm=document.getElementById('yzmwrong');
     if (response.code === 0) {
       // TODO: 链接未定
     } else {
@@ -105,7 +106,21 @@
       notOKimg.style.left = '68%';
       notOKimg.style.top = '160px';
       notOK.style.display = 'block';
+      yzm.style.display = 'block';
       notOK.firstChild.data = response.msg;
+    }
+    if(response.data===0){
+      //person  innersys2
+      window.location.href='../inner_system2.html';
+
+    }
+    else if(response.data===1){
+      //club  innersys
+      window.location.href='../inner_system.html';
+    }
+    else(response.data===2){
+      //shelian  innersys1
+      window.location.href='../inner_system1.html';
     }
   }
 

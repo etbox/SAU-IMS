@@ -101,7 +101,7 @@
     load(); // FIXME: load没定义！！！
 
   }
-    var searchData1 ={};
+  var searchData1 ={};
  function getSearchData() {
     $.ajax(
       {
@@ -132,7 +132,7 @@
 
 
   function search() {
-    
+  
     /*searchData={           //测试用
                    'code':0,
     				'msg': '',

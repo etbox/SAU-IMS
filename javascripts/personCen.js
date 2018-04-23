@@ -1,7 +1,7 @@
 (function() {
   'use strict';
   var $ = window.jQuery;
-
+ var json = {}; //全局
 
   function getNewsData() { //从服务器获取数据 // FIXME: 变量未使用
 
@@ -16,7 +16,12 @@
       })
       .done(function(Json) {
         console.log('success'); //操作
-        return Json;
+         if (Json.code != 0) {
+          alert(data.msg); // FIXME: data为定义！！！
+        }
+        json=Json;
+       load();
+       
       })
       .fail(function() {
         console.log('error');
@@ -26,12 +31,11 @@
       });
 
   }
+getNewsData();
 
-  var json = {};
-  // var Json = {};
 
   function load() { //加载
-    json=getNewsData();    //获取服务器数据
+   
 
 
     var userName;
@@ -153,7 +157,7 @@
 
 
   }
-  load();
+
 
 
 

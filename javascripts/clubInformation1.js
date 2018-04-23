@@ -66,7 +66,7 @@ getNewsData();
 
 
   function load() { //加载
-   
+  
 
     var clubId; //没错 这就是真正的数据 // FIXME: 变量未使用
     var clubName;
@@ -200,9 +200,8 @@ getNewsData();
 
 
   }
-
   function search() {
-    
+   
   /*  var searchData = { //测试用
       'code': 0,
       'msg': '',
@@ -258,7 +257,7 @@ getNewsData();
 
   function init() {
     addHandler('refresh', 'click', refresh);
-  addHandler('search', 'click', getSearchData);
+    addHandler('search', 'click', getSearchData);
 
   }
 
