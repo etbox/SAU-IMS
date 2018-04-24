@@ -41,7 +41,6 @@ public class LoginInterceptor implements HandlerInterceptor {
         open_urls.add("/resource");
         //临时开放链接，用来测试
         open_urls.add("/favicon.ico");
-        open_urls.add("/inner_system.html");
         open_urls.add("/clubNews.html");
         //如果是公开地址，则放行
         for(String open_url:open_urls){

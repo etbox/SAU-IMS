@@ -110,16 +110,16 @@
     }
     if(response.data===0){
       //person  innersys2
-      window.location.href='../inner_system2.html';
+      window.location.href='/inner_system2.html';
 
     }
     else if(response.data===1){
       //club  innersys
-      window.location.href='../inner_system.html';
+      window.location.href='/inner_system.html';
     }
     else if (response.data===2){
       //shelian  innersys1
-      window.location.href='../inner_system1.html';
+      window.location.href='/inner_system1.html';
     }
   }
 

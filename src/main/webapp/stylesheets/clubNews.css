@@ -29,7 +29,7 @@ html,body{
    }
    #HeadTitle{
          position: absolute;
-      width:100px;
+      width:600px;
       height: 25px;
       left: 140px;
       top: 28px;
@@ -38,7 +38,7 @@ html,body{
    }
     #HeadIntroduce{
       position: absolute;
-      width:150px;
+      width:450px;
       height: 25px;
       left: 140px;
       top: 70px;
@@ -47,10 +47,10 @@ html,body{
    }
     #HeadTime{
       position: absolute;
-      width:200px;
+      width:250px;
       height: 25px;
-      left:700px;
-      top: 70px;
+      left:680px;
+      top: 50px;
       font-family: "微软雅黑";
       font-size: 17px;
    }

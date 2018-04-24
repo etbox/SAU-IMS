@@ -1,11 +1,6 @@
      (function(window){
-
-
-
-    var orgId=window.localStorage.getItem('uid');
-     console.log(orgId);
-
-
+         var orgId = getParam("id");
+         console.log(orgId);
      $.ajax({
          url: '/index/club/'+orgId,
          type: 'GET',
@@ -17,12 +12,12 @@
 
          $('#HeadTitle').text(json.data.orgName);
          $('#HeadIntroduce').text(json.data.description);
-         $('#HeadTime').text(registerTime);
+         $('#HeadTime').text(registerTime+"  成立");
          $('#bossName').text(json.data.adminName);
          $('#mailboxName').text(json.data.email);
          $('#telNum').text(json.data.phone);
          $('#Introduce').text(json.data.description);
-         $('#HeadPic').attr("src",json.data.logo);
+         $('#HeadPic').attr("src","/resource/logo/"+json.data.logo);
          
      })
      .fail(function() {
@@ -32,10 +27,6 @@
          console.log("complete");
      });
      
-
-
-
-
 
 
         'use strict';
@@ -92,7 +83,7 @@
 };
 
 
-        // 使用刚指定的配置项和数据显示图表。
+         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);   
 
 
@@ -153,4 +144,18 @@
         myChart2.setOption(option2);   
      })(window);
 
-    
+     /**
+      * 获取指定的URL参数值
+      * URL:http://www.quwan.com/index?name=tyler
+      * 参数：paramName URL参数
+      * 调用方法:getParam("name")
+      * 返回值:tyler
+      */
+     function getParam(paramName) {
+         paramValue = "", isFound = !1;
+         if (this.location.search.indexOf("?") == 0 && this.location.search.indexOf("=") > 1) {
+             arrSource = unescape(this.location.search).substring(1, this.location.search.length).split("&"), i = 0;
+             while (i < arrSource.length && !isFound) arrSource[i].indexOf("=") > 0 && arrSource[i].split("=")[0].toLowerCase() == paramName.toLowerCase() && (paramValue = arrSource[i].split("=")[1], isFound = !0), i++
+         }
+         return paramValue == "" && (paramValue = null), paramValue
+     }

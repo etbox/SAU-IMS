@@ -29,6 +29,11 @@ public class PermissionInterceptor implements HandlerInterceptor {
         permissionMap.put(0,"/member");
         permissionMap.put(1,"/club");
         permissionMap.put(2,"/sau");
+        //临时加的
+        permissionMap.put(0,"/inner_system2.html");
+        permissionMap.put(1,"/inner_system.html");
+        permissionMap.put(2,"/inner_system1.html");
+
     }
     //在执行handler之前来执行的
     //用于用户认证校验、用户权限校验
@@ -51,7 +56,6 @@ public class PermissionInterceptor implements HandlerInterceptor {
         open_urls.add("/resource");
         //临时开放链接，用来测试
         open_urls.add("/favicon.ico");
-        open_urls.add("/inner_system.html");
         open_urls.add("/clubNews.html");
         //如果是公开地址，则放行
         for(String open_url:open_urls){
