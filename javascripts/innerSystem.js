@@ -69,7 +69,7 @@ function getNewsData() { //从服务器获取数据
 
     $.ajax(
       {
-        url: '/msg',
+        url: '/sauims/json/msg/allMsg.json',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -100,43 +100,18 @@ getNewsData();
 
   
   var load = function() { //加载
-    //json = getNewsData(); //获取服务器数据
-
+  
     var messageId; //没错 这就是真正的数据 // FIXME: 变量未使用
     var messageTitle;
     var releaseTime; // FIXME: 变量未使用
     var releaseName; // FIXME: 变量未使用
     var readFlag; // FIXME: 变量未使用
-    /*    json={           //测试用
-               'code':0,
-				'msg': '',
-				'data':[
-							{
-									'messageId': 232,
-   									'messageTitle': '乒乓球比赛',
-   									'releaseTime': '2017-09-08 22:23:30',
-    								'releaseName': '乒乓球协会',
-     								'readFlag': 1
-							},{
-									'messageId': 233,
-      								'messageTitle': '羽毛球比赛',
-     								'sendTime': '2017-09-08 22:23:30',
-    								'senderName': '羽毛球协会',
-      								'readFlag': 0
-							   },
-							   {
-									'messageId': 235,
-      								'messageTitle': '篮球比赛',
-     								'sendTime': '2017-09-08 22:23:30',
-    								'senderName': '篮球协会',
-      								'readFlag': 0
-							   }
-						]	}*/
+
     for (var i = 0; i < json.data.length; i++) { //i的长度是json的 data的长度
       messageId = json.data[i].messageId; //没错 这就是真正的数据
       messageTitle = json.data[i].messageTitle;
       releaseTime = json.data[i].releaseTime;
-      releaseNamee = json.data[i].releaseName;
+      releaseName = json.data[i].releaseName;
       readFlag = json.data[i].readFlag;
 
       /*获取数据后操作dom*/
@@ -148,12 +123,6 @@ getNewsData();
     }
   };
 
-
-
-
-
-
-  
 
 
 }());

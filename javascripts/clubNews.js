@@ -2,7 +2,7 @@
          var orgId = getParam("id");
          console.log(orgId);
      $.ajax({
-         url: '/index/club/'+orgId,
+         url: '/sauims/json/index/club/'+orgId+".json",
          type: 'GET',
          dataType: 'json',
      })
@@ -11,26 +11,14 @@
          var registerTime = unixTimestamp.toLocaleString();
 
          $('#HeadTitle').text(json.data.orgName);
-         $('#HeadIntroduce').text(json.data.description);
+         $('#HeadIntroduce').text(json.data.headIntroduce);
          $('#HeadTime').text(registerTime+"  成立");
          $('#bossName').text(json.data.adminName);
          $('#mailboxName').text(json.data.email);
          $('#telNum').text(json.data.phone);
          $('#Introduce').text(json.data.description);
          $('#HeadPic').attr("src","/resource/logo/"+json.data.logo);
-         
-     })
-     .fail(function() {
-         console.log("error");
-     })
-     .always(function() {
-         console.log("complete");
-     });
-     
-
-
-        'use strict';
-
+       
           //绘图
 
         //---------------------------------------------------------------------
@@ -74,16 +62,14 @@
                 }
             },
             data:[
-                {value:335, name:'男'},
-                {value:310, name:'女'},
+                {value:json.data.manNum, name:'男'},
+                {value:json.data.womanNum, name:'女'},
                 
             ]
         }
-    ]
-};
-
-
-         // 使用刚指定的配置项和数据显示图表。
+		]}
+		
+		         // 使用刚指定的配置项和数据显示图表。
         myChart.setOption(option);   
 
 
@@ -95,7 +81,7 @@
 
         // 指定图表的配置项和数据
         var option2 = {
-            color: ['#37a2fe','#8dcaea','#327aa7'],
+            color: ['#37a2fe','#8dcaea','#327aa7','#000FFF'],
     tooltip: {
         trigger: 'item',
         formatter: "{a} <br/>{b}: {c} ({d}%)"
@@ -103,7 +89,7 @@
     legend: {
         orient: 'vertical',
         x: 'left',
-        data:['大一','大二','大三']
+        data:['大一','大二','大三','大四']
     },
     series: [
         {
@@ -130,10 +116,10 @@
                 }
             },
             data:[
-                {value:335, name:'大一'},
-                {value:310, name:'大二'},
-                {value:310, name:'大三'},
-                
+                {value:json.data.firstGradeNum, name:'大一'},
+                {value:json.data.secondGradeNum, name:'大二'},
+                {value:json.data.threeGradeNum, name:'大三'},
+                {value:json.data.fourGradeNum, name:'大四'},
             ]
         }
     ]
@@ -141,7 +127,20 @@
 
 
         // 使用刚指定的配置项和数据显示图表。
-        myChart2.setOption(option2);   
+        myChart2.setOption(option2); 
+		
+
+     })
+     .fail(function() {
+         console.log("error");
+     })
+     .always(function() {
+         console.log("complete");
+     });
+     
+
+        'use strict';
+
      })(window);
 
      /**

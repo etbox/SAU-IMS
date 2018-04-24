@@ -6,7 +6,7 @@
    //    var App=window.App || {};
        var orgId;
     $.ajax({
-        url: 'index/club?offset=1&limit=10000',
+        url: 'json/index/allClub.json',
         type:'GET',
         dataType: 'json',
     })
@@ -25,7 +25,7 @@
           <div class="cover pos">
           
             <!-- 如果社团id，orgId ===11，就是校社联用户。 如果是社团的话，就是下面的展示图的链接，如果是校社联的话，就是另一个链接 -->
-            <a href="/clubNews.html?id=${Data.data[i].orgId}" target="_blank" title="${Data.data[i].orgName}">
+            <a href="/sauims/clubNews.html?id=${Data.data[i].orgId}" target="_blank" title="${Data.data[i].orgName}">
               <img src="/resource/view/sau/${Data.data[i].view}" alt="${Data.data[i].view}">
               
             </a>
@@ -56,7 +56,7 @@
           <div class="cover pos">
           
             <!-- 如果社团id，orgId ===11，就是校社联用户。 如果是社团的话，就是下面的展示图的链接，如果是校社联的话，就是另一个链接 -->
-            <a href="/clubNews.html?id=${Data.data[i].orgId}" target="_blank" title="${Data.data[i].orgName}">
+            <a href="/sauims/clubNews.html?id=${Data.data[i].orgId}" target="_blank" title="${Data.data[i].orgName}">
               <img src="/resource/view/club/${Data.data[i].view}" alt="${Data.data[i].view}">
               
             </a>
@@ -79,19 +79,6 @@
 
                }
 
-
-      //  for (var i = 0; i <= $(".post").children('li').length; i++) {
-      // $(".post").find("li").eq(i).click(function(event) {
-      //
-      //   orgId=this.id;
-      //     console.log("add——card中的："+orgid);
-      //    var localStorage = window.localStorage;
-      //    localStorage.setItem('uid',''+orgId);
-      //
-      // });}
-
-
-
             console.log("success");
         })
         .fail(function() {
@@ -112,19 +99,3 @@
 */
 }(window));
 
-
-// var random="";
-// for(var i=0;i<4;i++){
-//     random+=Math.floor(Math.random()*10);
-// }
-// console.log(random);
-//
-// $("#yzm a").attr({
-//     href: '#',
-//
-// });
-//
-// $("#yzm img").attr({
-//     src: '/login/captcha?r='+random,
-//
-// });

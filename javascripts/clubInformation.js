@@ -10,7 +10,7 @@
     });
     var $img = $('<img></img>', {
       'class': 'MHEAD',
-      'src': './images/touxiang.png'
+      'src': '/sauims/resource/logo/'
     });
     var $div1 = $('<div></div>', {
       'class': 'WRITER',
@@ -40,18 +40,20 @@
   function getNewsData(){       //从服务器获取数据
 
       return $.ajax({
-          url: '/sau/club',
+          url: '/sauims/json/sau/club/allClub.json',
           type: 'get',
           headers: {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'},
           dataType: 'json',
       })
       .done(function(Json) {
           console.log('success');//操作
+		  console.log(Json);
           if (Json.code != 0) {
           alert(data.msg); // FIXME: data为定义！！！
         }
         json=Json;
-       load();
+        load();
+		addNewsClick(json);
       })
       .fail(function() {
           console.log('error');
@@ -70,40 +72,20 @@ getNewsData();
 
     var clubId; //没错 这就是真正的数据 // FIXME: 变量未使用
     var clubName;
-    //var members; // FIXME: 变量未使用
+    var members; // FIXME: 变量未使用
     var likeNumber;
- /*   json = { //测试用
-      'code': 0,
-      'msg': '',
-      'data': [
-        {
-          'clubId': 232,
-          'clubName': '乒乓球协会',
-          'members': 100,
-          'likeNumber': 20
-        },
-        {
-          'clubId': 233,
-          'clubName': '羽毛球',
-          'members': 100,
-          'likeNumber': 100
-        }
 
-      ]
-    };*/
     for (var i = 0; i < json.data.length; i++) { //i的长度是json的 data的长度
-      clubId = json.data[i].clubId; //没错 这就是真正的数据
-      clubName = json.data[i].clubName;
+      clubId = json.data[i].orgId; //没错 这就是真正的数据
+      clubName = json.data[i].orgName;
       members = json.data[i].members;
-      likeNumber = json.data[i].likeNumber;
-
+      likeNumber = json.data[i].likeClick;
 
       /*获取数据后操作dom*/
-      $('.middleSide').append(row(i, json.data[i].clubId));
+      $('.middleSide').append(row(i, json.data[i].orgId));
+	  $('.MHEAD').attr("src","http://localhost:8080/resource/logo/"+json.data[i].logo);
       $('#WRITER' + i).text(clubName);
       $('#NUM' + i).text(likeNumber);
-
-
     }
   }
 
@@ -149,7 +131,7 @@ getNewsData();
       });
     }
   }
-  addNewsClick(json);
+
 
   function news(a, b, c, d, e, f, g) {
     $('.rightHeadTitle').text(a);
@@ -189,7 +171,7 @@ getNewsData();
       })
       .done(function(searchData) {
           searchData1=searchData;
-        search();
+          search();
       })
       .fail(function() {
         console.log('error');

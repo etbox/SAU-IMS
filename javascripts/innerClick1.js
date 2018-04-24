@@ -41,7 +41,7 @@
       });
     }
   }
-  addNewsClick(json); // FIXME: json没定义！！！
+  //addNewsClick(json); // FIXME: json没定义！！！
 
 
   function news(a, b, c, d) { //点击新闻显示
@@ -195,5 +195,6 @@
     addHandler('refresh', 'click', refresh);
     addHandler('search', 'click', getSearchData);
   }
+  console.log('执行了事件监听的初始化');
   init();
 }());

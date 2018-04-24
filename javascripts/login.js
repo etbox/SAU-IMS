@@ -71,12 +71,7 @@
     var json = JSON.stringify(formData);
     // console.log(formData);
 
-    var url = 'login';
-    // var json = JSON.stringify({
-    //   'userName': 's19961234@126.com',
-    //   'password': '123456',
-    //   'captcha': 'cabce'
-    // });
+    var url = '/sauims/login/sau_success.json';
     sendAjax(url, json)
       .done(getResponse);
   }
@@ -114,11 +109,11 @@
 
     }
     else if(response.data===1){
-      //club  innersys
+      //sau  innersys
       window.location.href='/inner_system.html';
     }
     else if (response.data===2){
-      //shelian  innersys1
+      //club  innersys1
       window.location.href='/inner_system1.html';
     }
   }
