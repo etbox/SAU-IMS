@@ -38,6 +38,11 @@ public class OrgDetail extends BaseModel {
     private String phone;
 
     /**
+     * 口号
+     */
+    private String headIntroduce;
+
+    /**
      * 社团内男生数量
      */
     private Integer manNum;
@@ -65,6 +70,14 @@ public class OrgDetail extends BaseModel {
      * 社团内已经毕业的学生的数量
      */
     private Integer graduatedNum;
+
+    public String getHeadIntroduce() {
+        return headIntroduce;
+    }
+
+    public void setHeadIntroduce(String headIntroduce) {
+        this.headIntroduce = headIntroduce;
+    }
 
     public Integer getManNum() {
         return manNum;

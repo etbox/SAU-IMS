@@ -1,9 +1,12 @@
 package com.fekpal.web.controller;
 
 import com.fekpal.api.ClubService;
+import com.fekpal.api.MemberOrgService;
+import com.fekpal.api.OrgMemberService;
 import com.fekpal.api.OrgService;
 import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
+import com.fekpal.dao.mapper.MemberOrgMapper;
 import com.fekpal.dao.model.Org;
 import com.fekpal.web.model.OrgDetail;
 import com.fekpal.web.model.OrgListMsg;
@@ -32,6 +35,9 @@ public class IndexPageController {
 
     @Autowired
     private OrgService orgService;
+
+    @Autowired
+    private OrgMemberService orgMemberService;
 
     /**
      * 得到社团列表信息
@@ -79,25 +85,40 @@ public class IndexPageController {
     @ResponseBody
     @RequestMapping(value = "/index/club/{id}", method = RequestMethod.GET)
     public JsonResult<OrgDetail> getClubDetail(@PathVariable int id) {
-        Org club = clubService.selectByPrimaryKey(id);
+        Org org = orgService.selectByPrimaryKey(id);
         JsonResult<OrgDetail> result = new JsonResult<>();
 
-        if (club == null) {
+        if (org == null) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
         } else {
             OrgDetail record = new OrgDetail();
-            record.setOrgId(club.getOrgId());
-            record.setAdminName(club.getAdminName());
-            record.setLogo(club.getOrgLogo());
-            record.setView(club.getOrgView());
-            record.setOrgName(club.getOrgName());
-            record.setDescription(club.getDescription());
-            record.setEmail(club.getContactEmail());
-            record.setFoundTime(club.getFoundTime());
-            record.setMembers(club.getMembers());
-            record.setOrgType(club.getOrgType());
-            record.setPhone(club.getContactNumber());
-            record.setLikeClick(club.getLikeClick());
+            record.setOrgId(org.getOrgId());
+            record.setAdminName(org.getAdminName());
+            record.setLogo(org.getOrgLogo());
+            record.setView(org.getOrgView());
+            record.setOrgName(org.getOrgName());
+            record.setEmail(org.getContactEmail());
+            record.setFoundTime(org.getFoundTime());
+            record.setMembers(org.getMembers());
+            record.setOrgType(org.getOrgType());
+            record.setPhone(org.getContactNumber());
+            record.setLikeClick(org.getLikeClick());
+            String[] description = org.getDescription().split("。");
+            record.setHeadIntroduce(description[0]);
+            record.setDescription(description[description.length-1]);
+            record.setManNum(orgService.countOrgManNumByOrgId(id));
+            record.setWomanNum(orgService.countOrgWomanNumByOrgId(id));
+            int firstGradeNum = orgService.countOrgGradeNumByOrgId(1,id);
+            int secondGradeNum = orgService.countOrgGradeNumByOrgId(2,id);
+            int threeGradeNum = orgService.countOrgGradeNumByOrgId(3,id);
+            int fourGradeNum = orgService.countOrgGradeNumByOrgId(4,id);
+            //已经毕业的人数由社团总人数减去各个年级的人数
+            int graduatedNum = org.getMembers()-firstGradeNum-secondGradeNum-threeGradeNum-fourGradeNum;
+            record.setFirstGradeNum(firstGradeNum);
+            record.setSecondGradeNum(secondGradeNum);
+            record.setThreeGradeNum(threeGradeNum);
+            record.setFourGradeNum(fourGradeNum);
+            record.setGraduatedNum(graduatedNum >=0? graduatedNum : 0);
 
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
             result.setData(record);

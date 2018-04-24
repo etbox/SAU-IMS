@@ -55,4 +55,32 @@ public interface OrgService extends BaseService<Org> {
      * @return 组织记录集
      */
     List<Org> loadAllOrg(int offset, int limit);
+
+
+    /**
+     * 根据社团id计算社团内部男生的数量
+     * @param orgId 组织id
+     * @return 组织内男生的人数
+     */
+    int countOrgManNumByOrgId(int orgId);
+
+    /**
+     * 根据组织id计算社团内部女生的数量
+     * @param orgId 组织id
+     * @return 组织内女生的人数
+     */
+    int countOrgWomanNumByOrgId(int orgId);
+
+
+    /**
+     * 根据组织id计算年级数计算社团内部年级的数量
+     *
+     * @param grade 年级 如1,2,3,4,
+     * @param orgId 组织id
+     * @return 组织内各个年级的人数
+     */
+    int countOrgGradeNumByOrgId(int grade,int orgId);
+
+
+
 }

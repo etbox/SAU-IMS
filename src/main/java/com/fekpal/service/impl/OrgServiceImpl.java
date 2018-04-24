@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -89,4 +90,55 @@ public class OrgServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements O
         example.eq("org_state", AvailableState.AVAILABLE);
         return mapper.selectByExample(example, offset, limit);
     }
+
+    /**
+     * 根据社团id计算社团内部男生的数量
+     *
+     * @param orgId 组织id
+     * @return 组织内男生的人数
+     */
+    @Override
+    public int countOrgManNumByOrgId(int orgId) {
+        int manNum = memberMapper.countOrgManNum(orgId);
+        return manNum;
+    }
+
+    /**
+     * 根据组织id计算社团内部女生的数量
+     *
+     * @param orgId 组织id
+     * @return 组织内女生的人数
+     */
+    @Override
+    public int countOrgWomanNumByOrgId(int orgId) {
+        int womanNum = memberMapper.countOrgWomanNum(orgId);
+        return womanNum;
+    }
+
+    /**
+     * 根据组织id计算年级数计算社团内部年级的数量
+     *
+     * @param grade 年级 如1,2,3,4,
+     * @param orgId 组织id
+     * @return 组织内各个年级的人数
+     */
+    @Override
+    public int countOrgGradeNumByOrgId(int grade, int orgId) {
+        Calendar date = Calendar.getInstance();
+        int year = date.get(Calendar.YEAR);
+        int yearBack2 = year%100;
+        String realGrade = "15";
+        int month = date.get(Calendar.MONDAY);
+        //根据当前年份加上年级数（1,2,3,4），得到临时年级（15,16,17,18）
+        int tempGrade = yearBack2-grade+1;
+        if(month<9){
+            realGrade = String.valueOf(tempGrade-1);
+        }else{
+            realGrade = String.valueOf(tempGrade);
+        }
+        int gradeNum = memberMapper.countOrgGradeNum(orgId,realGrade+"%");
+        return gradeNum;
+    }
+
+
 }
