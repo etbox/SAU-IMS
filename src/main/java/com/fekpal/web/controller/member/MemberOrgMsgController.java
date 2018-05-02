@@ -9,10 +9,7 @@ import com.fekpal.common.json.JsonResult;
 import com.fekpal.dao.model.LikeOrg;
 import com.fekpal.dao.model.Org;
 import com.fekpal.dao.model.PersonOrgView;
-import com.fekpal.web.model.OrgDetail;
-import com.fekpal.web.model.OrgListMsg;
-import com.fekpal.web.model.PageList;
-import com.fekpal.web.model.SearchPage;
+import com.fekpal.web.model.*;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -87,19 +84,18 @@ public class MemberOrgMsgController {
      */
     @ResponseBody
     @RequestMapping(value = "/member/org/{id}", method = RequestMethod.GET)
-    public JsonResult<OrgDetail> getOneOrgMsg(@PathVariable int id) {
+    public JsonResult<MemberClubDetail> getOneOrgMsg(@PathVariable int id) {
         PersonOrgView org = orgService.selectByIdForPerson(id);
 
-        JsonResult<OrgDetail> result = new JsonResult<>();
+        JsonResult<MemberClubDetail> result = new JsonResult<>();
         if (org == null) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
 
         } else {
-            OrgDetail detail = new OrgDetail();
+            MemberClubDetail detail = new MemberClubDetail();
             detail.setOrgId(org.getOrgId());
             detail.setOrgName(org.getOrgName());
             detail.setAdminName(org.getAdminName());
-            detail.setDescription(org.getDescription());
             detail.setPhone(org.getContactNumber());
             detail.setEmail(org.getContactEmail());
             detail.setFoundTime(org.getFoundTime());
@@ -109,6 +105,24 @@ public class MemberOrgMsgController {
             detail.setLikeClick(org.getLikeClick());
             detail.setView(org.getOrgView());
             detail.setJoinState(org.getJoinState());
+            LikeOrg likeState = likeOrgService.selectByOrgId(org.getOrgId());
+            detail.setIsLike(likeState.getAvailable());
+            String[] description = org.getDescription().split("。");
+            detail.setHeadIntroduce(description[0]);
+            detail.setDescription(description[description.length-1]);
+            detail.setManNum(orgService.countOrgManNumByOrgId(id));
+            detail.setWomanNum(orgService.countOrgWomanNumByOrgId(id));
+            int firstGradeNum = orgService.countOrgGradeNumByOrgId(1,id);
+            int secondGradeNum = orgService.countOrgGradeNumByOrgId(2,id);
+            int threeGradeNum = orgService.countOrgGradeNumByOrgId(3,id);
+            int fourGradeNum = orgService.countOrgGradeNumByOrgId(4,id);
+            //已经毕业的人数由社团总人数减去各个年级的人数
+            int graduatedNum = org.getMembers()-firstGradeNum-secondGradeNum-threeGradeNum-fourGradeNum;
+            detail.setFirstGradeNum(firstGradeNum);
+            detail.setSecondGradeNum(secondGradeNum);
+            detail.setThreeGradeNum(threeGradeNum);
+            detail.setFourGradeNum(fourGradeNum);
+            detail.setGraduatedNum(graduatedNum >=0? graduatedNum : 0);
 
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
             result.setData(detail);
@@ -142,20 +156,27 @@ public class MemberOrgMsgController {
      * 用户喜爱组织
      *
      * @param id 要喜爱的组织id
-     * @return 返回时候是否喜爱成功
+     * @return 返回时候是否喜爱成功和zai数据里面加上点赞人数
      */
     @ResponseBody
     @RequestMapping(value = "/member/org/{id}/star", method = RequestMethod.POST)
-    public JsonResult<String> likeClub(@PathVariable int id) {
+    public JsonResult<Integer> likeClub(@PathVariable int id) {
         int state = likeOrgService.likeByOrgIdAndState(id);
 
-        JsonResult<String> result = new JsonResult<>();
+
+        JsonResult<Integer> result = new JsonResult<>();
         if (state == Operation.SUCCESSFULLY) {
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "点赞成功");
+            PersonOrgView org = orgService.selectByIdForPerson(id);
+            Integer likeClick = org.getLikeClick();
+            result.setData(likeClick);
         } else if (state == Operation.FAILED) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "点赞失败");
         } else if (state == Operation.CANCEL) {
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "取消点赞");
+            PersonOrgView org = orgService.selectByIdForPerson(id);
+            Integer likeClick = org.getLikeClick();
+            result.setData(likeClick);
         }
         return result;
     }

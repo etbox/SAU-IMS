@@ -30,9 +30,9 @@ public class PermissionInterceptor implements HandlerInterceptor {
         permissionMap.put(1,"/club");
         permissionMap.put(2,"/sau");
         //临时加的
-        permissionMap.put(0,"/inner_system2.html");
-        permissionMap.put(1,"/inner_system.html");
-        permissionMap.put(2,"/inner_system1.html");
+//        permissionMap.put(0,"/inner_system2.html");
+//        permissionMap.put(1,"/inner_system.html");
+//        permissionMap.put(2,"/inner_system1.html");
 
     }
     //在执行handler之前来执行的
@@ -77,8 +77,8 @@ public class PermissionInterceptor implements HandlerInterceptor {
         //权限访问地址
         HttpSession session = request.getSession(false);
         int permissionId = SessionLocal.local(session).getUserIdentity().getAuth();
-        String permission_url = permissionMap.get(permissionId);
-        if(url.indexOf(permission_url)>=0){
+        String permissionUrl = permissionMap.get(permissionId);
+        if(url.indexOf(permissionUrl)>=0){
             return true;
         }
        //执行到这里拦截，跳转到无权访问的提示页面

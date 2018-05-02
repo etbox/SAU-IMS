@@ -53,12 +53,13 @@ public class SauServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements S
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int updateSauInfo(SauMsg msg) {
+        int uid = SessionLocal.local(session).getUserIdentity().getUid();
         ExampleWrapper<Org> example = new ExampleWrapper<>();
-        example.eq("org_name", msg.getSauName());
+        example.eq("org_name", msg.getSauName()).and().ne("org_id",uid);
         int row = mapper.countByExample(example);
         if (row != 0) return Operation.INPUT_INCORRECT;
 
-        int uid = SessionLocal.local(session).getUserIdentity().getUid();
+
         Org org = new Org();
         org.setOrgId(uid);
         org.setOrgName(msg.getSauName());

@@ -7,6 +7,7 @@ import java.sql.Timestamp;
 
 /**
  * Created by APone on 2018/3/4 14:24.
+ * @author APone
  */
 @Component
 public class OrgDetail extends BaseModel {

@@ -79,7 +79,6 @@ public class SauOrgMsgController {
             detail.setOrgId(org.getOrgId());
             detail.setOrgName(org.getOrgName());
             detail.setAdminName(org.getAdminName());
-            detail.setDescription(org.getDescription());
             detail.setPhone(org.getContactNumber());
             detail.setEmail(org.getContactEmail());
             detail.setFoundTime(org.getFoundTime());
@@ -89,6 +88,22 @@ public class SauOrgMsgController {
             detail.setLikeClick(org.getLikeClick());
             detail.setView(org.getOrgView());
             detail.setJoinState(org.getJoinState());
+            String[] description = org.getDescription().split("。");
+            detail.setHeadIntroduce(description[0]);
+            detail.setDescription(description[description.length-1]);
+            detail.setManNum(orgService.countOrgManNumByOrgId(id));
+            detail.setWomanNum(orgService.countOrgWomanNumByOrgId(id));
+            int firstGradeNum = orgService.countOrgGradeNumByOrgId(1,id);
+            int secondGradeNum = orgService.countOrgGradeNumByOrgId(2,id);
+            int threeGradeNum = orgService.countOrgGradeNumByOrgId(3,id);
+            int fourGradeNum = orgService.countOrgGradeNumByOrgId(4,id);
+            //已经毕业的人数由社团总人数减去各个年级的人数
+            int graduatedNum = org.getMembers()-firstGradeNum-secondGradeNum-threeGradeNum-fourGradeNum;
+            detail.setFirstGradeNum(firstGradeNum);
+            detail.setSecondGradeNum(secondGradeNum);
+            detail.setThreeGradeNum(threeGradeNum);
+            detail.setFourGradeNum(fourGradeNum);
+            detail.setGraduatedNum(graduatedNum >=0? graduatedNum : 0); 
 
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
             result.setData(detail);
