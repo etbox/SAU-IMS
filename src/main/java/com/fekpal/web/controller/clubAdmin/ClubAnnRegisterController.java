@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import java.util.*;
@@ -165,5 +166,21 @@ public class ClubAnnRegisterController {
         }
         return result;
     }
+
+    /**
+     * 下载某个审核消息的审核文件，向浏览器输出下载信息
+     *
+     * @param auditMsgId 审核消息id
+     * @param response   响应
+     */
+    @RequestMapping(value = "/club/ann/{auditMsgId}/file", method = RequestMethod.GET)
+    public void downFile(@PathVariable int auditMsgId, HttpServletResponse response) {
+        int state = auditService.getAuditFileById(auditMsgId,response);
+        if(state == Operation.FAILED){
+            throw new RuntimeException("下载失败，请重新下载");
+        }
+    }
+
+
 
 }

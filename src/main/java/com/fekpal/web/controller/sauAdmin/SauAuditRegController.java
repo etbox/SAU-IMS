@@ -89,8 +89,8 @@ public class SauAuditRegController {
      * @return 审核信息列表
      */
     @ResponseBody
-    @RequestMapping(value = "/sau/audit/join/{auditMsgId}/{role}", method = RequestMethod.GET)
-    public JsonResult getAuditMsgDetail(@PathVariable("auditMsgId") int auditMsgId, @PathVariable(value = "role") int role) {
+    @RequestMapping(value = "/sau/audit/join/{role}/{auditMsgId}", method = RequestMethod.GET)
+    public JsonResult getAuditMsgDetail(@PathVariable(value = "role") int role , @PathVariable("auditMsgId") int auditMsgId ) {
         JsonResult<PersonJoinAuditDetail> personResult = new JsonResult<>();
         JsonResult<SauClubAuditDetail> clubResult = new JsonResult<>();
         PersonJoinAuditDetail personDetail = new PersonJoinAuditDetail();
@@ -151,8 +151,8 @@ public class SauAuditRegController {
      * @return 是否成功
      */
     @ResponseBody
-    @RequestMapping(value = "/sau/audit/reg/{auditMsgId}/{role}", method = RequestMethod.PUT)
-    public JsonResult<String> sendAuditMsgResult(@PathVariable int auditMsgId, @PathVariable int role, @RequestBody AuditResult auditResult)  {
+    @RequestMapping(value = "/sau/audit/reg/{role}/{auditMsgId}", method = RequestMethod.PUT)
+    public JsonResult<String> sendAuditMsgResult(@PathVariable int role, @PathVariable int auditMsgId, @RequestBody AuditResult auditResult)  {
         JsonResult<String> result = new JsonResult<>();
         int state = 0;
         if(auditResult == null){result.setStateCode(ResponseCode.REQUEST_ERROR,"发送审核结果错误");}

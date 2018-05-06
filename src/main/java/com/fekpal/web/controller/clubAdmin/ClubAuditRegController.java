@@ -20,7 +20,7 @@ import java.util.*;
 
 /**
  * 注册审核的控制类
- * Created by hasee on 2017/8/27.
+ * @kanlon 2018/5/4
  */
 @Controller
 public class ClubAuditRegController {

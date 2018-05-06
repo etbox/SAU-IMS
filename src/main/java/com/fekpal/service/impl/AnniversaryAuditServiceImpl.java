@@ -272,7 +272,18 @@ public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAudi
      */
     @Override
     public int getAuditFileById(int auditId, HttpServletResponse response) {
-        AnniversaryAudit anniversaryAudit  = mapper.selectByPrimaryKey(auditId);
+        int auth = SessionLocal.local(session).getUserIdentity().getAuth();
+        int orgId = SessionLocal.local(session).getUserIdentity().getUid();
+        AnniversaryAudit anniversaryAudit = null;
+        if(auth == SystemRole.CLUB){
+            //如果用户是社团，则只能下载该社团的年度审核信息
+            ExampleWrapper<AnniversaryAudit> example = new ExampleWrapper<>();
+            example.eq("id",auditId).and().eq("org_id",orgId);
+            anniversaryAudit = mapper.selectFirstByExample(example);
+        }else if(auth == SystemRole.SAU){
+            //如果用户是校社联，则可以下载全部年度审核
+            anniversaryAudit  = mapper.selectByPrimaryKey(auditId);
+        }
         if (anniversaryAudit == null){return Operation.FAILED;}
         String fileName = anniversaryAudit.getFileName();
         //存放年度审核的路径地址
