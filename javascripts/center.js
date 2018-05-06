@@ -3,63 +3,63 @@
   var $ = window.jQuery;
   var echarts = window.echarts;
   var json = {};
-  function getNewsData(){       //从服务器获取数据
 
-     $.ajax({
-          url: '/sau/center/info',
-          type: 'get',
-          headers: {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'},
-          dataType: 'json',
+  function getNewsData() { //从服务器获取数据
+
+    $.ajax({
+        url: '/sau/center/info',
+        type: 'get',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        dataType: 'json',
       })
       .done(function(Json) {
-          console.log('success');//操作
-           if (Json.code != 0) {
+        console.log('success'); //操作
+        if (Json.code != 0) {
           alert(data.msg); // FIXME: data为定义！！！
         }
-        json=Json;
-       load();
-          
+        json = Json;
+        load();
+
       })
       .fail(function() {
-          console.log('error');
+        console.log('error');
       })
       .always(function() {
-          console.log('complete');
+        console.log('complete');
       });
 
   }
-getNewsData();
+  getNewsData();
 
 
-
-
- 
 
   function load() {
-    json=getNewsData();    //获取服务器数据
+    json = getNewsData(); //获取服务器数据
     var clubName;
     var setTime;
     var bossName;
     var mailbox;
     var Introduce;
-   /* json = {
-      'code': 0,
-      'msg': '',
-      'url': '',
-      'data': {
-        'orgId': 1,
-        'orgName': '乒乓球',
-        'logo': 'a.jpg',
-        'view': 'b.jpg',
-        'description': '一个喜爱乒乓球的聚集地',
-        'adminName': '张三',
-        'email': 's1996@126.com',
-        'phone': '18316821833',
-        'foundTime': '15127423425234',
-        'members': 100
+    /* json = {
+       'code': 0,
+       'msg': '',
+       'url': '',
+       'data': {
+         'orgId': 1,
+         'orgName': '乒乓球',
+         'logo': 'a.jpg',
+         'view': 'b.jpg',
+         'description': '一个喜爱乒乓球的聚集地',
+         'adminName': '张三',
+         'email': 's1996@126.com',
+         'phone': '18316821833',
+         'foundTime': '15127423425234',
+         'members': 100
 
-      }
-    };*/
+       }
+     };*/
 
     clubName = json.data.orgName;
     setTime = json.data.foundTime;
@@ -83,13 +83,6 @@ getNewsData();
 
 
   }
-
-
-
-
-
-
-
 
 
 
@@ -119,8 +112,7 @@ getNewsData();
       'foundTime': '2017-10-29',
       '_method': 'put'
     };
-    $.ajax(
-      {
+    $.ajax({
         url: '/sau/center/info',
         type: 'post',
         headers: {
@@ -150,8 +142,7 @@ getNewsData();
 
   function changeHead() {
 
-    $.ajax(
-      {
+    $.ajax({
         url: '/sau/center/info/head',
         type: 'post',
         headers: {
@@ -244,12 +235,10 @@ getNewsData();
           show: false
         }
       },
-      data: [
-        {
+      data: [{
           value: 335,
           name: '男'
-        },
-        {
+        }, {
           value: 310,
           name: '女'
         },
@@ -304,16 +293,13 @@ getNewsData();
           show: false
         }
       },
-      data: [
-        {
+      data: [{
           value: 335,
           name: '大一'
-        },
-        {
+        }, {
           value: 310,
           name: '大二'
-        },
-        {
+        }, {
           value: 310,
           name: '大三'
         },

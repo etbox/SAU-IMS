@@ -93,9 +93,8 @@
     'use strict';
     var notOK = document.getElementById('pswNotNull');
     var notOKimg = document.getElementById('F1');
-    var yzm=document.getElementById('yzmwrong');
-    if (response.code === 0) {
-    } else {
+    var yzm = document.getElementById('yzmwrong');
+    if (response.code === 0) {} else {
       notOKimg.style.display = 'block';
       notOKimg.style.left = '68%';
       notOKimg.style.top = '160px';
@@ -103,18 +102,16 @@
       yzm.style.display = 'block';
       notOK.firstChild.data = response.msg;
     }
-    if(response.data===0){
+    if (response.data === 0) {
       //person  innersys2
-      window.location.href='/inner_system2.html';
+      window.location.href = '/inner_system2.html';
 
-    }
-    else if(response.data===1){
+    } else if (response.data === 1) {
       //sau  innersys
-      window.location.href='/inner_system.html';
-    }
-    else if (response.data===2){
+      window.location.href = '/inner_system.html';
+    } else if (response.data === 2) {
       //club  innersys1
-      window.location.href='/inner_system1.html';
+      window.location.href = '/inner_system1.html';
     }
   }
 
@@ -135,7 +132,6 @@
     addHandler('showLogin', 'click', showLog);
     addHandler('Loga', 'click', sendLoginData);
   }
-
 
 
 

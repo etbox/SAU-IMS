@@ -285,6 +285,8 @@ to {width: 10px; height: 50px;opacity: 0;}
         position: absolute;
         top: 18px;
         left: 260px;
+        height: 30px;
+        overflow: hidden;
 
   }
   .MCHECK{

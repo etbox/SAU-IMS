@@ -302,7 +302,7 @@ to {width: 0px; height: 50px;opacity: 0;}
    }
    .rightHeadTitle{
          position: absolute;
-      width:100px;
+      width:250px;
       height: 25px;
       left: 100px;
       top: 22px;
@@ -311,7 +311,7 @@ to {width: 0px; height: 50px;opacity: 0;}
    }
     .rightHeadIntroduce{
       position: absolute;
-      width:150px;
+      width:250px;
       height: 25px;
       left: 100px;
       top: 45px;
@@ -453,6 +453,26 @@ to {width: 0px; height: 50px;opacity: 0;}
       display: none;
     }
     .join:hover{ background-color:#8fc9fb;}
+
+	 .haveJoin{
+      width: 300px;
+      height: 50px;
+      border-radius: 5px;
+      background-color: #37a2fe;
+      position: absolute;
+       top: 403px;
+      left: 200px;
+      text-decoration: none;
+      text-align: center;
+      font-size: 26px;
+      cursor: pointer;
+      line-height: 45px;
+      color: white;
+      font-family: "微软雅黑";
+      display: none;
+    }
+    .haveJoin:hover{ background-color:#8fc9fb;}
+
     .RightShadow{
            position:absolute;
            z-index: 1;

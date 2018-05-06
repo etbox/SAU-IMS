@@ -114,7 +114,7 @@
     if (second > 0) {
       target.style.cursor = 'not-allowed';
       target.value = '再次发送(' + second + '秒)';
-      window.setTimeout(function () {
+      window.setTimeout(function() {
         forbidClick(second - 1);
       }, 1000);
     } else {

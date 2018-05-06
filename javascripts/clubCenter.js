@@ -4,57 +4,57 @@
   var echarts = window.echarts;
   var json = {};
 
-  function getNewsData(){       //从服务器获取数据
+  function getNewsData() { //从服务器获取数据
 
-     $.ajax({
-          url: '/sau/center/info',
-          type: 'get',
-          headers: {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'},
-          dataType: 'json',
+    $.ajax({
+        url: '/sau/center/info',
+        type: 'get',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        dataType: 'json',
       })
       .done(function(Json) {
-          console.log('success');//操作
+        console.log('success'); //操作
         if (Json.code != 0) {
           alert(data.msg); // FIXME: data为定义！！！
         }
-        json=Json;
-       load();
+        json = Json;
+        load();
       })
       .fail(function() {
-          console.log('error');
+        console.log('error');
       })
       .always(function() {
-          console.log('complete');
+        console.log('complete');
       });
 
   }
-getNewsData();
-
-
+  getNewsData();
 
 
 
   function load() {
-    
+
     var clubName;
     var setTime;
     var bossName;
     var mailbox;
     var Introduce;
- /*   json = {
-      'code': 0,
-      'msg': '',
-      'url': '',
-      'data': {
-        'sauName': '广金校社联',
-        'logo': 'default_logo.jpg',
-        'description': '管理社团的组织',
-        'adminName': '张三',
-        'contactEmail': 'someone@qq.com',
-        'foundTime': '2017-10-09',
-        'members': 100
-      }
-    };*/
+    /*   json = {
+         'code': 0,
+         'msg': '',
+         'url': '',
+         'data': {
+           'sauName': '广金校社联',
+           'logo': 'default_logo.jpg',
+           'description': '管理社团的组织',
+           'adminName': '张三',
+           'contactEmail': 'someone@qq.com',
+           'foundTime': '2017-10-09',
+           'members': 100
+         }
+       };*/
 
     clubName = json.data.sauName;
     setTime = json.data.foundTime;
@@ -78,12 +78,6 @@ getNewsData();
 
 
   }
-
-
-
-
-
-
 
 
 
@@ -113,8 +107,7 @@ getNewsData();
       'foundTime': '2017-10-29',
       '_method': 'put'
     };
-    $.ajax(
-      {
+    $.ajax({
         url: '/sau/center/info',
         type: 'post',
         headers: {
@@ -144,8 +137,7 @@ getNewsData();
 
   function changeHead() {
 
-    $.ajax(
-      {
+    $.ajax({
         url: '/sau/center/info/head',
         type: 'post',
         headers: {
@@ -238,12 +230,10 @@ getNewsData();
           show: false
         }
       },
-      data: [
-        {
+      data: [{
           value: 335,
           name: '男'
-        },
-        {
+        }, {
           value: 310,
           name: '女'
         },
@@ -298,16 +288,13 @@ getNewsData();
           show: false
         }
       },
-      data: [
-        {
+      data: [{
           value: 335,
           name: '大一'
-        },
-        {
+        }, {
           value: 310,
           name: '大二'
-        },
-        {
+        }, {
           value: 310,
           name: '大三'
         },

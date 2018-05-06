@@ -1,22 +1,22 @@
 (function(window) {
-    'use strict';
-    var $ = window.jQuery;
-    var Mock = window.Mock;
-    var template;
-   //    var App=window.App || {};
-       var orgId;
-    $.ajax({
-        url: 'json/index/allClub.json',
-        type:'GET',
-        dataType: 'json',
+  'use strict';
+  var $ = window.jQuery;
+  var Mock = window.Mock;
+  var template;
+  // var App=window.App || {};
+  var orgId;
+  $.ajax({
+      url: 'json/index/allClub.json',
+      type: 'GET',
+      dataType: 'json',
     })
-        .done(function(json) {
-            console.log("执行了ajax"+json);
-            template=json;
-            let Data = Mock.mock(template);
-                for (let i = 0; i < Data.data.length; i++) {
-                  if(Data.data[i].orgId===11){
-                           let $li = $(`
+    .done(function(json) {
+      console.log("执行了ajax" + json);
+      template = json;
+      let Data = Mock.mock(template);
+      for (let i = 0; i < Data.data.length; i++) {
+        if (Data.data[i].orgId === 11) {
+          let $li = $(`
         <!-- li begin -->
         <li>
           <!--  -->
@@ -43,11 +43,9 @@
             </p>
           </div>
         </li>`);
-                    $li.appendTo('ul');
-                  }
-
-                  else{
-                         let $li = $(`
+          $li.appendTo('ul');
+        } else {
+          let $li = $(`
         <!-- li begin -->
         <li>
           <!--  -->
@@ -74,28 +72,27 @@
             </p>
           </div>
         </li>`);
-                    $li.appendTo('ul');
-                  }
+          $li.appendTo('ul');
+        }
 
-               }
+      }
 
-            console.log("success");
-        })
-        .fail(function() {
-            console.log("error");
-        })
-        .always(function() {
-            console.log("complete");
-        });
+      console.log("success");
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete");
+    });
 
 
 
-/*
-      function DataId () {
-      return orgId;
-    }
-    App.DataId=DataId;
-    window.App=App;
-*/
+  /*
+        function DataId () {
+        return orgId;
+      }
+      App.DataId=DataId;
+      window.App=App;
+  */
 }(window));
-
