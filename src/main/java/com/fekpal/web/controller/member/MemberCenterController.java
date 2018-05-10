@@ -123,6 +123,7 @@ public class MemberCenterController {
     @ResponseBody
     @RequestMapping(value = "/member/center/info/org", method = RequestMethod.GET)
     public JsonResult<List<MemberOrgDetail>> getOrgPersonJoin(PageList page) {
+
         //将前端发送过来的页码offset，转化为跳过数offset
         if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
 

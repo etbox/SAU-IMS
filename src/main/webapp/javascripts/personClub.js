@@ -2,7 +2,7 @@
   'use strict';
   var $ = window.jQuery;
   var echarts = window.echarts;
- var json = {}; //全局
+  var json = {}; //全局
   function row(i, id) {
     var $div0 = $('<div></div>', {
       'class': 'm',
@@ -37,121 +37,160 @@
   }
 
 
-  function getNewsData(){       //从服务器获取数据
+  function getNewsData() { //从服务器获取数据
 
-      return $.ajax({
-          url: '/member/club',
-          type: 'get',
-          headers: {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'},
-          dataType: 'json',
+    return $.ajax({
+        url: '/member/org',
+        type: 'get',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        dataType: 'json',
       })
       .done(function(Json) {
-          console.log('success');//操作
-           if (Json.code != 0) {
-          alert(data.msg); // FIXME: data为定义！！！
+        console.log('success'); //操作
+        console.log(Json);
+        if (Json.code != 0) {
+          alert(Json.data.msg); // FIXME: data为定义！！！
         }
-        json=Json;
-       load();
-         
+        json = Json;
+        load(json);
+        addNewsClick(json);
+        loadFirstOrgMsg(json);
       })
       .fail(function() {
-          console.log('error');
+        console.log('error');
       })
       .always(function() {
-          console.log('complete');
+        console.log('complete');
       });
 
   }
 
   getNewsData();
- 
 
-  function load() { //加载
-   
 
-    var clubId; //没错 这就是真正的数据 // FIXME: 变量未使用
+  function load(json) { //加载
+    var clubId; //没错 这就是真正的数据 
     var clubName;
-  //  var members; // FIXME: 变量未使用
+    var members;
     var likeNumber;
-  /*  json = { //测试用
-      'code': 0,
-      'msg': '',
-      'data': [
-        {
-          'orgId': 232,
-          'clubName': '乒乓球协会',
-          'members': 100,
-          'likeClick': 20,
-          'isClick': 0
-        },
-        {
-          'orgId': 233,
-          'clubName': '羽毛球',
-          'members': 100,
-          'likeClick': 100,
-          'isClick': 1
-        },
-        {
-          'orgId': 236,
-          'clubName': '羽毛球',
-          'members': 100,
-          'likeClick': 100,
-          'isClick': 0
-        }
-
-      ]
-    };*/
+    var logo;
+    var view;
     for (var i = 0; i < json.data.length; i++) { //i的长度是json的 data的长度
       clubId = json.data[i].orgId; //没错 这就是真正的数据
-      clubName = json.data[i].clubName;
+      clubName = json.data[i].orgName;
       members = json.data[i].members;
       likeNumber = json.data[i].likeClick;
+      logo = json.data[i].logo;
+      view = json.data[i].view;
 
       /*获取数据后操作dom*/
       $('.middleSide').append(row(i, json.data[i].orgId));
       if (json.data[i].isClick === 1) {
+        //'可以点，该用户之前不喜欢该社团'
         $('#LIKE' + json.data[i].orgId).attr('src', './images/heartGrey.png');
       }
       if (json.data[i].isClick === 0) {
+        //'已经点了的，该用户之前喜欢该社团
         $('#LIKE' + json.data[i].orgId).attr('src', './images/heart.png');
       }
 
+
+      var jmz = {};
+      jmz.GetLength = function(str) {
+        return str.replace(/[\u0391-\uFFE5]/g, "aa").length;
+      }
+      if (jmz.GetLength(clubName) < 19) {
+        $('#WRITER' + i).text(clubName);
+      } else {
+        $('#WRITER' + i).text("" + clubName.substr(0, 10) + "....");
+      }
+
+      $('.MHEAD').attr("src", "/resource/logo/" + json.data[i].logo);
       $('#WRITER' + i).text(clubName);
       $('#NUM' + i).text(likeNumber);
 
-
-
-
-      if (json.data[i].isClick === 1) {
-        $('#' + 'LIKE' + json.data[i].orgId).click(function() {
-          var x = this.parentNode.id;
-          $.ajax(
-            {
-              url: '/member/club/{' + x + '}/star',
-              type: 'get',
-              dataType: 'json',
-              data: {
-                'isClick ': 0
+      $('#' + 'LIKE' + json.data[i].orgId).click(function() {
+        var x = this.parentNode.id;
+        $.ajax({
+            url: '/member/org/' + x + '/star' + '',
+            type: 'post',
+            dataType: 'json',
+            data: null
+          })
+          .done(function(JSON1) {
+            if (JSON1.code != 0) {
+              alert('点赞失败');
+            } else {
+              if (JSON1.msg === '点赞成功') {
+                console.log('点赞成功');
+                $('#' + x).children('.LIKE').attr('src', './images/heart.png');
+                $('#' + x).children('.NUM').text(JSON1.data);
+              } else if (JSON1.msg === '取消点赞') {
+                console.log('取消点赞成功');
+                $('#' + x).children('.LIKE').attr('src', './images/heartGrey.png');
+                $('#' + x).children('.NUM').text(JSON1.data);
               }
+            }
 
-            })
-            .done(function(JSON1) {
-              $('#' + x).children('.LIKE').attr('src', './images/heart.png');
-              $('#' + x).children('.NUM').text(JSON1.data.likeClick);
-
-            })
-            .fail(function() {
-              console.log('error');
-            })
-            .always(function() {
-              console.log('complete');
-            });
-        });
-      }
+          })
+          .fail(function() {
+            console.log('error');
+          })
+          .always(function() {
+            console.log('complete');
+          });
+      });
 
     }
   }
 
+
+  /**
+   *加载第一个社团信息，用于刚刚进入到页面时，加载第一个社团信息
+   *
+   */
+  function loadFirstOrgMsg(json) {
+    $.ajax({
+        url: '' + '/member/org/' + json.data[0].orgId + '',
+        type: 'get',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        dataType: 'json',
+
+      })
+      .done(function(JSON1) {
+        if (JSON1.code != 0) {
+          alert('操作失败');
+        }
+        if (JSON1.data.joinState === 1) {
+          console.log('执行了已经加入社团');
+          //如果已经加入了该社团，则显示已经加入
+          $('#join').hide();
+          $("#haveJoin").css('display', 'block');
+        } else {
+          //否则，就是还没有加入，显示加入按钮、
+          $('#haveJoin').hide();
+          $('#join').show();
+        }
+        //将时间规范化
+        Date.prototype.toLocaleString = function() {
+          return this.getFullYear() + "年" + (this.getMonth() + 1) + "月" + this.getDate() + "日";
+        };
+        console.log(JSON1);
+        news(JSON1.data.orgName, JSON1.data.headIntroduce, new Date(JSON1.data.foundTime).toLocaleString(), JSON1.data.adminName, JSON1.data.email, JSON1.data.phone, JSON1.data.description);
+        //绘图
+        drawing(JSON1.data.manNum, JSON1.data.womanNum, JSON1.data.firstGradeNum, JSON1.data.secondGradeNum, JSON1.data.threeGradeNum, JSON1.data.fourGradeNum);
+      })
+      .fail(function() {
+        console.log('error');
+      })
+      .always(function() {
+        console.log('complete');
+      });
+  }
 
   function addNewsClick(json) {
     var checkID = '';
@@ -159,30 +198,52 @@
     for (var i = 0; i < json.data.length; i++) {
       $('#' + json.data[i].orgId).click(function() {
         checkID = this.id;
-        $('.join').show();
-
         $.ajax({
-            url: '/sau/club/{'+this.id+'}',
+            url: '' + '/member/org/' + this.id + '',
             type: 'get',
-            headers: {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+            headers: {
+              'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
             dataType: 'json',
 
-        })
-        .done(function(JSON1) {
-               JSONSAVE=JSON1;
-               news(JSON1.data[0].orgName,'',JSON1.data[0].foundTime,JSON1.data[0].adminName,JSON1.data[0].email,JSON1.data[0].phone,JSON1.data[0].description);
-        })
-        .fail(function() {
+          })
+          .done(function(JSON1) {
+            JSONSAVE = JSON1;
+            console.log(JSON1);
+            if (JSON1.code != 0) {
+              alert('操作失败');
+            }
+            console.log(JSON1.data.joinState);
+            if (JSON1.data.joinState === 1) {
+              console.log('执行了已经加入社团');
+              //如果已经加入了该社团，则显示已经加入
+              $('#join').hide();
+              $("#haveJoin").css('display', 'block');
+            } else {
+              //否则，就是还没有加入，显示加入按钮
+              $('#haveJoin').hide();
+              $('#join').show();
+            }
+            //将时间规范化
+            Date.prototype.toLocaleString = function() {
+              return this.getFullYear() + "年" + (this.getMonth() + 1) + "月" + this.getDate() + "日";
+            };
+            var foundTime = new Date(JSON1.data.foundTime).toLocaleString();
+
+            news(JSON1.data.orgName, JSON1.data.headIntroduce, foundTime, JSON1.data.adminName, JSON1.data.email, JSON1.data.phone, JSON1.data.description);
+            //绘图
+            drawing(JSON1.data.manNum, JSON1.data.womanNum, JSON1.data.firstGradeNum, JSON1.data.secondGradeNum, JSON1.data.threeGradeNum, JSON1.data.fourGradeNum);
+          })
+          .fail(function() {
             console.log('error');
-        })
-        .always(function() {
+          })
+          .always(function() {
             console.log('complete');
-        });
+          });
 
         $('#join').click(function() {
-          $.ajax(
-            {
-              url: '/member/club/{' + checkID + '}/join',
+          $.ajax({
+              url: '/member/org/' + checkID + '/join',
               type: 'POST',
               dataType: 'json',
               data: JSONSAVE,
@@ -206,11 +267,11 @@
       });
     }
   }
-  addNewsClick(json);
-  function news(a, b, c, d, e, f, g) { // FIXME: 变量未使用
+
+  function news(a, b, c, d, e, f, g) {
     $('.rightHeadTitle').text(a);
     $('.rightHeadIntroduce').text(b);
-    $('.rightHeadTime').text(c);
+    $('.rightHeadTime').text(c + ' 成立');
 
     $('#bossName').text(d);
     $('#mailboxName').text(e);
@@ -221,28 +282,24 @@
 
   function refresh() { //刷新按钮
     $('.middleSide').children('div').remove();
-    load();
+    getNewsData();
 
   }
 
-var searchData1={};
 
-  function getSearchData() { // FIXME: 变量未使用
-    $.ajax(
-      {
-        url: '/member/club/search',
+  function getSearchData() {
+    $('.middleSide').children('div').remove();
+    $.ajax({
+        url: '/member/org/search?findContent=' + $('.searchBar').val() + '&offset=1&limit=10000000',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
         },
         dataType: 'json',
-        data: {
-          'findContent': '' + $('.search-bar').val()
-        },
+        data: null
       })
       .done(function(searchData) {
-        earchData1=searchData;
-        search();
+        search(searchData);
       })
       .fail(function() {
         console.log('error');
@@ -254,57 +311,72 @@ var searchData1={};
 
   }
 
-  function search() {
-   
-    /*var searchData = { //测试用
-      'code': 0,
-      'msg': '',
-      'data': [{
-        'clubId': 234,
-        'clubName': '乒乓球协会',
-        'clubLogo': 'a.jpg',
-        'description': '一群爱好乒乓球的人，社团内有不定时举办各种活动',
-        'adminName': '李四',
-        'email': 's19961234@126.com',
-        'phone': '18316821383',
-        'foundTime': '2010-10-10',
-        'members': 100
-      }]
-    };*/
-
-    $('.middleSide').children('div').remove();
-    var clubId; //没错 这就是真正的数据 // FIXME: 变量未使用
+  function search(json) {
+    var clubId; //没错 这就是真正的数据 
     var clubName;
-    var members; // FIXME: 变量未使用
+    var members;
     var likeNumber;
-    if (searchData.code === 0) {
-      for (var i = 0; i < searchData.data.length; i++) { //i的长度是json的 data的长度
-        clubId = searchData.data[i].orgId; //没错 这就是真正的数据
-        clubName = searchData.data[i].clubName;
-        members = searchData.data[i].members;
-        likeNumber = searchData.data[i].likeClick;
+    var logo;
+    var view;
+    for (var i = 0; i < json.data.length; i++) { //i的长度是json的 data的长度
+      clubId = json.data[i].orgId; //没错 这就是真正的数据
+      clubName = json.data[i].orgName;
+      members = json.data[i].members;
+      likeNumber = json.data[i].likeClick;
+      logo = json.data[i].logo;
+      view = json.data[i].view;
 
-        /*获取数据后操作dom*/
-        $('.middleSide').append(row(i, searchData.data[i].orgId));
-        if (searchData.data[i].avaliable === 1) {
-          $('#LIKE' + searchData.data[i].orgId).attr('src', './images/heartGrey.png');
-        }
-        if (searchData.data[i].avaliable === 0) {
-          $('#LIKE' + searchData.data[i].orgId).attr('src', './images/heart.png');
-        }
-
-        $('#WRITER' + i).text(clubName);
-        $('#NUM' + i).text(likeNumber);
+      /*获取数据后操作dom*/
+      $('.middleSide').append(row(i, json.data[i].orgId));
+      if (json.data[i].isClick === 1) {
+        //'可以点，该用户之前不喜欢该社团'
+        $('#LIKE' + json.data[i].orgId).attr('src', './images/heartGrey.png');
       }
+      if (json.data[i].isClick === 0) {
+        //'已经点了的，该用户之前喜欢该社团
+        $('#LIKE' + json.data[i].orgId).attr('src', './images/heart.png');
+      }
+      $('.MHEAD').attr("src", "/resource/logo/" + json.data[i].logo);
+      $('#WRITER' + i).text(clubName);
+      $('#NUM' + i).text(likeNumber);
+
+      $('#' + 'LIKE' + json.data[i].orgId).click(function() {
+        var x = this.parentNode.id;
+        $.ajax({
+            url: '/member/org/' + x + '/star' + '',
+            type: 'post',
+            dataType: 'json',
+            data: null
+          })
+          .done(function(JSON1) {
+            if (JSON1.code != 0) {
+              alert('点赞失败');
+            } else {
+              if (JSON1.msg === '点赞成功') {
+                console.log('点赞成功');
+                $('#' + x).children('.LIKE').attr('src', './images/heart.png');
+                $('#' + x).children('.NUM').text(JSON1.data);
+              } else if (JSON1.msg === '取消点赞') {
+                console.log('取消点赞成功');
+                $('#' + x).children('.LIKE').attr('src', './images/heartGrey.png');
+                $('#' + x).children('.NUM').text(JSON1.data);
+              }
+            }
+
+          })
+          .fail(function() {
+            console.log('error');
+          })
+          .always(function() {
+            console.log('complete');
+          });
+      });
+
     }
 
-    addNewsClick(searchData1);
+    addNewsClick(json);
 
   }
-
-
-
-
 
   function addHandler(id, action, func, x) {
     var domID = document.querySelector(`#${id}`);
@@ -325,129 +397,131 @@ var searchData1={};
   init();
 
 
+  /*
+   *绘图的函数，
+   *绘制男女生和社团内大一，大二，大三，大四的比例图
+   *   
+   */
+  function drawing(manNum, womanNum, firstGradeNum, secondGradeNum, threeGradeNum, fourGradeNum) {
 
+    //绘图
 
-  //绘图
+    //---------------------------------------------------------------------
+    // 基于准备好的dom，初始化echarts实例
+    var myChart = echarts.init(document.getElementById('Boypic1'));
 
-  //---------------------------------------------------------------------
-  // 基于准备好的dom，初始化echarts实例
-  var myChart = echarts.init(document.getElementById('Boypic1'));
-
-  // 指定图表的配置项和数据
-  var option = {
-    color: ['#37a2fe', '#8dcaea', '#327aa7'],
-    tooltip: {
-      trigger: 'item',
-      formatter: '{a} <br/>{b}: {c} ({d}%)'
-    },
-    legend: {
-      orient: 'vertical',
-      x: 'left',
-      data: ['男', '女']
-    },
-    series: [{
-      name: '男女比例',
-      type: 'pie',
-      radius: ['50%', '70%'],
-      avoidLabelOverlap: false,
-      label: {
-        normal: {
-          show: false,
-          position: 'center'
-        },
-        emphasis: {
-          show: true,
-          textStyle: {
-            fontSize: '30',
-            fontWeight: 'bold'
+    // 指定图表的配置项和数据
+    var option = {
+      color: ['#37a2fe', '#8dcaea', '#327aa7'],
+      tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b}: {c} ({d}%)'
+      },
+      legend: {
+        orient: 'vertical',
+        x: 'left',
+        data: ['男', '女']
+      },
+      series: [{
+        name: '男女比例',
+        type: 'pie',
+        radius: ['50%', '70%'],
+        avoidLabelOverlap: false,
+        label: {
+          normal: {
+            show: false,
+            position: 'center'
+          },
+          emphasis: {
+            show: true,
+            textStyle: {
+              fontSize: '30',
+              fontWeight: 'bold'
+            }
           }
-        }
-      },
-      labelLine: {
-        normal: {
-          show: false
-        }
-      },
-      data: [
-        {
-          value: 335,
-          name: '男'
         },
-        {
-          value: 310,
-          name: '女'
-        },
-
-      ]
-    }]
-  };
-
-
-  // 使用刚指定的配置项和数据显示图表。
-  myChart.setOption(option);
-
-
-  //绘图二
-  //----------------------------------------------------------------
-
-  // 基于准备好的dom，初始化echarts实例
-  var myChart1 = echarts.init(document.getElementById('Boypic2'));
-
-  // 指定图表的配置项和数据
-  var option1 = {
-    color: ['#37a2fe', '#8dcaea', '#327aa7'],
-    tooltip: {
-      trigger: 'item',
-      formatter: '{a} <br/>{b}: {c} ({d}%)'
-    },
-    legend: {
-      orient: 'vertical',
-      x: 'left',
-      data: ['大一', '大二', '大三']
-    },
-    series: [{
-      name: '年级比例',
-      type: 'pie',
-      radius: ['50%', '70%'],
-      avoidLabelOverlap: false,
-      label: {
-        normal: {
-          show: false,
-          position: 'center'
-        },
-        emphasis: {
-          show: true,
-          textStyle: {
-            fontSize: '30',
-            fontWeight: 'bold'
+        labelLine: {
+          normal: {
+            show: false
           }
-        }
+        },
+        data: [{
+            value: manNum,
+            name: '男'
+          }, {
+            value: womanNum,
+            name: '女'
+          },
+
+        ]
+      }]
+    };
+
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+
+
+    //绘图二
+    //----------------------------------------------------------------
+
+    // 基于准备好的dom，初始化echarts实例
+    var myChart1 = echarts.init(document.getElementById('Boypic2'));
+
+    // 指定图表的配置项和数据
+    var option1 = {
+      color: ['#37a2fe', '#8dcaea', '#327aa7', '#000FFF'],
+      tooltip: {
+        trigger: 'item',
+        formatter: '{a} <br/>{b}: {c} ({d}%)'
       },
-      labelLine: {
-        normal: {
-          show: false
-        }
+      legend: {
+        orient: 'vertical',
+        x: 'left',
+        data: ['大一', '大二', '大三', '大四']
       },
-      data: [
-        {
-          value: 335,
+      series: [{
+        name: '年级比例',
+        type: 'pie',
+        radius: ['50%', '70%'],
+        avoidLabelOverlap: false,
+        label: {
+          normal: {
+            show: false,
+            position: 'center'
+          },
+          emphasis: {
+            show: true,
+            textStyle: {
+              fontSize: '30',
+              fontWeight: 'bold'
+            }
+          }
+        },
+        labelLine: {
+          normal: {
+            show: false
+          }
+        },
+        data: [{
+          value: firstGradeNum,
           name: '大一'
-        },
-        {
-          value: 310,
+        }, {
+          value: secondGradeNum,
           name: '大二'
-        },
-        {
-          value: 310,
+        }, {
+          value: threeGradeNum,
           name: '大三'
-        },
+        }, {
+          value: fourGradeNum,
+          name: '大四'
+        }, ]
+      }]
+    };
 
-      ]
-    }]
-  };
 
+    // 使用刚指定的配置项和数据显示图表。
+    myChart1.setOption(option1);
 
-  // 使用刚指定的配置项和数据显示图表。
-  myChart1.setOption(option1);
-
+  }
 }());

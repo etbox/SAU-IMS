@@ -71,12 +71,7 @@
     var json = JSON.stringify(formData);
     // console.log(formData);
 
-    var url = 'login';
-    // var json = JSON.stringify({
-    //   'userName': 's19961234@126.com',
-    //   'password': '123456',
-    //   'captcha': 'cabce'
-    // });
+    var url = '/login';
     sendAjax(url, json)
       .done(getResponse);
   }
@@ -98,9 +93,8 @@
     'use strict';
     var notOK = document.getElementById('pswNotNull');
     var notOKimg = document.getElementById('F1');
-    var yzm=document.getElementById('yzmwrong');
-    if (response.code === 0) {
-    } else {
+    var yzm = document.getElementById('yzmwrong');
+    if (response.code === 0) {} else {
       notOKimg.style.display = 'block';
       notOKimg.style.left = '68%';
       notOKimg.style.top = '160px';
@@ -108,18 +102,16 @@
       yzm.style.display = 'block';
       notOK.firstChild.data = response.msg;
     }
-    if(response.data===0){
-      //person  innersys2
-      window.location.href='/inner_system2.html';
+    if (response.data === 0) {
+      //member  个人
+      window.location.href = '/member_inner_system2.html';
 
-    }
-    else if(response.data===1){
-      //club  innersys
-      window.location.href='/inner_system.html';
-    }
-    else if (response.data===2){
-      //shelian  innersys1
-      window.location.href='/inner_system1.html';
+    } else if (response.data === 1) {
+      // 社团
+      window.location.href = '/club_inner_system1.html';
+    } else if (response.data === 2) {
+      //校社联
+      window.location.href = '/sau_inner_system.html';
     }
   }
 
@@ -140,7 +132,6 @@
     addHandler('showLogin', 'click', showLog);
     addHandler('Loga', 'click', sendLoginData);
   }
-
 
 
 

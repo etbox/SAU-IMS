@@ -1,6 +1,10 @@
 (function() {
   'use strict';
   var $ = window.jQuery;
+  /**
+   * 详细审核消息的id(用于同意或驳回年度注册消息)
+   */
+  var checkID = 1;
 
   function row(i, id) {
     var $div0 = $('<div></div>', {
@@ -38,136 +42,164 @@
 
     return $div0;
 
-  } 
-   var json = {};
-function getNewsData(){       //从服务器获取数据
+  }
+  var json = {};
 
-     $.ajax({
-          url: '/sau/audit/ann',
-          type: 'get',
-          headers: {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'},
-          dataType: 'json',
+  function getNewsData() { //从服务器获取数据
+
+    $.ajax({
+        url: '/sau/audit/ann',
+        type: 'get',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        dataType: 'json',
       })
       .done(function(Json) {
-          console.log('success');//操作
-           json=Json;
-       load();
+        if (Json.code != 0) {
+          alert(Json.msg);
+        } else {
+          json = Json;
+          load();
+          addNewsClick(Json);
+          loadFirstAnnCheck(json);
+        }
       })
       .fail(function() {
-          console.log('error');
+        console.log('error');
       })
       .always(function() {
-          console.log('complete');
+        console.log('complete');
       });
 
   }
-getNewsData();
-  
+  getNewsData();
+
+  var auditState;
 
   function load() { //加载
-    //json=getNewsData();    //获取服务器数据
-
     var registerName; //没错 这就是真正的数据
     var registerTitle;
     var registerTime;
-    //var auditState; // FIXME: 变量未使用
-   /* json = { //测试用
-      'code': 0,
-      'msg': '',
-      'data': [
-        {
-          'auditMsgId': 1,
-          'registerTitle': '乒乓球协会',
-          'registerName': '张三',
-          'registerTime': '2017',
-          'auditState': 2
-        }
-      ]
-    };*/
+    var auditState; // FIXME: 变量未使用
+
     for (var i = 0; i < json.data.length; i++) { //i的长度是json的 data的长度
       registerTitle = json.data[i].registerTitle; //没错 这就是真正的数据
       registerName = json.data[i].registerName;
-      registerTime = json.data[i].registerTime;
-      auditState = json.data[i].auditState;
-
+      //将时间规范化
+      Date.prototype.toLocaleString = function() {
+        return this.getFullYear() + "" /*+ (this.getMonth() + 1) + "月" + this.getDate() + "日 " + this.getHours() + ":" + this.getMinutes()*/ ;
+      };
+      var unixTimestamp = new Date(json.data[i].registerTime);
+      var registerTime = unixTimestamp.toLocaleString();
+      // auditState = json.data[i].auditState;
+/*      var jmz = {};
+      jmz.GetLength = function(str) {
+        return str.replace(/[\u0391-\uFFE5]/g, "aa").length;
+      }
+      if (jmz.GetLength(registerTitle) < 19) {
+        $('#MTITLE' + i).text(registerTitle);
+      } else {
+        $('#MTITLE' + i).text("" + registerTitle.substr(0, 10) + "....");
+      }*/
 
       /*获取数据后操作dom*/
       $('#middleSide').append(row(i, json.data[i].auditMsgId));
       $('#MTITLE' + i).text(registerTitle);
       $('#WRITER' + i).text(registerName);
       $('#MTIME' + i).text(registerTime);
-
-
     }
   }
 
 
-  var checkID;
+  function loadFirstAnnCheck(json) {
+    var auditMsgId = json.data[0].auditMsgId;
+    $.ajax({
+        url: '/sau/audit/ann/' + auditMsgId + '',
+        type: 'get',
+        headers: {
+          'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        dataType: 'json',
+
+      })
+      .done(function(JSON1) {
+        checkID = JSON1.data.auditMsgId;
+        auditState = JSON1.data.auditState;
+        //将时间规范化
+        Date.prototype.toLocaleString = function() {
+          return this.getFullYear() + "年" + (this.getMonth() + 1) + "月" + this.getDate() + "日 " + this.getHours() + ":" + this.getMinutes();
+        };
+        var unixTimestamp = new Date(JSON1.data.submitTime);
+        var registerTime = unixTimestamp.toLocaleString();
+        news(JSON1.data.clubName, '', registerTime, JSON1.data.adminName, JSON1.data.description);
+        var fileURL = '/sau/audit/ann/' + checkID + '/file' + '';
+        document.getElementById("fujian").href = fileURL;
+
+      })
+      .fail(function() {
+        console.log('error');
+      })
+      .always(function() {
+        console.log('complete');
+      });
+  }
+
 
   function addNewsClick(json) {
     for (var i = 0; i < json.data.length; i++) {
       $('#' + json.data[i].auditMsgId).click(function() {
         $.ajax({
-            url: '/sau/audit/ann/{'+this.id+'}',
+            url: '/sau/audit/ann/' + this.id + '',
             type: 'get',
-            headers: {'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'},
+            headers: {
+              'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
+            },
             dataType: 'json',
 
-        })
-        .done(function(JSON1) {
-              checkID=json.data[i].auditMsgId;
-                 news(JSON1.data[0].clubName,'',JSON1.data[0].submitTime,JSON1.data[0].adminName,JSON1.data[0].description);
-
-        })
-        .fail(function() {
+          })
+          .done(function(JSON1) {
+            checkID = JSON1.data.auditMsgId;
+            auditState = JSON1.data.auditState;
+            //将时间规范化
+            Date.prototype.toLocaleString = function() {
+              return this.getFullYear() + "年" + (this.getMonth() + 1) + "月" + this.getDate() + "日 " + this.getHours() + ":" + this.getMinutes();
+            };
+            var unixTimestamp = new Date(JSON1.data.submitTime);
+            var registerTime = unixTimestamp.toLocaleString();
+            news(JSON1.data.clubName, '', registerTime, JSON1.data.adminName, JSON1.data.description);
+            var fileURL = '/sau/audit/ann/' + checkID + '/file' + '';
+            document.getElementById("fujian").href = fileURL;
+          })
+          .fail(function() {
             console.log('error');
-        })
-        .always(function() {
+          })
+          .always(function() {
             console.log('complete');
-        });
-     /*   var JSON1 = {
-          'data': [{
-            'auditMsgId': 3232,
-            'clubName': '2017年乒乓球协会',
-            'adminName': '张三',
-            'submitTime': '2017',
-            'description': '这是一个审核的具体内容描述',
-            'fileName': 'a.doc'
-          }]
-        };
+          });
 
-
-
-        news(JSON1.data[0].clubName, '', JSON1.data[0].submitTime, JSON1.data[0].adminName, JSON1.data[0].description);
-*/
 
       });
     }
   }
-  addNewsClick(json);
 
   function news(a, b, c, d, e) {
     $('#rightHeadTitle').text(a);
     $('#rightHeadTime').text(c);
     $('#bossName').text(d);
     $('#zhuceneirong').text(e);
-
-
   }
-
-  
 
   function refresh() { //刷新按钮
     $('#middleSide').children('div').remove();
-    load();
+    getNewsData();
 
   }
 
-
   function agree() {
-    $.ajax(
-      {
-        url: '/sau/audit/ann/{' + checkID + '}',
+    console.log('sauims/json/sau/audit/ann/' + checkID + '');
+    $.ajax({
+        url: '/sau/audit/ann/' + checkID + '',
         type: 'post',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -181,7 +213,11 @@ getNewsData();
       .done(function(data) {
         if (data.code != 0) {
           alert('data.msg');
+        } else {
+          alert('通过成功');
         }
+        //提交之后重置理由区
+        document.getElementById("neirong").value = "";
       })
       .fail(function() {
         console.log('error');
@@ -194,10 +230,10 @@ getNewsData();
   }
 
   function disagree() {
-
-    $.ajax(
-      {
-        url: '/sau/audit/ann/{' + checkID + '}',
+    console.log('sauims/json/sau/audit/ann/' + checkID + '');
+    console.log('不通过理由：' + $('#neirong').val());
+    $.ajax({
+        url: '/sau/audit/ann/' + checkID + '',
         type: 'post',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -212,7 +248,11 @@ getNewsData();
       .done(function(data) {
         if (data.code != 0) {
           alert('data.msg');
+        } else {
+          alert('驳回成功');
         }
+        //提交之后重置理由区
+        document.getElementById("neirong").value = "";
       })
       .fail(function() {
         console.log('error');
@@ -223,25 +263,19 @@ getNewsData();
 
   }
 
-
-var searchData1={};
-
-function getSearchData() {
-    $.ajax(
-      {
-        url: '/sau/audit/ann/search',
+  function getSearchData() {
+    $('#middleSide').children('div').remove();
+    $.ajax({
+        url: '/sau/audit/ann/search' + '',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
         },
         dataType: 'json',
-        data: {
-          'findContent': '' + $('.search-bar').val()
-        },
+        data: null
       })
       .done(function(searchData) {
-        searchData1=searchData;
-        search();
+        search(searchData);
       })
       .fail(function() {
         console.log('error');
@@ -250,44 +284,42 @@ function getSearchData() {
         console.log('complete');
       });
 
-
   }
 
-  
-function search() {
- 
 
-    $('#middleSide').children('div').remove();
-    var registerTitle; //没错 这就是真正的数据
-    var registerName;
+  function search(json) {
+    var registerName; //没错 这就是真正的数据
+    var registerTitle;
     var registerTime;
-   // var auditState; // FIXME: 变量未使用
-    if (searchData.code === 0) {
-      for (var i = 0; i < searchData.data.length; i++) { //i的长度是json的 data的长度
-        //i的长度是json的 data的长度
-        registerTitle = searchData.data[i].registerTitle; //没错 这就是真正的数据
-        registerName = searchData.data[i].registerName;
-        registerTime = searchData.data[i].registerTime;
-        auditState = searchData.data[i].auditState;
+    var auditState; // FIXME: 变量未使用
 
+    for (var i = 0; i < json.data.length; i++) { //i的长度是json的 data的长度
+      registerTitle = json.data[i].registerTitle; //没错 这就是真正的数据
+      registerName = json.data[i].registerName;
+      //将时间规范化
+      Date.prototype.toLocaleString = function() {
+        return this.getFullYear() + "" /*+ (this.getMonth() + 1) + "月" + this.getDate() + "日 " + this.getHours() + ":" + this.getMinutes()*/ ;
+      };
+      var unixTimestamp = new Date(json.data[i].registerTime);
+      var registerTime = unixTimestamp.toLocaleString();
+      // auditState = json.data[i].auditState;
 
-        /*获取数据后操作dom*/
-        $('#middleSide').append(row(i, searchData.data[i].auditMsgId));
-        $('#MTITLE' + i).text(registerTitle);
-        $('#WRITER' + i).text(registerName);
-        $('#MTIME' + i).text(registerTime);
-      }
+      /*获取数据后操作dom*/
+      $('#middleSide').append(row(i, json.data[i].auditMsgId));
+      $('#MTITLE' + i).text(registerTitle);
+      $('#WRITER' + i).text(registerName);
+      $('#MTIME' + i).text(registerTime);
     }
 
-    addNewsClick(searchData1);
+    addNewsClick(json);
 
   }
-  
+
 
   function file() {
-    $.ajax(
-      {
-        url: '/sau/audit/ann/{' + checkID + '}/file/online',
+    document.getElementById("file").href = '/sau/audit/ann/' + checkID + '/file' + '';
+    $.ajax({
+        url: '/sau/audit/ann/' + checkID + '/file' + '',
         type: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -304,27 +336,8 @@ function search() {
         console.log('complete');
       });
 
-    $.ajax(
-      {
-        url: '/sau/audit/ann/{' + checkID + '}/file',
-        type: 'GET',
-        headers: {
-          'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        },
-        dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
 
-      })
-      .done(function(x) {
-        $('#FUPIC1').write(x);
-      })
-      .fail(function() {
-        console.log('error');
-      })
-      .always(function() {
-        console.log('complete');
-      });
   }
-
 
 
 
@@ -341,8 +354,8 @@ function search() {
     addHandler('refresh', 'click', refresh);
     addHandler('agree', 'click', agree);
     addHandler('disagree', 'click', disagree);
-   addHandler('search', 'click', getSearchData);
-    addHandler('fujian', 'click', file);
+    addHandler('search', 'click', getSearchData);
+    /*addHandler('fujian', 'click', file);*/
   }
   init();
 

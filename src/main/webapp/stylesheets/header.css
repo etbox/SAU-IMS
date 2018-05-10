@@ -33,7 +33,7 @@ header > nav {
 }
 
 .topButtons {
-  position: absolute;
+  /* position: absolute; */
   padding-right: 20px;
   right: 1px;
   top: 3px;
@@ -128,8 +128,8 @@ header > nav {
 
   height: 40px;
   width: 40px;
-  padding: 5px 0;
-
+  padding: 5px;
+  margin: 5px;
 }
 
 .avatar-img {

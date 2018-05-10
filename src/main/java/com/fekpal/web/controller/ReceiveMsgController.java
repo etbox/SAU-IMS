@@ -18,6 +18,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.logging.Logger;
 
+import static java.lang.System.out;
+
 /**
  * 新消息的控制类
  * Created by hasee on 2017/8/22.
@@ -41,6 +43,8 @@ public class ReceiveMsgController {
     @ResponseBody
     @RequestMapping(value = "/msg", method = RequestMethod.GET)
     public JsonResult<List<NewMsgListDomain>> getAllMsg(PageList page) {
+        out.println("page为："+page);
+
         //前端传的offset是页码，转化为跳过的条数
         if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
         JsonResult<List<NewMsgListDomain>> jsonResult = new JsonResult<>();

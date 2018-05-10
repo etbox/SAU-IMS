@@ -16,8 +16,8 @@ public class PageList extends BaseModel {
     private Integer limit;
 
     public PageList() {
-        this.offset = 0;
-        this.limit = 10;
+        this.offset = 1;
+        this.limit = 1000000;
     }
 
     public Integer getOffset() {

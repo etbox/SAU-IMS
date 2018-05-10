@@ -42,6 +42,7 @@ public class SauAuditRegController {
     @ResponseBody
     @RequestMapping(value = "/sau/audit/reg", method = RequestMethod.GET)
     public JsonResult<List<ClubAuditListMsg>> getAllAuditMsg(PageList page) {
+
         //将前端发送过来的页码offset，转化为跳过数offset
         if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
 

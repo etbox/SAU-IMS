@@ -1,13 +1,12 @@
 (function() {
   'use strict';
   var $ = window.jQuery;
- var json = {}; //全局
+  var json = {}; //全局
 
   function getNewsData() { //从服务器获取数据 // FIXME: 变量未使用
 
-    $.ajax(
-      {
-        url: '/member/center/info',
+    $.ajax({
+        url: '/sau/center/info',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -16,12 +15,12 @@
       })
       .done(function(Json) {
         console.log('success'); //操作
-         if (Json.code != 0) {
+        if (Json.code != 0) {
           alert(data.msg); // FIXME: data为定义！！！
         }
-        json=Json;
-       load();
-       
+        json = Json;
+        load();
+
       })
       .fail(function() {
         console.log('error');
@@ -31,56 +30,23 @@
       });
 
   }
-getNewsData();
+  getNewsData();
 
 
-  function load() { //加载
-   
+ var load = function() { //加载
+
 
 
     var userName;
     var realName;
-   // var logo; // FIXME: 变量未使用
-    var studentId;
     var gender;
     var birthday;
-   // var phone; // FIXME: 变量未使用
     var joinTime;
     var leaveTime;
     var departmentName;
     var majorName;
     var address;
-   // var clubs = []; // FIXME: 变量未使用
-   // var job = []; // FIXME: 变量未使用
-  /*  json = { //测试用
-      'code': 0,
-      'msg': '',
-      'data': {
-        'nickName': 'abc@qq.com',
-        'realName': '李四',
-        'logo': '头像.jpg',
-        'studentId': '151612220',
-        'gender': '男',
-        'birthday': 15978767876,
-        'phone': '18316821333',
-        'enrollmentYear': 15908998787,
-        'leaveTime': 15908998787,
-        'department': '金融学院与统计学院',
-        'major': '信息与计算科学',
-        'address': '8#111',
-        'clubs': [{
-          'clubName': '乒乓球协会',
-          'clubDuty': 0,
-          'userState': 1
-        }, {
-          'clubName': '羽毛球协会',
-          'clubDuty': 1,
-          'userState': 1
-        }]
-
-
-      }
-    };*/
+  
 
     userName = json.data.nickName;
     realName = json.data.realName;
@@ -131,40 +97,9 @@ getNewsData();
     $('#collageName1').val(departmentName);
     $('#majorName1').val(majorName);
     $('#domName1').val(address);
-    /*   var saveClub='';
-       var saveJob='';
-       for(var i=0;i<json.data.clubs.length;i++){
-
-        clubs[i]=json.data.clubs[i].clubName;
-        if(json.data.clubs[i].clubDuty===0){
-          job[i]='普通';
-        }
-        if(json.data.clubs[i].clubDuty===1){
-          job[i]='干事';
-        }
-        if(json.data.clubs[i].clubDuty===2){
-          job[i]='部长';
-        }
-        saveClub=saveClub+'  '+clubs[i];
-        saveJob=saveJob+'  '+job[i];
-         $('#guishuName').text(saveClub);
-         $('#jobName').text(saveJob);
-           $('#guishuName1').val(saveClub);
-         $('#jobName1').val(saveJob);
-
-
-                }*/
 
 
   }
-
-
-
-
-
-
-
-
 
 
 
@@ -201,8 +136,7 @@ getNewsData();
       '_method': 'put'
 
     };
-    $.ajax(
-      {
+    $.ajax({
         url: '/member/center/info/edit',
         type: 'post',
         headers: {
@@ -249,8 +183,7 @@ getNewsData();
   }
 
   function changeHead() {
-    $.ajax(
-      {
+    $.ajax({
         url: '/member/center/info/edit/head',
         type: 'post',
         dataType: 'default: Intelligent Guess (Other values: xml, json, script, or html)',
@@ -276,12 +209,6 @@ getNewsData();
     target.style.display = 'none';
 
   }
-
-
-
-
-
-
 
 
 

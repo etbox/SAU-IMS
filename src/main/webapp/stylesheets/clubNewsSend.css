@@ -332,7 +332,7 @@ to {width: 330px;opacity: 1;}
    }
    #rightHeadTitle{
          position: absolute;
-      width:100px;
+      width:750px;
       height: 25px;
       left: 100px;
       top: 22px;
@@ -341,7 +341,7 @@ to {width: 330px;opacity: 1;}
    }
     #rightHeadTime{
       position: absolute;
-      width:150px;
+      width:750px;
       height: 25px;
       left: 100px;
       top: 45px;
@@ -397,7 +397,7 @@ to {width: 330px;opacity: 1;}
       top: 43px;
       left: 170px;
       height: 40px;
-      width: 70px; 
+      width: 600px; 
       font-size: 15px;
    }
  .neirongTitle{
@@ -418,36 +418,7 @@ to {width: 330px;opacity: 1;}
       color: black;
 
 }
-#sendPicture0{
-     position:absolute;
-    left: 308px;
-    top: 14px;
 
-}
-#sendPic0{
-    position:absolute;
-    left: 340px;
-    top: 20px;
-    font-size: 20px;
-    color: grey;
-    text-decoration: none;
-
-}
-#sendPicture1{
-     position:absolute;
-    left: 438px;
-    top: 14px;
-
-}
-#sendPic1{
-    position:absolute;
-    left: 465px;
-    top: 20px;
-    font-size: 20px;
-    color: grey;
-    text-decoration: none;
-
-}
 #sendPicture2{
      position:absolute;
     left: 568px;
@@ -477,7 +448,35 @@ to {width: 330px;opacity: 1;}
 
 }
 
+.showContact{
+   width:150px;
+ 
+   background-color: white;
+   position: absolute;
+   left:580px;
+   top: 70px;
+   z-index: 5;
+}
 
+.send{
+
+  margin-top: 7px;
+  font-size: 20px;
+  color: grey;
+  cursor:pointer;
+  margin-left: 10px;
+
+
+}
+.selectContact li{
+
+  list-style: none;
+  margin-left: -26px;
+  cursor: pointer;
+}
+.saveContact{
+ display: none; 
+}
 #rightSideEdit{
         display: none;
           position:absolute;

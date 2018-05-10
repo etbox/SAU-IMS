@@ -74,6 +74,7 @@ public class ClubSendPublishMsgController {
     @ResponseBody
     @RequestMapping(value = "/club/msg/old", method = RequestMethod.GET)
     public JsonResult<List<OldPublishMsg>> getAllOldMsg(PageList page) {
+
         //将前端发送过来的页码offset，转化为跳过数offset
         if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
 

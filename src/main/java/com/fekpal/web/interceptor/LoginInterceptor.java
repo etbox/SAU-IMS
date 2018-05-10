@@ -3,6 +3,8 @@ package com.fekpal.web.interceptor;
 import com.fekpal.common.session.SessionLocal;
 import com.fekpal.service.model.domain.SecureMsg;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -17,7 +19,9 @@ import static java.lang.System.out;
 /**
  * 用户身份拦截器
  * Created by hasee on 2018/3/6.
+ * @author kanlon
  */
+@Controller
 public class LoginInterceptor implements HandlerInterceptor {
 
     private Logger logger = Logger.getLogger(LoginInterceptor.class);
@@ -41,7 +45,8 @@ public class LoginInterceptor implements HandlerInterceptor {
         open_urls.add("/resource");
         //临时开放链接，用来测试
         open_urls.add("/favicon.ico");
-        open_urls.add("/clubNews.html");
+        open_urls.add("/sign");
+        open_urls.add("/clubNews");
         //如果是公开地址，则放行
         for(String open_url:open_urls){
             if(url.indexOf(open_url)>=0){

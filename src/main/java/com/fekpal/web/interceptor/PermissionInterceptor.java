@@ -2,6 +2,8 @@ package com.fekpal.web.interceptor;
 
 import com.fekpal.common.session.SessionLocal;
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -18,7 +20,9 @@ import static java.lang.System.out;
 /**
  * 用户授权拦截器
  * Created by hasee on 2018/3/6.
+ * @author kanlon
  */
+@Controller
 public class PermissionInterceptor implements HandlerInterceptor {
 
     private Logger logger = Logger.getLogger(PermissionInterceptor.class);
@@ -29,11 +33,6 @@ public class PermissionInterceptor implements HandlerInterceptor {
         permissionMap.put(0,"/member");
         permissionMap.put(1,"/club");
         permissionMap.put(2,"/sau");
-        //临时加的
-//        permissionMap.put(0,"/inner_system2.html");
-//        permissionMap.put(1,"/inner_system.html");
-//        permissionMap.put(2,"/inner_system1.html");
-
     }
     //在执行handler之前来执行的
     //用于用户认证校验、用户权限校验
@@ -56,7 +55,8 @@ public class PermissionInterceptor implements HandlerInterceptor {
         open_urls.add("/resource");
         //临时开放链接，用来测试
         open_urls.add("/favicon.ico");
-        open_urls.add("/clubNews.html");
+        open_urls.add("/sign");
+        open_urls.add("/clubNews");
         //如果是公开地址，则放行
         for(String open_url:open_urls){
             if(url.indexOf(open_url)>=0){
