@@ -71,7 +71,7 @@
     var json = JSON.stringify(formData);
     // console.log(formData);
 
-    var url = '/sauims/login/sau_success.json';
+    var url = '/login';
     sendAjax(url, json)
       .done(getResponse);
   }
@@ -103,15 +103,15 @@
       notOK.firstChild.data = response.msg;
     }
     if (response.data === 0) {
-      //person  innersys2
-      window.location.href = '/inner_system2.html';
+      //member  个人
+      window.location.href = '/member_inner_system2.html';
 
     } else if (response.data === 1) {
-      //sau  innersys
-      window.location.href = '/inner_system.html';
+      // 社团
+      window.location.href = '/club_inner_system1.html';
     } else if (response.data === 2) {
-      //club  innersys1
-      window.location.href = '/inner_system1.html';
+      //校社联
+      window.location.href = '/sau_inner_system.html';
     }
   }
 

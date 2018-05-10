@@ -25,7 +25,7 @@
           <div class="cover pos">
           
             <!-- 如果社团id，orgId ===11，就是校社联用户。 如果是社团的话，就是下面的展示图的链接，如果是校社联的话，就是另一个链接 -->
-            <a href="/sauims/clubNews.html?id=${Data.data[i].orgId}" target="_blank" title="${Data.data[i].orgName}">
+            <a href="/clubNews.html?id=${Data.data[i].orgId}" target="_blank" title="${Data.data[i].orgName}">
               <img src="/resource/view/sau/${Data.data[i].view}" alt="${Data.data[i].view}">
               
             </a>
@@ -54,7 +54,7 @@
           <div class="cover pos">
           
             <!-- 如果社团id，orgId ===11，就是校社联用户。 如果是社团的话，就是下面的展示图的链接，如果是校社联的话，就是另一个链接 -->
-            <a href="/sauims/clubNews.html?id=${Data.data[i].orgId}" target="_blank" title="${Data.data[i].orgName}">
+            <a href="/clubNews.html?id=${Data.data[i].orgId}" target="_blank" title="${Data.data[i].orgName}">
               <img src="/resource/view/club/${Data.data[i].view}" alt="${Data.data[i].view}">
               
             </a>

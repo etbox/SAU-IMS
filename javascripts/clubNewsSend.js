@@ -77,19 +77,7 @@
     var auditTitle;
     var registerTime;
     var auditState; // FIXME: 变量未使用
-    /*json = { //测试用
-      'code': 0,
-      'msg': '',
-      'data': [
-        {
-          'messageId': 234,
-          'messageTitle': '张三',
-          'sendTime': 5343388883333,
-          'messageType': 0
 
-        }
-      ]
-    };*/
     for (var i = 0; i < json.data.length; i++) { //i的长度是json的 data的长度
       auditMsgId = json.data[i].messageId; //没错 这就是真正的数据
       auditTitle = json.data[i].messageTitle;
@@ -98,11 +86,20 @@
 
       auditState = json.data[i].messageType;
 
-
+      var jmz = {};
+      jmz.GetLength = function(str) {
+        return str.replace(/[\u0391-\uFFE5]/g, "aa").length;
+      }
+      if (jmz.GetLength(auditTitle) < 19) {
+        $('#MTITLE' + i).text(auditTitle);
+      } else {
+        $('#MTITLE' + i).text("" + auditTitle.substr(0, 10) + "....");
+      }
+      
       /*获取数据后操作dom*/
       $('#middleSide').append(row(i, json.data[i].auditMsgId));
-      $('#MTITLE' + i).text(auditMsgId);
-      $('#WRITER' + i).text(auditTitle);
+      $('#MTITLE' + i).text(auditTitle);
+      $('#WRITER' + i).text(auditMsgId);
       $('#MTIME' + i).text(registerTime);
 
 
@@ -168,12 +165,13 @@
 
   function getSearchData() {
     $.ajax({
-        url: '/club/msg/old/search?findContent=' + $('.search-bar').val() + '&offset=1&limit=-1',
+        url: '/club/msg/old/search?findContent=' + $('.search-bar').val() + '&offset=1&limit=1000000',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
         },
         dataType: 'json',
+        data: null
 
       })
       .done(function(searchData) {

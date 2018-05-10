@@ -40,7 +40,7 @@
   function getNewsData() { //从服务器获取数据
 
     return $.ajax({
-        url: '/sauims/json/member/org/allClub.json',
+        url: '/member/org',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -95,6 +95,18 @@
         //'已经点了的，该用户之前喜欢该社团
         $('#LIKE' + json.data[i].orgId).attr('src', './images/heart.png');
       }
+
+
+      var jmz = {};
+      jmz.GetLength = function(str) {
+        return str.replace(/[\u0391-\uFFE5]/g, "aa").length;
+      }
+      if (jmz.GetLength(clubName) < 19) {
+        $('#WRITER' + i).text(clubName);
+      } else {
+        $('#WRITER' + i).text("" + clubName.substr(0, 10) + "....");
+      }
+
       $('.MHEAD').attr("src", "/resource/logo/" + json.data[i].logo);
       $('#WRITER' + i).text(clubName);
       $('#NUM' + i).text(likeNumber);
@@ -102,7 +114,7 @@
       $('#' + 'LIKE' + json.data[i].orgId).click(function() {
         var x = this.parentNode.id;
         $.ajax({
-            url: '/sauims/json/member/org/' + x + '/star' + '/unLike.json',
+            url: '/member/org/' + x + '/star' + '',
             type: 'post',
             dataType: 'json',
             data: null
@@ -141,7 +153,7 @@
    */
   function loadFirstOrgMsg(json) {
     $.ajax({
-        url: '/sauims/json' + '/member/org/' + json.data[0].orgId + '.json',
+        url: '' + '/member/org/' + json.data[0].orgId + '',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -187,7 +199,7 @@
       $('#' + json.data[i].orgId).click(function() {
         checkID = this.id;
         $.ajax({
-            url: '/sauims/json' + '/member/org/' + this.id + '.json',
+            url: '' + '/member/org/' + this.id + '',
             type: 'get',
             headers: {
               'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -278,7 +290,7 @@
   function getSearchData() {
     $('.middleSide').children('div').remove();
     $.ajax({
-        url: '/sauims/json/member/org/search/' + $('.searchBar').val() + '.json',
+        url: '/member/org/search?findContent=' + $('.searchBar').val() + '&offset=1&limit=10000000',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -331,7 +343,7 @@
       $('#' + 'LIKE' + json.data[i].orgId).click(function() {
         var x = this.parentNode.id;
         $.ajax({
-            url: '/sauims/json/member/org/' + x + '/star' + '/unLike.json',
+            url: '/member/org/' + x + '/star' + '',
             type: 'post',
             dataType: 'json',
             data: null

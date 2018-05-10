@@ -51,7 +51,7 @@
   function getNewsData() { //从服务器获取数据
 
     $.ajax({
-        url: '/sauims/json/sau/audit/reg.json',
+        url: '/sau/audit/reg.json',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -100,6 +100,16 @@
       registerTime = unixTimestamp.toLocaleString();
       role = json.data[i].role;
       auditState = json.data[i].auditState;
+
+      var jmz = {};
+      jmz.GetLength = function(str) {
+        return str.replace(/[\u0391-\uFFE5]/g, "aa").length;
+      }
+      if (jmz.GetLength(auditTitle) < 19) {
+        $('#MTITLE' + i).text(auditTitle);
+      } else {
+        $('#MTITLE' + i).text("" + auditTitle.substr(0, 10) + "....");
+      }
       /*获取数据后操作dom*/
       $('#middleSide').append(row(i, json.data[i].auditMsgId + '-' + json.data[i].role));
       $('#MTITLE' + i).text(auditTitle);
@@ -121,7 +131,7 @@
     if (role === 0) {
       //点击审核社员注册信息
       $.ajax({
-          url: '/sauims/json/sau/audit/join/' + role + '/' + auditMsgId + '.json',
+          url: '/sau/audit/join/' + role + '/' + auditMsgId + '',
           type: 'get',
           headers: {
             'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -144,7 +154,7 @@
     } else {
       //点击社团注册信息
       $.ajax({
-          url: '/sauims/json/sau/audit/join/' + role + '/' + auditMsgId + '.json',
+          url: '/sau/audit/join/' + role + '/' + auditMsgId + '',
           type: 'get',
           headers: {
             'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -180,7 +190,7 @@
         if (role === '0') {
           //点击审核社员注册信息
           $.ajax({
-              url: '/sauims/json/sau/audit/join/' + role + '/' + auditMsgId + '.json',
+              url: '/sau/audit/join/' + role + '/' + auditMsgId + '',
               type: 'get',
               headers: {
                 'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -204,7 +214,7 @@
         } else {
           //点击社团注册信息
           $.ajax({
-              url: '/sauims/json/sau/audit/join/' + role + '/' + auditMsgId + '.json',
+              url: '/sau/audit/join/' + role + '/' + auditMsgId + '',
               type: 'get',
               headers: {
                 'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -249,7 +259,7 @@
     $('#telNum').text(f);
     $('#Introduce').text(g);
     $("#fujian").attr({
-      href: '/sauims/json/sau/audit/reg/' + h + '/file' + '/test.docx'
+      href: '/sau/audit/reg/' + h + '/file' + ''
     });
 
   }
@@ -263,9 +273,9 @@
 
 
   function agree() {
-    console.log('/sauims/json/sau/audit/reg/' + ROLE + '/' + checkID + '/success.json');
+    console.log('/sau/audit/reg/' + ROLE + '/' + checkID + '');
     $.ajax({
-        url: '/sauims/json/sau/audit/reg/' + ROLE + '/' + checkID + '/success.json',
+        url: '/sau/audit/reg/' + ROLE + '/' + checkID + '',
         type: 'post',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -296,10 +306,10 @@
   }
 
   function disagree() {
-    console.log('/sauims/json/sau/audit/reg/' + ROLE + '/' + checkID + '/success.json');
+    console.log('/sau/audit/reg/' + ROLE + '/' + checkID + '');
     console.log('不通过理由：' + $('#neirong').val());
     $.ajax({
-        url: '/sauims/json/sau/audit/reg/' + ROLE + '/' + checkID + '/success.json',
+        url: '/sau/audit/reg/' + ROLE + '/' + checkID + '',
         type: 'post',
         dataType: 'json',
         data: {
@@ -329,7 +339,7 @@
   function getSearchData() {
     $('#middleSide').children('div').remove();
     $.ajax({
-        url: '/sauims/json/sau/audit/reg/search' +'/'+$('.searchBar').val()+'.json',
+        url: '/sau/audit/reg/search' + '?findContent=' + $('.searchBar').val() + '&offset=1&limit=100000',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'

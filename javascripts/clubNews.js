@@ -2,7 +2,7 @@
          var orgId = getParam("id");
          console.log(orgId);
          $.ajax({
-                 url: '/sauims/json/index/club/' + orgId + ".json",
+                 url: '/index/club/' + orgId + "",
                  type: 'GET',
                  dataType: 'json',
              })

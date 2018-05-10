@@ -34,27 +34,14 @@
 
 
 
-  function load() {
+  var load = function(){
 
     var clubName;
     var setTime;
     var bossName;
     var mailbox;
     var Introduce;
-    /*   json = {
-         'code': 0,
-         'msg': '',
-         'url': '',
-         'data': {
-           'sauName': '广金校社联',
-           'logo': 'default_logo.jpg',
-           'description': '管理社团的组织',
-           'adminName': '张三',
-           'contactEmail': 'someone@qq.com',
-           'foundTime': '2017-10-09',
-           'members': 100
-         }
-       };*/
+  
 
     clubName = json.data.sauName;
     setTime = json.data.foundTime;

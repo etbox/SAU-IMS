@@ -54,7 +54,7 @@
 
   function getNewsData() { //从服务器获取数据
     $.ajax({
-        url: '/sauims/json/club/ann' + '/allReg.json',
+        url: '/club/ann' + '',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -99,6 +99,16 @@
       registerName = json.data[i].registerName;
       auditState = json.data[i].auditState;
 
+/*      var jmz = {};
+      jmz.GetLength = function(str) {
+        return str.replace(/[\u0391-\uFFE5]/g, "aa").length;
+      }
+      if (jmz.GetLength(auditTitle) < 19) {
+        $('#MTITLE' + i).text(auditTitle);
+      } else {
+        $('#MTITLE' + i).text("" + auditTitle.substr(0, 10) + "....");
+      }*/
+
       /*获取数据后操作dom*/
       $('#middleSide').append(row(i, json.data[i].auditMsgId));
       $('#MTITLE' + i).text(auditTitle);
@@ -123,7 +133,7 @@
    */
   function loadFirstAnnReg(json) {
         $.ajax({
-            url: '/sauims/json/club/ann/' + json.data[0].auditMsgId + '.json',
+            url: '/club/ann/' + json.data[0].auditMsgId + '',
             type: 'get',
             headers: {
               'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -137,7 +147,7 @@
             } else {
               checkID = JSON1.data.auditMsgId;
               news(JSON1.data.clubName, '', JSON1.data.submitTime, JSON1.data.adminName, JSON1.data.description, JSON1.data.auditResult, JSON1.data.auditState);
-              var fileURL = '/sauims/json/club/ann/' + checkID + '/file' + '/test.docx';
+              var fileURL = '/club/ann/' + checkID + '/file' + '';
               document.getElementById('fujian').href=fileURL;
             }
           })
@@ -154,7 +164,7 @@
     for (var i = 0; i < json.data.length; i++) {
       $('#' + json.data[i].auditMsgId).click(function() {
         $.ajax({
-            url: '/sauims/json/club/ann/' + this.id + '.json',
+            url: '/club/ann/' + this.id + '',
             type: 'get',
             headers: {
               'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -168,7 +178,7 @@
             } else {
               checkID = JSON1.data.auditMsgId;
               news(JSON1.data.clubName, '', JSON1.data.submitTime, JSON1.data.adminName, JSON1.data.description, JSON1.data.auditResult, JSON1.data.auditState);
-              var fileURL = '/sauims/json/club/ann/' + checkID + '/file' + '/test.docx';
+              var fileURL = '/club/ann/' + checkID + '/file' + '';
               document.getElementById('fujian').href=fileURL;
             }
           })
@@ -207,7 +217,7 @@
   function getSearchData() {
     $('#middleSide').children('div').remove();
     $.ajax({
-        url: '/sauims/json/club/ann/search' + '/' + $('.searchBar').val() + '.json',
+        url: '/club/ann/search' + '?findContent=' + $('.searchBar').val() + '&offset=1&limit=1000000',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -275,7 +285,7 @@
 
   function sendCheck() {
     $.ajax({
-        url: '/sauims/json/club/ann/one' + '/success.json',
+        url: '/club/ann/one' + '',
         type: 'POST',
         headers: {
           'Content-type': 'application/json;charset=UTF-8'

@@ -36,30 +36,12 @@
 
 
   function load() {
-    json = getNewsData(); //获取服务器数据
     var clubName;
     var setTime;
     var bossName;
     var mailbox;
     var Introduce;
-    /* json = {
-       'code': 0,
-       'msg': '',
-       'url': '',
-       'data': {
-         'orgId': 1,
-         'orgName': '乒乓球',
-         'logo': 'a.jpg',
-         'view': 'b.jpg',
-         'description': '一个喜爱乒乓球的聚集地',
-         'adminName': '张三',
-         'email': 's1996@126.com',
-         'phone': '18316821833',
-         'foundTime': '15127423425234',
-         'members': 100
 
-       }
-     };*/
 
     clubName = json.data.orgName;
     setTime = json.data.foundTime;

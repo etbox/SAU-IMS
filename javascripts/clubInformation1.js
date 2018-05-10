@@ -11,7 +11,7 @@
     });
     var $img = $('<img></img>', {
       'class': 'MHEAD',
-      'src': '/sauims/resource/logo/'
+      'src': '/resource/logo/'
     });
     var $div1 = $('<div></div>', {
       'class': 'WRITER',
@@ -41,7 +41,7 @@
   function getNewsData() { //从服务器获取数据
 
     return $.ajax({
-        url: '/sauims/json/club/other/allClub.json',
+        url: '/club/other',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -83,9 +83,19 @@
       members = json.data[i].members;
       likeClick = json.data[i].likeClick;
 
+/*      var jmz = {};
+      jmz.GetLength = function(str) {
+        return str.replace(/[\u0391-\uFFE5]/g, "aa").length;
+      }
+      if (jmz.GetLength(orgName) < 19) {
+        $('#WRITER' + i).text(orgName);
+      } else {
+        $('#WRITER' + i).text("" + orgName.substr(0, 10) + "....");
+      }*/
+
       /*获取数据后操作dom*/
       $('.middleSide').append(row(i, json.data[i].orgId));
-      $('.MHEAD').attr("src", "http://localhost:8080/resource/logo/" + json.data[i].logo);
+      $('.MHEAD').attr("src", "/resource/logo/" + json.data[i].logo);
       $('#WRITER' + i).text(orgName);
       $('#NUM' + i).text(likeClick);
     }
@@ -97,7 +107,7 @@
    */
   function loadFirstOrgMsg(json) {
     $.ajax({
-        url: '/sauims/json/club/other/' + json.data[0].orgId + '.json',
+        url: '/club/other/' + json.data[0].orgId + '',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -132,7 +142,7 @@
     for (var i = 0; i < json.data.length; i++) {
       $('#' + json.data[i].orgId).click(function() {
         $.ajax({
-            url: '/sauims/json/club/other//' + this.id + '.json',
+            url: '/club/other/' + this.id + '',
             type: 'get',
             headers: {
               'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -185,7 +195,7 @@
   function getSearchData() {
     $('.middleSide').children('div').remove();
     $.ajax({
-        url: '/sauims/json/club/other/search/' + $('.searchBar').val() + '.json',
+        url: '/club/other/search?findContent=' + $('.searchBar').val() + '&offset=1&limit=100000',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'

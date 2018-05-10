@@ -48,7 +48,7 @@
   function getNewsData() { //从服务器获取数据
 
     $.ajax({
-        url: '/sauims/json/sau/audit/ann/ancheck.json',
+        url: '/sau/audit/ann',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -93,6 +93,15 @@
       var unixTimestamp = new Date(json.data[i].registerTime);
       var registerTime = unixTimestamp.toLocaleString();
       // auditState = json.data[i].auditState;
+/*      var jmz = {};
+      jmz.GetLength = function(str) {
+        return str.replace(/[\u0391-\uFFE5]/g, "aa").length;
+      }
+      if (jmz.GetLength(registerTitle) < 19) {
+        $('#MTITLE' + i).text(registerTitle);
+      } else {
+        $('#MTITLE' + i).text("" + registerTitle.substr(0, 10) + "....");
+      }*/
 
       /*获取数据后操作dom*/
       $('#middleSide').append(row(i, json.data[i].auditMsgId));
@@ -106,7 +115,7 @@
   function loadFirstAnnCheck(json) {
     var auditMsgId = json.data[0].auditMsgId;
     $.ajax({
-        url: '/sauims/json/sau/audit/ann/' + auditMsgId + '.json',
+        url: '/sau/audit/ann/' + auditMsgId + '',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -124,7 +133,7 @@
         var unixTimestamp = new Date(JSON1.data.submitTime);
         var registerTime = unixTimestamp.toLocaleString();
         news(JSON1.data.clubName, '', registerTime, JSON1.data.adminName, JSON1.data.description);
-        var fileURL = '/sauims/json/sau/audit/ann/' + checkID + '/file' + '/test.docx';
+        var fileURL = '/sau/audit/ann/' + checkID + '/file' + '';
         document.getElementById("fujian").href = fileURL;
 
       })
@@ -141,7 +150,7 @@
     for (var i = 0; i < json.data.length; i++) {
       $('#' + json.data[i].auditMsgId).click(function() {
         $.ajax({
-            url: '/sauims/json/sau/audit/ann/' + this.id + '.json',
+            url: '/sau/audit/ann/' + this.id + '',
             type: 'get',
             headers: {
               'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -159,7 +168,7 @@
             var unixTimestamp = new Date(JSON1.data.submitTime);
             var registerTime = unixTimestamp.toLocaleString();
             news(JSON1.data.clubName, '', registerTime, JSON1.data.adminName, JSON1.data.description);
-            var fileURL = '/sauims/json/sau/audit/ann/' + checkID + '/file' + '/test.docx';
+            var fileURL = '/sau/audit/ann/' + checkID + '/file' + '';
             document.getElementById("fujian").href = fileURL;
           })
           .fail(function() {
@@ -188,9 +197,9 @@
   }
 
   function agree() {
-    console.log('sauims/json/sau/audit/ann/' + checkID + '/success.json');
+    console.log('sauims/json/sau/audit/ann/' + checkID + '');
     $.ajax({
-        url: '/sauims/json/sau/audit/ann/' + checkID + '/success.json',
+        url: '/sau/audit/ann/' + checkID + '',
         type: 'post',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -221,10 +230,10 @@
   }
 
   function disagree() {
-    console.log('sauims/json/sau/audit/ann/' + checkID + '/success.json');
+    console.log('sauims/json/sau/audit/ann/' + checkID + '');
     console.log('不通过理由：' + $('#neirong').val());
     $.ajax({
-        url: '/sauims/json/sau/audit/ann/' + checkID + '/success.json',
+        url: '/sau/audit/ann/' + checkID + '',
         type: 'post',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -257,7 +266,7 @@
   function getSearchData() {
     $('#middleSide').children('div').remove();
     $.ajax({
-        url: '/sauims/json/sau/audit/ann/search' + '/search.json',
+        url: '/sau/audit/ann/search' + '',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -308,9 +317,9 @@
 
 
   function file() {
-    document.getElementById("file").href = '/sauims/json/sau/audit/ann/' + checkID + '/file' + '/test.docx';
+    document.getElementById("file").href = '/sau/audit/ann/' + checkID + '/file' + '';
     $.ajax({
-        url: '/sauims/json/sau/audit/ann/' + checkID + '/file' + '/test.docx',
+        url: '/sau/audit/ann/' + checkID + '/file' + '',
         type: 'GET',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'

@@ -47,7 +47,7 @@
   function getNewsData() { //从服务器获取数据
 
     $.ajax({
-        url: '/sauims/json/club/audit/join' + '/reg.json',
+        url: '/club/audit/join' + '',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -95,6 +95,17 @@
       var unixTimestamp = new Date(json.data[i].registerTime);
       registerTime = unixTimestamp.toLocaleString();
       auditState = json.data[i].auditState;
+
+      var jmz = {};
+      jmz.GetLength = function(str) {
+        return str.replace(/[\u0391-\uFFE5]/g, "aa").length;
+      }
+      if (jmz.GetLength(auditTitle) < 19) {
+        $('#MTITLE' + i).text(auditTitle);
+      } else {
+        $('#MTITLE' + i).text("" + auditTitle.substr(0, 10) + "....");
+      }
+      
       /*获取数据后操作dom*/
       $('#middleSide').append(row(i, json.data[i].auditMsgId));
       $('#MTITLE' + i).text(auditTitle);
@@ -111,7 +122,7 @@
 
     //点击审核社员注册信息
     $.ajax({
-        url: '/sauims/json/club/audit/join/' + auditMsgId + '.json',
+        url: '/club/audit/join/' + auditMsgId + '',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -137,7 +148,7 @@
       $('#' + jsonx.data[i].auditMsgId).click(function(event) {
         var auditMsgId = this.id;
         $.ajax({
-            url: '/sauims/json/club/audit/join/' + auditMsgId + '.json',
+            url: '/club/audit/join/' + auditMsgId + '',
             type: 'get',
             headers: {
               'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -188,9 +199,9 @@
 
 
   function agree() {
-    console.log('/sauims/json/club/audit/join/' + checkID + '/success.json');
+    console.log('/club/audit/join/' + checkID + '');
     $.ajax({
-        url: '/sauims/json/club/audit/join/' + checkID + '/success.json',
+        url: '/club/audit/join/' + checkID + '',
         type: 'post',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -221,10 +232,10 @@
   }
 
   function disagree() {
-    console.log('/sauims/json/club/audit/join/' + checkID + '/success.json');
+    console.log('/club/audit/join/' + checkID + '');
     console.log('不通过理由：' + $('#neirong').val());
     $.ajax({
-        url: '/sauims/json/club/audit/join/' + checkID + '/success.json',
+        url: '/club/audit/join/' + checkID + '',
         type: 'post',
         dataType: 'json',
         data: {
@@ -254,7 +265,7 @@
   function getSearchData() {
     $('#middleSide').children('div').remove();
     $.ajax({
-        url: '/sauims/json/club/audit/join/search' + '/' + $('.searchBar').val() + '.json',
+        url: '/club/audit/join/search' + '?findContent=' + $('.searchBar').val() + '&offset=1&limit=100000',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
