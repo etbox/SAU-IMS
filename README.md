@@ -28,8 +28,8 @@ https://documenter.getpostman.com/view/3892535/collection/RVnVDzVV
 
 <h4>普通用户端/社团成员端</h4>
 公开接口文档地址 
-<a target="_blank" href="https://documenter.getpostman.com/view/3892535/collection/RVnVDzVW">
-https://documenter.getpostman.com/view/3892535/collection/RVnVDzVW
+<a target="_blank" href="https://documenter.getpostman.com/view/3892535/RWM8TXbE">
+https://documenter.getpostman.com/view/3892535/RWM8TXbE
 </a>
 
 <h4>校社联管理端</h4>
