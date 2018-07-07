@@ -3,54 +3,12 @@
 下面是postman测试接口生成的在线API文档，可以由后端实时更新。
 <br/>
 <hr/>
-<h4>首页功能</h4>
+<h4>校社联管理系统全部功能的接口文档在线地址</h4>
 公开接口文档地址 
-<a target="_blank" href="https://documenter.getpostman.com/view/3892535/collection/RVnVDzVM#b6d57746-5c52-432a-89b6-d3c14da26e0d">
-https://documenter.getpostman.com/view/3892535/collection/RVnVDzVM#b6d57746-5c52-432a-89b6-d3c14da26e0d
+<a target="_blank" href="https://documenter.getpostman.com/view/3892535/RWM8UC2C">
+https://documenter.getpostman.com/view/3892535/RWM8UC2C
 </a>
-<h4>图片资源</h4>
-公开接口文档地址 
-<a target="_blank" href="https://documenter.getpostman.com/view/3892535/collection/RVnVDzVS">
-https://documenter.getpostman.com/view/3892535/collection/RVnVDzVS
-</a>
-<h4>安全功能接口测试</h4>
-公开接口文档地址 
-<a target="_blank" href="https://documenter.getpostman.com/view/3892535/collection/RVnVDzVU">
-https://documenter.getpostman.com/view/3892535/collection/RVnVDzVU
-</a>
-
-<h4>接受消息功能</h4>
-公开接口文档地址 
-<a target="_blank" href="https://documenter.getpostman.com/view/3892535/collection/RVnVDzVV">
-https://documenter.getpostman.com/view/3892535/collection/RVnVDzVV
-</a>
-
-
-<h4>普通用户端/社团成员端</h4>
-公开接口文档地址 
-<a target="_blank" href="https://documenter.getpostman.com/view/3892535/RWM8TXbE">
-https://documenter.getpostman.com/view/3892535/RWM8TXbE
-</a>
-
-<h4>校社联管理端</h4>
-公开接口文档地址 
-<a target="_blank" href="https://documenter.getpostman.com/view/3892535/collection/RVnVDzZm">
-https://documenter.getpostman.com/view/3892535/collection/RVnVDzZm
-</a>
-
-
-<h4>社团管理端</h4>
-公开接口文档地址 
-<a target="_blank" href="https://documenter.getpostman.com/view/3892535/collection/RVnVDzZn">
-https://documenter.getpostman.com/view/3892535/collection/RVnVDzZn
-</a>
-
-<h4>注意事项</h4>
-公开注意事项地址
-<a target="_blank" href="https://documenter.getpostman.com/view/3892535/collection/RVu4F9Ak">
-https://documenter.getpostman.com/view/3892535/collection/RVu4F9Ak
-</a>
-
+<hr/>
 关于项目的注意事项，不用于请求<br/>
 <font color="red"><h4>前端</h4></font><br/>
 (1)如果用户还没登录进行，消息查询等非法操作， 后端会返回一个首页页面。<br/>
