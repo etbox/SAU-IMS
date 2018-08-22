@@ -1,6 +1,8 @@
 package com.fekpal.service.impl;
 
+import com.fekpal.api.ClubAuditService;
 import com.fekpal.common.base.BaseServiceImpl;
+import com.fekpal.common.base.CRUDException;
 import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.common.constant.AuditState;
 import com.fekpal.common.constant.FIleDefaultPath;
@@ -10,8 +12,9 @@ import com.fekpal.common.utils.WordFileUtil;
 import com.fekpal.dao.mapper.ClubAuditMapper;
 import com.fekpal.dao.mapper.OrgMapper;
 import com.fekpal.dao.mapper.UserMapper;
-import com.fekpal.dao.model.*;
-import com.fekpal.api.ClubAuditService;
+import com.fekpal.dao.model.ClubAudit;
+import com.fekpal.dao.model.Org;
+import com.fekpal.dao.model.User;
 import com.fekpal.web.model.ClubAuditResultMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -120,10 +123,12 @@ public class ClubAuditServiceImpl extends BaseServiceImpl<ClubAuditMapper, ClubA
      * @return Operation.SUCCESSFULLY; 删除成功 Operation.FAILED 删除失败
      */
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int deleteClubAuditById(int id) {
         ClubAudit clubAudit = mapper.selectByPrimaryKey(id);
         clubAudit.setAuditState(AuditState.DELETE);
         int row = mapper.updateByPrimaryKey(clubAudit);
+        if(row > 1){throw new CRUDException("删除审核消息异常,删除"+row +"行");}
         return row==1 ? Operation.SUCCESSFULLY : Operation.FAILED;
     }
 
@@ -135,9 +140,11 @@ public class ClubAuditServiceImpl extends BaseServiceImpl<ClubAuditMapper, ClubA
      * @return Operation.SUCCESSFULLY; 删除成功 Operation.FAILED 删除失败
      */
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int updateClubAuditById(int id, ClubAudit clubAudit) {
         clubAudit.setId(id);
         int row = mapper.updateByPrimaryKeySelective(clubAudit);
+        if(row > 1){throw new CRUDException("通过审核id和社团审核类更新审核状态信息异常,更新"+row +"行");}
         return row==1 ? Operation.SUCCESSFULLY : Operation.FAILED;
     }
 
@@ -239,6 +246,6 @@ public class ClubAuditServiceImpl extends BaseServiceImpl<ClubAuditMapper, ClubA
         row += orgMapper.updateByPrimaryKey(org);
         row += userMapper.updateByPrimaryKey(user);
         if(row!=3){throw new RuntimeException("操作失败，不能成功更新三行");}
-        return row==3?Operation.SUCCESSFULLY : Operation.FAILED;
+        return Operation.SUCCESSFULLY;
     }
 }

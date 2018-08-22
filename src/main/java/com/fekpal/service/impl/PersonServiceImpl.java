@@ -1,5 +1,6 @@
 package com.fekpal.service.impl;
 
+import com.fekpal.api.PersonService;
 import com.fekpal.common.base.BaseServiceImpl;
 import com.fekpal.common.base.CRUDException;
 import com.fekpal.common.base.ExampleWrapper;
@@ -11,16 +12,19 @@ import com.fekpal.common.utils.ImageFileUtil;
 import com.fekpal.dao.mapper.PersonMapper;
 import com.fekpal.dao.mapper.UserMapper;
 import com.fekpal.dao.model.Person;
-import com.fekpal.api.PersonService;
 import com.fekpal.dao.model.User;
 import com.fekpal.service.model.domain.PersonMsg;
 import com.fekpal.web.model.PersonDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sun.net.www.content.image.png;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -36,6 +40,7 @@ public class PersonServiceImpl extends BaseServiceImpl<PersonMapper, Person> imp
     private UserMapper userMapper;
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public String updateLogo(PersonMsg msg) {
         try {
             int uid = SessionLocal.local(session).getUserIdentity().getUid();
@@ -58,12 +63,12 @@ public class PersonServiceImpl extends BaseServiceImpl<PersonMapper, Person> imp
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int updatePersonInfo(PersonMsg msg) {
         int uid = SessionLocal.local(session).getUserIdentity().getUid();
         ExampleWrapper<Person> example = new ExampleWrapper<>();
         example.eq("nickname", msg.getNickname()).and().ne("person_id",uid);
         int row = mapper.countByExample(example);
-
         if  (row != 0  ){
             return Operation.INPUT_INCORRECT;
         }

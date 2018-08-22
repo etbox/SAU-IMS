@@ -15,8 +15,8 @@ import com.fekpal.common.utils.captcha.CaptchaUtil;
 import com.fekpal.dao.model.Org;
 import com.fekpal.dao.model.Person;
 import com.fekpal.dao.model.User;
-import com.fekpal.service.model.domain.SecureMsg;
 import com.fekpal.service.model.domain.LoginResult;
+import com.fekpal.service.model.domain.SecureMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -26,8 +26,6 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Timestamp;
-
-import static java.lang.System.out;
 
 /**
  * Created by APone on 2018/2/19 21:15.

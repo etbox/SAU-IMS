@@ -17,6 +17,8 @@ import com.fekpal.dao.model.PersonOrgView;
 import com.fekpal.service.model.domain.ClubMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpSession;
@@ -47,6 +49,7 @@ public class ClubServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements 
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public String updateLogo(ClubMsg msg) {
         if (msg.getLogo() == null) {
             return null;
@@ -72,6 +75,7 @@ public class ClubServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements 
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public String updateView(ClubMsg msg) {
         if (msg.getView() == null) {
             return null;
@@ -97,6 +101,7 @@ public class ClubServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements 
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int updateClubInfo(ClubMsg msg) {
         int orgId = SessionLocal.local(session).getUserIdentity().getUid();
         ExampleWrapper<Org> example = new ExampleWrapper<>();
@@ -115,7 +120,6 @@ public class ClubServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements 
         org.setDescription(msg.getDescription());
         org.setOrgType(msg.getOrgType());
         row = mapper.updateByPrimaryKeySelective(org);
-
         if (row != 1) {
             throw new CRUDException("社团信息更新异常:" + row);
         }
