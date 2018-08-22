@@ -4,14 +4,17 @@
 <br/>
 <hr/>
 <h4>校社联管理系统全部功能的接口文档在线地址</h4>
-<<<<<<< HEAD
+<br/>
+公开接口文档(第二版)地址 
+<a target="_blank" href="">
+</a>
+<br/>
 公开接口文档(第一版)地址（当前使用） 
 <a target="_blank" href="https://documenter.getpostman.com/view/3892535/RWM8UC2C">
 https://documenter.getpostman.com/view/3892535/RWM8UC2C
 </a>
-公开接口文档(第二版)地址 
-<a target="_blank" href="">
-</a>
+
+
 <hr/>
 关于项目的注意事项，不用于请求<br/>
 <font color="red"><h4>前端</h4></font><br/>
