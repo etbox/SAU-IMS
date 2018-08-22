@@ -7,7 +7,7 @@ import com.fekpal.dao.model.OrgMember;
 import java.util.List;
 
 /**
- * Created by Kanlon on 2018/3/22.
+ * Created by zhangcanlong on 2018/3/22.
  * 喜爱社团的接口
  * 该接口提供社团点赞，取消点赞等功能
  */

@@ -1,31 +1,35 @@
 package com.fekpal.service.impl;
 
+import com.fekpal.api.AnniversaryAuditService;
 import com.fekpal.common.base.BaseServiceImpl;
 import com.fekpal.common.base.CRUDException;
 import com.fekpal.common.base.ExampleWrapper;
-import com.fekpal.common.constant.*;
+import com.fekpal.common.constant.AuditState;
+import com.fekpal.common.constant.FIleDefaultPath;
+import com.fekpal.common.constant.Operation;
+import com.fekpal.common.constant.SystemRole;
 import com.fekpal.common.session.SessionLocal;
 import com.fekpal.common.utils.FileUtil;
 import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.common.utils.WordFileUtil;
 import com.fekpal.dao.mapper.AnniversaryAuditMapper;
 import com.fekpal.dao.model.AnniversaryAudit;
-import com.fekpal.api.AnniversaryAuditService;
 import com.fekpal.web.model.ClubSubmitAnnMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.swing.text.html.Option;
 import java.io.*;
 import java.sql.Timestamp;
 import java.util.List;
 
 /**
  * 年度审核服务的实现类，实现年度审核的各种事务
- * @author kanlon
- * @time 2018/4/6
+ *
+ * @author zhangcanlong
+ * @date 2018/4/6
  */
 @Service
 public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAuditMapper, AnniversaryAudit> implements AnniversaryAuditService {
@@ -42,7 +46,7 @@ public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAudi
     @Override
     public int sendAuditMessage(ClubSubmitAnnMsg submitAudit) {
         int orgId = SessionLocal.local(session).getUserIdentity().getUid();
-        int row = 0;
+        int row;
         AnniversaryAudit audit = new AnniversaryAudit();
         audit.setAuditState(AuditState.AUDITING);
         audit.setOrgId(orgId);
@@ -58,33 +62,36 @@ public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAudi
             e.printStackTrace();
             return Operation.FAILED;
         }
-
         audit.setFileName(fileName);
-        if (submitAudit == null) {
-            return Operation.FAILED;
-        }
 
-       //如果存在，如果是该年的年度审核已经通过，则不能提交了。如果审核状态是拒绝或审核中了，则修改。否则不存在。则增加。
+        //如果存在，如果是该年的年度审核已经通过，则不能提交了。如果审核状态是拒绝或审核中了，则修改。否则不存在。则增加。
         ExampleWrapper<AnniversaryAudit> example = new ExampleWrapper<>();
-        String auditYear = Integer.toString(TimeUtil.getYear()-1);
-        example.eq("org_id",orgId).and().like("audit_title",auditYear);
+        String auditYear = Integer.toString(TimeUtil.getYear() - 1);
+        example.eq("org_id", orgId).and().like("audit_title", auditYear);
         int exitsState = mapper.countByExample(example);
-        if(exitsState ==1 ){
+        if (exitsState == 1) {
             //存在
             ExampleWrapper<AnniversaryAudit> examplePass = new ExampleWrapper<>();
-            examplePass.eq("org_id",orgId).and().like("audit_title",auditYear).and().eq("audit_state",AuditState.PASS);
+            examplePass.eq("org_id", orgId).and().like("audit_title", auditYear).and().eq("audit_state", AuditState.PASS);
             int passState = mapper.countByExample(examplePass);
-            if(passState == 1){return  Operation.FAILED;}
-        }else {
+            if (passState == 1) {
+                return Operation.FAILED;
+            }
+        } else {
             //不存在
             row = mapper.insert(audit);
-            return row == 1 ? Operation.SUCCESSFULLY : Operation.FAILED;
+            if (row != 1) {
+                throw new CRUDException("插入年度审核时出错，插入了" + row + "行;");
+            }
         }
         //如果执行到这里，则审核状态是拒绝或审核中，则修改
         ExampleWrapper<AnniversaryAudit> exampleMod = new ExampleWrapper<>();
-        exampleMod.eq("org_id",orgId).and().like("audit_title",auditYear);
-        row = mapper.updateByExampleSelective(audit,exampleMod);
-        return row == 1 ? Operation.SUCCESSFULLY : Operation.FAILED;
+        exampleMod.eq("org_id", orgId).and().like("audit_title", auditYear);
+        row = mapper.updateByExampleSelective(audit, exampleMod);
+        if (row != 1) {
+            throw new CRUDException("更新年度审核时出错，插入了" + row + "行;");
+        }
+        return Operation.SUCCESSFULLY;
     }
 
     /**
@@ -96,15 +103,32 @@ public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAudi
      */
     @Override
     public List<AnniversaryAudit> loadAllAudit(int offset, int limit) {
-       ExampleWrapper<AnniversaryAudit> example = new ExampleWrapper<>();
-       example.ne(" audit_state ", AuditState.DELETE).orderBy("submit_time",false);;
-        List<AnniversaryAudit> anniversaryAuditList = null;
-       try {
-            anniversaryAuditList  = mapper.selectByExample(example,offset,limit);
-       }catch (Exception e){
-            e.printStackTrace();
-       }
-        return anniversaryAuditList;
+        int auth = SessionLocal.local(session).getUserIdentity().getAuth();
+        int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        ExampleWrapper<AnniversaryAudit> example = new ExampleWrapper<>();
+        //如果是校社联，查询全部
+        if (auth == SystemRole.SAU) {
+            example.ne("audit_state", AuditState.DELETE).orderBy("submit_time", false);
+        } else {
+            //否则是社团，查询该社团的审核信息
+            example.eq("org_id", uid).orderBy("submit_time", false);
+        }
+        return mapper.selectByExample(example, offset, limit);
+    }
+
+    @Override
+    public Integer countAllAudit() {
+        int auth = SessionLocal.local(session).getUserIdentity().getAuth();
+        int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        ExampleWrapper<AnniversaryAudit> example = new ExampleWrapper<>();
+        //如果是校社联，查询全部
+        if (auth == SystemRole.SAU) {
+            example.ne("audit_state", AuditState.DELETE).orderBy("submit_time", false);
+        } else {
+            //否则是社团，查询该社团的审核信息
+            example.eq("org_id", uid).orderBy("submit_time", false);
+        }
+        return mapper.countByExample(example);
     }
 
     /**
@@ -117,19 +141,12 @@ public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAudi
     @Override
     public List<AnniversaryAudit> loadAllUnAudit(int offset, int limit) {
         ExampleWrapper<AnniversaryAudit> example = new ExampleWrapper<>();
-        example.eq("audit_state", AuditState.AUDITING).orderBy("submit_time", false);
-        List<AnniversaryAudit> anniversaryAuditList;
-        try{
-            anniversaryAuditList = mapper.selectByExample(example,offset,limit);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new CRUDException("加载全部未审核的社团年度审核消息出错");
-        }
-        return anniversaryAuditList;
+        example.ne("audit_state", AuditState.AUDITING).orderBy("submit_time", false);
+        return mapper.selectByExample(example, offset, limit);
     }
 
     /**
-     * 加载全部已经审核的年度审核消息
+     * 加载全部已经审核的年度通过审核消息
      *
      * @param offset 开始数
      * @param limit  查询条数
@@ -139,14 +156,7 @@ public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAudi
     public List<AnniversaryAudit> loadAllHaveAudit(int offset, int limit) {
         ExampleWrapper<AnniversaryAudit> example = new ExampleWrapper<>();
         example.eq("audit_state", AuditState.PASS).orderBy("submit_time", false);
-        List<AnniversaryAudit> anniversaryAuditList;
-        try{
-            anniversaryAuditList = mapper.selectByExample(example,offset,limit);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new CRUDException("加载全部已经审核的社团年度审核消息出错");
-        }
-        return anniversaryAuditList;
+        return mapper.selectByExample(example, offset, limit);
     }
 
     /**
@@ -161,22 +171,37 @@ public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAudi
     public List<AnniversaryAudit> queryByAuditTitle(String auditTitle, int offset, int limit) {
         int auth = SessionLocal.local(session).getUserIdentity().getAuth();
         int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        //如果为空，则返回所有年度审核消息
+        if (StringUtils.isEmpty(auditTitle)) {
+            return loadAllAudit(offset, limit);
+        }
         ExampleWrapper<AnniversaryAudit> example = new ExampleWrapper<>();
-        List<AnniversaryAudit> anniversaryAuditList = null;
         //如果是校社联，查询全部
-        if(auth == 2){
-            example.ne("audit_state",AuditState.DELETE).and().like("audit_title",auditTitle).orderBy("submit_time", false);
-        }else {
+        if (auth == SystemRole.SAU) {
+            example.ne("audit_state", AuditState.DELETE).and().like("audit_title", auditTitle).orderBy("submit_time", false);
+        } else {
             //否则是社团，查询该社团的审核信息
-            example.eq("org_id",uid).and().like("audit_title",auditTitle).orderBy("submit_time", false);
+            example.eq("org_id", uid).and().like("audit_title", auditTitle).orderBy("submit_time", false);
         }
-        try {
-            anniversaryAuditList = mapper.selectByExample(example,offset,limit);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new CRUDException("加载通过审核标题查找年度审核消息错误");
+        return mapper.selectByExample(example, offset, limit);
+    }
+
+    @Override
+    public Integer countByAuditTitle(String auditTitle) {
+        int auth = SessionLocal.local(session).getUserIdentity().getAuth();
+        int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        if (StringUtils.isEmpty(auditTitle)) {
+            return countAllAudit();
         }
-        return anniversaryAuditList;
+        ExampleWrapper<AnniversaryAudit> example = new ExampleWrapper<>();
+        //如果是校社联，查询全部
+        if (auth == SystemRole.SAU) {
+            example.ne("audit_state", AuditState.DELETE).and().like("audit_title", auditTitle).orderBy("submit_time", false);
+        } else {
+            //否则是社团，查询该社团的审核信息
+            example.eq("org_id", uid).and().like("audit_title", auditTitle).orderBy("submit_time", false);
+        }
+        return mapper.countByExample(example);
     }
 
     /**
@@ -190,15 +215,8 @@ public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAudi
     @Override
     public List<AnniversaryAudit> selectByOrgId(int orgId, int offset, int limit) {
         ExampleWrapper<AnniversaryAudit> example = new ExampleWrapper<>();
-        example.eq("org_id",orgId).orderBy("submit_time", false);
-        List<AnniversaryAudit> anniversaryAuditList = null;
-        try {
-            anniversaryAuditList = mapper.selectByExample(example,offset,limit);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new CRUDException("通过社团id查询某个社团的全部审核消息错误");
-        }
-        return anniversaryAuditList;
+        example.eq("org_id", orgId).orderBy("submit_time", false);
+        return mapper.selectByExample(example, offset, limit);
     }
 
     /**
@@ -210,23 +228,16 @@ public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAudi
     @Override
     public AnniversaryAudit selectByAuditId(int auditId) {
         int auth = SessionLocal.local(session).getUserIdentity().getAuth();
-        int OrgId = SessionLocal.local(session).getUserIdentity().getUid();
+        int orgId = SessionLocal.local(session).getUserIdentity().getUid();
         ExampleWrapper<AnniversaryAudit> example = new ExampleWrapper<>();
         //如果是校社联用户
-        if(auth == SystemRole.SAU){
-            example.ne("audit_state",AuditState.DELETE).and().eq("id",auditId);
-        }else{
+        if (auth == SystemRole.SAU) {
+            example.ne("audit_state", AuditState.DELETE).and().eq("id", auditId);
+        } else {
             //如果是社团用户
-            example.eq("id",auditId).and().eq("org_id",OrgId);
+            example.eq("id", auditId).and().eq("org_id", orgId);
         }
-        AnniversaryAudit anniversaryAudit = null;
-        try{
-            anniversaryAudit = mapper.selectFirstByExample(example);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new CRUDException("通过年度审核id，查询某个年度审核错误");
-        }
-        return anniversaryAudit;
+        return mapper.selectFirstByExample(example);
     }
 
     /**
@@ -237,15 +248,8 @@ public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAudi
     @Override
     public int countUnAuditNum() {
         ExampleWrapper<AnniversaryAudit> example = new ExampleWrapper<>();
-        example.eq("audit_state",AuditState.AUDITING);
-        int num=0;
-        try {
-            num = mapper.countByExample(example);
-        }catch (Exception e){
-            e.printStackTrace();
-            throw new CRUDException("查询未审核的年度审核数量出错");
-        }
-        return num;
+        example.eq("audit_state", AuditState.AUDITING);
+        return mapper.countByExample(example);
     }
 
     /**
@@ -260,7 +264,7 @@ public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAudi
         anniversaryAudit.setId(auditId);
         anniversaryAudit.setAuditState(AuditState.DELETE);
         int row = mapper.updateByPrimaryKeySelective(anniversaryAudit);
-        return row==1 ? Operation.SUCCESSFULLY : Operation.FAILED;
+        return row == 1 ? Operation.SUCCESSFULLY : Operation.FAILED;
     }
 
     /**
@@ -275,22 +279,24 @@ public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAudi
         int auth = SessionLocal.local(session).getUserIdentity().getAuth();
         int orgId = SessionLocal.local(session).getUserIdentity().getUid();
         AnniversaryAudit anniversaryAudit = null;
-        if(auth == SystemRole.CLUB){
+        if (auth == SystemRole.CLUB) {
             //如果用户是社团，则只能下载该社团的年度审核信息
             ExampleWrapper<AnniversaryAudit> example = new ExampleWrapper<>();
-            example.eq("id",auditId).and().eq("org_id",orgId);
+            example.eq("id", auditId).and().eq("org_id", orgId);
             anniversaryAudit = mapper.selectFirstByExample(example);
-        }else if(auth == SystemRole.SAU){
+        } else if (auth == SystemRole.SAU) {
             //如果用户是校社联，则可以下载全部年度审核
-            anniversaryAudit  = mapper.selectByPrimaryKey(auditId);
+            anniversaryAudit = mapper.selectByPrimaryKey(auditId);
         }
-        if (anniversaryAudit == null){return Operation.FAILED;}
+        if (anniversaryAudit == null) {
+            return Operation.FAILED;
+        }
         String fileName = anniversaryAudit.getFileName();
         //存放年度审核的路径地址
         String filePath = FIleDefaultPath.CLUB_ANN_AUDIT_FILE;
         try {
-            FileUtil.downFile(filePath,fileName,response);
-        }catch (Exception e){
+            FileUtil.downFile(filePath, fileName, response);
+        } catch (Exception e) {
             return Operation.FAILED;
         }
         return Operation.SUCCESSFULLY;
@@ -306,36 +312,35 @@ public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAudi
     @Override
     public int viewAuditFileById(int auditId, HttpServletResponse response) {
         AnniversaryAudit audit = mapper.selectByPrimaryKey(auditId);
-        if(audit==null) {return Operation.FAILED;}
+        if (audit == null) {
+            return Operation.FAILED;
+        }
         String fileName = audit.getFileName();
-        String WordFilePath = FIleDefaultPath.CLUB_ANN_AUDIT_OVERVIEW_FILE;
+        String wordFilePath = FIleDefaultPath.CLUB_ANN_AUDIT_OVERVIEW_FILE;
         String htmlFilePath = FIleDefaultPath.CLUB_ANN_AUDIT_OVERVIEW_FILE;
-        String htmlFileName = audit.getAuditTitle()+".html";
-        WordFileUtil.convertToHTML(WordFilePath+fileName,htmlFileName+htmlFileName,htmlFileName+"image/","ann_ol/image/");
+        String htmlFileName = audit.getAuditTitle() + ".html";
+        WordFileUtil.convertToHTML(wordFilePath + fileName, htmlFileName + htmlFileName, htmlFileName + "image/", "ann_ol/image/");
         try {
-            InputStream in = new FileInputStream(new File(htmlFilePath,htmlFileName));
+            InputStream in = new FileInputStream(new File(htmlFilePath, htmlFileName));
             OutputStream out = response.getOutputStream();
             byte[] byteBuffer = new byte[1024];
-            int len = 0;
+            int len;
             while ((len = in.read(byteBuffer)) != -1) {
                 out.write(byteBuffer, 0, len);
             }
             out.close();
             in.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            throw new RuntimeException("文件找不到");
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("文件找不到");
         }
-
-        File deleteFile = new File(htmlFileName+htmlFileName) ;
-        deleteFile.delete();
-
+        File deleteFile = new File(htmlFileName + htmlFileName);
+        Boolean deleteState = deleteFile.delete();
+        if (!deleteState) {
+            throw new RuntimeException("预览失败");
+        }
         return Operation.SUCCESSFULLY;
     }
-
 
     /**
      * 通过年度审核类来更新年度审核信息
@@ -345,7 +350,14 @@ public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAudi
      */
     @Override
     public int updateAuditStateByAnnModel(AnniversaryAudit anniversaryAudit) {
+        ExampleWrapper<AnniversaryAudit> example = new ExampleWrapper<>();
+        example.eq("audit_state", AuditState.PASS).or().eq("audit_state", AuditState.REJECT).and().eq("id", anniversaryAudit.getId());
+        int auditNum = mapper.countByExample(example);
+        //如果之前的年度注册信息已经是通过或者是拒绝了的，则不能再次审核
+        if (auditNum >= 1) {
+            return Operation.FAILED;
+        }
         int row = mapper.updateByPrimaryKeySelective(anniversaryAudit);
-        return row==1?Operation.SUCCESSFULLY : Operation.FAILED;
+        return row == 1 ? Operation.SUCCESSFULLY : Operation.FAILED;
     }
 }

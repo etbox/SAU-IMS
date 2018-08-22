@@ -21,6 +21,7 @@ import java.io.OutputStream;
 
 /**
  * 登陆相关的方法
+ * @author zhangcanlong
  * Created by hasee on 2017/8/14.
  */
 @Controller
@@ -33,8 +34,9 @@ public class LoginController {
 
     /**
      * 用户登录
-     *
-     * @return 返回用户信息
+     * @param msg 用户名，密码和验证码信息
+     * @param request 请求
+     * @return 是否登录成功
      */
     @ResponseBody
     @RequestMapping(value = "/login", method = RequestMethod.POST)
@@ -73,7 +75,6 @@ public class LoginController {
     /**
      * 用户的登出
      *
-     * @return json数据
      */
     @ResponseBody
     @RequestMapping(value = "/logout", method = RequestMethod.GET)

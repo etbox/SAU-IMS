@@ -24,7 +24,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by APone on 2017/9/17.
+ * @author APone
+ * @date 2017/9/17
  */
 @Service
 public class ClubAuditServiceImpl extends BaseServiceImpl<ClubAuditMapper, ClubAudit> implements ClubAuditService {
@@ -44,21 +45,19 @@ public class ClubAuditServiceImpl extends BaseServiceImpl<ClubAuditMapper, ClubA
 
     @Override
     public List<ClubAudit> queryByClubName(String clubName, int offset, int limit) {
-        List<Integer> orgIds = new ArrayList<>();
         List<ClubAudit> clubAuditList = new ArrayList<>();
         ExampleWrapper<Org> orgExample = new ExampleWrapper<>();
         orgExample.like("org_name",clubName).and().eq("org_state",AuditState.AUDITING);
-        List<Org> orgList = orgMapper.selectByExample(orgExample,1,100000);
+        List<Org> orgList = orgMapper.selectByExample(orgExample,0,100000);
         if(orgList ==null ){return  null;}
         for (Org org : orgList){
             ExampleWrapper<ClubAudit> example = new ExampleWrapper<>();
             example.like("org_id",Integer.toString(org.getOrgId())).ne("audit_state",AuditState.DELETE).orderBy("register_time",false);
-            List<ClubAudit> clubAudits = mapper.selectByExample(example, 1, 100000);
+            List<ClubAudit> clubAudits = mapper.selectByExample(example, 0, 100000);
             if(clubAudits == null) {return null;}
-            for(ClubAudit clubAudit : clubAudits){
-                clubAuditList.add(clubAudit);
-            }
+            clubAuditList.addAll(clubAudits);
         }
+
         //从list集合中根据offset和limit的值来获取元素
         List<ClubAudit> clubAuditResultList = new ArrayList<>();
         if(offset>clubAuditList.size()){return null;}
@@ -177,31 +176,30 @@ public class ClubAuditServiceImpl extends BaseServiceImpl<ClubAuditMapper, ClubA
         ClubAudit audit = mapper.selectByPrimaryKey(id);
         if(audit==null) {return Operation.FAILED;}
         String fileName = audit.getFile();
-        String WordFilePath = FIleDefaultPath.CLUB_AUDIT_FILE;
+        String wordFilePath = FIleDefaultPath.CLUB_AUDIT_FILE;
         String htmlFilePath = FIleDefaultPath.CLUB_AUDIT_OVERVIEW_FILE;
         String htmlFileName = audit.getAuditTitle()+".html";
-        WordFileUtil.convertToHTML(WordFilePath+fileName,htmlFileName+htmlFileName,htmlFileName+"image/","ann_ol/image/");
+        WordFileUtil.convertToHTML(wordFilePath+fileName,htmlFileName+htmlFileName,htmlFileName+"image/","ann_ol/image/");
         try {
             InputStream in = new FileInputStream(new File(htmlFilePath,htmlFileName));
             OutputStream out = response.getOutputStream();
             byte[] byteBuffer = new byte[1024];
-            int len = 0;
+            int len;
             while ((len = in.read(byteBuffer)) != -1) {
                 out.write(byteBuffer, 0, len);
             }
             out.close();
             in.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            throw new RuntimeException("文件找不到");
         } catch (IOException e) {
             e.printStackTrace();
             throw new RuntimeException("文件找不到");
         }
 
         File deleteFile = new File(htmlFileName+htmlFileName) ;
-        deleteFile.delete();
-
+        boolean deleteState =  deleteFile.delete();
+        if(!deleteState){
+            throw new RuntimeException("文件删除失败");
+        }
         return Operation.SUCCESSFULLY;
     }
 
@@ -214,7 +212,7 @@ public class ClubAuditServiceImpl extends BaseServiceImpl<ClubAuditMapper, ClubA
      */
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
-    public int passOrRejectClubAuditByIdAndResultMsg(int id, ClubAuditResultMsg resultMsg) {
+    public Integer passOrRejectClubAuditByIdAndResultMsg(int id, ClubAuditResultMsg resultMsg) {
         //如果这个审核已经是通过，删除，或者是拒绝的，则不能操作了
         ExampleWrapper<ClubAudit> example = new ExampleWrapper<>();
         example.eq("id",id).and().ne("audit_state",AuditState.AUDITING);
@@ -240,6 +238,7 @@ public class ClubAuditServiceImpl extends BaseServiceImpl<ClubAuditMapper, ClubA
         int row = mapper.updateByPrimaryKey(clubAudit);
         row += orgMapper.updateByPrimaryKey(org);
         row += userMapper.updateByPrimaryKey(user);
+        if(row!=3){throw new RuntimeException("操作失败，不能成功更新三行");}
         return row==3?Operation.SUCCESSFULLY : Operation.FAILED;
     }
 }

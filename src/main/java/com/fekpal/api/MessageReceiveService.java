@@ -64,6 +64,14 @@ public interface MessageReceiveService extends BaseService<MessageReceive> {
     List<MessageReceive> queryByMessageTitle(String title, int offset, int limit);
 
     /**
+     * 根据信息标题模糊搜索该用户的接收的有效信息记录数
+     *
+     * @param title  信息标题
+     * @return 接收信息记录数
+     */
+    Integer countByMessageTitle(String title);
+
+    /**
      * 根据信息发送人名称模糊搜索该用户接收的按时间降序的有效信息记录集，按分页获取
      *
      * @param name   发送人名称
@@ -72,6 +80,14 @@ public interface MessageReceiveService extends BaseService<MessageReceive> {
      * @return 接收信息记录集
      */
     List<MessageReceive> queryByReleaseName(String name, int offset, int limit);
+
+    /**
+     * 根据信息发送人名称模糊搜索该用户接收的有效信息记录数
+     *
+     * @param name   发送人名称
+     * @return 接收信息记录数
+     */
+    Integer countByReleaseName(String name);
 
     /**
      * 获取该用户接收的有效信息的附件，前提该信息具有附件
@@ -89,4 +105,11 @@ public interface MessageReceiveService extends BaseService<MessageReceive> {
      * @return 接收信息记录集
      */
     List<MessageReceive> loadAllReceiveMessage(int offset, int limit);
+
+    /**
+     * 获取所有该用户接收的按时间降序的有效信息记录数
+     *
+     * @return 接收信息记录数
+     */
+    Integer countAllReceiveMessage();
 }

@@ -2,7 +2,6 @@ package com.fekpal.api;
 
 import com.fekpal.common.base.BaseService;
 import com.fekpal.dao.model.OrgMember;
-import com.fekpal.dao.model.Person;
 import com.fekpal.web.model.AuditResult;
 
 import java.util.List;
@@ -72,6 +71,13 @@ public interface OrgMemberService extends BaseService<OrgMember> {
     List<OrgMember> loadAllAuditMember(int offset,int limit);
 
     /**
+     * 统计所有该组织的所有审核的组织成员数
+     * @return 组织成员记录数
+     */
+    Integer countAllAuditMember();
+
+
+    /**
      * 根据真实姓名用模糊搜索个人名姓名
      * @param realName 真实姓名
      * @param offset 跳过读数
@@ -79,6 +85,14 @@ public interface OrgMemberService extends BaseService<OrgMember> {
      * @return 组织成员记录表
      */
     List<OrgMember> queryByRealName(String realName,int offset,int limit);
+
+    /**
+     * 根据真实姓名统计组织成员数
+     * @param realName 真实姓名
+     * @return 组织成员记录数
+     */
+    Integer countAuditByRealName(String realName);
+
 
     /**
      * 社团对个人加入社团进行通过或拒绝

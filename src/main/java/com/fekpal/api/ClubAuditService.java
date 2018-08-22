@@ -11,6 +11,7 @@ import java.util.List;
  * Created by APone on 2017/9/5.
  * ClubAuditService接口
  * 该接口用于校社联审核关社团注册申请的审核等操作
+ * @author APone
  */
 public interface ClubAuditService extends BaseService<ClubAudit> {
 
@@ -99,5 +100,5 @@ public interface ClubAuditService extends BaseService<ClubAudit> {
      * @param resultMsg 审核结果信息
      * @return Operation.SUCCESSFULLY; 删除成功 Operation.FAILED 删除失败
      */
-    int passOrRejectClubAuditByIdAndResultMsg(int id, ClubAuditResultMsg resultMsg);
+    Integer passOrRejectClubAuditByIdAndResultMsg(int id, ClubAuditResultMsg resultMsg);
 }

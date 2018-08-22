@@ -21,7 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.sql.Wrapper;
 
 /**
- * @author kanlon
+ * @author zhangcanlong
  * 喜欢社团的实现类
  */
 @Service

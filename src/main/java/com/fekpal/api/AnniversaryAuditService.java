@@ -1,17 +1,15 @@
 package com.fekpal.api;
 
 import com.fekpal.common.base.BaseService;
-import com.fekpal.common.constant.Operation;
 import com.fekpal.dao.model.AnniversaryAudit;
 import com.fekpal.web.model.ClubSubmitAnnMsg;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.OutputStream;
 import java.util.List;
 
 /**
- * @author kanlon
- * @time 2018/4/6
+ * @author zhangcanlong
+ * @date 2018/4/6
  * 社团年度审核接口
  * 该接口提供添加，审核，删除，查看社团年度审核的操作
  */
@@ -34,6 +32,12 @@ public interface AnniversaryAuditService extends BaseService<AnniversaryAudit> {
     List<AnniversaryAudit> loadAllAudit(int offset,int limit);
 
     /**
+     * 统计全部审核内容，除了删除的
+     * @return 审核消息记录数
+     */
+    Integer countAllAudit();
+
+    /**
      * 加载全部未审核的社团年度审核消息
      * @param offset 开始数
      * @param limit 查询条数
@@ -42,14 +46,12 @@ public interface AnniversaryAuditService extends BaseService<AnniversaryAudit> {
     List<AnniversaryAudit> loadAllUnAudit(int offset,int limit);
 
     /**
-     * 加载全部已经审核的年度审核消息
+     * 加载全部已经审核的年度通过审核消息
      * @param offset 开始数
      * @param limit 查询条数
      * @return 审核消息的类的list集合
      */
     List<AnniversaryAudit> loadAllHaveAudit(int offset,int limit);
-
-
 
     /**
      * 通过审核标题查找年度审核消息
@@ -59,6 +61,14 @@ public interface AnniversaryAuditService extends BaseService<AnniversaryAudit> {
      * @return 审核消息的类的list集合
      */
     List<AnniversaryAudit> queryByAuditTitle(String auditTitle,int offset,int limit);
+
+
+    /**
+     * 通过统计审核标题查找年度审核消息
+     * @param auditTitle 审核标题
+     * @return 审核消息记录数
+     */
+    Integer countByAuditTitle(String auditTitle);
 
     /**
      * 通过社团id查询某个社团的全部审核消息

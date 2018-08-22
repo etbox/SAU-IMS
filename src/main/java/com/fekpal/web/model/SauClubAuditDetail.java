@@ -4,8 +4,8 @@ import java.util.Date;
 
 /**
  * 校社联审核社团注册信息的详细内容
- * @author  kanlon
- * @time 2018/4/7
+ * @author  zhangcanlong
+ * @date 2018/4/7
  */
 public class SauClubAuditDetail {
     /**

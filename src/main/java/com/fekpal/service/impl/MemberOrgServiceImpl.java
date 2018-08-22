@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
@@ -64,6 +65,14 @@ public class MemberOrgServiceImpl extends BaseServiceImpl<MemberOrgMapper, Membe
         int uid = SessionLocal.local(session).getUserIdentity().getUid();
         Person person = personMapper.selectByPrimaryKey(uid);
         if (!isValidInfo(person)) return Operation.INPUT_INCORRECT;
+        //获取该用户是否已经加入了该社团，如果已经加入了或已经申请了,则返回失败
+        ExampleWrapper<MemberOrg> example = new ExampleWrapper<>();
+        example.eq("member.person_id",person.getPersonId())
+                .and().eq("member.org_id",id)
+                .and().eq("member_state",MemberState.STILL_BEING);
+        if(mapper.countByExample(example)>=1){
+            return Operation.FAILED;
+        }
 
         MemberOrg memberOrg = new MemberOrg();
         memberOrg.setPersonId(uid);
@@ -73,8 +82,8 @@ public class MemberOrgServiceImpl extends BaseServiceImpl<MemberOrgMapper, Membe
         memberOrg.setMemberState(MemberState.STILL_BEING);
         memberOrg.setAvailable(AvailableState.AUDITING);
         int row = mapper.insert(memberOrg);
-        if (row > 1) throw new CRUDException("加入组织操作异常：" + row);
-        return row == 0 ? Operation.FAILED : Operation.SUCCESSFULLY;
+        if (row != 1) throw new CRUDException("加入组织操作异常：" + row);
+        return Operation.SUCCESSFULLY;
     }
 
     /**
@@ -84,17 +93,24 @@ public class MemberOrgServiceImpl extends BaseServiceImpl<MemberOrgMapper, Membe
      * @return 是否符合
      */
     private boolean isValidInfo(Person person) {
-        return (person.getRealName() != null && person.getDepartment() != null &&
-                person.getMajor() != null && person.getStudentId() != null &&
+        return (!StringUtils.isEmpty(person.getRealName()) && !StringUtils.isEmpty(person.getDepartment()) &&
+                !StringUtils.isEmpty(person.getMajor()) && !StringUtils.isEmpty(person.getStudentId()) &&
                 person.getEnrollmentYear() > 0);
     }
 
     @Override
     public List<MemberOrg> loadAllOrg(int offset, int limit) {
         int uid = SessionLocal.local(session).getUserIdentity().getUid();
-        logger.info("执行了查询某个人加入的所有社团，他的uid为"+uid);
         ExampleWrapper<MemberOrg> example = new ExampleWrapper<>();
         example.eq("person_id", uid).and().eq("available", AvailableState.AVAILABLE);
         return mapper.selectByExample(example, offset, limit);
+    }
+
+    @Override
+    public Integer countAllOrg() {
+        int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        ExampleWrapper<MemberOrg> example = new ExampleWrapper<>();
+        example.eq("person_id", uid).and().eq("available", AvailableState.AVAILABLE);
+        return mapper.countByExample(example);
     }
 }

@@ -3,14 +3,13 @@ package com.fekpal.api;
 import com.fekpal.common.base.BaseService;
 import com.fekpal.dao.model.Org;
 import com.fekpal.service.model.domain.SauMsg;
-import com.sun.org.apache.xpath.internal.operations.Or;
-
-import java.util.List;
 
 /**
  * Created by APone on 2017/9/5.
  * 校社联用户信息接口
  * 该接口主要提功校社联用户信息增删查改操作
+ * @author APone
+ * @date 2017/9/5
  */
 public interface SauService extends BaseService<Org> {
 
@@ -55,38 +54,5 @@ public interface SauService extends BaseService<Org> {
      * @return 更新状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败 Operation.INPUT_INCORRECT 存在相同校社联名称
      */
     int updateSauInfo(SauMsg msg);
-
-    /**
-     * 获得所有的校社联记录，分页获取
-     *
-     * @param offset 跳过读数
-     * @param limit  读取数
-     * @return 校社联信息记录集
-     */
-    List<Org> loadAllSau(int offset, int limit);
-
-
-
-    /**
-     * 根据社团id计算校社联内部男生的数量
-     * @return 校社联内男生的人数
-     */
-    int countSauManNum();
-
-    /**
-     * 计算校社联内部女生的数量
-     * @return 校社联内女生的人数
-     */
-    int countSauWomanNum();
-
-
-    /**
-     * 根据年级数计算校社联内部年级的数量
-     *
-     * @param grade 年级 如1,2,3,4,
-     * @return 校社联内各个年级的人数
-     */
-    int countSauGradeNum(int grade);
-
 
 }

@@ -9,7 +9,7 @@ import static java.lang.System.out;
 /**
  * 实现二进制与十进制的互换
  * @author Canlong
- * @time 2018/4/13
+ * @date 2018/4/13
  */
 public class Test3 {
 

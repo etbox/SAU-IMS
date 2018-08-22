@@ -24,9 +24,21 @@ public class SauMsg extends BaseModel {
 
     private MultipartFile logo;
 
+    private MultipartFile view;
+
+    public void setView(MultipartFile view) {
+        this.view = view;
+    }
+
+    public MultipartFile getView() {
+
+        return view;
+    }
+
     public String getSauName() {
         return sauName;
     }
+
 
     public void setSauName(String sauName) {
         this.sauName = sauName;

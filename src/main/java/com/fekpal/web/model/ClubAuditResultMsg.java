@@ -2,8 +2,8 @@ package com.fekpal.web.model;
 
 /**
  * 审核社团注册的结果信息类，存放是否通过审核的信息
- * @author kanlon
- * @time 2018/4/7
+ * @author zhangcanlong
+ * @date 2018/4/7
  */
 public class ClubAuditResultMsg {
     /**

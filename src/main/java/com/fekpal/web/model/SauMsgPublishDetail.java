@@ -5,8 +5,8 @@ import java.util.List;
 
 /**
  * 校社联消息发布中查看某条消息的详细消息类
- * @author kanlon
- * @time 2018/4/5
+ * @author zhangcanlong
+ * @date 2018/4/5
  */
 public class SauMsgPublishDetail {
     /**

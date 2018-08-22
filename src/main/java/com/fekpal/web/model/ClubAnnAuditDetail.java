@@ -4,8 +4,8 @@ import java.util.Date;
 
 /**
  * 社团年度审核查看具体某个审核消息的类
- * @author kanlon
- * @time 2018/4/7
+ * @author zhangcanlong
+ * @date 2018/4/7
  */
 public class ClubAnnAuditDetail {
     /**

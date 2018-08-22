@@ -5,13 +5,14 @@ import com.fekpal.api.OrgService;
 import com.fekpal.common.base.BaseServiceImpl;
 import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.common.constant.AvailableState;
-import com.fekpal.common.constant.MessageType;
 import com.fekpal.common.constant.Operation;
-import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.session.SessionLocal;
 import com.fekpal.dao.mapper.MemberMapper;
 import com.fekpal.dao.mapper.OrgMapper;
-import com.fekpal.dao.model.*;
+import com.fekpal.dao.model.LikeOrg;
+import com.fekpal.dao.model.Member;
+import com.fekpal.dao.model.Org;
+import com.fekpal.dao.model.PersonOrgView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -22,7 +23,9 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * Created by APone on 2018/3/4 15:44.
+ *
+ * @author APone
+ * @date 2018/3/4
  */
 @Service
 public class OrgServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements OrgService {
@@ -38,6 +41,19 @@ public class OrgServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements O
         ExampleWrapper<Org> example = new ExampleWrapper<>();
         example.like("org_name", name).and().eq("org_state", AvailableState.AVAILABLE);
         return mapper.selectByExample(example, offset, limit);
+    }
+
+    /**
+     * 根据组织名称进行模糊搜索获取组织总数
+     *
+     * @param name 组织名称
+     * @return 组织总数
+     */
+    @Override
+    public Integer countByOrgName(String name) {
+        ExampleWrapper<Org> example = new ExampleWrapper<>();
+        example.like("org_name", name).and().eq("org_state", AvailableState.AVAILABLE);
+        return mapper.countByExample(example);
     }
 
     @Override
@@ -65,7 +81,7 @@ public class OrgServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements O
     @Override
     public int likeByOrgId(int orgId) {
         LikeOrgService likeOrgService = new LikeOrgServiceImpl();
-        LikeOrg likeOrg = null;
+        LikeOrg likeOrg ;
         likeOrg = likeOrgService.selectByOrgId(orgId);
         //如果根据社团id获取不到，点赞状态则，返回错误
         if(likeOrg == null){
@@ -92,6 +108,18 @@ public class OrgServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements O
     }
 
     /**
+     * 统计所有组织记录数
+     *
+     * @return 组织记录数
+     */
+    @Override
+    public Integer countAllOrg() {
+        ExampleWrapper<Org> example = new ExampleWrapper<>();
+        example.eq("org_state", AvailableState.AVAILABLE);
+        return mapper.countByExample(example);
+    }
+
+    /**
      * 根据社团id计算社团内部男生的数量
      *
      * @param orgId 组织id
@@ -99,8 +127,7 @@ public class OrgServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements O
      */
     @Override
     public int countOrgManNumByOrgId(int orgId) {
-        int manNum = memberMapper.countOrgManNum(orgId);
-        return manNum;
+        return memberMapper.countOrgManNum(orgId);
     }
 
     /**
@@ -111,8 +138,7 @@ public class OrgServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements O
      */
     @Override
     public int countOrgWomanNumByOrgId(int orgId) {
-        int womanNum = memberMapper.countOrgWomanNum(orgId);
-        return womanNum;
+        return memberMapper.countOrgWomanNum(orgId);
     }
 
     /**
@@ -127,8 +153,8 @@ public class OrgServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements O
         Calendar date = Calendar.getInstance();
         int year = date.get(Calendar.YEAR);
         int yearBack2 = year%100;
-        String realGrade = "15";
-        int month = date.get(Calendar.MONDAY);
+        String realGrade;
+        int month = date.get(Calendar.MONTH);
         //根据当前年份加上年级数（1,2,3,4），得到临时年级（15,16,17,18）
         int tempGrade = yearBack2-grade+1;
         if(month<9){
@@ -136,9 +162,7 @@ public class OrgServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements O
         }else{
             realGrade = String.valueOf(tempGrade);
         }
-        int gradeNum = memberMapper.countOrgGradeNum(orgId,realGrade+"%");
-        return gradeNum;
+        return memberMapper.countOrgGradeNum(orgId,realGrade+"%");
     }
-
 
 }

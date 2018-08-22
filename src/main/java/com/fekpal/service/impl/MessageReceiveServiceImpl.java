@@ -10,6 +10,7 @@ import com.fekpal.common.session.SessionLocal;
 import com.fekpal.dao.mapper.MessageReceiveMapper;
 import com.fekpal.dao.model.MessageReceive;
 import com.fekpal.service.model.domain.SRMsgRecord;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -97,6 +98,9 @@ public class MessageReceiveServiceImpl extends BaseServiceImpl<MessageReceiveMap
 
     @Override
     public List<MessageReceive> queryByMessageTitle(String title, int offset, int limit) {
+        if(StringUtils.isEmpty(title)){
+            return loadAllReceiveMessage(offset,limit);
+        }
         int accId = SessionLocal.local(session).getUserIdentity().getAccId();
         ExampleWrapper<MessageReceive> example = new ExampleWrapper<>();
         example.eq("receive_id", accId)
@@ -108,7 +112,24 @@ public class MessageReceiveServiceImpl extends BaseServiceImpl<MessageReceiveMap
     }
 
     @Override
+    public Integer countByMessageTitle(String title) {
+        if(StringUtils.isEmpty(title)){
+            return countAllReceiveMessage();
+        }
+        int accId = SessionLocal.local(session).getUserIdentity().getAccId();
+        ExampleWrapper<MessageReceive> example = new ExampleWrapper<>();
+        example.eq("receive_id", accId)
+                .and().like("message_title", title)
+                .and().eq("message_state", AvailableState.AVAILABLE)
+                .and().eq("available", AvailableState.AVAILABLE);
+        return mapper.countByExample(example);
+    }
+
+    @Override
     public List<MessageReceive> queryByReleaseName(String name, int offset, int limit) {
+        if(StringUtils.isEmpty(name)){
+            return loadAllReceiveMessage(offset,limit);
+        }
         int accId = SessionLocal.local(session).getUserIdentity().getAccId();
         ExampleWrapper<MessageReceive> example = new ExampleWrapper<>();
         example.eq("receive_id", accId)
@@ -120,6 +141,20 @@ public class MessageReceiveServiceImpl extends BaseServiceImpl<MessageReceiveMap
     }
 
     @Override
+    public Integer countByReleaseName(String name) {
+        if(StringUtils.isEmpty(name)){
+            return countAllReceiveMessage();
+        }
+        int accId = SessionLocal.local(session).getUserIdentity().getAccId();
+        ExampleWrapper<MessageReceive> example = new ExampleWrapper<>();
+        example.eq("receive_id", accId)
+                .and().like("release_name", name)
+                .and().eq("message_state", AvailableState.AVAILABLE)
+                .and().eq("available", AvailableState.AVAILABLE);
+        return mapper.countByExample(example);
+    }
+
+    @Override
     public void getAnnexById(int id, OutputStream outputStream) {
         int accId = SessionLocal.local(session).getUserIdentity().getAccId();
         ExampleWrapper<MessageReceive> example = new ExampleWrapper<>();
@@ -128,9 +163,6 @@ public class MessageReceiveServiceImpl extends BaseServiceImpl<MessageReceiveMap
                 .and().eq("message_state", AvailableState.AVAILABLE)
                 .and().eq("available", AvailableState.AVAILABLE);
         MessageReceive receive = mapper.selectFirstByExample(example);
-        if (receive != null && receive.getMessageAnnex() != null) {
-
-        }
     }
 
     @Override
@@ -142,5 +174,15 @@ public class MessageReceiveServiceImpl extends BaseServiceImpl<MessageReceiveMap
                 .and().eq("message_state", AvailableState.AVAILABLE)
                 .orderBy("release_time", false);
         return mapper.selectByExample(example, offset, limit);
+    }
+
+    @Override
+    public Integer countAllReceiveMessage() {
+        int accId = SessionLocal.local(session).getUserIdentity().getAccId();
+        ExampleWrapper<MessageReceive> example = new ExampleWrapper<>();
+        example.eq("receive_id", accId)
+                .and().eq("available", AvailableState.AVAILABLE)
+                .and().eq("message_state", AvailableState.AVAILABLE);
+        return mapper.countByExample(example);
     }
 }

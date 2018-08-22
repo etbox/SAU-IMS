@@ -1,4 +1,4 @@
-package com.fekpal.web.controller.clubAdmin;
+package com.fekpal.web.controller.club;
 
 import com.fekpal.api.OrgMemberService;
 import com.fekpal.api.ClubService;
@@ -6,7 +6,6 @@ import com.fekpal.api.PersonService;
 import com.fekpal.api.UserService;
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.constant.ResponseCode;
-import com.fekpal.common.constant.SystemRole;
 import com.fekpal.common.json.JsonResult;
 import com.fekpal.dao.model.OrgMember;
 import com.fekpal.dao.model.Person;
@@ -20,7 +19,9 @@ import java.util.*;
 
 /**
  * 注册审核的控制类
- * @kanlon 2018/5/4
+ *
+ * @author zhangcanlong
+ * @date 2018/5/4
  */
 @Controller
 public class ClubAuditRegController {
@@ -37,7 +38,6 @@ public class ClubAuditRegController {
     @Autowired
     UserService userService;
 
-
     /**
      * 查看全部审核的信息的方法
      *
@@ -46,29 +46,8 @@ public class ClubAuditRegController {
      */
     @ResponseBody
     @RequestMapping(value = "/club/audit/join", method = RequestMethod.GET)
-    public JsonResult<List<ClubRegisterAuditListMsg>> getAllAuditMsg(PageList page) {
-
-        //将前端发送过来的页码offset，转化为跳过数offset
-        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
-
-        JsonResult<List<ClubRegisterAuditListMsg>> result = new JsonResult<>();
-        List<ClubRegisterAuditListMsg> auditList = new ArrayList<>();
-        List<OrgMember> orgMemberList = orgMemberService.loadAllAuditMember(page.getOffset(), page.getLimit());
-        if (orgMemberList.size() == 0 || orgMemberList == null) {
-            result.setStateCode(ResponseCode.REQUEST_ERROR, "暂未审核消息");
-        }
-        for (OrgMember orgMember : orgMemberList) {
-            ClubRegisterAuditListMsg audit = new ClubRegisterAuditListMsg();
-            audit.setAuditMsgId(orgMember.getId());
-            audit.setAuditState(orgMember.getMemberState());
-            Person person = personService.selectByPrimaryKey(orgMember.getPersonId());
-            audit.setAuditTitle(person.getRealName());
-            audit.setRegisterTime(orgMember.getJoinTime());
-            auditList.add(audit);
-        }
-        result.setCode(ResponseCode.RESPONSE_SUCCESS);
-        result.setData(auditList);
-        return result;
+    public JsonResult<List<ClubRegisterAuditListMsg>> getAllAuditMsg(SearchPage page) {
+        return searchAuditMsg(page);
     }
 
     /**
@@ -83,7 +62,10 @@ public class ClubAuditRegController {
         JsonResult<PersonJoinAuditDetail> result = new JsonResult<>();
         PersonJoinAuditDetail personDetail = new PersonJoinAuditDetail();
         OrgMember orgMember = orgMemberService.selectById(auditMsgId);
-        if (orgMember == null) {result.setStateCode(ResponseCode.REQUEST_ERROR, "操作非法"); return result;}
+        if (orgMember == null) {
+            result.setStateCode(ResponseCode.REQUEST_ERROR, "操作非法");
+            return result;
+        }
         personDetail.setAuditId(auditMsgId);
         Person person = personService.selectByPrimaryKey(orgMember.getPersonId());
         User user = userService.selectByPrimaryKey(person.getUserId());
@@ -117,11 +99,10 @@ public class ClubAuditRegController {
     @RequestMapping(value = "/club/audit/join/{auditMsgId}", method = RequestMethod.PUT)
     public JsonResult<String> sendAuditMsgResult(@PathVariable("auditMsgId") int auditMsgId, @RequestBody AuditResult auditResult) {
         JsonResult<String> result = new JsonResult<>();
-        int state = 0;
         if (auditResult == null) {
             result.setStateCode(ResponseCode.REQUEST_ERROR, "发送审核结果错误");
         }
-        state = orgMemberService.passOrRejectAuditByIdAndModel(auditMsgId, auditResult);
+        int state = orgMemberService.passOrRejectAuditByIdAndModel(auditMsgId, auditResult);
         if (state == Operation.FAILED) {
             result.setStateCode(ResponseCode.REQUEST_ERROR, "操作非法");
             return result;
@@ -139,24 +120,23 @@ public class ClubAuditRegController {
     @ResponseBody
     @RequestMapping(value = "/club/audit/join/search", method = RequestMethod.GET)
     public JsonResult<List<ClubRegisterAuditListMsg>> searchAuditMsg(SearchPage page) {
-        //将前端发送的页码offset，转化为跳过条数offset
-        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
-
         JsonResult<List<ClubRegisterAuditListMsg>> result = new JsonResult<>();
         List<ClubRegisterAuditListMsg> auditList = new ArrayList<>();
         List<OrgMember> orgMemberList = orgMemberService.queryByRealName(page.getFindContent(), page.getOffset(), page.getLimit());
-        if(orgMemberList == null || orgMemberList.size()==0){result.setStateCode(ResponseCode.REQUEST_ERROR,"搜索不到审核"); return result;}
-        for (OrgMember orgMember : orgMemberList) {
-            ClubRegisterAuditListMsg audit = new ClubRegisterAuditListMsg();
-            audit.setAuditMsgId(orgMember.getId());
-            audit.setAuditState(orgMember.getMemberState());
-            int personId = orgMember.getPersonId();
-            Person person = personService.selectByPrimaryKey(personId);
-            audit.setAuditTitle(person.getRealName());
-            audit.setRegisterTime(orgMember.getJoinTime());
-            auditList.add(audit);
+        Integer memberNum = orgMemberService.countAuditByRealName(page.getFindContent());
+        if (orgMemberList != null) {
+            for (OrgMember orgMember : orgMemberList) {
+                ClubRegisterAuditListMsg audit = new ClubRegisterAuditListMsg();
+                audit.setAuditMsgId(orgMember.getId());
+                audit.setAuditState(orgMember.getMemberState());
+                int personId = orgMember.getPersonId();
+                Person person = personService.selectByPrimaryKey(personId);
+                audit.setAuditTitle(person.getRealName());
+                audit.setRegisterTime(orgMember.getJoinTime());
+                auditList.add(audit);
+            }
         }
-        result.setCode(ResponseCode.RESPONSE_SUCCESS);
+        result.setStateCode(ResponseCode.RESPONSE_SUCCESS, memberNum.toString());
         result.setData(auditList);
         return result;
     }

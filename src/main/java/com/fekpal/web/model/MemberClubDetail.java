@@ -2,7 +2,7 @@ package com.fekpal.web.model;
 
 /**
  * 社员或普通成员查看的社团信息
- * @author kanlon
+ * @author zhangcanlong
  */
 public class MemberClubDetail extends OrgDetail {
     /**

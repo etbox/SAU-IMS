@@ -4,8 +4,8 @@ import java.util.Date;
 
 /**
  * 发布消息列表中的历史发布消息列表对象类
- * @author kanlon
- * @time 2018/4/5
+ * @author zhangcanlong
+ * @date 2018/4/5
  */
 public class OldPublishMsg {
     /**

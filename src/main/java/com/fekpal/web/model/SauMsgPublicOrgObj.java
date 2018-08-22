@@ -2,8 +2,8 @@ package com.fekpal.web.model;
 
 /**
  * 校社联信息发布对象类，用于校社联发布消息的时候获取的发布对象
- * @author kanlon
- * @time 2018/4/5
+ * @author zhangcanlong
+ * @date 2018/4/5
  */
 public class SauMsgPublicOrgObj {
     private int clubId;

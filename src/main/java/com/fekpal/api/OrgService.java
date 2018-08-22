@@ -32,6 +32,14 @@ public interface OrgService extends BaseService<Org> {
     List<Org> selectByOrgName(String name, int offset, int limit);
 
     /**
+     * 根据组织名称进行模糊搜索获取组织总数
+     *
+     * @param name   组织名称
+     * @return 组织总数
+     */
+    Integer countByOrgName(String name);
+
+    /**
      * 根据组织标识获取组织记录详细，用于校社联和社团用户
      *
      * @param id 组织标识
@@ -56,6 +64,11 @@ public interface OrgService extends BaseService<Org> {
      */
     List<Org> loadAllOrg(int offset, int limit);
 
+    /**
+     * 统计所有组织记录数
+     * @return 组织记录数
+     */
+    Integer countAllOrg();
 
     /**
      * 根据社团id计算社团内部男生的数量

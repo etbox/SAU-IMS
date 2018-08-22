@@ -2,8 +2,8 @@ package com.fekpal.web.model;
 
 /**
  * 社团发送自定义消息的发送对象，就是社团内的社员
- * @author  kanlon
- * @time 2018/4/9
+ * @author  zhangcanlong
+ * @date 2018/4/9
  */
 public class ClubCustomSendObj {
 

@@ -1,10 +1,7 @@
 package com.fekpal.web.interceptor;
 
 import com.fekpal.common.session.SessionLocal;
-import com.fekpal.service.model.domain.SecureMsg;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -14,14 +11,12 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.System.out;
-
 /**
  * 用户身份拦截器
  * Created by hasee on 2018/3/6.
- * @author kanlon
+ * @author zhangcanlong
  */
-@Controller
+
 public class LoginInterceptor implements HandlerInterceptor {
 
     private Logger logger = Logger.getLogger(LoginInterceptor.class);
@@ -49,7 +44,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         open_urls.add("/clubNews");
         //如果是公开地址，则放行
         for(String open_url:open_urls){
-            if(url.indexOf(open_url)>=0){
+            if(url.startsWith(open_url)){
                 return true;
             }
         }
@@ -58,6 +53,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         if(session == null ){
             logger.info("session为空,用户没有登录，准备跳转");
             response.sendRedirect("/index.html");
+            return false;
         }else{
             SessionLocal local=SessionLocal.local(session);
             if(local.isExitUserIdentity()){

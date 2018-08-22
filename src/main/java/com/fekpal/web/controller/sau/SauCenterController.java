@@ -1,13 +1,12 @@
-package com.fekpal.web.controller.sauAdmin;
+package com.fekpal.web.controller.sau;
 
 
-import com.fekpal.api.OrgService;
+import com.fekpal.api.ClubService;
 import com.fekpal.api.SauService;
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
 import com.fekpal.dao.model.Org;
-import com.fekpal.service.model.domain.ClubMsg;
 import com.fekpal.service.model.domain.SauMsg;
 import com.fekpal.web.model.OrgDetail;
 import org.apache.log4j.Logger;
@@ -18,12 +17,16 @@ import org.springframework.web.bind.annotation.*;
 /**
  * 校社联中心信息的控制类
  * Created by hasee on 2017/8/19.
+ * @author zhangcanlong
  */
 @Controller
 public class SauCenterController {
 
     @Autowired
     private SauService sauService;
+
+    @Autowired
+    private ClubService clubService;
 
     Logger logger = Logger.getLogger(SauCenterController.class);
 
@@ -39,9 +42,7 @@ public class SauCenterController {
         Org org = sauService.selectByPrimaryId();
 
         JsonResult<OrgDetail> result = new JsonResult<>();
-        if (org == null) {
-            result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
-        } else {
+        if (org != null) {
             OrgDetail detail = new OrgDetail();
             detail.setOrgName(org.getOrgName());
             detail.setLogo(org.getOrgLogo());
@@ -51,12 +52,12 @@ public class SauCenterController {
             detail.setPhone(org.getContactNumber());
             detail.setFoundTime(org.getFoundTime());
             detail.setMembers(org.getMembers());
-            detail.setManNum(sauService.countSauManNum());
-            detail.setWomanNum(sauService.countSauWomanNum());
-            int firstGradeNum = sauService.countSauGradeNum(1);
-            int secondGradeNum = sauService.countSauGradeNum(2);
-            int threeGradeNum = sauService.countSauGradeNum(3);
-            int fourGradeNum = sauService.countSauGradeNum(4);
+            detail.setManNum(clubService.countClubManNum());
+            detail.setWomanNum(clubService.countClubWomanNum());
+            int firstGradeNum = clubService.countClubGradeNum(1);
+            int secondGradeNum = clubService.countClubGradeNum(2);
+            int threeGradeNum = clubService.countClubGradeNum(3);
+            int fourGradeNum = clubService.countClubGradeNum(4);
             //校社联内已经毕业了的学生的人数
             int graduatedNum = org.getMembers()-firstGradeNum-secondGradeNum-threeGradeNum-fourGradeNum;
             detail.setFirstGradeNum(firstGradeNum);
@@ -66,6 +67,8 @@ public class SauCenterController {
             detail.setGraduatedNum(graduatedNum>0?graduatedNum:0);
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
             result.setData(detail);
+        }else {
+            result.setStateCode(ResponseCode.REQUEST_ERROR,"获取错误！");
         }
         return result;
     }

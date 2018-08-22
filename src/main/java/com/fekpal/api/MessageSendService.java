@@ -11,6 +11,7 @@ import java.util.List;
  * Created by APone on 2017/8/25.
  * 信息发送信息接口
  * 该接口提供信息发送者用于发送，删除，查看信息的操作
+ * @author apone
  */
 public interface MessageSendService extends BaseService<Message> {
 
@@ -31,6 +32,14 @@ public interface MessageSendService extends BaseService<Message> {
      * @return 信息记录集
      */
     List<Message> queryByMessageTitle(String title, int offset, int limit);
+
+    /**
+     * 根据标题文字模糊搜索获取该用户发送的时间降序的有效信息记录数
+     *
+     * @param title  信息标题
+     * @return 信息记录数
+     */
+    Integer countByMessageTitle(String title);
 
     /**
      * 根据信息标识逻辑删除该用户所发送的有效信息记录集
@@ -85,4 +94,13 @@ public interface MessageSendService extends BaseService<Message> {
      * @return 信息记录集
      */
     List<Message> loadAllMessage(int offset, int limit);
+
+    /**
+     * 加载所有该用户发送的所有消息数
+     *
+     * @param offset 跳过读数
+     * @param limit  读取数
+     * @return 信息记录数
+     */
+    Integer countAllMessage(int offset, int limit);
 }

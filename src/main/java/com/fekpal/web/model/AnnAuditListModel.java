@@ -1,13 +1,11 @@
 package com.fekpal.web.model;
 
-import com.fekpal.common.constant.AuditState;
-
 import java.util.Date;
 
 /**
  * 年度审核列表的类模型，用于传递给前端获取年度审核列表信息
- * @author kanlon
- * @time 2018/4/6
+ * @author zhangcanlong
+ * @date 2018/4/6
  */
 public class AnnAuditListModel {
     /**

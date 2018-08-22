@@ -6,8 +6,8 @@ import java.util.List;
 
 /**
  * 查看新消息的详细信息
- * @authot kanlon
- * @time 2018/4/16
+ * @authot zhangcanlong
+ * @date 2018/4/16
  */
 public class NewMsgDetail {
 /*

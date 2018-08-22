@@ -1,19 +1,18 @@
 package com.fekpal.web.filter;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.web.filter.OncePerRequestFilter;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 /**
  * 自定义编码过滤器，解决乱码问题，主要处理get请求乱码问题
- * @author  kanlon
+ * @author  zhangcanlong
  * @2018/4/11
  */
 public class EncodingFilter extends OncePerRequestFilter {
@@ -38,7 +37,7 @@ public class EncodingFilter extends OncePerRequestFilter {
         }
         final String method = request.getMethod();
         // 该处可以实现各种业务的自定义的过滤机制
-        if (method.equalsIgnoreCase("get")) {
+        if ("get".equalsIgnoreCase(method)) {
             try {
                 ret = new String(input.getBytes("ISO8859-1"), this.encoding);
             } catch (UnsupportedEncodingException e) {
@@ -58,27 +57,27 @@ public class EncodingFilter extends OncePerRequestFilter {
                 response.setCharacterEncoding(this.encoding);
             }
         }
-
-        //对request中的参数进行编码格式的转换
-        filterChain.doFilter(new HttpServletRequestWrapper(request) {
-            @Override
-            public String getParameter(String name) {
-                String value = super.getParameter(name);
-                return filter(this, value);
-            }
-
-            @Override
-            public String[] getParameterValues(String name) {
-                String[] values = super.getParameterValues(name);
-                if (values == null) {
-                    return null;
+            //对request中的参数进行编码格式的转换
+            filterChain.doFilter(new HttpServletRequestWrapper(request) {
+                @Override
+                public String getParameter(String name) {
+                    String value = super.getParameter(name);
+                    return filter(this, value);
                 }
-                for (int i = 0; i < values.length; i++) {
-                    values[i] = filter(this, values[i]);
+
+                @Override
+                public String[] getParameterValues(String name) {
+                    String[] values = super.getParameterValues(name);
+                    if (values == null) {
+                        return null;
+                    }
+                    for (int i = 0; i < values.length; i++) {
+                        values[i] = filter(this, values[i]);
+                    }
+                    return values;
                 }
-                return values;
-            }
-        }, response);
+            }, response);
+
     }
 }
 

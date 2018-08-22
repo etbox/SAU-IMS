@@ -1,4 +1,4 @@
-package com.fekpal.web.controller.clubAdmin;
+package com.fekpal.web.controller.club;
 
 import com.fekpal.api.*;
 import com.fekpal.common.constant.Operation;
@@ -6,7 +6,6 @@ import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
 import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.dao.model.Message;
-import com.fekpal.dao.model.Org;
 import com.fekpal.dao.model.Person;
 import com.fekpal.service.model.domain.SRMsgRecord;
 import com.fekpal.web.model.*;
@@ -19,8 +18,9 @@ import java.util.*;
 
 /**
  * 社团的消息发布的控制类
- * @author kanlon
- * @time 2018/4/8
+ *
+ * @author zhangcanlong
+ * @date 2018/4/8
  */
 @Controller
 public class ClubSendPublishMsgController {
@@ -48,19 +48,23 @@ public class ClubSendPublishMsgController {
      */
     @ResponseBody
     @RequestMapping(value = "/club/members", method = RequestMethod.GET)
-    public JsonResult<List<ClubCustomSendObj>> getMassageType(@RequestParam int messageType) {
+    public JsonResult<List<ClubCustomSendObj>> getMassageType(@RequestParam int messageType, PageList page) {
         JsonResult<List<ClubCustomSendObj>> result = new JsonResult<>();
         List<ClubCustomSendObj> objList = new ArrayList<>();
-        List<Person> personList = clubService.getClubAllMemberPersonMsg();
-        if(personList == null || personList.size()==0){result.setStateCode(ResponseCode.REQUEST_ERROR,"无结果");return  result;}
+        List<Person> personList = clubService.getClubAllMemberPersonMsg(page.getOffset(), page.getLimit());
+        Integer personNum = clubService.countClubAllMemberPersonMsg();
+        if (personList == null || personList.size() == 0) {
+            result.setStateCode(ResponseCode.REQUEST_ERROR, "无结果");
+            return result;
+        }
 
-        for(Person person : personList){
+        for (Person person : personList) {
             ClubCustomSendObj obj = new ClubCustomSendObj();
             obj.setUserId(person.getUserId());
             obj.setRealName(person.getRealName());
             objList.add(obj);
         }
-        result.setCode(ResponseCode.RESPONSE_SUCCESS);
+        result.setStateCode(ResponseCode.RESPONSE_SUCCESS,personNum.toString());
         result.setData(objList);
         return result;
     }
@@ -73,29 +77,8 @@ public class ClubSendPublishMsgController {
      */
     @ResponseBody
     @RequestMapping(value = "/club/msg/old", method = RequestMethod.GET)
-    public JsonResult<List<OldPublishMsg>> getAllOldMsg(PageList page) {
-
-        //将前端发送过来的页码offset，转化为跳过数offset
-        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
-
-        List<Message> messageList = messageSendService.loadAllMessage(page.getOffset(),page.getLimit());
-        JsonResult<List<OldPublishMsg>> result = new JsonResult<>();
-        List<OldPublishMsg> oldPublishMsgList = new ArrayList<>();
-        if (messageList == null || messageList.size() == 0) {
-            result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
-            return result;
-        }
-        for(Message message:messageList){
-            OldPublishMsg oldPublishMsg = new OldPublishMsg();
-            oldPublishMsg.setMessageId(message.getMessageId());
-            oldPublishMsg.setMessageTitle(message.getMessageTitle());
-            oldPublishMsg.setMessageType(message.getMessageType());
-            oldPublishMsg.setSendTime(message.getReleaseTime());
-            oldPublishMsgList.add(oldPublishMsg);
-        }
-        result.setCode(ResponseCode.RESPONSE_SUCCESS);
-        result.setData(oldPublishMsgList);
-        return result;
+    public JsonResult<List<OldPublishMsg>> getAllOldMsg(SearchPage page) {
+        return searchMsg(page);
     }
 
     /**
@@ -107,7 +90,7 @@ public class ClubSendPublishMsgController {
     @ResponseBody
     @RequestMapping(value = "/club/msg/old/{messageId}", method = RequestMethod.GET)
     public JsonResult<SauMsgPublishDetail> getOneOldMsg(@PathVariable int messageId) {
-        Message message =  messageSendService.selectByMessageId(messageId);
+        Message message = messageSendService.selectByMessageId(messageId);
         JsonResult<SauMsgPublishDetail> result = new JsonResult<>();
         if (message == null) {
             result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
@@ -142,10 +125,10 @@ public class ClubSendPublishMsgController {
         sRMsgRecord.setMessageContent(newMsg.getMessageContent());
         sRMsgRecord.setReleaseTime(new Timestamp(TimeUtil.currentTime()));
         int state = messageSendService.sendGlobalMessage(sRMsgRecord);
-        if(state == Operation.SUCCESSFULLY){
-            result.setStateCode(ResponseCode.RESPONSE_SUCCESS,"发送成功");
-        }else if(state == Operation.FAILED){
-            result.setStateCode(ResponseCode.RESPONSE_ERROR,"发送失败");
+        if (state == Operation.SUCCESSFULLY) {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "发送成功");
+        } else if (state == Operation.FAILED) {
+            result.setStateCode(ResponseCode.RESPONSE_ERROR, "发送失败");
         }
         return result;
     }
@@ -153,7 +136,7 @@ public class ClubSendPublishMsgController {
     /**
      * 发送消息个给本社团内的人
      *
-     * @param newMsg  消息对象
+     * @param newMsg 消息对象
      * @return 是否成功
      */
     @ResponseBody
@@ -165,10 +148,10 @@ public class ClubSendPublishMsgController {
         sRMsgRecord.setMessageContent(newMsg.getMessageContent());
         sRMsgRecord.setReleaseTime(new Timestamp(TimeUtil.currentTime()));
         int state = messageSendService.sendOrgMessage(sRMsgRecord);
-        if(state == Operation.SUCCESSFULLY){
-            result.setStateCode(ResponseCode.RESPONSE_SUCCESS,"发送成功");
-        }else if(state == Operation.FAILED){
-            result.setStateCode(ResponseCode.RESPONSE_ERROR,"发送失败");
+        if (state == Operation.SUCCESSFULLY) {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "发送成功");
+        } else if (state == Operation.FAILED) {
+            result.setStateCode(ResponseCode.RESPONSE_ERROR, "发送失败");
         }
         return result;
     }
@@ -176,7 +159,7 @@ public class ClubSendPublishMsgController {
     /**
      * 发送消息给自定义对象
      *
-     * @param newMsg  消息对象
+     * @param newMsg 消息对象
      * @return 是否成功
      */
     @ResponseBody
@@ -189,21 +172,21 @@ public class ClubSendPublishMsgController {
         sRMsgRecord.setReleaseTime(new Timestamp(TimeUtil.currentTime()));
         List<Integer> orgIdsList = new ArrayList<>();
         String msgPublishedObject = newMsg.getPublishedObject();
-        if(msgPublishedObject== null){
-            result.setStateCode(ResponseCode.RESPONSE_ERROR,"要发送的对象为空");
+        if (msgPublishedObject == null) {
+            result.setStateCode(ResponseCode.RESPONSE_ERROR, "要发送的对象为空");
             return result;
         }
         //获取发布对象中的用户id
         String[] msgPublishObjectStrs = msgPublishedObject.split(",");
-        for(int i=0;i<msgPublishObjectStrs.length;i++){
+        for (int i = 0; i < msgPublishObjectStrs.length; i++) {
             orgIdsList.add(Integer.parseInt(msgPublishObjectStrs[i]));
         }
         sRMsgRecord.setReceives(orgIdsList);
         int state = messageSendService.sendCustomMessage(sRMsgRecord);
-        if(state == Operation.SUCCESSFULLY){
-            result.setStateCode(ResponseCode.RESPONSE_SUCCESS,"发送成功");
-        }else if(state == Operation.FAILED){
-            result.setStateCode(ResponseCode.RESPONSE_ERROR,"发送失败");
+        if (state == Operation.SUCCESSFULLY) {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "发送成功");
+        } else if (state == Operation.FAILED) {
+            result.setStateCode(ResponseCode.RESPONSE_ERROR, "发送失败");
         }
         return result;
     }
@@ -218,22 +201,22 @@ public class ClubSendPublishMsgController {
     @RequestMapping(value = "/club/msg/old", method = RequestMethod.DELETE)
     public JsonResult<String> deleteMsg(@RequestBody DeleteMsgIdsModel deleteMsgIdsModel) {
         JsonResult<String> result = new JsonResult<>();
-        if(deleteMsgIdsModel.getDeleteMsgIds()==null){
-            result.setStateCode(ResponseCode.REQUEST_ERROR,"要删除的消息为空，不能执行");
+        if (deleteMsgIdsModel.getDeleteMsgIds() == null) {
+            result.setStateCode(ResponseCode.REQUEST_ERROR, "要删除的消息为空，不能执行");
             return result;
         }
         String[] deleteMsgIdsStr = deleteMsgIdsModel.getDeleteMsgIds().split(",");
         List<Integer> deleteMsgIdsList = new ArrayList<>();
-        for(int i=0;i<deleteMsgIdsStr.length;i++){
+        for (int i = 0; i < deleteMsgIdsStr.length; i++) {
             deleteMsgIdsList.add(Integer.parseInt(deleteMsgIdsStr[i]));
         }
         SRMsgRecord srMsgRecord = new SRMsgRecord();
         srMsgRecord.setIds(deleteMsgIdsList);
         int state = messageSendService.deleteByMessageId(srMsgRecord);
-        if(state == Operation.SUCCESSFULLY ){
-            result.setStateCode(ResponseCode.RESPONSE_SUCCESS,"删除成功");
-        }else{
-            result.setStateCode(ResponseCode.REQUEST_ERROR,"删除失败");
+        if (state == Operation.SUCCESSFULLY) {
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "删除成功");
+        } else {
+            result.setStateCode(ResponseCode.REQUEST_ERROR, "删除失败");
         }
         return result;
     }
@@ -247,25 +230,21 @@ public class ClubSendPublishMsgController {
     @ResponseBody
     @RequestMapping(value = "/club/msg/old/search", method = RequestMethod.GET)
     public JsonResult<List<OldPublishMsg>> searchMsg(SearchPage page) {
-        //将前端发送的页码offset，转化为跳过条数offset
-        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
-
-        List<Message> messageList = messageSendService.queryByMessageTitle(page.getFindContent(),page.getOffset(),page.getLimit());
+        List<Message> messageList = messageSendService.queryByMessageTitle(page.getFindContent(), page.getOffset(), page.getLimit());
+        Integer messageNum = messageSendService.countByMessageTitle(page.getFindContent());
         JsonResult<List<OldPublishMsg>> result = new JsonResult<>();
         List<OldPublishMsg> oldPublishMsgList = new ArrayList<>();
-        if (messageList == null || messageList.size() == 0) {
-            result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
-            return result;
+        if (messageList != null) {
+            for (Message message : messageList) {
+                OldPublishMsg oldPublishMsg = new OldPublishMsg();
+                oldPublishMsg.setMessageId(message.getMessageId());
+                oldPublishMsg.setMessageTitle(message.getMessageTitle());
+                oldPublishMsg.setMessageType(message.getMessageType());
+                oldPublishMsg.setSendTime(message.getReleaseTime());
+                oldPublishMsgList.add(oldPublishMsg);
+            }
         }
-        for(Message message:messageList){
-            OldPublishMsg oldPublishMsg = new OldPublishMsg();
-            oldPublishMsg.setMessageId(message.getMessageId());
-            oldPublishMsg.setMessageTitle(message.getMessageTitle());
-            oldPublishMsg.setMessageType(message.getMessageType());
-            oldPublishMsg.setSendTime(message.getReleaseTime());
-            oldPublishMsgList.add(oldPublishMsg);
-        }
-        result.setCode(ResponseCode.RESPONSE_SUCCESS);
+        result.setStateCode(ResponseCode.RESPONSE_SUCCESS, messageNum.toString());
         result.setData(oldPublishMsgList);
         return result;
     }

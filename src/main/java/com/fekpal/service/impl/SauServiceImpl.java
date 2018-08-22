@@ -1,15 +1,14 @@
 package com.fekpal.service.impl;
 
+import com.fekpal.api.SauService;
 import com.fekpal.common.base.BaseServiceImpl;
 import com.fekpal.common.base.CRUDException;
+import com.fekpal.common.base.ExampleWrapper;
 import com.fekpal.common.constant.DefaultField;
 import com.fekpal.common.constant.FIleDefaultPath;
 import com.fekpal.common.constant.Operation;
-import com.fekpal.common.constant.SystemRole;
 import com.fekpal.common.session.SessionLocal;
 import com.fekpal.common.utils.ImageFileUtil;
-import com.fekpal.common.base.ExampleWrapper;
-import com.fekpal.api.SauService;
 import com.fekpal.dao.mapper.MemberMapper;
 import com.fekpal.dao.mapper.OrgMapper;
 import com.fekpal.dao.model.Org;
@@ -20,12 +19,11 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
-import java.util.Calendar;
-import java.util.List;
 
 /**
- * Created by APone on 2017/9/5.
  * SauService实现类
+ * @author zhangcanlong
+ * @author 2018/8/20
  */
 @Service
 public class SauServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements SauService {
@@ -74,6 +72,7 @@ public class SauServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements S
 
     @Override
     public String updateLogo(SauMsg msg) {
+        if(msg.getLogo() == null){ return null;}
         try {
             int uid = SessionLocal.local(session).getUserIdentity().getUid();
             Org org = mapper.selectByPrimaryKey(uid);
@@ -93,15 +92,9 @@ public class SauServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements S
         }
     }
 
-    /**
-     * 根据校社联用户标识更新校社联展示
-     *
-     * @param msg 校社联修改信息封装
-     *            传入参数：头像文件logo
-     * @return 头像名
-     */
     @Override
     public String updateView(SauMsg msg) {
+        if(msg.getView() == null){ return null;}
         try {
             int uid = SessionLocal.local(session).getUserIdentity().getUid();
             Org org = mapper.selectByPrimaryKey(uid);
@@ -121,61 +114,6 @@ public class SauServiceImpl extends BaseServiceImpl<OrgMapper, Org> implements S
         }
     }
 
-    @Override
-    public List<Org> loadAllSau(int offset, int limit) {
-        ExampleWrapper<Org> example = new ExampleWrapper<>();
-        example.eq("org_auth", SystemRole.SAU);
-        return mapper.selectByExample(example, offset, limit);
-    }
-
-    /**
-     * 根据社团id计算校社联内部男生的数量
-     *
-     * @return 校社联内男生的人数
-     */
-    @Override
-    public int countSauManNum() {
-        int orgId = SessionLocal.local(session).getUserIdentity().getUid();
-        int manNum = memberMapper.countOrgManNum(orgId);
-        return manNum;
-    }
-
-    /**
-     * 计算校社联内部女生的数量
-     *
-     * @return 校社联内女生的人数
-     */
-    @Override
-    public int countSauWomanNum() {
-        int orgId = SessionLocal.local(session).getUserIdentity().getUid();
-        int womanNum = memberMapper.countOrgWomanNum(orgId);
-        return womanNum;
-    }
-
-    /**
-     * 根据年级数计算校社联内部年级的数量
-     *
-     * @param grade 年级 如1,2,3,4,
-     * @return 校社联内各个年级的人数
-     */
-    @Override
-    public int countSauGradeNum(int grade) {
-        int orgId = SessionLocal.local(session).getUserIdentity().getUid();
-        Calendar date = Calendar.getInstance();
-        int year = date.get(Calendar.YEAR);
-        int yearBack2 = year%100;
-        String realGrade = "15";
-        int month = date.get(Calendar.MONDAY);
-        //根据当前年份加上年级数（1,2,3,4），得到临时年级（15,16,17,18）
-        int tempGrade = yearBack2-grade+1;
-        if(month<9){
-            realGrade = String.valueOf(tempGrade-1);
-        }else{
-            realGrade = String.valueOf(tempGrade);
-        }
-        int gradeNum = memberMapper.countOrgGradeNum(orgId,realGrade+"%");
-        return gradeNum;
-    }
 }
 
 

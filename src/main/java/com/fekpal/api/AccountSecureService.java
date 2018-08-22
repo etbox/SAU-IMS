@@ -50,6 +50,16 @@ public interface AccountSecureService {
     int sendModifyEmailCaptcha();
 
     /**
+     * 确认（申请）修改邮箱地址，在真正修改邮箱地址前的认证
+     * @param record 信息封装
+     *               传入参数：新邮箱email
+     * @return
+     * 参考参数：Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
+     */
+    int sendModifyEmailCaptcha(SecureMsg record);
+
+
+    /**
      * 更新（修改）邮箱地址记录，适用于登录用户
      *
      * @param record 信息封装

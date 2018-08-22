@@ -71,9 +71,9 @@ public class SecurityController {
      * @return 是否成功
      */
     @ResponseBody
-    @RequestMapping(value = "/security/email/captcha", method = RequestMethod.GET)
-    public JsonResult<String> sendModifyEmailCaptcha() {
-        int state = accountSecureService.sendModifyEmailCaptcha();
+    @RequestMapping(value = "/security/email/captcha", method = RequestMethod.POST)
+    public JsonResult<String> sendModifyEmailCaptcha(@RequestBody SecureMsg msg) {
+        int state = accountSecureService.sendModifyEmailCaptcha(msg);
 
         JsonResult<String> result = new JsonResult<>();
         if (state == Operation.SUCCESSFULLY) {

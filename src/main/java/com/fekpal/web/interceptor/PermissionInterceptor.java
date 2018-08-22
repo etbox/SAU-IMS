@@ -2,8 +2,6 @@ package com.fekpal.web.interceptor;
 
 import com.fekpal.common.session.SessionLocal;
 import org.apache.log4j.Logger;
-import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -15,14 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static java.lang.System.out;
-
 /**
  * 用户授权拦截器
  * Created by hasee on 2018/3/6.
- * @author kanlon
+ * @author zhangcanlong
  */
-@Controller
+
 public class PermissionInterceptor implements HandlerInterceptor {
 
     private Logger logger = Logger.getLogger(PermissionInterceptor.class);
@@ -59,7 +55,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
         open_urls.add("/clubNews");
         //如果是公开地址，则放行
         for(String open_url:open_urls){
-            if(url.indexOf(open_url)>=0){
+            if(url.startsWith(open_url)){
                 return true;
             }
         }
@@ -70,7 +66,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
         common_urls.add("/security/pwd");
         common_urls.add("/logout");
         for(String common_url : common_urls){
-            if(url.indexOf(common_url)>=0){
+            if(url.startsWith(common_url)){
                 return true;
             }
         }
@@ -78,7 +74,7 @@ public class PermissionInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession(false);
         int permissionId = SessionLocal.local(session).getUserIdentity().getAuth();
         String permissionUrl = permissionMap.get(permissionId);
-        if(url.indexOf(permissionUrl)>=0){
+        if(url.startsWith(permissionUrl)){
             return true;
         }
        //执行到这里拦截，跳转到无权访问的提示页面

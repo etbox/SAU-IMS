@@ -22,6 +22,8 @@ import java.util.List;
 /**
  * 普通成员社团信息的控制类
  * Created by hasee on 2017/8/23.
+ * @author zhangcanlong
+ * @date 2017/8/23
  */
 @Controller
 public class MemberOrgMsgController {
@@ -47,33 +49,8 @@ public class MemberOrgMsgController {
      */
     @ResponseBody
     @RequestMapping(value = "/member/org", method = RequestMethod.GET)
-    public JsonResult<List<OrgListMsg>> getAllOrgMsg(PageList page) {
-
-        //将前端发送过来的页码offset，转化为跳过数offset
-        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
-
-        List<Org> orgList = orgService.loadAllOrg(page.getOffset(), page.getLimit());
-        JsonResult<List<OrgListMsg>> result = new JsonResult<>();
-
-        if (orgList == null || orgList.size() == 0) {
-            result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
-        } else {
-            List<OrgListMsg> lists = new ArrayList<>();
-            for (Org org : orgList) {
-                OrgListMsg msg = new OrgListMsg();
-                msg.setOrgId(org.getOrgId());
-                msg.setOrgName(org.getOrgName());
-                msg.setLogo(org.getOrgLogo());
-                msg.setMembers(org.getMembers());
-                msg.setLikeClick(org.getLikeClick());
-                likeOrg = likeOrgService.selectByOrgId(org.getOrgId());
-                msg.setIsClick(likeOrg.getAvailable());
-                lists.add(msg);
-            }
-            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
-            result.setData(lists);
-        }
-        return result;
+    public JsonResult<List<OrgListMsg>> getAllOrgMsg(SearchPage page) {
+        return searchMsg(page);
     }
 
 
@@ -89,10 +66,7 @@ public class MemberOrgMsgController {
         PersonOrgView org = orgService.selectByIdForPerson(id);
 
         JsonResult<MemberClubDetail> result = new JsonResult<>();
-        if (org == null) {
-            result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
-
-        } else {
+        if (org != null) {
             MemberClubDetail detail = new MemberClubDetail();
             detail.setOrgId(org.getOrgId());
             detail.setOrgName(org.getOrgName());
@@ -127,6 +101,8 @@ public class MemberOrgMsgController {
 
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
             result.setData(detail);
+        }else {
+            result.setStateCode(ResponseCode.REQUEST_ERROR,"获取错误！");
         }
         return result;
     }
@@ -141,14 +117,13 @@ public class MemberOrgMsgController {
     @RequestMapping(value = "/member/org/{id}/join", method = RequestMethod.POST)
     public JsonResult<String> joinClub(@PathVariable int id) {
         int state = memberOrgService.joinOrganizationByOrgId(id);
-
         JsonResult<String> result = new JsonResult<>();
         if (state == Operation.SUCCESSFULLY) {
-            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "申请成功，请留意审核通知");
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "申请成功，请留意审核通知！");
         } else if (state == Operation.FAILED) {
-            result.setStateCode(ResponseCode.RESPONSE_ERROR, "申请失败，请稍后再试");
+            result.setStateCode(ResponseCode.RESPONSE_ERROR, "已经加入了或已经申请该社团了！");
         } else if (state == Operation.INPUT_INCORRECT) {
-            result.setStateCode(ResponseCode.RESPONSE_ERROR, "请完善资料再进行申请");
+            result.setStateCode(ResponseCode.RESPONSE_ERROR, "请完善资料再进行申请！");
         }
         return result;
     }
@@ -191,17 +166,11 @@ public class MemberOrgMsgController {
     @ResponseBody
     @RequestMapping(value = "/member/org/search", method = RequestMethod.GET)
     public JsonResult<List<OrgListMsg>> searchMsg(SearchPage page) {
-        //将前端发送的页码offset，转化为跳过条数offset
-        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
-
-        List<Org> orgList = orgService.selectByOrgName(page.getFindContent(), page.getOffset(), page.getLimit());
         JsonResult<List<OrgListMsg>> result = new JsonResult<>();
-
-        if (orgList == null || orgList.size() == 0) {
-            result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
-        } else {
+        List<Org> orgList = orgService.selectByOrgName(page.getFindContent(), page.getOffset(), page.getLimit());
+        Integer orgNum = orgService.countByOrgName(page.getFindContent());
+        if (orgList != null ) {
             List<OrgListMsg> lists = new ArrayList<>();
-
             for (Org org : orgList) {
                 OrgListMsg msg = new OrgListMsg();
                 msg.setOrgId(org.getOrgId());
@@ -214,7 +183,7 @@ public class MemberOrgMsgController {
 
                 lists.add(msg);
             }
-            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, orgNum.toString());
             result.setData(lists);
         }
         return result;

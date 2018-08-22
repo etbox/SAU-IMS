@@ -2,7 +2,6 @@ package com.fekpal.service.impl;
 
 import com.fekpal.api.ClubService;
 import com.fekpal.api.MessageSendService;
-import com.fekpal.api.SauService;
 import com.fekpal.common.base.BaseServiceImpl;
 import com.fekpal.common.base.CRUDException;
 import com.fekpal.common.base.ExampleWrapper;
@@ -17,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
@@ -25,10 +25,11 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.System.out;
-
 /**
  * Created by APone on 2017/9/17.
+ *
+ * @author APone
+ * @date 2017/9/17
  */
 @Service
 public class MessageSendServiceImpl extends BaseServiceImpl<MessageMapper, Message> implements MessageSendService {
@@ -40,16 +41,19 @@ public class MessageSendServiceImpl extends BaseServiceImpl<MessageMapper, Messa
     private MessageReceiveMapper receiveMapper;
 
     @Autowired
-    OrgMemberMapper orgMemberMapper;
+    private OrgMemberMapper orgMemberMapper;
 
     @Autowired
-    PersonMapper personMapper;
+    private PersonMapper personMapper;
 
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
 
     @Autowired
     private HttpSession session;
+
+    @Autowired
+    private ClubService clubService;
 
     /**
      * 一次循环最大数目
@@ -74,7 +78,29 @@ public class MessageSendServiceImpl extends BaseServiceImpl<MessageMapper, Messa
                 .and().like("message_title", title)
                 .and().eq("message_state", AvailableState.AVAILABLE)
                 .orderBy("release_time", false);
+        if (StringUtils.isEmpty(title)) {
+            example = new ExampleWrapper<>();
+            example.eq("org_id", uid)
+                    .and().eq("message_state", AvailableState.AVAILABLE)
+                    .orderBy("release_time", false);
+        }
         return mapper.selectByExample(example, offset, limit);
+    }
+
+    @Override
+    public Integer countByMessageTitle(String title) {
+        int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        ExampleWrapper<Message> example = new ExampleWrapper<>();
+        example.eq("org_id", uid)
+                .and().like("message_title", title)
+                .and().eq("message_state", AvailableState.AVAILABLE);
+        if (StringUtils.isEmpty(title)) {
+            example = new ExampleWrapper<>();
+            example.eq("org_id", uid)
+                    .and().eq("message_state", AvailableState.AVAILABLE)
+                    .orderBy("release_time", false);
+        }
+        return mapper.countByExample(example);
     }
 
     @Override
@@ -100,7 +126,9 @@ public class MessageSendServiceImpl extends BaseServiceImpl<MessageMapper, Messa
         }
         SessionContent.UserIdentity userIdentity = SessionLocal.local(session).getUserIdentity();
         String releaseName = getReleaseNameByUserId(userIdentity);
-        if (releaseName == null) {return Operation.FAILED;}
+        if (releaseName == null) {
+            return Operation.FAILED;
+        }
 
         int uid = userIdentity.getUid();
         message.setOrgId(uid);
@@ -111,7 +139,9 @@ public class MessageSendServiceImpl extends BaseServiceImpl<MessageMapper, Messa
         message.setMessageType(MessageType.ALL);
         message.setMessageState(AvailableState.AVAILABLE);
         int row = mapper.insert(message);
-        if (row != 1) throw new CRUDException("全体信息插入异常：" + row);
+        if (row != 1) {
+            throw new CRUDException("全体信息插入异常：" + row);
+        }
 
         MessageReceive receive = new MessageReceive();
         receive.setMessageId(message.getMessageId());
@@ -121,12 +151,13 @@ public class MessageSendServiceImpl extends BaseServiceImpl<MessageMapper, Messa
         //获取所有人的userId
         List<Integer> receives = new ArrayList<>();
         ExampleWrapper<User> userExample = new ExampleWrapper<>();
-        List<User>  userList = userMapper.selectByExample(userExample,1,100000);
-        if(userList == null){return Operation.FAILED;}
-        for(User user:userList){
+        List<User> userList = userMapper.selectByExample(userExample, 0, 100000);
+        if (userList == null) {
+            return Operation.FAILED;
+        }
+        for (User user : userList) {
             receives.add(user.getUserId());
         }
-
         //批量一定长度插入
         int size = receives.size(), loopCount = (size % maxItem == 0) ? (size / maxItem) : (size / maxItem + 1);
         for (int i = 0; i < loopCount; i++) {
@@ -134,7 +165,9 @@ public class MessageSendServiceImpl extends BaseServiceImpl<MessageMapper, Messa
             receive.setReceives(receives.subList(from, to));
             row += receiveMapper.insertLoopOnlyWithReceiveId(receive);
         }
-        if (row != size + 1) throw new CRUDException("插入接收人信息出错，发送人和接收人数总数：" + size + " 实际插入：" + row);
+        if (row != size + 1) {
+            throw new CRUDException("插入接收人信息出错，发送人和接收人数总数：" + size + " 实际插入：" + row);
+        }
 
         return Operation.SUCCESSFULLY;
     }
@@ -147,7 +180,7 @@ public class MessageSendServiceImpl extends BaseServiceImpl<MessageMapper, Messa
             String fileName = addAnnex(record);
             message.setMessageAnnex(fileName);
         } catch (Exception e) {
-            return Operation.FAILED;
+            throw new CRUDException("添加附件失败");
         }
 
         SessionContent.UserIdentity userIdentity = SessionLocal.local(session).getUserIdentity();
@@ -159,7 +192,7 @@ public class MessageSendServiceImpl extends BaseServiceImpl<MessageMapper, Messa
         message.setMessageContent(record.getMessageContent());
         message.setReleaseName(releaseName);
         message.setReleaseTime(record.getReleaseTime());
-        message.setMessageType(MessageType.ALL);
+        message.setMessageType(MessageType.CUSTOM);
         message.setMessageState(AvailableState.AVAILABLE);
         int row = mapper.insert(message);
 
@@ -168,6 +201,7 @@ public class MessageSendServiceImpl extends BaseServiceImpl<MessageMapper, Messa
         receive.setReadFlag(MessageType.UN_READ);
         receive.setAvailable(AvailableState.AVAILABLE);
         List<Integer> receives = record.getReceives();
+
 
         //批量一定长度插入
         int size = receives.size(), loopCount = (size % maxItem == 0) ? (size / maxItem) : (size / maxItem + 1);
@@ -200,7 +234,7 @@ public class MessageSendServiceImpl extends BaseServiceImpl<MessageMapper, Messa
         message.setMessageContent(record.getMessageContent());
         message.setReleaseName(releaseName);
         message.setReleaseTime(record.getReleaseTime());
-        message.setMessageType(MessageType.ALL);
+        message.setMessageType(MessageType.Org);
         message.setMessageState(AvailableState.AVAILABLE);
         int row = mapper.insert(message);
 
@@ -209,20 +243,14 @@ public class MessageSendServiceImpl extends BaseServiceImpl<MessageMapper, Messa
         receive.setReadFlag(MessageType.UN_READ);
         receive.setAvailable(AvailableState.AVAILABLE);
 
-        List<Integer> receives= new ArrayList<>();
+        List<Integer> receives = new ArrayList<>();
         //获取该用户所在的组织所有仍未离开组织的社员的userId
-        ExampleWrapper<OrgMember> orgMapperExample  = new ExampleWrapper<>();
-        orgMapperExample.eq("org_id",uid).and().eq("available",AvailableState.AVAILABLE);
-        List<OrgMember> orgMemberList =orgMemberMapper.selectByExample(orgMapperExample,1,100000);
-        if (orgMemberList==null) {return Operation.FAILED;}
-        for(OrgMember orgMember : orgMemberList){
-            int personId = orgMember.getPersonId();
-            ExampleWrapper<Person> personExample = new ExampleWrapper<>();
-            personExample.eq("person_id",personId);
-            Person person = personMapper.selectFirstByExample(personExample);
-            receives.add(person.getUserId());
+        List<Person> personList = clubService.getClubAllMemberPersonMsg(0, 100000);
+        if (personList != null) {
+            for (Person person : personList) {
+                receives.add(person.getUserId());
+            }
         }
-
         //批量一定长度插入
         int size = receives.size(), loopCount = (size % maxItem == 0) ? (size / maxItem) : (size / maxItem + 1);
         for (int i = 0; i < loopCount; i++) {
@@ -264,7 +292,7 @@ public class MessageSendServiceImpl extends BaseServiceImpl<MessageMapper, Messa
         ExampleWrapper<Message> example = new ExampleWrapper<>();
         example.eq("message_id", id).and().eq("message_state", AvailableState.AVAILABLE);
         Message message = mapper.selectFirstByExample(example);
-        String annexFileName = message.getMessageAnnex();
+        message.getMessageAnnex();
     }
 
     @Override
@@ -275,5 +303,14 @@ public class MessageSendServiceImpl extends BaseServiceImpl<MessageMapper, Messa
                 .and().eq("message_state", AvailableState.AVAILABLE)
                 .orderBy("release_time", false);
         return mapper.selectByExample(example, offset, limit);
+    }
+
+    @Override
+    public Integer countAllMessage(int offset, int limit) {
+        int uid = SessionLocal.local(session).getUserIdentity().getUid();
+        ExampleWrapper<Message> example = new ExampleWrapper<>();
+        example.eq("org_id", uid)
+                .and().eq("message_state", AvailableState.AVAILABLE);
+        return mapper.countByExample(example);
     }
 }

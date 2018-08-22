@@ -1,4 +1,4 @@
-package com.fekpal.web.controller.clubAdmin;
+package com.fekpal.web.controller.club;
 
 import com.fekpal.api.ClubService;
 import com.fekpal.api.OrgService;
@@ -8,19 +8,23 @@ import com.fekpal.dao.model.Org;
 import com.fekpal.dao.model.PersonOrgView;
 import com.fekpal.web.model.OrgDetail;
 import com.fekpal.web.model.OrgListMsg;
-import com.fekpal.web.model.PageList;
 import com.fekpal.web.model.SearchPage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
  * 社团管理员的的社团信息的控制类
- * @author kanlon
- * @time 2018/4/8
+ *
+ * @author zhangcanlong
+ * @date 2018/4/8
  */
 @Controller
 public class ClubOrgMsgController {
@@ -38,31 +42,8 @@ public class ClubOrgMsgController {
      */
     @ResponseBody
     @RequestMapping(value = "/club/other", method = RequestMethod.GET)
-    public JsonResult<List<OrgListMsg>> getAllClubMsg(PageList page) {
-
-        //将前端发送过来的页码offset，转化为跳过数offset
-        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
-
-        List<Org> orgList = clubService.loadAllClub(page.getOffset(), page.getLimit());
-        JsonResult<List<OrgListMsg>> result = new JsonResult<>();
-
-        if (orgList == null || orgList.size() == 0) {
-            result.setStateCode(ResponseCode.REQUEST_ERROR, "无结果");
-        } else {
-            List<OrgListMsg> lists = new ArrayList<>();
-            for (Org org : orgList) {
-                OrgListMsg msg = new OrgListMsg();
-                msg.setOrgId(org.getOrgId());
-                msg.setOrgName(org.getOrgName());
-                msg.setLogo(org.getOrgLogo());
-                msg.setMembers(org.getMembers());
-                msg.setLikeClick(org.getLikeClick());
-                lists.add(msg);
-            }
-            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
-            result.setData(lists);
-        }
-        return result;
+    public JsonResult<List<OrgListMsg>> getAllClubMsg(SearchPage page) {
+        return searchMsg(page);
     }
 
 
@@ -96,20 +77,20 @@ public class ClubOrgMsgController {
             detail.setJoinState(org.getJoinState());
             String[] description = org.getDescription().split("。");
             detail.setHeadIntroduce(description[0]);
-            detail.setDescription(description[description.length-1]);
+            detail.setDescription(description[description.length - 1]);
             detail.setManNum(orgService.countOrgManNumByOrgId(id));
             detail.setWomanNum(orgService.countOrgWomanNumByOrgId(id));
-            int firstGradeNum = orgService.countOrgGradeNumByOrgId(1,id);
-            int secondGradeNum = orgService.countOrgGradeNumByOrgId(2,id);
-            int threeGradeNum = orgService.countOrgGradeNumByOrgId(3,id);
-            int fourGradeNum = orgService.countOrgGradeNumByOrgId(4,id);
+            int firstGradeNum = orgService.countOrgGradeNumByOrgId(1, id);
+            int secondGradeNum = orgService.countOrgGradeNumByOrgId(2, id);
+            int threeGradeNum = orgService.countOrgGradeNumByOrgId(3, id);
+            int fourGradeNum = orgService.countOrgGradeNumByOrgId(4, id);
             //已经毕业的人数由社团总人数减去各个年级的人数
-            int graduatedNum = org.getMembers()-firstGradeNum-secondGradeNum-threeGradeNum-fourGradeNum;
+            int graduatedNum = org.getMembers() - firstGradeNum - secondGradeNum - threeGradeNum - fourGradeNum;
             detail.setFirstGradeNum(firstGradeNum);
             detail.setSecondGradeNum(secondGradeNum);
             detail.setThreeGradeNum(threeGradeNum);
             detail.setFourGradeNum(fourGradeNum);
-            detail.setGraduatedNum(graduatedNum >=0? graduatedNum : 0);
+            detail.setGraduatedNum(graduatedNum >= 0 ? graduatedNum : 0);
 
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
             result.setData(detail);
@@ -126,27 +107,22 @@ public class ClubOrgMsgController {
     @ResponseBody
     @RequestMapping(value = "/club/other/search", method = RequestMethod.GET)
     public JsonResult<List<OrgListMsg>> searchMsg(SearchPage page) {
-        //将前端发送的页码offset，转化为跳过条数offset
-        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
-
         List<Org> orgList = clubService.queryByClubName(page.getFindContent(), page.getOffset(), page.getLimit());
+        Integer orgNum = clubService.countByClubName(page.getFindContent());
         JsonResult<List<OrgListMsg>> result = new JsonResult<>();
-        if (orgList == null || orgList.size() == 0) {
-            result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
-            return result;
-        }
-
         List<OrgListMsg> lists = new ArrayList<>();
-        for (Org org : orgList) {
-            OrgListMsg msg = new OrgListMsg();
-            msg.setOrgId(org.getOrgId());
-            msg.setOrgName(org.getOrgName());
-            msg.setMembers(org.getMembers());
-            msg.setLogo(org.getOrgLogo());
-            msg.setLikeClick(org.getLikeClick());
-            lists.add(msg);
+        if (orgList != null) {
+            for (Org org : orgList) {
+                OrgListMsg msg = new OrgListMsg();
+                msg.setOrgId(org.getOrgId());
+                msg.setOrgName(org.getOrgName());
+                msg.setMembers(org.getMembers());
+                msg.setLogo(org.getOrgLogo());
+                msg.setLikeClick(org.getLikeClick());
+                lists.add(msg);
+            }
         }
-        result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
+        result.setStateCode(ResponseCode.RESPONSE_SUCCESS, orgNum.toString());
         result.setData(lists);
         return result;
     }

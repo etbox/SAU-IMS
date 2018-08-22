@@ -69,7 +69,9 @@ public class FileUtil {
     public static String fileHandle(MultipartFile file, String savePath, String fileName) throws IOException {
         if (file != null /*&& !file.isEmpty()*/) {
             String[] originalFileName = file.getOriginalFilename().split("\\.");
-            fileName = (fileName == null || fileName.length() == 0) ? RandomUtil.createFileName() + "." + originalFileName[1] : fileName+ "." + originalFileName[1];
+            fileName = (fileName == null || fileName.length() == 0)
+                    ? RandomUtil.createFileName() + "." + originalFileName[originalFileName.length-1]
+                    : fileName+ "." + originalFileName[originalFileName.length-1];
             file.transferTo(new File(savePath, fileName));
             return fileName;
         }

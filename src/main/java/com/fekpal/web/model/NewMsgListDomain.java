@@ -5,8 +5,8 @@ import java.sql.Timestamp;
 
 /**
  * 消息列表的中的消息对象
- * @author kanlon
- * @time 2018/4/16
+ * @author zhangcanlong
+ * @date 2018/4/16
  */
 public class NewMsgListDomain {
     private Integer messageId;

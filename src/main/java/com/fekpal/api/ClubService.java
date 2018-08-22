@@ -68,6 +68,13 @@ public interface ClubService extends BaseService<Org> {
     List<Org> queryByClubName(String name, int offset, int limit);
 
     /**
+     * 根据社团名称进行模糊搜索统计社团信息记录
+     *
+     * @param name   社团名称
+     * @return 社团信息记录数
+     */
+    Integer countByClubName(String name);
+    /**
      * 是否有相同的社团名称的社团
      *
      * @param name 社团名称
@@ -85,6 +92,12 @@ public interface ClubService extends BaseService<Org> {
     List<Org> loadAllClub(int offset, int limit);
 
     /**
+     * 统计所有的社团信息记录数
+     * @return 社团信息记录数
+     */
+    Integer countAllClub();
+
+    /**
      * 只用于社团用户和普通用户用，返回不括校社联的信息
      * 根据社团id返回社团详细信息
      * @param orgId 社团id
@@ -93,11 +106,18 @@ public interface ClubService extends BaseService<Org> {
     PersonOrgView selectByIdForPerson(int orgId);
 
     /**
-     * 得到本社团所有人的个人信息，仅仅社团用户用
+     * 得到本社团所有人的个人信息，仅仅社团用户用,分页获取
+     * @param offset 跳过数
+     * @param limit 获取条数
      * @return 本社团社员个人信息记录集
      */
-    List<Person> getClubAllMemberPersonMsg();
+    List<Person> getClubAllMemberPersonMsg(Integer offset,Integer limit);
 
+    /**
+     * 统计本社团所有人的个人信息记录数，仅仅社团用户用,
+     * @return 本社团所有社员个人信息记录数
+     */
+    Integer countClubAllMemberPersonMsg();
 
     /**
      * 根据社团id计算社团内部男生的数量

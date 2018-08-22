@@ -27,6 +27,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Timestamp;
 
+import static java.lang.System.out;
+
 /**
  * Created by APone on 2018/2/19 21:15.
  */
@@ -157,6 +159,7 @@ public class AccountAccessServiceImpl implements AccountAccessService {
 
             SessionContent.Captcha captcha = SessionContent.createCaptcha();
             captcha.setCode(captchaImg.getCode());
+            System.out.println("验证码为："+captchaImg.getCode());
             captcha.setCreateTime(TimeUtil.currentTime());
             captcha.setActiveTime(1000 * 60 * 2);
             //先数据存储到session，再图片流发送到客户端，否则将引起sessionID不一致

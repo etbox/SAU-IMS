@@ -4,8 +4,8 @@ import java.util.Date;
 
 /**
  * 社团管理端，注册审核的列表信息类
- * @author kanlon
- * @time 2018/4/8
+ * @author zhangcanlong
+ * @date 2018/4/8
  */
 public class ClubRegisterAuditListMsg {
 //    审核信息ID auditMsgId

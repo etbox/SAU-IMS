@@ -3,7 +3,6 @@ package com.fekpal.web.controller.member;
 import com.fekpal.api.MemberOrgService;
 import com.fekpal.api.PersonService;
 import com.fekpal.api.UserService;
-import com.fekpal.common.constant.FIleDefaultPath;
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
@@ -19,13 +18,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * 普通用户和社团成员端中心的控制类
- * Created by hasee on 2017/8/19.
+ * @author zhangcanlong
+ * @date 2018/8/21
  */
 @Controller
 public class MemberCenterController {
@@ -123,26 +124,25 @@ public class MemberCenterController {
     @ResponseBody
     @RequestMapping(value = "/member/center/info/org", method = RequestMethod.GET)
     public JsonResult<List<MemberOrgDetail>> getOrgPersonJoin(PageList page) {
-
-        //将前端发送过来的页码offset，转化为跳过数offset
-        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
-
         JsonResult<List<MemberOrgDetail>> result = new JsonResult<>();
         List<MemberOrg> list = memberOrgService.loadAllOrg(page.getOffset(), page.getLimit());
+        Integer orgNum = memberOrgService.countAllOrg();
         List<MemberOrgDetail> details = new ArrayList<>();
-        for (MemberOrg memberOrg : list) {
-            MemberOrgDetail detail = new MemberOrgDetail();
-            detail.setOrgId(memberOrg.getOrgId());
-            detail.setOrgName(memberOrg.getOrgName());
-            detail.setOrgDepartment(memberOrg.getOrgDepartment());
-            detail.setJoinTime(memberOrg.getJoinTime());
-            detail.setLeaveTime(memberOrg.getLeaveTime());
-            detail.setLogo(memberOrg.getOrgLogo());
-            detail.setMemberDuty(memberOrg.getMemberDuty());
-            detail.setMemberState(memberOrg.getMemberState());
-            details.add(detail);
+        if (list != null) {
+            for (MemberOrg memberOrg : list) {
+                MemberOrgDetail detail = new MemberOrgDetail();
+                detail.setOrgId(memberOrg.getOrgId());
+                detail.setOrgName(memberOrg.getOrgName());
+                detail.setOrgDepartment(memberOrg.getOrgDepartment());
+                detail.setJoinTime(memberOrg.getJoinTime());
+                detail.setLeaveTime(memberOrg.getLeaveTime());
+                detail.setLogo(memberOrg.getOrgLogo());
+                detail.setMemberDuty(memberOrg.getMemberDuty());
+                detail.setMemberState(memberOrg.getMemberState());
+                details.add(detail);
+            }
         }
-        result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
+        result.setStateCode(ResponseCode.RESPONSE_SUCCESS, orgNum.toString());
         result.setData(details);
         return result;
     }
@@ -156,7 +156,9 @@ public class MemberCenterController {
             response.setContentType("image/png");
             OutputStream outputStream = response.getOutputStream();
             int state = personService.getPersonLogo(outputStream);
-            if(state == Operation.FAILED){ throw new IOException("输出头像错误"); }
+            if (state == Operation.FAILED) {
+                throw new IOException("输出头像错误");
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

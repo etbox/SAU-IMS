@@ -41,4 +41,5 @@
         <result property="type" column="type"/>
         <result property="result" column="result"/>
     </resultMap>
+
 </mapper>

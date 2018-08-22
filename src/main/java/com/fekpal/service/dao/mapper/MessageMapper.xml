@@ -12,7 +12,7 @@
     </select>
 
     <select id="selectFirstByExample" resultMap="result">
-        select * from message
+        select *  from message
         <where>
             ${ex.sqlSegment}
         </where>
@@ -20,7 +20,7 @@
     </select>
 
     <select id="selectByExample" resultMap="result">
-        select * from message
+        select *  from message
         <where>
             ${ex.sqlSegment}
         </where>

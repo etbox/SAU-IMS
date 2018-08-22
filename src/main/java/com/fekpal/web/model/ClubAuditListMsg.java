@@ -4,16 +4,10 @@ import java.util.Date;
 
 /**
  * 社团审核的列表的信息类
- * @author  kanlon
- * @time 2018/4/7
+ * @author  zhangcanlong
+ * @date 2018/4/7
  */
 public class ClubAuditListMsg {
-//    审核信息ID auditMsgId
-//    审核标题auditTitle
-//            注册人registerName
-//    注册时间registerTime
-//    审核状态auditState（0，否决，1：通过；2；待审）
-//    角色role（0表示注册社团，1表示注册校社联组织成员）
     /**
      * 审核信息ID
      */
@@ -35,7 +29,7 @@ public class ClubAuditListMsg {
      */
     private int auditState;
     /**
-     * 角色role（0表示注册社团，1表示注册校社联组织成员）
+     * 角色role（社团注册审核没有该字段没有）
      */
     private int role;
 

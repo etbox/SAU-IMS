@@ -6,12 +6,12 @@
   // var App=window.App || {};
   var orgId;
   $.ajax({
-      url: 'json/index/allClub.json',
+      url: '/index/club',
       type: 'GET',
       dataType: 'json',
     })
     .done(function(json) {
-      console.log("执行了ajax" + json);
+      console.log(json);
       template = json;
       let Data = Mock.mock(template);
       for (let i = 0; i < Data.data.length; i++) {

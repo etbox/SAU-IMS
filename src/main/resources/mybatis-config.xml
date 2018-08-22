@@ -7,6 +7,8 @@
 
     <settings>
         <setting name="logImpl" value="STDOUT_LOGGING"/>
+        <!-- 驼峰命名命名的属性自动映射为用下划线区分字母的表字段 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
 
     <typeAliases>
@@ -23,6 +25,7 @@
         <typeAlias type="com.fekpal.dao.model.PersonOrgView" alias="PersonOrgView"/>
         <typeAlias type="com.fekpal.dao.model.Member" alias="Member"/>
         <typeAlias type="com.fekpal.dao.model.LikeOrg" alias="likeOrg"/>
+        <typeAlias type="com.fekpal.dao.model.SauAuditRegister" alias="SauAuditRegister"/>
     </typeAliases>
 
     <!--映射文件-->
@@ -40,5 +43,8 @@
         <mapper resource="com/fekpal/service/dao/mapper/OrgMemberMapper.xml"/>
         <mapper resource="com/fekpal/service/dao/mapper/MemberMapper.xml"/>
         <mapper resource="com/fekpal/service/dao/mapper/AnniversaryAuditMapper.xml"/>
+        <mapper resource="com/fekpal/service/dao/mapper/SauAuditMapper.xml"/>
     </mappers>
+
+
 </configuration>

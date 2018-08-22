@@ -153,6 +153,27 @@ public class AccountSecureServiceImpl implements AccountSecureService {
     }
 
     @Override
+    public int sendModifyEmailCaptcha(SecureMsg record) {
+        int accId = SessionLocal.local(session).getUserIdentity().getAccId();
+        User user = userService.selectByPrimaryKey(accId);
+        if (user == null) return Operation.FAILED;
+
+        String code = new Captcha().getCode();
+        SessionContent.Captcha captcha = SessionContent.createCaptcha();
+        captcha.setCode(code);
+        captcha.setCreateTime(TimeUtil.currentTime());
+        captcha.setActiveTime(1000 * 60 * 10);
+        SessionLocal.local(session).createCaptcha(captcha, UPDATE);
+
+        EmailMsg msg = new EmailMsg();
+        msg.setTo(record.getEmail());
+        msg.setSubject("修改邮箱安全验证码");
+        msg.setText("您所申请修改邮箱安全验证码为：" + code + "\n有效期为10分钟，请勿泄露。如果此请求不是由您发出，请留意您的账户安全");
+        emailSender.send(msg);
+        return Operation.SUCCESSFULLY;
+    }
+
+    @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int modifyEmail(SecureMsg msg) {
         SessionContent.Captcha captcha = SessionContent.createCaptcha();

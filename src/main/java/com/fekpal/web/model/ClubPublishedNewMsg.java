@@ -2,13 +2,11 @@ package com.fekpal.web.model;
 
 
 import java.sql.Timestamp;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 社团发布新消息的实体类，暂时跟校社联的一样
- * @author kanlon
- * @time 2018/4/9
+ * @author zhangcanlong
+ * @date 2018/4/9
  */
 public class ClubPublishedNewMsg {
     private String messageTitle;

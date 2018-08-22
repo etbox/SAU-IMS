@@ -1,4 +1,4 @@
-package com.fekpal.web.controller.sauAdmin;
+package com.fekpal.web.controller.sau;
 
 import com.fekpal.api.MessageSendService;
 import com.fekpal.api.OrgMemberService;
@@ -10,8 +10,6 @@ import com.fekpal.common.json.JsonResult;
 import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.dao.model.Message;
 import com.fekpal.dao.model.Org;
-import com.fekpal.dao.model.OrgMember;
-import com.fekpal.dao.model.Person;
 import com.fekpal.service.model.domain.SRMsgRecord;
 import com.fekpal.web.model.*;
 import org.apache.log4j.Logger;
@@ -22,11 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import java.sql.Timestamp;
 import java.util.*;
 
-import static java.lang.System.out;
-
 /**
  * 消息发布的控制类
- * @author kanlon
+ * @author zhangcanlong
  * @date 2018/4/5
  */
 @Controller
@@ -49,18 +45,17 @@ public class SauSendPublishMsgController {
      */
     @ResponseBody
     @RequestMapping(value = "/sau/clubs",method = RequestMethod.GET)
-    public JsonResult<List<SauMsgPublicOrgObj>> getMassageType(@RequestParam("messageType")int messageType){
-        List<Org> orgList= orgService.loadAllOrg(1,1000);
-        List<SauMsgPublicOrgObj> sauMsgPublicOrgObjList = new ArrayList<SauMsgPublicOrgObj>() ;
+    public JsonResult<List<SauMsgPublicOrgObj>> getMassageType(@RequestParam("messageType")int messageType,PageList page){
+        List<Org> orgList= orgService.loadAllOrg(page.getOffset(),page.getLimit());
+        Integer orgNum = orgService.countAllOrg();
+        List<SauMsgPublicOrgObj> sauMsgPublicOrgObjList = new ArrayList<>() ;
         JsonResult<List<SauMsgPublicOrgObj>> result = new JsonResult<>();
 
         if (orgList == null || orgList.size() == 0) {
-            result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
+            result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "无结果");
             return result;
         }
-
         if(messageType == 2){
-            if(orgList != null){
                 for(Org org:orgList){
                     SauMsgPublicOrgObj obj = new SauMsgPublicOrgObj();
                    //由于发送消息的时候需要的是user_id，因此，这里选择返回用户id给前端，当做社团id
@@ -68,9 +63,8 @@ public class SauSendPublishMsgController {
                     obj.setClubName(org.getOrgName());
                     sauMsgPublicOrgObjList.add(obj);
                 }
-            }
         }
-        result.setStateCode(ResponseCode.RESPONSE_SUCCESS,"获取成功");
+        result.setStateCode(ResponseCode.RESPONSE_SUCCESS,orgNum.toString());
         result.setData(sauMsgPublicOrgObjList);
         return result;
     }
@@ -82,30 +76,8 @@ public class SauSendPublishMsgController {
      */
     @ResponseBody
     @RequestMapping(value = "/sau/msg/old",method = RequestMethod.GET)
-    public JsonResult<List<OldPublishMsg>> getAllOldMsg(PageList page){
-
-        //将前端发送过来的页码offset，转化为跳过数offset
-        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
-
-        logger.info("page的参数"+page.getOffset()+",limit:"+page.getLimit());
-        List<Message> messageList = messageSendService.loadAllMessage(page.getOffset(),page.getLimit());
-        JsonResult<List<OldPublishMsg>> result = new JsonResult<>();
-        List<OldPublishMsg> oldPublishMsgList = new ArrayList<>();
-        if (messageList == null || messageList.size() == 0) {
-            result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
-            return result;
-        }
-        for(Message message:messageList){
-            OldPublishMsg oldPublishMsg = new OldPublishMsg();
-            oldPublishMsg.setMessageId(message.getMessageId());
-            oldPublishMsg.setMessageTitle(message.getMessageTitle());
-            oldPublishMsg.setMessageType(message.getMessageType());
-            oldPublishMsg.setSendTime(message.getReleaseTime());
-            oldPublishMsgList.add(oldPublishMsg);
-        }
-        result.setCode(ResponseCode.RESPONSE_SUCCESS);
-        result.setData(oldPublishMsgList);
-        return result;
+    public JsonResult<List<OldPublishMsg>> getAllOldMsg(SearchPage page){
+        return searchMsg(page);
     }
 
     /**
@@ -251,16 +223,11 @@ public class SauSendPublishMsgController {
     @ResponseBody
     @RequestMapping(value = "/sau/msg/old/search",method = RequestMethod.GET)
     public JsonResult<List<OldPublishMsg>> searchMsg (SearchPage page) {
-        //将前端发送的页码offset，转化为跳过条数offset
-        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
-
-        List<Message> messageList = messageSendService.queryByMessageTitle(page.getFindContent(),page.getOffset(),page.getLimit());
         JsonResult<List<OldPublishMsg>> result = new JsonResult<>();
+        List<Message> messageList = messageSendService.queryByMessageTitle(page.getFindContent(),page.getOffset(),page.getLimit());
+        Integer messageNum = messageSendService.countByMessageTitle(page.getFindContent());
+
         List<OldPublishMsg> oldPublishMsgList = new ArrayList<>();
-        if (messageList == null || messageList.size() == 0) {
-            result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
-            return result;
-        }
         for(Message message:messageList){
             OldPublishMsg oldPublishMsg = new OldPublishMsg();
             oldPublishMsg.setMessageId(message.getMessageId());
@@ -269,7 +236,7 @@ public class SauSendPublishMsgController {
             oldPublishMsg.setSendTime(message.getReleaseTime());
             oldPublishMsgList.add(oldPublishMsg);
         }
-        result.setCode(ResponseCode.RESPONSE_SUCCESS);
+        result.setStateCode(ResponseCode.RESPONSE_SUCCESS,messageNum.toString());
         result.setData(oldPublishMsgList);
         return result;
     }

@@ -44,4 +44,11 @@ public interface MemberOrgService extends BaseService<MemberOrg> {
      * @return 成员组织记录集
      */
     List<MemberOrg> loadAllOrg(int offset, int limit);
+
+    /**
+     * 统计所有该用户加入的有效组织数
+     *
+     * @return 成员组织记录数
+     */
+    Integer countAllOrg();
 }

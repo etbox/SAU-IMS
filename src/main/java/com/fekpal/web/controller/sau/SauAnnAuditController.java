@@ -1,4 +1,4 @@
-package com.fekpal.web.controller.sauAdmin;
+package com.fekpal.web.controller.sau;
 
 import com.fekpal.api.AnniversaryAuditService;
 import com.fekpal.api.ClubService;
@@ -6,12 +6,10 @@ import com.fekpal.api.SauService;
 import com.fekpal.common.constant.Operation;
 import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
-import com.fekpal.common.utils.FileUtil;
 import com.fekpal.common.utils.TimeUtil;
 import com.fekpal.dao.model.AnniversaryAudit;
 import com.fekpal.dao.model.Org;
 import com.fekpal.web.model.AnnAuditListModel;
-import com.fekpal.web.model.PageList;
 import com.fekpal.web.model.SauAnnAuditDetail;
 import com.fekpal.web.model.SearchPage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +17,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 /**
  * 年度审核的控制类
- * @author kanlon
- * @time 2018/4/6
+ * @author zhangcanlong
+ * @date 2018/4/6
  */
 
 @Controller
@@ -50,35 +49,8 @@ public class SauAnnAuditController {
      */
     @ResponseBody
     @RequestMapping(value = "/sau/audit/ann", method = RequestMethod.GET)
-    public JsonResult<List<AnnAuditListModel>> getAllAuditMsg(PageList page) {
-
-        //将前端发送过来的页码offset，转化为跳过数offset
-        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
-
-        JsonResult<List<AnnAuditListModel>> result = new JsonResult<>();
-        List<AnnAuditListModel> sauAuditList = new ArrayList<>();
-        List<AnniversaryAudit> auditList = auditService.loadAllAudit(page.getOffset(),page.getLimit());
-
-        if (auditList==null){result.setStateCode(ResponseCode.REQUEST_ERROR,"无结果");return result;}
-
-        Calendar c = Calendar.getInstance();
-        for (AnniversaryAudit audit : auditList){
-            AnnAuditListModel sauAudit = new AnnAuditListModel();
-            sauAudit.setAuditMsgId(audit.getId());
-            sauAudit.setAuditState(audit.getAuditState());
-            Org org = clubService.selectByPrimaryKey(audit.getOrgId());
-            //获取提交年份-1的年份作为年度审核的年份
-            c.setTime(audit.getSubmitTime());
-            int year = c.get(Calendar.YEAR)-1;
-            sauAudit.setRegisterName(year+org.getOrgName());
-            sauAudit.setRegisterTime(audit.getSubmitTime());
-            sauAudit.setRegisterName(org.getAdminName());
-            sauAudit.setRegisterTitle(audit.getAuditTitle());
-            sauAuditList.add(sauAudit);
-        }
-        result.setCode(ResponseCode.RESPONSE_SUCCESS);
-        result.setData(sauAuditList);
-        return result;
+    public JsonResult<List<AnnAuditListModel>> getAllAuditMsg(SearchPage page) {
+        return searchAuditMsg(page);
     }
 
     /**
@@ -147,29 +119,28 @@ public class SauAnnAuditController {
     @ResponseBody
     @RequestMapping(value = "/sau/audit/ann/reg/search", method = RequestMethod.GET)
     public JsonResult<List<AnnAuditListModel>> searchAuditMsg(SearchPage page) {
-        //将前端发送的页码offset，转化为跳过条数offset
-        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
-
         JsonResult<List<AnnAuditListModel>> result = new JsonResult<>();
         List<AnniversaryAudit> auditList = auditService.queryByAuditTitle(page.getFindContent(),page.getOffset(),page.getLimit());
+        Integer auditNum = auditService.countByAuditTitle(page.getFindContent());
         List<AnnAuditListModel> sauAuditList = new ArrayList<>();
-        if(auditList==null || auditList.size()==0){result.setStateCode(ResponseCode.REQUEST_ERROR,"搜索结果为空"); return result;}
         Calendar c = Calendar.getInstance();
-        for (AnniversaryAudit audit : auditList){
-            AnnAuditListModel sauAudit = new AnnAuditListModel();
-            sauAudit.setAuditMsgId(audit.getId());
-            sauAudit.setAuditState(audit.getAuditState());
-            Org org = clubService.selectByPrimaryKey(audit.getOrgId());
-            //获取提交年份-1的年份作为年度审核的年份
-            c.setTime(audit.getSubmitTime());
-            int year = c.get(Calendar.YEAR)-1;
-            sauAudit.setRegisterName(year+org.getOrgName());
-            sauAudit.setRegisterTime(audit.getSubmitTime());
-            sauAudit.setRegisterTitle(audit.getAuditTitle());
-            sauAudit.setRegisterName(org.getAdminName());
-            sauAuditList.add(sauAudit);
+        if(auditList!=null) {
+            for (AnniversaryAudit audit : auditList) {
+                AnnAuditListModel sauAudit = new AnnAuditListModel();
+                sauAudit.setAuditMsgId(audit.getId());
+                sauAudit.setAuditState(audit.getAuditState());
+                Org org = clubService.selectByPrimaryKey(audit.getOrgId());
+                //获取提交年份-1的年份作为年度审核的年份
+                c.setTime(audit.getSubmitTime());
+                int year = c.get(Calendar.YEAR) - 1;
+                sauAudit.setRegisterName(year + org.getOrgName());
+                sauAudit.setRegisterTime(audit.getSubmitTime());
+                sauAudit.setRegisterTitle(audit.getAuditTitle());
+                sauAudit.setRegisterName(org.getAdminName());
+                sauAuditList.add(sauAudit);
+            }
         }
-        result.setCode(ResponseCode.RESPONSE_SUCCESS);
+        result.setStateCode(ResponseCode.RESPONSE_SUCCESS,auditNum.toString());
         result.setData(sauAuditList);
         return result;
     }

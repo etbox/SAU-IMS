@@ -12,6 +12,11 @@ public class MessageType {
     public static final int ALL = 0;
 
     /**
+     * 社团内部消息
+     */
+    public static final int Org = 1;
+
+    /**
      * 自定义消息
      */
     public static final int CUSTOM = 2;

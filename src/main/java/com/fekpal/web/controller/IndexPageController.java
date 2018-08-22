@@ -1,12 +1,10 @@
 package com.fekpal.web.controller;
 
 import com.fekpal.api.ClubService;
-import com.fekpal.api.MemberOrgService;
 import com.fekpal.api.OrgMemberService;
 import com.fekpal.api.OrgService;
 import com.fekpal.common.constant.ResponseCode;
 import com.fekpal.common.json.JsonResult;
-import com.fekpal.dao.mapper.MemberOrgMapper;
 import com.fekpal.dao.model.Org;
 import com.fekpal.web.model.OrgDetail;
 import com.fekpal.web.model.OrgListMsg;
@@ -14,7 +12,10 @@ import com.fekpal.web.model.PageList;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,16 +48,10 @@ public class IndexPageController {
     @ResponseBody
     @RequestMapping(value = "/index/club", method = RequestMethod.GET)
     public JsonResult<List<OrgListMsg>> getClubList(PageList page) {
-
-        //前端传的offset是页码，转化为跳过的条数
-        if(page!=null){page.setOffset((page.getOffset()-1)*page.getLimit());}
-
         List<Org> clubList = orgService.loadAllOrg(page.getOffset(),page.getLimit());
         JsonResult<List<OrgListMsg>> result = new JsonResult<>();
 
-        if (clubList == null || clubList.size() == 0) {
-            result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
-        } else {
+        if (clubList != null ) {
             List<OrgListMsg> results = new ArrayList<>();
             for (Org club : clubList) {
                 OrgListMsg clubs = new OrgListMsg();
@@ -89,9 +84,7 @@ public class IndexPageController {
         Org org = orgService.selectByPrimaryKey(id);
         JsonResult<OrgDetail> result = new JsonResult<>();
 
-        if (org == null) {
-            result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");
-        } else {
+        if (org != null) {
             OrgDetail record = new OrgDetail();
             record.setOrgId(org.getOrgId());
             record.setAdminName(org.getAdminName());
@@ -123,6 +116,8 @@ public class IndexPageController {
 
             result.setStateCode(ResponseCode.RESPONSE_SUCCESS, "加载成功");
             result.setData(record);
+        }else {
+            result.setStateCode(ResponseCode.REQUEST_ERROR,"获取错误！");
         }
         logger.info("执行了获取某社团信息");
         return result;

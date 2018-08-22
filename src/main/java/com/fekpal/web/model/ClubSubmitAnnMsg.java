@@ -5,8 +5,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 社团发送年度审核注册信息的类
- * @author kanlon
- * @time 2018/4/7
+ * @author zhangcanlong
+ * @date 2018/4/7
  */
 public class ClubSubmitAnnMsg extends BaseModel {
     /**

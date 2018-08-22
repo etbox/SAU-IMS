@@ -1,4 +1,4 @@
-package com.fekpal.web.controller.clubAdmin;
+package com.fekpal.web.controller.club;
 
 import com.fekpal.api.ClubService;
 import com.fekpal.common.constant.Operation;
@@ -10,11 +10,6 @@ import com.fekpal.web.model.OrgDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.util.Map;
 
 
 /**
@@ -41,6 +36,7 @@ public class ClubCenterController {
         Org org = clubService.selectByPrimaryId();
         if (org == null) {result.setStateCode(ResponseCode.RESPONSE_ERROR, "无结果");return result; }
         OrgDetail detail = new OrgDetail();
+        detail.setOrgId(org.getOrgId());
         detail.setOrgName(org.getOrgName());
         detail.setLogo(org.getOrgLogo());
         detail.setDescription(org.getDescription());

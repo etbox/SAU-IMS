@@ -21,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpSession;
 import java.sql.Timestamp;
@@ -114,10 +115,10 @@ public class OrgMemberServiceImpl extends BaseServiceImpl<OrgMemberMapper, OrgMe
     public List<OrgMember> loadAllUnAuditMember(int offset, int limit) {
         int orgId = SessionLocal.local(session).getUserIdentity().getUid();
         ExampleWrapper<OrgMember> example = new ExampleWrapper<>();
-        example.eq("member_state",AvailableState.AUDITING)
-                .and().eq("org_id",orgId)
-                .orderBy("join_time",false);
-        List<OrgMember> orgMemberList = mapper.selectByExample(example,offset,limit);
+        example.eq("member_state", AvailableState.AUDITING)
+                .and().eq("org_id", orgId)
+                .orderBy("join_time", false);
+        List<OrgMember> orgMemberList = mapper.selectByExample(example, offset, limit);
         return orgMemberList;
     }
 
@@ -132,10 +133,18 @@ public class OrgMemberServiceImpl extends BaseServiceImpl<OrgMemberMapper, OrgMe
     public List<OrgMember> loadAllAuditMember(int offset, int limit) {
         int orgId = SessionLocal.local(session).getUserIdentity().getUid();
         ExampleWrapper<OrgMember> example = new ExampleWrapper<>();
-        example.and().eq("org_id",orgId)
-                .orderBy("join_time",false);
-        List<OrgMember> orgMemberList = mapper.selectByExample(example,offset,limit);
-        return orgMemberList;
+        example.and().eq("org_id", orgId)
+                .orderBy("join_time", false);
+        return mapper.selectByExample(example, offset, limit);
+    }
+
+    @Override
+    public Integer countAllAuditMember() {
+        int orgId = SessionLocal.local(session).getUserIdentity().getUid();
+        ExampleWrapper<OrgMember> example = new ExampleWrapper<>();
+        example.and().eq("org_id", orgId)
+                .orderBy("join_time", false);
+        return mapper.countByExample(example);
     }
 
     /**
@@ -148,48 +157,58 @@ public class OrgMemberServiceImpl extends BaseServiceImpl<OrgMemberMapper, OrgMe
      */
     @Override
     public List<OrgMember> queryByRealName(String realName, int offset, int limit) {
+        if (StringUtils.isEmpty(realName)) {
+            return loadAllAuditMember(offset, limit);
+        }
         int orgId = SessionLocal.local(session).getUserIdentity().getUid();
         ExampleWrapper<Person> personExample = new ExampleWrapper<>();
-        personExample.like("real_name",realName);
-        List<Person> personList = personMapper.selectByExample(personExample,offset,limit);
+        personExample.like("real_name", realName);
+        List<Person> personList = personMapper.selectByExample(personExample, offset, limit);
         List<OrgMember> orgMemberList = new ArrayList<>();
-        if(personList == null ){return null;}
-        for(Person person : personList){
-            ExampleWrapper<OrgMember> example = new ExampleWrapper<>();
-            example.eq("member.person_id",person.getPersonId()).and().eq("org_id",orgId);
-            List<OrgMember> orgMembers = mapper.selectByExample(example,1,1);
-            orgMemberList.add(orgMembers.get(0));
+        if (personList != null) {
+            for (Person person : personList) {
+                ExampleWrapper<OrgMember> example = new ExampleWrapper<>();
+                example.eq("member.person_id", person.getPersonId()).and().eq("org_id", orgId);
+                OrgMember orgMember = mapper.selectFirstByExample(example);
+                orgMemberList.add(orgMember);
+            }
         }
         return orgMemberList;
     }
 
-    /**
-     * 社团对个人加入社团进行通过或拒绝
-     *
-     * @param auditId   审核id
-     * @param auditResult 社团成员类
-     * @return 操作状态 Operation.SUCCESSFULLY 成功 Operation.FAILED 失败
-     */
+    @Override
+    public Integer countAuditByRealName(String realName) {
+        if (StringUtils.isEmpty(realName)) {
+            return countAllAuditMember();
+        }
+        int orgId = SessionLocal.local(session).getUserIdentity().getUid();
+        ExampleWrapper<Person> personExample = new ExampleWrapper<>();
+        personExample.like("real_name", realName);
+        return personMapper.countByExample(personExample);
+    }
+
     @Override
     @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
-    public int passOrRejectAuditByIdAndModel(int auditId,AuditResult auditResult) {
+    public int passOrRejectAuditByIdAndModel(int auditId, AuditResult auditResult) {
         int orgId = SessionLocal.local(session).getUserIdentity().getUid();
         //如果该id的审核已经是通过，拒绝或者删除了的，则不能操作
         ExampleWrapper<OrgMember> example = new ExampleWrapper<>();
-        example.eq("id",auditId).and().ne("member_state", AuditState.AUDITING);
-        if(mapper.countByExample(example)>=1){return Operation.FAILED;};
-
+        example.eq("id", auditId).and().ne("member_state", AuditState.AUDITING);
+        if (mapper.countByExample(example) >= 1) {
+            return Operation.FAILED;
+        }
+        ;
         OrgMember orgMember = mapper.selectByPrimaryKey(auditId);
         orgMember.setMemberState(auditResult.getAuditState());
         //如果状态是通过的话，在社团表内也增加人数
-        if(auditResult.getAuditState()== AuditState.PASS){
+        if (auditResult.getAuditState() == AuditState.PASS) {
             Org org = orgMapper.selectByPrimaryKey(orgId);
-            org.setMembers(org.getMembers()+1);
+            org.setMembers(org.getMembers() + 1);
             orgMapper.updateByPrimaryKey(org);
         }
         ExampleWrapper<OrgMember> exampleUpdate = new ExampleWrapper<>();
-        exampleUpdate.eq("org_id",orgId).and().eq("id",auditId);
-        int row  = mapper.updateByExample(orgMember,exampleUpdate);
+        exampleUpdate.eq("org_id", orgId).and().eq("id", auditId);
+        int row = mapper.updateByExample(orgMember, exampleUpdate);
         return row == 1 ? Operation.SUCCESSFULLY : Operation.FAILED;
     }
 }

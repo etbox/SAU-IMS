@@ -102,6 +102,9 @@
             <if test="description != null">
                 description = #{description},
             </if>
+            <if test="orgType != null">
+                org_type = #{orgType},
+            </if>
             <if test="adminName != null">
                 admin_name = #{adminName},
             </if>
