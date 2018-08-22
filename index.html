@@ -4,6 +4,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="校社联社团管理系统在大学社团管理中对社团活动的申请及审核、新社团的申报及审核、社团年度注册的审核、一些重要活动信息的公示和社团资金的管理均有着极其重要的意义。本系统从大学生社团管理的业务需求进行分析，实现了基于B/S的社团管理业务内容为主线的社团管理系统。">
+  <meta name="keywords" content="大学社团,社团管理,校社联管理">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>校社联 · 信息管理系统</title>
   <link rel="stylesheet" href="./stylesheets/index.css">
@@ -12,21 +14,25 @@
   <link rel="stylesheet" href="./stylesheets/post.css">
   <link rel="stylesheet" href="./stylesheets/footer.css">
   <link rel="stylesheet" href="./stylesheets/login.css">
+  <link rel="shortcut icon" href="./images/SAU-logo.png" type="image/x-icon">
+
 </head>
 
 <body class="Site">
 
   <header>
     <nav class="cl wpn">
-      <a href="http://sauims.cn/SAU_IMS" class="logo z"><img src="./images/SAU-logo.png" alt="logo"></a>
-      <a href="http://sauims.cn/SAU_IMS">
+      <a href="/" class="logo z">
+        <img src="./images/SAU-logo.png" alt="logo">
+      </a>
+      <a href="/">
         <div class="headerInfo z cl">校社联 · 信息管理系统</div>
       </a>
       <div class="topButtons y cl">
         <a id="showLogin">
           <div class="logIn">登录</div>
         </a>
-        <a href="">
+        <a href="sign_up.html">
           <div class="signUp">注册</div>
         </a>
       </div>
@@ -58,7 +64,9 @@
         <input type="checkbox" id="RemPsw">
         <div class="RemPsw1">记住密码</div>
 
-        <div id="Loga"><a id="ha">登陆</a></div>
+        <div id="Loga">
+          <a id="ha">登陆</a>
+        </div>
 
         <!--叉叉按钮-->
         <a id="x">×</a>
@@ -73,8 +81,12 @@
         <img src="./images/T.png" id="T1">
         <img src="./images/F.png" id="F1">
 
-        <div id="yzm"><a href="#"><img src="./images/yzm.jpg"></a></div>
-        <div id="forgetPsw"><a href="#">忘记密码？</a></div>
+        <div id="yzm">
+          <img src="/login/captcha" onclick="javascript:this.src='/login/captcha?tm='+Math.random()" />
+        </div>
+        <div id="forgetPsw">
+          <a href="#">忘记密码？</a>
+        </div>
 
       </form>
     </div>

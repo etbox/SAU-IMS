@@ -69,14 +69,9 @@
       formData[item.name] = item.value;
     });
     var json = JSON.stringify(formData);
-    // console.log(formData);
+    console.log(json);
 
-    var url = 'login/go';
-    // var json = JSON.stringify({
-    //   "userName": "s19961234@126.com",
-    //   "password": "123456",
-    //   "captcha": "cabce"
-    // });
+    var url = '/login';
     sendAjax(url, json)
       .done(getResponse);
   }
@@ -98,14 +93,25 @@
     'use strict';
     var notOK = document.getElementById('pswNotNull');
     var notOKimg = document.getElementById('F1');
-    if (response.code === 0) {
-      // TODO: 链接未定
-    } else {
+    var yzm = document.getElementById('yzmwrong');
+    if (response.code === 0) {} else {
       notOKimg.style.display = 'block';
       notOKimg.style.left = '68%';
       notOKimg.style.top = '160px';
       notOK.style.display = 'block';
+      yzm.style.display = 'block';
       notOK.firstChild.data = response.msg;
+    }
+    if (response.data === 0) {
+      //member  个人
+      window.location.href = '/member_inner_system2.html';
+
+    } else if (response.data === 1) {
+      // 社团
+      window.location.href = '/club_inner_system1.html';
+    } else if (response.data === 2) {
+      //校社联
+      window.location.href = '/sau_inner_system.html';
     }
   }
 
@@ -126,7 +132,6 @@
     addHandler('showLogin', 'click', showLog);
     addHandler('Loga', 'click', sendLoginData);
   }
-
 
 
 
