@@ -50,7 +50,7 @@
     $('.middleSide').children('div').remove();
     console.log('执行次数1');
     $.ajax({
-        url: '/sau/msg/old',
+        url: '/club/msg/old',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -128,7 +128,7 @@
       $('#' + json.data[i].messageId).click(function() {
         close();
         $.ajax({
-            url: '/sau/msg/old/' + this.id + '',
+            url: '/club/msg/old/' + this.id + '',
             type: 'get',
             headers: {
               'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -139,6 +139,7 @@
           .done(function(json) {
             checkID = json.data.messageId;
             news(json.data.messageTitle, '', json.data.sendTime, json.data.messageContent);
+            console.log(json);
 
 
           })
@@ -174,7 +175,7 @@
   function getSearchData() {
     $('#middleSide').children('div').remove();
     $.ajax({
-        url: '/sau/msg/old/search' + '?findContent=' + $('.searchBar').val() + '&offset=1&limit=1000000',
+        url: '/club/msg/old/search' + '?findContent=' + $('.searchBar').val() + '&offset=1&limit=1000000',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'
@@ -263,15 +264,15 @@
       if (receiversArr[i] === '所有人') {
         sendType = 0;
         publishedObject = "";
-        sendMsgURL = '/sau/msg/new/all';
+        sendMsgURL = '/club/msg/new/all';
       } else if (receiversArr[i] === '社团内') {
         sendType = 1;
         publishedObject = "";
-        sendMsgURL = '/sau/msg/new/group';
+        sendMsgURL = '/club/msg/new/group';
       }
       //判断是不是自定义发送类型的
       if (sendType === 2 && publishedObject != '') {
-        sendMsgURL = '/sau/clubs?messageType=2';
+        sendMsgURL = '/club/clubs?messageType=2';
       }
     }
     var sendTime = new Date().getTime();
@@ -305,7 +306,7 @@
     $("#shoujianren").val("");
 
     $.ajax({
-        url: '/sau/club',
+        url: '/club/other',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'

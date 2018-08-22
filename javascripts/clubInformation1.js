@@ -228,7 +228,7 @@
 
       /*获取数据后操作dom*/
       $('.middleSide').append(row(i, json.data[i].orgId));
-      $('.MHEAD').attr("src", "http://localhost:8080/resource/logo/" + json.data[i].logo);
+      $('.MHEAD').attr("src", "/resource/logo/" + json.data[i].logo);
       $('#WRITER' + i).text(orgName);
       $('#NUM' + i).text(likeClick);
     }

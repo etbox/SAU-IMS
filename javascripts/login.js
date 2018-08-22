@@ -69,7 +69,7 @@
       formData[item.name] = item.value;
     });
     var json = JSON.stringify(formData);
-    // console.log(formData);
+    console.log(json);
 
     var url = '/login';
     sendAjax(url, json)

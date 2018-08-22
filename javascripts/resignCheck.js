@@ -51,7 +51,7 @@
   function getNewsData() { //从服务器获取数据
 
     $.ajax({
-        url: '/sau/audit/reg.json',
+        url: '/sau/audit/reg',
         type: 'get',
         headers: {
           'Content-type': 'application/x-www-form-urlencoded;charset=UTF-8'

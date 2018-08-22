@@ -226,7 +226,7 @@
               "Content-Type": "application/json"
           },
           "processData": false,
-          "data": "{\n\t\"deleteMsgIds\":\"21\"\t\n}"
+          "data": delJson
       }
 
       $.ajax(settings).done(function (response) {
