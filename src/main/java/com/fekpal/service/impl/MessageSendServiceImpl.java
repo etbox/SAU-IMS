@@ -104,6 +104,7 @@ public class MessageSendServiceImpl extends BaseServiceImpl<MessageMapper, Messa
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int deleteByMessageId(SRMsgRecord record) {
         int accId = SessionLocal.local(session).getUserIdentity().getAccId();
         ExampleWrapper<MessageReceive> sendExample = new ExampleWrapper<>();

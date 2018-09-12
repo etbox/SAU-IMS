@@ -12,7 +12,8 @@ import com.fekpal.dao.model.Message;
 import com.fekpal.dao.model.Org;
 import com.fekpal.service.model.domain.SRMsgRecord;
 import com.fekpal.web.model.*;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +38,7 @@ public class SauSendPublishMsgController {
     @Autowired
     private PersonService personService;
 
-    Logger logger = Logger.getLogger(SauSendPublishMsgController.class);
+    private static Logger logger =   LogManager.getLogger(SauSendPublishMsgController.class);
     /**
      * 根据用户id和消息类型，返回发布对象
      * @param messageType 消息类型
@@ -187,14 +188,15 @@ public class SauSendPublishMsgController {
     }
 
     /**
-     * 根据消息id删除历史发布消息
+     * 根据消息id删除历史发布消息(该功能暂时不要，还不清楚逻辑)
      * @param deleteMsgIdsModel 要删除的消息的id
      * @return 是否成功
      */
     @ResponseBody
     @RequestMapping(value = "/sau/msg/old",method = RequestMethod.DELETE)
     public JsonResult<String> deleteMsgs (@RequestBody DeleteMsgIdsModel deleteMsgIdsModel) {
-        JsonResult<String> result = new JsonResult<>();
+        return null;
+/*        JsonResult<String> result = new JsonResult<>();
         if(deleteMsgIdsModel.getDeleteMsgIds()==null){
             result.setStateCode(ResponseCode.REQUEST_ERROR,"要删除的消息为空，不能执行");
             return result;
@@ -212,7 +214,7 @@ public class SauSendPublishMsgController {
         }else{
             result.setStateCode(ResponseCode.REQUEST_ERROR,"删除失败");
         }
-        return result;
+        return result;*/
     }
 
     /**

@@ -17,6 +17,8 @@ import com.fekpal.dao.model.AnniversaryAudit;
 import com.fekpal.web.model.ClubSubmitAnnMsg;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletResponse;
@@ -259,11 +261,13 @@ public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAudi
      * @return Operation.SUCCESSFULLY; 删除成功 Operation.FAILED 删除失败
      */
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int deleteById(int auditId) {
         AnniversaryAudit anniversaryAudit = new AnniversaryAudit();
         anniversaryAudit.setId(auditId);
         anniversaryAudit.setAuditState(AuditState.DELETE);
         int row = mapper.updateByPrimaryKeySelective(anniversaryAudit);
+        if(row > 1){throw new CRUDException("删除审核消息异常,删除"+row +"行");}
         return row == 1 ? Operation.SUCCESSFULLY : Operation.FAILED;
     }
 
@@ -349,6 +353,7 @@ public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAudi
      * @return Operation.SUCCESSFULLY; 删除成功 Operation.FAILED 删除失败
      */
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int updateAuditStateByAnnModel(AnniversaryAudit anniversaryAudit) {
         ExampleWrapper<AnniversaryAudit> example = new ExampleWrapper<>();
         example.eq("audit_state", AuditState.PASS).or().eq("audit_state", AuditState.REJECT).and().eq("id", anniversaryAudit.getId());
@@ -358,6 +363,7 @@ public class AnniversaryAuditServiceImpl extends BaseServiceImpl<AnniversaryAudi
             return Operation.FAILED;
         }
         int row = mapper.updateByPrimaryKeySelective(anniversaryAudit);
+        if(row > 1){throw new CRUDException("更新审核消息异常,更新"+row +"行");}
         return row == 1 ? Operation.SUCCESSFULLY : Operation.FAILED;
     }
 }

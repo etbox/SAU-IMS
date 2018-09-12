@@ -1,11 +1,13 @@
 package com.fekpal.service.impl;
 
-import com.fekpal.common.base.BaseServiceImpl;
-import com.fekpal.dao.mapper.UserMapper;
-import com.fekpal.common.base.ExampleWrapper;
-import com.fekpal.dao.model.User;
 import com.fekpal.api.UserService;
+import com.fekpal.common.base.BaseServiceImpl;
+import com.fekpal.common.base.ExampleWrapper;
+import com.fekpal.dao.mapper.UserMapper;
+import com.fekpal.dao.model.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -70,6 +72,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, rollbackFor = {Exception.class})
     public int updateLastLoginById(User user) {
         if (user.getUserId() != null && user.getLoginIp() != null && user.getLoginTime() != null) {
             return mapper.updateByPrimaryKeySelective(user);
