@@ -1,30 +1,29 @@
-# SAU-IMS 前端部分
-大创项目：校社联管理系统
+# SAU-IMS
 
+## Project setup
+```
+npm install
+```
 
-<h4>Update 2018.8.22</h4>
-0.修改所有链接，链接应该没有错了的，前端做测试的时候，不应该修改链接了。应该自己开启tomcat服务器，然后用反向代理服务器转发请求到kanlon.ink，应该就可以进行测试了的，后端已经在后端代码做了跨域处理。<br/>
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
 
-<h4>Update 2018.5.11</h4>
-0.这个是今天布置到服务器上最新的前端，不过还存在很多问题<br/>
+### Compiles and minifies for production
+```
+npm run build
+```
 
+### Run your tests
+```
+npm run test
+```
 
-<h4>Update 2018.5.6</h4>
-0.实现和测试了前端大部分功能，但是还没与整合。<br/>
-1.还差三个管理端的个人中心（包含个人中心 信息展示和信息修改，每页的头像，用户名），个人中心页面还需要写。<br/>
-2.还有社团端和校社联端的消息发布，社团管理端年度注册提交，最新公告最右边删除按钮,社员加入社团逻辑。<br/>
+### Lints and fixes files
+```
+npm run lint
+```
 
-<h4>Update 2018.4.24</h4>
-0.将前端分离出来到tomcat上测试了，直接用json文件做测试，增加了json文件夹，最新消息和社团信息部分测试过，明天准备测试修改最新消息的详细内容。<br/>
-1.修改了首页的进入到某个社团的详细信息查看的部分布局。<br/>
-2.修改了验证码链接和点击换张图片。<br/>
-3.将首页部分的展示图片链接换成后端需要的，首页基本功能已经与后端交互完成（首页还有忘记密码和注册没有测试）。<br/>
-
-<h4>Update 2018.4.23</h4>
-1.将社团管理页面和校社联管理页面分离开，采用复制多个页面的方式。<br/>
-2.修改了所有ajaxa请求问题，将其他js执行代码放入到ajaxa返回后的函数中。<br/>
-3.在后面加个1的页面是校社联页面。加2的是社团页面，以person开头的是个人页面。<br/>
-
-<h4>Update 2017.8.18</h4>
-上传半成品网页。<br/>
-配置git的时候，务必要注意用户名和邮箱的正确性。<br/>
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
