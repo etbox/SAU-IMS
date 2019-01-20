@@ -1,10 +1,11 @@
 <template>
   <div id="app">
     <NavBar/>
-    <div id="nav">
+    <!-- <div id="nav">
       <router-link to="/">Home</router-link>|
       <router-link to="/about">About</router-link>
-    </div>
+    </div> -->
+    <Banner/>
     <router-view/>
   </div>
 </template>
@@ -43,11 +44,13 @@ a {
 
 <script>
 import NavBar from "@/components/NavBar.vue";
+import Banner from '@/components/Banner.vue'
 
 export default {
   name: "home",
   components: {
-    NavBar
+    NavBar,
+    Banner
   }
 };
 </script>
