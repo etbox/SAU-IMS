@@ -1,7 +1,8 @@
 <template>
   <div id="app">
+    <NavBar/>
     <div id="nav">
-      <router-link to="/">Home</router-link> |
+      <router-link to="/">Home</router-link>|
       <router-link to="/about">About</router-link>
     </div>
     <router-view/>
@@ -9,8 +10,18 @@
 </template>
 
 <style>
+body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  text-decoration: none;
+}
+
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -29,3 +40,14 @@
   color: #42b983;
 }
 </style>
+
+<script>
+import NavBar from "@/components/NavBar.vue";
+
+export default {
+  name: "home",
+  components: {
+    NavBar
+  }
+};
+</script>
