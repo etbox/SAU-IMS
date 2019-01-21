@@ -6,7 +6,7 @@
         <span>校社联 · 信息管理系统</span>
       </a>
       <div class="nav">
-        <button class="button button-primary button-rounded">登录</button>
+        <button class="button button-primary button-rounded" @click="showLogin">登录</button>
         <button class="button button-primary button-rounded">注册</button>
       </div>
     </div>
@@ -15,11 +15,17 @@
 
 <script>
 export default {
-  name: "NavBar"
+  name: "NavBar",
+  methods: {
+    showLogin() {
+      this.$parent.isLogining = !this.$parent.isLogining;
+    }
+  }
 };
 </script>
 
 <style lang="scss" scoped>
+@import url("../assets/button.css");
 $length: 50px;
 .header {
   $padding: 150px;
@@ -30,6 +36,8 @@ $length: 50px;
     left: $padding;
     right: $padding;
   }
+  z-index: 10;
+  position: relative;
 }
 
 .relative {
@@ -62,28 +70,10 @@ $navpadding: 30px;
 }
 
 .button {
-  color: #666;
-  background-color: #eee;
-  border-color: #eee;
-  font-weight: 300;
-  font-size: 16px;
-  text-decoration: none;
-  text-align: center;
   line-height: 30px;
   height: 30px;
   padding: 0 20px;
   margin: 0 15px;
-  display: inline-block;
-  appearance: none;
-  cursor: pointer;
-  border: none;
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-  -webkit-transition-property: all;
-  transition-property: all;
-  -webkit-transition-duration: 0.3s;
-  transition-duration: 0.3s;
 }
 
 .button-primary,

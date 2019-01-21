@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <!-- <Login/> -->
     <Banner/>
     <!-- <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>-->
@@ -13,6 +14,7 @@
 // import HelloWorld from "@/components/HelloWorld.vue";
 import Banner from "@/components/Banner.vue";
 import ItemList from "@/components/ItemList.vue";
+// import Login from "@/components/Login.vue";
 
 export default {
   name: "home",
@@ -20,6 +22,7 @@ export default {
     // HelloWorld,
     Banner,
     ItemList
+    // Login
   },
   data: function() {
     return {

@@ -1,19 +1,40 @@
 <template>
   <div id="app">
     <NavBar/>
+    <Login v-show="isLogining"/>
     <!-- <div id="nav">
       <router-link to="/">Home</router-link>|
       <router-link to="/about">About</router-link>
-    </div> -->
+    </div>-->
     <router-view/>
   </div>
 </template>
 
-<style>
+<script>
+import NavBar from "@/components/NavBar.vue";
+import Login from "@/components/Login.vue";
+
+export default {
+  name: "home",
+  components: {
+    NavBar,
+    Login
+  },
+  data() {
+    return {
+      isLogining: true // 登录框显示flag,默认不显示
+    };
+  }
+};
+</script>
+
+<style lang="scss">
+$blue: #3fb2fa;
 body {
   height: 100vh;
   margin: 0;
   padding: 0;
+  background-color: #e4e8ec;
 }
 
 a {
@@ -40,14 +61,3 @@ a {
   color: #42b983;
 }
 </style>
-
-<script>
-import NavBar from "@/components/NavBar.vue";
-
-export default {
-  name: "home",
-  components: {
-    NavBar
-  }
-};
-</script>

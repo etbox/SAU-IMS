@@ -1,14 +1,14 @@
 <template>
   <div class="list-container">
     <div class="list-head">
-      <div class="posistion">
+      <div class="posistioned">
         <img src="@/images/xiangyun2.png" alt="祥云" class>
         <span class="list-title">{{name}}</span>
         <img src="@/images/xiangyun2.png" alt="祥云" class="flipx">
       </div>
     </div>
     <div class="list-body">
-      <!-- <IndexItem/> -->
+      <IndexItem v-for="i in 10"/>
     </div>
   </div>
 </template>
@@ -22,6 +22,11 @@ export default {
   },
   components: {
     IndexItem
+  },
+  data() {
+    return {
+      // items: [0, 1, 2]
+    };
   }
 };
 </script>
@@ -43,7 +48,7 @@ $blue: #3fb2fa;
   // border: 0.1px solid red;
   flex: 0 45px;
 }
-.posistion {
+.posistioned {
   float: left;
   span {
     color: $blue;
@@ -56,7 +61,11 @@ $blue: #3fb2fa;
 .list-body {
   border: 0.1px solid green;
   flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
+
 .flipx {
   -moz-transform: scaleX(-1);
   -webkit-transform: scaleX(-1);
