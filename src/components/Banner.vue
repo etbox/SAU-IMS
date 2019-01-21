@@ -1,6 +1,6 @@
 <template>
   <!-- banner begin -->
-  <div id="swiper">
+  <div class="swiper">
     <swiper :options="swiperOption">
       <swiper-slide>
         <img src="@/images/slide1.png" alt="First slide">
@@ -51,8 +51,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#swiper {
-  padding: 30px;
+.swiper {
+  // margin: {
+  //   top: 30px;
+  //   left: 30px;
+  // }
+  // margin: 0;
+  // padding: 30px;
+  margin-top: 30px;
 }
 </style>
 

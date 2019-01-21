@@ -1,21 +1,25 @@
 <template>
   <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <Banner/>
+    <!-- <img alt="Vue logo" src="../assets/logo.png">
+    <HelloWorld msg="Welcome to Your Vue.js App"/>-->
+    <ItemList name="社团"/>
     <footer>{{copyright}}</footer>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
-
-const copyright = "2019";
+// import HelloWorld from "@/components/HelloWorld.vue";
+import Banner from "@/components/Banner.vue";
+import ItemList from "@/components/ItemList.vue";
 
 export default {
   name: "home",
   components: {
-    HelloWorld
+    // HelloWorld,
+    Banner,
+    ItemList
   },
   data: function() {
     return {
@@ -26,8 +30,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$height: 75px;
 footer {
+  $height: 75px;
   color: white;
   background-color: gray;
   height: $height;

@@ -1,11 +1,11 @@
 <template>
-  <header>
+  <header class="header">
     <div class="relative">
-      <a id="logo" href="/">
-        <img src="@/images/sau_logo.svg" alt="校社联管理系统">
+      <a class="logo" href="/">
+        <img src="@/images/sau.svg" alt="校社联管理系统" class="logo-img">
         <span>校社联 · 信息管理系统</span>
       </a>
-      <div id="nav">
+      <div class="nav">
         <button class="button button-primary button-rounded">登录</button>
         <button class="button button-primary button-rounded">注册</button>
       </div>
@@ -20,19 +20,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-header {
+$length: 50px;
+.header {
   $padding: 150px;
   background-color: #3ea4fb;
-  height: 50px;
-  // width: 100vw;
+  height: $length;
   min-width: 1080px;
   padding: {
     left: $padding;
     right: $padding;
   }
-  position: relative;
-  top: 0;
-  z-index: 100;
 }
 
 .relative {
@@ -40,31 +37,27 @@ header {
 }
 
 $navpadding: 30px;
-#logo {
-  $length: 50px;
+
+.logo {
   display: inline-block;
-  font-size: 1.5em;
+  font-size: 1.5rem;
   line-height: $length;
   color: white;
   font-weight: 500;
-  img {
-    vertical-align: middle;
-    margin-right: 6px;
-    width: $length;
-    height: $length;
-  }
   position: absolute;
   left: $navpadding;
 }
+.logo-img {
+  vertical-align: middle;
+  margin-right: 6px;
+  width: $length;
+  height: $length;
+}
 
-#nav {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+.nav {
   position: absolute;
   right: $navpadding;
-  top: 10px;
-  height: 40px;
+  top: 5px;
   line-height: 40px;
 }
 
