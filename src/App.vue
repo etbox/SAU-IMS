@@ -22,7 +22,7 @@ export default {
   },
   data() {
     return {
-      isLogining: true // 登录框显示flag,默认不显示
+      isLogining: false // 登录框显示flag,默认不显示
     };
   }
 };

@@ -1,40 +1,39 @@
 <template>
   <div class="overlayer" @click.self="vanish">
-    <div class="login-container">
-      <div class="login-head">
-        <span>登录</span>
-      </div>
-      <div class="login-body">
-        <!-- 上方已布好局 -->
-        <div class="panel-input">
-          <input type="text" name="username" id="username" placeholder="邮箱 | 用户名">
-          <input type="password" name="password" id="password" placeholder="密码">
-          <div class="captcha-container">
-            <input type="text" name="captcha" id="captcha" placeholder="验证码">
-            <img src="@/images/yzm.jpg" alt="验证码" class="captcha_img">
-          </div>
-          <div class="option-container">
-            <input type="checkbox" name="saveName" id="saveName">
-            <span>记住账号</span>
-            <router-link to="/forgot" class="forgotPW">忘记密码</router-link>
-          </div>
-          <button class="button button-primary button-rounded button-login">登录</button>
-        </div>
-        <!-- 左右分界线 -->
-        <div class="panel-info"></div>
-      </div>
+    <div class="container">
+      <Panel v-bind="{title:'登录'}">
+        <InputInfo
+          v-bind="{isTrue:false, isFalse:true, msg:'请填写邮箱或账号名', type:'text', placeholder:'邮箱 | 用户名'}"
+        />
+        <InputInfo
+          v-bind="{isTrue:false, isFalse:true, msg:'', type:'password', placeholder:'密码'}"
+        />
+        <InputInfo v-bind="{isTrue:false, isFalse:true, msg:'', type:'text', placeholder:'验证码'}">
+          <img src="@/images/yzm.jpg" alt="验证码" class="yzm">
+        </InputInfo>
+
+        <router-link to="/forgotpw" class="forgotPW">
+          <span @click="vanish">忘记密码</span>
+        </router-link>
+
+        <button class="button button-primary button-rounded button-fgpw">登录</button>
+      </Panel>
     </div>
   </div>
 </template>
 
 <script>
+import InputInfo from "@/components/InputInfo.vue";
+import Panel from "@/components/Panel.vue";
+
 export default {
   name: "Login",
   methods: {
     vanish() {
       this.$parent.isLogining = false;
     }
-  }
+  },
+  components: { Panel, InputInfo }
 };
 </script>
 
@@ -52,41 +51,9 @@ $blue: #3fb2fa;
   display: flex;
   justify-content: space-around;
 }
-.login-container {
-  background-color: #fff;
-  width: 580px;
-  min-height: 250px;
-  height: 250px;
-  max-height: 350px;
-  margin-top: 150px;
-  display: flex;
-  flex-direction: column;
-}
-.login-head {
-  background-color: $blue;
-  color: #fff;
-  font-size: 24px;
-  flex: 0 50px;
-  display: flex;
-  align-items: center;
-  justify-content: space-around;
-}
-
-// 以下是登录面板
-
-.login-body {
-  display: flex;
+.yzm {
+  display: block;
   height: 100%;
-}
-.panel-input {
-  background-color: pink;
-  flex: 3;
-  // display: flex;
-  // flex-direction: column;
-}
-
-.panel-info {
-  background-color: orange;
-  flex: 2;
+  width: 100%;
 }
 </style>

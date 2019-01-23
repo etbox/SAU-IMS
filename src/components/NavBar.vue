@@ -1,13 +1,15 @@
 <template>
   <header class="header">
     <div class="relative">
-      <a class="logo" href="/">
-        <img src="@/images/sau.svg" alt="校社联管理系统" class="logo-img">
-        <span>校社联 · 信息管理系统</span>
-      </a>
+      <router-link class="logo" to="/">
+        <img src="@/images/sau.svg" alt="校社联管理系统" class="logo-img" @click="vanish">
+        <span @click="vanish">校社联 · 信息管理系统</span>
+      </router-link>
       <div class="nav">
         <button class="button button-primary button-rounded" @click="showLogin">登录</button>
-        <button class="button button-primary button-rounded">注册</button>
+        <router-link to="/signup">
+          <button class="button button-primary button-rounded" @click="vanish">注册</button>
+        </router-link>
       </div>
     </div>
   </header>
@@ -19,6 +21,9 @@ export default {
   methods: {
     showLogin() {
       this.$parent.isLogining = !this.$parent.isLogining;
+    },
+    vanish() {
+      this.$parent.isLogining = false;
     }
   }
 };
@@ -77,33 +82,14 @@ $navpadding: 30px;
 }
 
 .button-primary,
-.button-primary-flat {
-  background-color: #327aa7;
-  border-color: #327aa7;
-  color: #fff;
+.button-primary:active {
+  background-color: #367ba5;
 }
-.button-primary:visited,
-.button-primary-flat:visited {
-  color: #fff;
+
+.button-primary:hover {
+  background-color: #326171;
 }
-.button-primary:hover,
-.button-primary:focus,
-.button-primary-flat:hover,
-.button-primary-flat:focus {
-  background-color: #32617e;
-  border-color: #32617e;
-  color: #fff;
-}
-.button-primary:active,
-.button-primary.active,
-.button-primary.is-active,
-.button-primary-flat:active,
-.button-primary-flat.active,
-.button-primary-flat.is-active {
-  background-color: #2798eb;
-  border-color: #2798eb;
-  color: #0880d7;
-}
+
 
 .button-rounded {
   border-radius: 10px;
