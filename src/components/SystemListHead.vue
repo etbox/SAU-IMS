@@ -30,6 +30,8 @@ $gray: #e4e8ec;
   flex: 0 0 100px;
   background-color: $gray;
   display: flex;
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.2);
+  z-index: 6;
 }
 .list-head-left {
   flex: 1;

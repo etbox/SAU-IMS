@@ -55,7 +55,7 @@ $blue: #3fb2fa;
   height: 100%;
   top: 0;
   left: 0;
-  z-index: 2;
+  z-index: 9;
   display: flex;
   justify-content: space-around;
 }
