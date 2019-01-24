@@ -1,7 +1,7 @@
 <template>
   <div class="panel-container">
-    <div class="panel-head">
-      <span v-if="title">{{title}}</span>
+    <div class="panel-head" v-if="title">
+      <span>{{title}}</span>
     </div>
     <div class="panel-body">
       <slot></slot>
@@ -28,7 +28,6 @@ $gray: #e4e8ec;
   border: 0.01px solid $gray;
   box-shadow: 2px 2px 5px rgba(128, 128, 128, 0.7);
   width: 580px;
-  margin-top: 100px;
   display: flex;
   flex-direction: column;
 }

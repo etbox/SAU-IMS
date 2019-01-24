@@ -10,6 +10,9 @@
         <router-link to="/signup">
           <button class="button button-primary button-rounded" @click="vanish">注册</button>
         </router-link>
+        <router-link to="/demo">
+          <button class="button button-primary button-rounded" @click="vanish">系统</button>
+        </router-link>
       </div>
     </div>
   </header>
@@ -35,7 +38,7 @@ $length: 50px;
 .header {
   $padding: 150px;
   background-color: #3ea4fb;
-  height: $length;
+  // flex: 0 $length;
   min-width: 1080px;
   padding: {
     left: $padding;
@@ -43,10 +46,12 @@ $length: 50px;
   }
   z-index: 10;
   position: relative;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, 0.3);
 }
 
 .relative {
   position: relative;
+  height: $length;
 }
 
 $navpadding: 30px;
@@ -89,7 +94,6 @@ $navpadding: 30px;
 .button-primary:hover {
   background-color: #326171;
 }
-
 
 .button-rounded {
   border-radius: 10px;

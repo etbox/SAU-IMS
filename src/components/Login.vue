@@ -1,7 +1,7 @@
 <template>
   <div class="overlayer" @click.self="vanish">
     <div class="container">
-      <Panel v-bind="{title:'登录'}">
+      <Panel v-bind="{title:'登录'}" class="panel">
         <InputInfo
           v-bind="{isTrue:false, isFalse:true, msg:'请填写邮箱或账号名', type:'text', placeholder:'邮箱 | 用户名'}"
         />
@@ -12,11 +12,19 @@
           <img src="@/images/yzm.jpg" alt="验证码" class="yzm">
         </InputInfo>
 
-        <router-link to="/forgotpw" class="forgotPW">
-          <span @click="vanish">忘记密码</span>
-        </router-link>
+        <div class="login-options">
+          <div class="rememberID">
+            <input type="checkbox" name="rememberID" id="rememberID">
+            <label for="rememberID">记住账号</label>
+          </div>
+          <div class="forgotPW">
+            <router-link to="/forgotpw">
+              <span @click="vanish">忘记密码</span>
+            </router-link>
+          </div>
+        </div>
 
-        <button class="button button-primary button-rounded button-fgpw">登录</button>
+        <button class="button button-primary button-rounded button-login">登录</button>
       </Panel>
     </div>
   </div>
@@ -55,5 +63,24 @@ $blue: #3fb2fa;
   display: block;
   height: 100%;
   width: 100%;
+}
+.login-options {
+  margin: 10px 0;
+}
+.rememberID {
+  display: inline-block;
+  position: relative;
+  right: 130px;
+}
+.forgotPW {
+  display: inline-block;
+  position: relative;
+  right: 20px;
+}
+.button-login {
+  width: 250px;
+}
+.panel {
+  margin-top: 100px;
 }
 </style>

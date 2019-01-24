@@ -1,7 +1,7 @@
 <template>
   <div class="root">
     <div class="container">
-      <Panel v-bind="{title:'忘记密码'}">
+      <Panel v-bind="{title:'忘记密码'}" class="panel">
         <InputInfo
           v-bind="{isTrue:false, isFalse:true, msg:'请填写邮箱或账号名', type:'text', placeholder:'邮箱 | 用户名'}"
         />
@@ -47,5 +47,8 @@ button {
   width: 250px;
   margin-top: 10px;
 }
-</style>
 
+.panel {
+  margin-top: 100px;
+}
+</style>

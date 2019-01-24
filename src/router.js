@@ -21,14 +21,29 @@ export default new Router({
       component: () => import( /* webpackChunkName: "about" */ './views/About.vue')
     },
     {
+      path: '/forgotpw',
+      name: 'forgotpw',
+      component: () => import('./views/ForgotPW.vue')
+    },
+    {
       path: '/signup',
       name: 'signup',
       component: () => import('./views/SignUp.vue')
     },
     {
-      path: '/forgotpw',
-      name: 'forgotpw',
-      component: () => import('./views/ForgotPW.vue')
+      path: '/clubsignup',
+      name: 'clubsignup',
+      component: () => import('./views/ClubSignUp.vue')
+    },
+    {
+      path: '/system',
+      name: 'system',
+      component: () => import('./views/System.vue')
+    },
+    {
+      path: '/demo',
+      name: 'demo',
+      component: () => import('./views/demo.vue')
     }
   ]
 })
