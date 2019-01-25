@@ -8,13 +8,42 @@
       </div>
     </div>
     <div class="list-body">
-      <IndexItem v-for="i in 10"/>
+      <IndexItem
+        v-for="item in items"
+        :key="item.orgid"
+        :view="item.view"
+        :orgName="item.orgName"
+        :description="item.description"
+        :members="item.members"
+        :likeClick="item.likeClick"
+      />
     </div>
   </div>
 </template>
 
 <script>
 import IndexItem from "./IndexItem.vue";
+import axios from "axios";
+
+let items = [];
+axios
+  .get("//kanlon.ink/index/club", {
+    offset: 1,
+    limit: 10
+  })
+  .then(res => {
+    // console.log(res);
+    const arr = res.data.data;
+    console.log(items);
+    for (let i = 0; i < arr.length; i++) {
+      items.push(arr[i]);
+    }
+    console.log(items);
+  })
+  .catch(function(error) {
+    console.log(error);
+  });
+
 export default {
   name: "ItemList",
   props: {
@@ -25,7 +54,7 @@ export default {
   },
   data() {
     return {
-      // items: [0, 1, 2]
+      items
     };
   }
 };
@@ -59,11 +88,12 @@ $blue: #3fb2fa;
 }
 
 .list-body {
-  border: 0.1px solid green;
+  // border: 0.1px solid green;
   flex: 1;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  // justify-content: flex-start;
 }
 
 .flipx {

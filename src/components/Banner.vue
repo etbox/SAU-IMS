@@ -52,12 +52,6 @@ export default {
 
 <style lang="scss" scoped>
 .swiper {
-  // margin: {
-  //   top: 30px;
-  //   left: 30px;
-  // }
-  // margin: 0;
-  // padding: 30px;
   margin-top: 30px;
 }
 </style>

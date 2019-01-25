@@ -1,16 +1,16 @@
 <template>
   <div class="item-container">
     <div class="img-container">
-      <img :src="clubView" :alt="clubName">
+      <img :src="view" :alt="orgName">
     </div>
     <div class="item-details">
-      <div class="club-name">{{clubName}}</div>
+      <div class="club-name">{{orgName}}</div>
       <div class="description">{{description}}</div>
       <div class="icon-numbers">
         <img src="@/images/member.png" alt="成员人数">
         <span>{{members+'人'}}</span>
         <img src="@/images/heard_logo.png" alt="喜欢数">
-        <span>{{likeNumber+'人'}}</span>
+        <span>{{likeClick+'人'}}</span>
       </div>
     </div>
   </div>
@@ -27,13 +27,23 @@ export default {
   //   members: Number,
   //   likeNumber: Number
   // },
+  props: {
+    orgName: String,
+    orgId: Number,
+    description: String,
+    view: String,
+    logo: String,
+    members: Number,
+    likeClick: Number,
+    isClick: Number
+  },
   data() {
     return {
-      clubView: require("@/images/摄影协会.png"),
-      clubName: "摄影协会",
-      description: "定格光影，留住光阴",
-      members: 65,
-      likeNumber: 32
+      // view: require("@/images/摄影协会.png"),
+      // orgName: "摄影协会",
+      // description: "定格光影，留住光阴",
+      // members: 65,
+      // likeClick: 32
     };
   }
 };
@@ -54,9 +64,6 @@ export default {
     transition: transform 0.2s;
     z-index: -10;
   }
-  // img:hover {
-  // transform: scale(1.05);
-  // }
 }
 .item-container:hover {
   img {
