@@ -3,29 +3,31 @@
     <div class="club-head">
       <div class="head-left">
         <div class="club-avatar">
-          <img src="@/images/avatar.png" alt="社团头像">
+          <!-- <img src="@/images/avatar.png" alt="社团头像"> -->
+          <img :src="details.logo" alt="社团头像">
         </div>
         <div class="club-title">
-          <div class="club-name">摄影协会</div>
-          <div class="description">定格光影，留住光阴</div>
+          <div class="club-name">{{details.orgName}}</div>
+          <div class="description">{{details.headIntroduce}}</div>
         </div>
       </div>
       <div class="head-right">
-        <div class="found-time">2002年2月22日成立</div>
+        <!-- <div class="found-time">2002年2月22日成立</div> -->
+        <div
+          class="found-time"
+        >{{new Date(details.foundTime).getFullYear()}}年{{new Date(details.foundTime).getMonth()+1}}月{{new Date(details.foundTime).getDate()}}日成立</div>
       </div>
     </div>
     <div class="club-body">
       <div class="body-left">
         <div class="info-top">
-          <div class="admin-name">会长：买买买</div>
-          <div class="admin-email">邮箱：789@jkl.com</div>
-          <div class="admin-phone">手机：12312341234</div>
+          <div class="admin-name">会长：{{details.adminName}}</div>
+          <div class="admin-email">邮箱：{{details.email}}</div>
+          <div class="admin-phone">手机：{{details.phone}}</div>
         </div>
         <div class="info-bottom">
           <div class="description-head">社团简介：</div>
-          <div
-            class="description-body"
-          >摄影协会是由摄影爱好者组成的非营利性社团，包容接纳擅长各门类摄影、持各种摄影观念的人员，让不同的思想得以碰撞交融。让摄影爱好者能够共同学习，互相交流，在学习和交流中提高艺术修养和摄影技术。</div>
+          <div class="description-body">{{details.description}}</div>
         </div>
       </div>
       <div class="body-right">
@@ -41,6 +43,7 @@
 import Copyright from "@/components/Copyright.vue";
 import ECharts from "vue-echarts";
 import "echarts/lib/chart/pie";
+import axios from "axios";
 
 export default {
   components: {
@@ -148,8 +151,51 @@ export default {
             ]
           }
         ]
+      },
+      details: {
+        orgId: 12,
+        orgName: "",
+        orgType: "",
+        adminName: "",
+        phone: "",
+        email: "",
+        foundTime: 1513195751000,
+        headIntroduce: "",
+        description: "",
+        joinState: 0,
+        likeClick: 2,
+        members: 2,
+        logo: "default_logo.jpg",
+        view: "default_overview.png",
+        firstGradeNum: 0,
+        secondGradeNum: 0,
+        threeGradeNum: 0,
+        fourGradeNum: 2,
+        graduatedNum: 0,
+        manNum: 2,
+        womanNum: 0,
+        date: 0
       }
     };
+  },
+  created() {
+    const orgId = this.$route.params.orgId;
+    axios
+      .get(`//kanlon.ink/index/club/${orgId}`)
+      .then(res => {
+        // console.log(res);
+        const resData = res.data.data;
+        // console.log(resData);
+        for (const key in resData) {
+          if (resData.hasOwnProperty(key)) {
+            const element = resData[key];
+            this.details[key] = element;
+          }
+        }
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   }
 };
 </script>

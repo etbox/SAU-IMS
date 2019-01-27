@@ -27,23 +27,6 @@ import IndexItem from "./IndexItem.vue";
 import axios from "axios";
 
 let items = [];
-axios
-  .get("//kanlon.ink/index/club", {
-    offset: 1,
-    limit: 10
-  })
-  .then(res => {
-    // console.log(res);
-    const arr = res.data.data;
-    // console.log(items);
-    for (let i = 0; i < arr.length; i++) {
-      items.push(arr[i]);
-    }
-    // console.log(items);
-  })
-  .catch(function(error) {
-    console.log(error);
-  });
 
 export default {
   name: "ItemList",
@@ -57,6 +40,25 @@ export default {
     return {
       items
     };
+  },
+  created() {
+    axios
+      .get("//kanlon.ink/index/club", {
+        offset: 1,
+        limit: 10
+      })
+      .then(res => {
+        // console.log(res);
+        const arr = res.data.data;
+        // console.log(items);
+        for (let i = 0; i < arr.length; i++) {
+          items.push(arr[i]);
+        }
+        // console.log(items);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   }
 };
 </script>
