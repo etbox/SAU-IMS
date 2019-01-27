@@ -10,7 +10,8 @@
     <div class="list-body">
       <IndexItem
         v-for="item in items"
-        :key="item.orgid"
+        :key="item.orgId"
+        :orgId="item.orgId"
         :view="item.view"
         :orgName="item.orgName"
         :description="item.description"
@@ -34,11 +35,11 @@ axios
   .then(res => {
     // console.log(res);
     const arr = res.data.data;
-    console.log(items);
+    // console.log(items);
     for (let i = 0; i < arr.length; i++) {
       items.push(arr[i]);
     }
-    console.log(items);
+    // console.log(items);
   })
   .catch(function(error) {
     console.log(error);

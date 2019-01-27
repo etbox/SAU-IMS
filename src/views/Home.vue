@@ -4,7 +4,7 @@
     <!-- <img alt="Vue logo" src="../assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/>-->
     <ItemList name="社团"/>
-    <footer>{{copyright}}</footer>
+    <Copyright/>
   </div>
 </template>
 
@@ -13,18 +13,15 @@
 // import HelloWorld from "@/components/HelloWorld.vue";
 import Banner from "@/components/Banner.vue";
 import ItemList from "@/components/ItemList.vue";
+import Copyright from "@/components/Copyright.vue";
 
 export default {
   name: "home",
   components: {
     // HelloWorld,
     Banner,
-    ItemList
-  },
-  data: function() {
-    return {
-      copyright: `${new Date().toString().slice(11, 15)} @ 校社联管理系统`
-    };
+    ItemList,
+    Copyright
   }
 };
 </script>
@@ -32,12 +29,5 @@ export default {
 <style lang="scss" scoped>
 .home {
   height: 100%;
-}
-footer {
-  $height: 75px;
-  color: white;
-  background-color: gray;
-  width: 100%;
-  line-height: $height;
 }
 </style>

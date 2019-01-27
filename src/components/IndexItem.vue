@@ -1,32 +1,26 @@
 <template>
   <div class="item-container">
-    <div class="img-container">
-      <img :src="view" :alt="orgName">
-    </div>
-    <div class="item-details">
-      <div class="club-name">{{orgName}}</div>
-      <div class="description">{{description}}</div>
-      <div class="icon-numbers">
-        <img src="@/images/member.png" alt="成员人数">
-        <span>{{members+'人'}}</span>
-        <img src="@/images/heard_logo.png" alt="喜欢数">
-        <span>{{likeClick+'人'}}</span>
+    <router-link :to="'/club/'+orgId">
+      <div class="img-container">
+        <img :src="view" :alt="orgName">
       </div>
-    </div>
+      <div class="item-details">
+        <div class="club-name">{{orgName}}</div>
+        <div class="description">{{description}}</div>
+        <div class="icon-numbers">
+          <img src="@/images/member.png" alt="成员人数">
+          <span>{{members+'人'}}</span>
+          <img src="@/images/heard_logo.png" alt="喜欢数">
+          <span>{{likeClick+'人'}}</span>
+        </div>
+      </div>
+    </router-link>
   </div>
 </template>
 
 <script>
 export default {
   name: "IndexItem",
-  // props: {
-  //   clubId: Number,
-  //   clubView: [String],
-  //   clubName: String,
-  //   description: String,
-  //   members: Number,
-  //   likeNumber: Number
-  // },
   props: {
     orgName: String,
     orgId: Number,

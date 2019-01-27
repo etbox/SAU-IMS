@@ -21,6 +21,11 @@ export default new Router({
       component: () => import( /* webpackChunkName: "about" */ './views/About.vue')
     },
     {
+      path: '/club/:orgId',
+      name: 'clubdetails',
+      component: () => import('./views/ClubDetails.vue')
+    },
+    {
       path: '/forgotpw',
       name: 'forgotpw',
       component: () => import('./views/ForgotPW.vue')
