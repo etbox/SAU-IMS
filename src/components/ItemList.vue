@@ -51,7 +51,7 @@ export default {
         // console.log(res);
         const arr = res.data.data;
         // console.log(items);
-        for (let i = 0; i < arr.length; i++) {
+        for (let i = 0; i < arr.length && items.length < 10; i++) {
           items.push(arr[i]);
         }
         // console.log(items);

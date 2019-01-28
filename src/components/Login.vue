@@ -3,14 +3,14 @@
     <div class="container">
       <Panel v-bind="{title:'登录'}" class="panel">
         <InputInfo
-          v-bind="{isTrue:false, isFalse:true, msg:'请填写邮箱或账号名', type:'text', placeholder:'邮箱 | 用户名'}"
+          v-bind="{isTrue:false, isFalse:false, msg:'请填写邮箱或账号名', type:'text', placeholder:'邮箱 | 用户名'}"
         />
         <InputInfo
-          v-bind="{isTrue:false, isFalse:true, msg:'', type:'password', placeholder:'密码'}"
+          v-bind="{isTrue:false, isFalse:false, msg:'', type:'password', placeholder:'密码'}"
         />
-        <InputInfo v-bind="{isTrue:false, isFalse:true, msg:'', type:'text', placeholder:'验证码'}">
-          <img src="@/images/yzm.jpg" alt="验证码" class="yzm">
-        </InputInfo>
+        <InputInfo
+          v-bind="{isTrue:false, isFalse:false, msg:'验证码错误', type:'text', placeholder:'验证码'}"
+        />
 
         <div class="login-options">
           <div class="rememberID">
@@ -24,7 +24,7 @@
           </div>
         </div>
 
-        <button class="button button-primary button-rounded button-login">登录</button>
+        <button class="button button-primary button-rounded button-login" @click="login">登录</button>
       </Panel>
     </div>
   </div>
@@ -33,12 +33,72 @@
 <script>
 import InputInfo from "@/components/InputInfo.vue";
 import Panel from "@/components/Panel.vue";
+import axios from "axios";
+import qs from "qs";
+
+// axios.defaults.headers.post["Content-Type"] = "application/json;charse=UTF-8";
+let params = {
+    userName: "person1@126.com",
+    password: "12345",
+    captcha: "8QCG8"
+  },
+  str =
+    '{\n"userName":"person1@126.com",\n"password":"12345",\n"captcha":"8QCG8"\n}';
 
 export default {
   name: "Login",
   methods: {
     vanish() {
       this.$parent.isLogining = false;
+    },
+    login() {
+      axios
+        .post(
+          "//kanlon.ink/login",
+          {
+            userName: "person1@126.com",
+            password: "12345",
+            captcha: "8QCG8"
+          },
+          // str,
+          // qs.stringify(params),
+          {
+            headers: {
+              "Content-Type": "application/json;charset=UTF-8"
+              // "Access-Control-Allow-Origin": "http://localhost:8080"
+            },
+            transformRequest: [
+              function(data) {
+                data = qs.stringify(data);
+                return data;
+              }
+            ]
+            // withCredentials: true
+            // proxy: {
+            //   host: "localhost",
+            //   port: 8080
+            // }
+          }
+        )
+        // axios({
+        //   method: "post",
+        //   url: "//kanlon.ink/login",
+        //   headers: {
+        //     "Content-type": "application/json"
+        //   },
+        //   data: param,
+        //   transformRequest: [
+        //     function() {
+        //       return JSON.stringify(param);
+        //     }
+        //   ]
+        // })
+        .then(res => {
+          console.log(res);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   },
   components: { Panel, InputInfo }

@@ -15,7 +15,8 @@
   <div class="container captcha" v-else>
     <div class="panel-input">
       <div class="captcha-extra">
-        <slot></slot>
+        <!-- <img src="@/images/yzm.jpg" alt="验证码"> -->
+        <img :src="captchaImg" alt="点击刷新验证码" v-if="flag" @click="refresh">
       </div>
       <input
         type="text"
@@ -23,6 +24,7 @@
         id="captcha"
         class="captcha-basic"
         :placeholder="placeholder"
+        @focus.once="showCaptcha"
       >
     </div>
     <div class="panel-info">
@@ -36,6 +38,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "InputInfo",
   props: {
@@ -44,6 +48,20 @@ export default {
     isFalse: Boolean,
     msg: String,
     placeholder: String
+  },
+  methods: {
+    showCaptcha() {
+      this.flag = true;
+    },
+    refresh() {
+      this.captchaImg = `//kanlon.ink/login/captcha?r=${Math.random() * 10000}`;
+    }
+  },
+  data() {
+    return {
+      flag: false,
+      captchaImg: `//kanlon.ink/login/captcha?r=${Math.random() * 10000}`
+    };
   }
 };
 </script>
@@ -105,6 +123,10 @@ input:focus {
   margin: {
     right: 10px;
     top: 3px;
+  }
+
+  img {
+    cursor: pointer;
   }
 }
 
