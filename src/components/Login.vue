@@ -34,16 +34,12 @@
 import InputInfo from "@/components/InputInfo.vue";
 import Panel from "@/components/Panel.vue";
 import axios from "axios";
-import qs from "qs";
 
-// axios.defaults.headers.post["Content-Type"] = "application/json;charse=UTF-8";
 let params = {
-    userName: "person1@126.com",
-    password: "12345",
-    captcha: "8QCG8"
-  },
-  str =
-    '{\n"userName":"person1@126.com",\n"password":"12345",\n"captcha":"8QCG8"\n}';
+  userName: "person1@126.com",
+  password: "12345",
+  captcha: "8QCG8"
+};
 
 export default {
   name: "Login",
@@ -53,48 +49,13 @@ export default {
     },
     login() {
       axios
-        .post(
-          "//kanlon.ink/login",
-          {
-            userName: "person1@126.com",
-            password: "12345",
-            captcha: "8QCG8"
-          },
-          // str,
-          // qs.stringify(params),
-          {
-            headers: {
-              "Content-Type": "application/json;charset=UTF-8"
-              // "Access-Control-Allow-Origin": "http://localhost:8080"
-            },
-            transformRequest: [
-              function(data) {
-                data = qs.stringify(data);
-                return data;
-              }
-            ]
-            // withCredentials: true
-            // proxy: {
-            //   host: "localhost",
-            //   port: 8080
-            // }
+        .post("//kanlon.ink/login", params, {
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8"
           }
-        )
-        // axios({
-        //   method: "post",
-        //   url: "//kanlon.ink/login",
-        //   headers: {
-        //     "Content-type": "application/json"
-        //   },
-        //   data: param,
-        //   transformRequest: [
-        //     function() {
-        //       return JSON.stringify(param);
-        //     }
-        //   ]
-        // })
+        })
         .then(res => {
-          console.log(res);
+          console.log(res.data);
         })
         .catch(function(error) {
           console.log(error);

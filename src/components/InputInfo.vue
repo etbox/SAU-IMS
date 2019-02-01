@@ -1,7 +1,7 @@
 <template>
   <div class="container" v-if="placeholder !== '验证码'">
     <div class="panel-input">
-      <input :type="type" class="input" :placeholder="placeholder">
+      <input :type="type" class="input" :placeholder="placeholder" v-model="value">
     </div>
     <div class="panel-info">
       <div v-if="isTrue||isFalse">
@@ -15,8 +15,9 @@
   <div class="container captcha" v-else>
     <div class="panel-input">
       <div class="captcha-extra">
-        <!-- <img src="@/images/yzm.jpg" alt="验证码"> -->
-        <img :src="captchaImg" alt="点击刷新验证码" v-if="flag" @click="refresh">
+        <slot>
+          <img :src="captchaImg" alt="点击刷新验证码" v-if="flag" @click="refresh">
+        </slot>
       </div>
       <input
         type="text"
@@ -25,6 +26,7 @@
         class="captcha-basic"
         :placeholder="placeholder"
         @focus.once="showCaptcha"
+        v-model="value"
       >
     </div>
     <div class="panel-info">
@@ -60,7 +62,8 @@ export default {
   data() {
     return {
       flag: false,
-      captchaImg: `//kanlon.ink/login/captcha?r=${Math.random() * 10000}`
+      captchaImg: `//kanlon.ink/login/captcha?r=${Math.random() * 10000}`,
+      value: ``
     };
   }
 };

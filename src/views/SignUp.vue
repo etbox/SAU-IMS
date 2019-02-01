@@ -11,16 +11,16 @@
       </div>
       <Panel class="panel">
         <InputInfo
-          v-bind="{isTrue:false, isFalse:true, msg:'请填写邮箱或账号名', type:'text', placeholder:'邮箱 | 用户名'}"
+          v-bind="{isTrue:false, isFalse:false, msg:'请填写邮箱或账号名', type:'text', placeholder:'邮箱 | 用户名'}"
         />
-        <InputInfo v-bind="{isTrue:false, isFalse:true, msg:'', type:'text', placeholder:'验证码'}">
+        <InputInfo v-bind="{isTrue:false, isFalse:false, msg:'', type:'text', placeholder:'验证码'}">
           <button class="button button-primary button-rounded button-captcha">发送验证码</button>
         </InputInfo>
         <InputInfo
-          v-bind="{isTrue:false, isFalse:true, msg:'', type:'password', placeholder:'密码'}"
+          v-bind="{isTrue:false, isFalse:false, msg:'', type:'password', placeholder:'密码'}"
         />
         <InputInfo
-          v-bind="{isTrue:false, isFalse:true, msg:'', type:'password', placeholder:'确认密码'}"
+          v-bind="{isTrue:false, isFalse:false, msg:'', type:'password', placeholder:'确认密码'}"
         />
         <button class="button button-primary button-rounded button-signup">注册</button>
       </Panel>
