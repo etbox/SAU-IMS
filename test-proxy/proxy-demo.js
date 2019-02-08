@@ -5,11 +5,11 @@ const request = require('request');
 // server地址
 const app = express();
 let serverUrl = 'http://kanlon.ink';
-app.use(express.static(path.join(__dirname, './src')));
+app.use(express.static(path.join(__dirname, './../src')));
 app.use('/', function (req, res) {
   let url = serverUrl + req.url;
   req.pipe(request(url)).pipe(res);
 });
-app.listen(3000, function () {
+app.listen(3001, function () {
   console.log('server is running at port 3000');
 });

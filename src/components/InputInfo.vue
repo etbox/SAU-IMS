@@ -1,7 +1,13 @@
 <template>
   <div class="container" v-if="placeholder !== '验证码'">
     <div class="panel-input">
-      <input :type="type" class="input" :placeholder="placeholder" v-model="value">
+      <input
+        :type="type"
+        class="input"
+        :placeholder="placeholder"
+        v-bind:value="value"
+        v-on:input="$emit('input', $event.target.value)"
+      >
     </div>
     <div class="panel-info">
       <div v-if="isTrue||isFalse">
@@ -26,7 +32,8 @@
         class="captcha-basic"
         :placeholder="placeholder"
         @focus.once="showCaptcha"
-        v-model="value"
+        v-bind:value="value"
+        v-on:input="$emit('input', $event.target.value)"
       >
     </div>
     <div class="panel-info">
@@ -40,8 +47,6 @@
 </template>
 
 <script>
-import axios from "axios";
-
 export default {
   name: "InputInfo",
   props: {

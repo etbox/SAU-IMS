@@ -4,12 +4,15 @@
       <Panel v-bind="{title:'登录'}" class="panel">
         <InputInfo
           v-bind="{isTrue:false, isFalse:false, msg:'请填写邮箱或账号名', type:'text', placeholder:'邮箱 | 用户名'}"
+          v-model="userName"
         />
         <InputInfo
           v-bind="{isTrue:false, isFalse:false, msg:'', type:'password', placeholder:'密码'}"
+          v-model="password"
         />
         <InputInfo
           v-bind="{isTrue:false, isFalse:false, msg:'验证码错误', type:'text', placeholder:'验证码'}"
+          v-model="captcha"
         />
 
         <div class="login-options">
@@ -35,12 +38,6 @@ import InputInfo from "@/components/InputInfo.vue";
 import Panel from "@/components/Panel.vue";
 import axios from "axios";
 
-let params = {
-  userName: "person1@126.com",
-  password: "12345",
-  captcha: "8QCG8"
-};
-
 export default {
   name: "Login",
   methods: {
@@ -48,8 +45,19 @@ export default {
       this.$parent.isLogining = false;
     },
     login() {
+      let params = {
+          userName: this.userName,
+          password: this.password,
+          captcha: this.captcha
+        },
+        url = `//kanlon.ink/login`;
+
+      // url = `http://localhost:3000/login`;
+
+      console.log(params);
+
       axios
-        .post("//kanlon.ink/login", params, {
+        .post(url, params, {
           headers: {
             "Content-Type": "application/json;charset=UTF-8"
           }
@@ -62,7 +70,14 @@ export default {
         });
     }
   },
-  components: { Panel, InputInfo }
+  components: { Panel, InputInfo },
+  data() {
+    return {
+      userName: ``,
+      password: ``,
+      captcha: ``
+    };
+  }
 };
 </script>
 
