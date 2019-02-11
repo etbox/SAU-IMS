@@ -43,7 +43,7 @@ export default {
   },
   created() {
     axios
-      .get("//kanlon.ink/index/club", {
+      .get("/index/club", {
         offset: 1,
         limit: 10
       })

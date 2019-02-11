@@ -50,7 +50,7 @@ export default {
           password: this.password,
           captcha: this.captcha
         },
-        url = `//kanlon.ink/login`;
+        url = `/login`;
 
       // url = `http://localhost:3000/login`;
 

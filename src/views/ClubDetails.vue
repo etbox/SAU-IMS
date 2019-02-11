@@ -181,7 +181,7 @@ export default {
   created() {
     const orgId = this.$route.params.orgId;
     axios
-      .get(`//kanlon.ink/index/club/${orgId}`)
+      .get(`/index/club/${orgId}`)
       .then(res => {
         // console.log(res);
         const resData = res.data.data;

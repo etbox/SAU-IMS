@@ -61,13 +61,13 @@ export default {
       this.flag = true;
     },
     refresh() {
-      this.captchaImg = `//kanlon.ink/login/captcha?r=${Math.random() * 10000}`;
+      this.captchaImg = `/login/captcha?r=${Math.random() * 10000}`;
     }
   },
   data() {
     return {
       flag: false,
-      captchaImg: `//kanlon.ink/login/captcha?r=${Math.random() * 10000}`,
+      captchaImg: `/login/captcha?r=${Math.random() * 10000}`,
       value: ``
     };
   }
