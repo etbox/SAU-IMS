@@ -60,11 +60,13 @@ export default {
           const element = params[key];
           if (!element) {
             alert("还有未填项！");
+            isFilled = false;
             break;
+          } else {
+            isFilled = true;
           }
         }
       }
-      isFilled = true;
 
       if (isFilled) {
         axios
@@ -82,7 +84,7 @@ export default {
 
             if (res.data.code === 2 && res.data.msg.search(/JDBC/) !== -1) {
               alert("数据库正在重新连接，请重试");
-            } else if (res.data.code !== 3) {
+            } else if (res.data.code !== 0) {
               alert(res.data.msg);
             }
           })

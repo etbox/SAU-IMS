@@ -7,6 +7,7 @@
         :placeholder="placeholder"
         v-bind:value="value"
         v-on:input="$emit('input', $event.target.value)"
+        @blur="$emit('blur', $event.target.value)"
       >
     </div>
     <div class="panel-info">

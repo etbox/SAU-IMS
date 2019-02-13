@@ -10,13 +10,29 @@
         </router-link>
       </div>
       <Panel class="panel">
-        <InputInfo v-bind="{isTrue:false, isFalse:false, type:'text', placeholder:'邮箱 | 用户名'}"/>
-        <InputInfo v-bind="{isTrue:false, isFalse:false, type:'text', placeholder:'验证码'}">
-          <button class="button button-primary button-rounded button-captcha">发送验证码</button>
+        <InputInfo
+          v-bind="{isTrue:false, isFalse:false, type:'text', placeholder:'邮箱 | 用户名'}"
+          v-model="userName"
+        />
+        <InputInfo
+          v-bind="{isTrue:false, isFalse:false, type:'text', placeholder:'验证码'}"
+          v-model="captcha"
+        >
+          <button
+            class="button button-primary button-rounded button-captcha"
+            @click="sendCaptcha"
+          >发送验证码</button>
         </InputInfo>
-        <InputInfo v-bind="{isTrue:false, isFalse:false, type:'password', placeholder:'密码'}"/>
-        <InputInfo v-bind="{isTrue:false, isFalse:false, type:'password', placeholder:'确认密码'}"/>
-        <button class="button button-primary button-rounded button-signup">注册</button>
+        <InputInfo
+          v-bind="{isTrue:false, isFalse:false, type:'password', placeholder:'密码'}"
+          v-model="password"
+        />
+        <InputInfo
+          v-bind="{isTrue:false, isFalse:false, type:'password', placeholder:'确认密码'}"
+          v-model="repassword"
+          @blur="checkPassword"
+        />
+        <button class="button button-primary button-rounded button-signup" @click="signUp">注册</button>
       </Panel>
     </div>
   </div>
@@ -25,9 +41,97 @@
 <script>
 import InputInfo from "@/components/InputInfo.vue";
 import Panel from "@/components/Panel.vue";
+import axios from "axios";
 
 export default {
-  components: { InputInfo, Panel }
+  components: { InputInfo, Panel },
+  methods: {
+    sendCaptcha() {
+      if (!this.userName) {
+        alert("请输入邮箱");
+      } else {
+        axios
+          .post(
+            `/reg/person/captcha`,
+            {
+              email: this.userName
+            },
+            {
+              headers: {
+                "Content-Type": "application/json;charset=UTF-8"
+              }
+            }
+          )
+          .then(res => {
+            console.log(res.data);
+            if (res.data.code !== 0) {
+              alert(res.data.msg);
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
+    },
+    checkPassword() {
+      if (this.password !== this.repassword) {
+        alert("两次密码输入不一致");
+      }
+    },
+    signUp() {
+      let params = {
+          userName: this.userName,
+          password: this.password,
+          captcha: this.captcha
+        },
+        url = `/reg/person`,
+        isFilled = false;
+
+      console.log(params);
+
+      for (const key in params) {
+        if (params.hasOwnProperty(key)) {
+          const element = params[key];
+          if (!element) {
+            alert("还有未填项！");
+            isFilled = false;
+            break;
+          } else {
+            isFilled = true;
+          }
+        }
+      }
+
+      if (isFilled) {
+        axios
+          .post(url, params, {
+            headers: {
+              "Content-Type": "application/json;charset=UTF-8"
+            }
+          })
+          .then(res => {
+            console.log(res.data);
+
+            if (res.data.code === 2 && res.data.msg.search(/JDBC/) !== -1) {
+              alert("数据库正在重新连接，请重试");
+            } else if (res.data.code !== 0) {
+              alert(res.data.msg);
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
+    }
+  },
+  data() {
+    return {
+      userName: ``,
+      password: ``,
+      captcha: ``,
+      repassword: ``
+    };
+  }
 };
 </script>
 
