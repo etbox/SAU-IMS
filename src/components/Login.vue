@@ -5,7 +5,6 @@
         <InputInfo
           v-bind="{isTrue:false, isFalse:false, type:'text', placeholder:'邮箱 | 用户名'}"
           v-model="userName"
-          @input="log"
         />
         <InputInfo
           v-bind="{isTrue:false, isFalse:false, type:'password', placeholder:'密码'}"
@@ -51,32 +50,46 @@ export default {
           password: this.password,
           captcha: this.captcha
         },
-        url = `/login`;
-
-      // url = `http://localhost:3000/login`;
+        url = `/login`,
+        isFilled = false;
 
       console.log(params);
 
-      axios
-        .post(url, params, {
-          headers: {
-            "Content-Type": "application/json;charset=UTF-8"
+      for (const key in params) {
+        if (params.hasOwnProperty(key)) {
+          const element = params[key];
+          if (!element) {
+            alert("还有未填项！");
+            break;
           }
-        })
-        .then(res => {
-          console.log(res.data);
+        }
+      }
+      isFilled = true;
 
-          if (res.data.code === 2 && res.data.msg.search(/JDBC/) !== -1) {
-            alert("数据库正在重新连接，请重试");
-          }
+      if (isFilled) {
+        axios
+          .post(url, params, {
+            headers: {
+              "Content-Type": "application/json;charset=UTF-8"
+            }
+          })
+          .then(res => {
+            console.log(res.data);
 
-          this.userName = ``;
-          this.password = ``;
-          this.captcha = ``;
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+            this.userName = ``;
+            this.password = ``;
+            this.captcha = ``;
+
+            if (res.data.code === 2 && res.data.msg.search(/JDBC/) !== -1) {
+              alert("数据库正在重新连接，请重试");
+            } else if (res.data.code !== 3) {
+              alert(res.data.msg);
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
     }
   },
   components: { Panel, InputInfo },
