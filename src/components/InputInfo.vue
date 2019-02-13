@@ -54,7 +54,8 @@ export default {
     isTrue: Boolean,
     isFalse: Boolean,
     msg: String,
-    placeholder: String
+    placeholder: String,
+    value: ``
   },
   methods: {
     showCaptcha() {
@@ -67,8 +68,7 @@ export default {
   data() {
     return {
       isShowCaptcha: false,
-      captchaImg: `/login/captcha?r=${Math.random()}`,
-      value: ``
+      captchaImg: `/login/captcha?r=${Math.random()}`
     };
   }
 };
