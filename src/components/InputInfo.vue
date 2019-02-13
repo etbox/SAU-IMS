@@ -22,7 +22,7 @@
     <div class="panel-input">
       <div class="captcha-extra">
         <slot>
-          <img :src="captchaImg" alt="点击刷新验证码" v-if="flag" @click="refresh">
+          <img :src="captchaImg" alt="点击刷新验证码" v-if="isShowCaptcha" @click="refresh">
         </slot>
       </div>
       <input
@@ -58,16 +58,16 @@ export default {
   },
   methods: {
     showCaptcha() {
-      this.flag = true;
+      this.isShowCaptcha = true;
     },
     refresh() {
-      this.captchaImg = `/login/captcha?r=${Math.random() * 10000}`;
+      this.captchaImg = `/login/captcha?r=${Math.random()}`;
     }
   },
   data() {
     return {
-      flag: false,
-      captchaImg: `/login/captcha?r=${Math.random() * 10000}`,
+      isShowCaptcha: false,
+      captchaImg: `/login/captcha?r=${Math.random()}`,
       value: ``
     };
   }
