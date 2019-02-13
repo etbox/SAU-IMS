@@ -67,6 +67,7 @@ $gray: #e4e8ec;
 }
 button {
   background-color: $blue;
+  color: white;
 }
 .button-captcha {
   width: 100%;

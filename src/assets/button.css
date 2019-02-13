@@ -137,7 +137,7 @@
 
 .button:hover,
 .button:focus {
-  background-color: #f6f6f6;
+  background-color: #326171;
   text-decoration: none;
   outline: none;
 }
@@ -147,7 +147,7 @@
 .button.is-active {
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
   text-decoration: none;
-  background-color: #eeeeee;
+  background-color: #367ba5;
   border-color: #cfcfcf;
   color: #d4d4d4;
   -webkit-transition-duration: 0s;
