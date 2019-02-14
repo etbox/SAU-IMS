@@ -141,7 +141,8 @@ export default {
   },
   data() {
     return {
-      userName: ``, //表单数据
+      //表单数据
+      userName: ``,
       password: ``,
       captcha: ``,
       repassword: ``,
