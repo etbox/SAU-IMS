@@ -78,11 +78,7 @@ export default {
           });
       }
     },
-    checkPassword(arg) {
-      // console.log(arg);
-      // arg.isTrue = true;
-      // 组件内不能修改props的值，同时修改的值也不会同步到组件外层，即调用组件方不知道组件内部当前的状态是什么。
-
+    checkPassword() {
       this.isCorrect = false;
       if (this.repassword) {
         if (this.password !== this.repassword) {
@@ -145,8 +141,8 @@ export default {
       userName: ``,
       password: ``,
       captcha: ``,
-      repassword: ``,
       // 控制数据
+      repassword: ``,
       isCorrect: false,
       isDiffrent: false,
       notFilledEmail: false
