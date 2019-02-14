@@ -78,8 +78,9 @@ export default {
           .then(res => {
             console.log(res.data);
 
-            this.userName = ``;
-            this.password = ``;
+            // 想了想只需要重置验证码
+            // this.userName = ``;
+            // this.password = ``;
             this.captcha = ``;
 
             if (res.data.code === 2 && res.data.msg.search(/JDBC/) !== -1) {

@@ -11,7 +11,7 @@
       </div>
       <Panel class="panel">
         <InputInfo
-          v-bind="{isTrue:false, isFalse:false, type:'text', placeholder:'邮箱 | 用户名'}"
+          v-bind="{isTrue:false, isFalse:notFilledEmail,msg: '请输入正确的邮箱', type:'text', placeholder:'邮箱 | 用户名'}"
           v-model="userName"
         />
         <InputInfo
@@ -28,7 +28,7 @@
           v-model="password"
         />
         <InputInfo
-          v-bind="{isTrue:false, isFalse:false, type:'password', placeholder:'确认密码'}"
+          v-bind="{isTrue:isCorrect, isFalse:isDiffrent,msg:'两次输入的密码不一致', type:'password', placeholder:'确认密码'}"
           v-model="repassword"
           @blur="checkPassword"
         />
@@ -47,9 +47,14 @@ export default {
   components: { InputInfo, Panel },
   methods: {
     sendCaptcha() {
-      if (!this.userName) {
-        alert("请输入邮箱");
+      if (
+        this.userName.search(
+          /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/
+        ) === -1
+      ) {
+        this.notFilledEmail = true;
       } else {
+        this.notFilledEmail = false;
         axios
           .post(
             `/reg/person/captcha`,
@@ -73,9 +78,19 @@ export default {
           });
       }
     },
-    checkPassword() {
-      if (this.password !== this.repassword) {
-        alert("两次密码输入不一致");
+    checkPassword(arg) {
+      // console.log(arg);
+      // arg.isTrue = true;
+      // 组件内不能修改props的值，同时修改的值也不会同步到组件外层，即调用组件方不知道组件内部当前的状态是什么。
+
+      this.isCorrect = false;
+      if (this.repassword) {
+        if (this.password !== this.repassword) {
+          this.isDiffrent = true;
+        } else {
+          this.isCorrect = true;
+          this.isDiffrent = false;
+        }
       }
     },
     signUp() {
@@ -126,10 +141,14 @@ export default {
   },
   data() {
     return {
-      userName: ``,
+      userName: ``, //表单数据
       password: ``,
       captcha: ``,
-      repassword: ``
+      repassword: ``,
+      // 控制数据
+      isCorrect: false,
+      isDiffrent: false,
+      notFilledEmail: false
     };
   }
 };

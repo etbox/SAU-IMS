@@ -7,14 +7,14 @@
         :placeholder="placeholder"
         v-bind:value="value"
         v-on:input="$emit('input', $event.target.value)"
-        @blur="$emit('blur', $event.target.value)"
+        @blur="blur"
       >
     </div>
     <div class="panel-info">
       <div v-if="isTrue||isFalse">
         <img src="@/images/true_logo.svg" alt="格式正确" v-if="isTrue">
         <img src="@/images/false_logo.svg" alt="信息有误" v-else>
-        <div class="information">{{msg}}</div>
+        <div class="information" v-if="isFalse">{{msg}}</div>
       </div>
     </div>
   </div>
@@ -41,7 +41,7 @@
       <div v-if="isTrue||isFalse">
         <img src="@/images/true_logo.svg" alt="格式正确" v-if="isTrue">
         <img src="@/images/false_logo.svg" alt="信息有误" v-else>
-        <div class="information">{{msg}}</div>
+        <div class="information" v-if="isFalse">{{msg}}</div>
       </div>
     </div>
   </div>
@@ -51,12 +51,12 @@
 export default {
   name: "InputInfo",
   props: {
-    type: String,
-    isTrue: Boolean,
-    isFalse: Boolean,
-    msg: String,
+    type: String, // 通过v-bind绑定的不变的特性
     placeholder: String,
-    value: ``
+    value: ``,
+    isTrue: Boolean, // 通过v-bind绑定的可变的变量
+    isFalse: Boolean,
+    msg: String
   },
   methods: {
     showCaptcha() {
@@ -64,14 +64,22 @@ export default {
     },
     refresh() {
       this.captchaImg = `/login/captcha?r=${Math.random()}`;
+    },
+    blur() {
+      let self = this;
+      this.$emit("blur", self);
     }
   },
   data() {
     return {
       isShowCaptcha: false,
-      captchaImg: `/login/captcha?r=${Math.random()}`
+      captchaImg: `/login/captcha?r=${Math.random()}`,
+      myTrue: this.isTrue, // my开头的data用于双向绑定
+      myFalse: this.isFalse,
+      myMsg: this.msg
     };
-  }
+  },
+  watch: {}
 };
 </script>
 
