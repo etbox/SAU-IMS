@@ -11,7 +11,7 @@
       </div>
       <Panel class="panel">
         <InputInfo
-          v-bind="{isTrue:false, isFalse:notFilledEmail,msg: '请输入正确的邮箱', type:'text', placeholder:'邮箱 | 用户名'}"
+          v-bind="{isTrue:isSent, isFalse:notFilledEmail,msg: '请输入正确的邮箱', type:'text', placeholder:'邮箱 | 用户名'}"
           v-model="userName"
         />
         <InputInfo
@@ -45,6 +45,20 @@ import axios from "axios";
 
 export default {
   components: { InputInfo, Panel },
+  data() {
+    return {
+      //表单数据
+      userName: ``,
+      password: ``,
+      captcha: ``,
+      // 控制数据
+      repassword: ``,
+      isCorrect: false,
+      isDiffrent: false,
+      notFilledEmail: false,
+      isSent: false
+    };
+  },
   methods: {
     sendCaptcha() {
       if (
@@ -69,8 +83,10 @@ export default {
           )
           .then(res => {
             console.log(res.data);
-            if (res.data.code !== 0) {
+            if (res.data.code) {
               alert(res.data.msg);
+            } else {
+              this.isSent = true;
             }
           })
           .catch(function(error) {
@@ -134,19 +150,6 @@ export default {
           });
       }
     }
-  },
-  data() {
-    return {
-      //表单数据
-      userName: ``,
-      password: ``,
-      captcha: ``,
-      // 控制数据
-      repassword: ``,
-      isCorrect: false,
-      isDiffrent: false,
-      notFilledEmail: false
-    };
   }
 };
 </script>

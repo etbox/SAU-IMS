@@ -31,7 +31,7 @@
           v-model="realName"
         />
         <InputInfo
-          v-bind="{isTrue:false, isFalse:notFilledEmail,msg: '请输入正确的邮箱', type:'email', placeholder:'邮箱'}"
+          v-bind="{isTrue:isSent, isFalse:notFilledEmail,msg: '请输入正确的邮箱', type:'email', placeholder:'邮箱'}"
           v-model="email"
         />
         <InputInfo
@@ -100,7 +100,8 @@ export default {
       repassword: ``,
       notFilledEmail: false,
       isCorrect: false,
-      isDiffrent: false
+      isDiffrent: false,
+      isSent: false
     };
   },
   methods: {
@@ -138,8 +139,10 @@ export default {
           )
           .then(res => {
             console.log(res.data);
-            if (res.data.code !== 0) {
+            if (res.data.code) {
               alert(res.data.msg);
+            } else {
+              this.isSent = true;
             }
           })
           .catch(function(error) {

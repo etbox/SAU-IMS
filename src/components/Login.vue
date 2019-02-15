@@ -16,10 +16,10 @@
         />
 
         <div class="login-options">
-          <div class="rememberID">
+          <!-- <div class="rememberID">
             <input type="checkbox" name="rememberID" id="rememberID">
             <label for="rememberID">记住账号</label>
-          </div>
+          </div>-->
           <div class="forgotPW">
             <router-link to="/forgotpw">
               <span @click="vanish">忘记密码</span>
