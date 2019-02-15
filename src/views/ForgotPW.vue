@@ -15,7 +15,11 @@
             @click="sendCaptcha"
           >发送验证码</button>
         </InputInfo>
-        <button class="button button-primary button-rounded button-fgpw">确认</button>
+        <InputInfo
+          v-bind="{isTrue:false, isFalse:false, type:'password', placeholder:'密码'}"
+          v-model="password"
+        />
+        <button class="button button-primary button-rounded button-fgpw" @click="resetPassword">确认</button>
       </Panel>
     </div>
   </div>
@@ -33,6 +37,7 @@ export default {
       //表单数据
       userName: ``,
       captcha: ``,
+      password: ``,
       // 控制数据
       notFilledEmail: false,
       isSent: false
@@ -66,6 +71,51 @@ export default {
               alert(res.data.msg);
             } else {
               this.isSent = true;
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      }
+    },
+    resetPassword() {
+      let params = {
+          newPassword: this.password,
+          captcha: this.captcha,
+          _method: "put"
+        },
+        url = `/security/resetpwd`,
+        isFilled = false;
+
+      // console.log(params);
+
+      for (const key in params) {
+        if (params.hasOwnProperty(key)) {
+          const element = params[key];
+          if (!element) {
+            alert("还有未填项！");
+            isFilled = false;
+            break;
+          } else {
+            isFilled = true;
+          }
+        }
+      }
+
+      if (isFilled) {
+        axios
+          .post(url, params, {
+            headers: {
+              "Content-Type": "application/json;charset=UTF-8"
+            }
+          })
+          .then(res => {
+            console.log(res.data);
+
+            if (res.data.code === 2 && res.data.msg.search(/JDBC/) !== -1) {
+              alert("数据库正在重新连接，请重试");
+            } else if (res.data.code !== 0) {
+              alert(res.data.msg);
             }
           })
           .catch(function(error) {

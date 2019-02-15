@@ -95,6 +95,7 @@ export default {
       clubName: ``,
       clubType: ``,
       description: ``,
+      // TODO: 文件问题没解决
       // file: new File(["text1", "text2"], "test.txt", { type: "text/plain" }),
       // 控制数据
       repassword: ``,
