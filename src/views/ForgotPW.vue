@@ -104,7 +104,7 @@ export default {
 
       if (isFilled) {
         axios
-          .post(url, params, {
+          .put(url, params, {
             headers: {
               "Content-Type": "application/json;charset=UTF-8"
             }
@@ -112,8 +112,11 @@ export default {
           .then(res => {
             console.log(res.data);
 
-            if (res.data.code === 2 && res.data.msg.search(/JDBC/) !== -1) {
-              alert("数据库正在重新连接，请重试");
+            if (res.data.code === 2) {
+              alert("服务器出错了，请重试");
+              // $router.replace("/forgotpw");
+              $router.go(0);
+              // window.location.reload();
             } else if (res.data.code !== 0) {
               alert(res.data.msg);
             }
