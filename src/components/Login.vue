@@ -87,7 +87,12 @@ export default {
               alert("数据库正在重新连接，请重试");
             } else if (res.data.code !== 0) {
               alert(res.data.msg);
+            } else {
+              this.$store.dispatch("login", Number(res.data.data));
+              this.$router.push("demo");
+              this.vanish();
             }
+            // console.log(this.$store.getters.checkLogin);
           })
           .catch(function(error) {
             console.log(error);
