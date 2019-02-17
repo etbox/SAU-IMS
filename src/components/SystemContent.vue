@@ -38,7 +38,7 @@ $gray: #e4e8ec;
 .root {
   // background-color: lightgreen;
   background-color: $gray;
-  flex: 4;
+  flex: 3;
   display: flex;
   flex-direction: column;
 }

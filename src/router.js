@@ -43,6 +43,7 @@ export default new Router({
     },
     {
       path: '/system',
+      redirect: '/system/news',
       name: 'system',
       component: () => import('./views/System.vue'),
       beforeEnter: (to, from, next) => {
@@ -52,7 +53,11 @@ export default new Router({
         } else {
           next();
         }
-      }
+      },
+      children: [{
+        path: 'news',
+        component: () => import('./views/News.vue')
+      }]
     },
   ]
 })

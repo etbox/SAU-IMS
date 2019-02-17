@@ -61,7 +61,7 @@ input {
   font-size: 16px;
   height: 40px;
   // width: 250px;
-  margin: 0 5px;
+  margin: 0 10px;
 
   border-radius: 5px;
   border: 0.01px solid $deep;
