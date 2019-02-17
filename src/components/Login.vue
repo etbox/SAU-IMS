@@ -89,7 +89,7 @@ export default {
               alert(res.data.msg);
             } else {
               this.$store.dispatch("login", Number(res.data.data));
-              this.$router.push("demo");
+              this.$router.push("system");
               this.vanish();
             }
             // console.log(this.$store.getters.checkLogin);

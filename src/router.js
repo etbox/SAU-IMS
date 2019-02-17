@@ -45,10 +45,5 @@ export default new Router({
       name: 'system',
       component: () => import('./views/System.vue')
     },
-    {
-      path: '/demo',
-      name: 'demo',
-      component: () => import('./views/demo.vue')
-    }
   ]
 })

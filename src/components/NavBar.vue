@@ -10,7 +10,7 @@
         <router-link to="/signup">
           <button class="button button-primary button-rounded" @click="vanish">注册</button>
         </router-link>
-        <router-link to="/demo">
+        <router-link to="/system">
           <button class="button button-primary button-rounded" @click="vanish">系统</button>
         </router-link>
       </div>
