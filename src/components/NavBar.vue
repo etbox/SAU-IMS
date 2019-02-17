@@ -6,19 +6,26 @@
         <span @click="vanish">校社联 · 信息管理系统</span>
       </router-link>
       <div class="nav">
-        <button class="button button-primary button-rounded" @click="showLogin">登录</button>
-        <router-link to="/signup">
-          <button class="button button-primary button-rounded" @click="vanish">注册</button>
-        </router-link>
-        <router-link to="/system">
-          <button class="button button-primary button-rounded" @click="vanish">系统</button>
-        </router-link>
+        <div v-if="this.$store.getters.checkLogin < 0">
+          <button class="button button-primary button-rounded" @click="showLogin">登录</button>
+          <router-link to="/signup">
+            <button class="button button-primary button-rounded" @click="vanish">注册</button>
+          </router-link>
+        </div>
+        <div v-else>
+          <button class="button button-primary button-rounded" @click="logout">登出</button>
+          <router-link to="/system">
+            <button class="button button-primary button-rounded" @click="vanish">系统</button>
+          </router-link>
+        </div>
       </div>
     </div>
   </header>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "NavBar",
   methods: {
@@ -27,6 +34,27 @@ export default {
     },
     vanish() {
       this.$parent.isLogining = false;
+    },
+    logout() {
+      axios
+        .get("/logout")
+        .then(res => {
+          console.log(res.data);
+
+          if (res.data.code === 2 && res.data.msg.search(/JDBC/) !== -1) {
+            alert("数据库正在重新连接，请重试");
+          } else if (res.data.code !== 0) {
+            alert(res.data.msg);
+          } else {
+            this.$store.dispatch("logout");
+            alert("登出成功");
+            this.$router.push("/");
+          }
+          // console.log(this.$store.getters.checkLogin);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   }
 };
