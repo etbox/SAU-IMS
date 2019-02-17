@@ -7,32 +7,6 @@
         <SystemListItem v-for="i in 15" :key="i"></SystemListItem>
       </div>
     </div>
-    <!-- <div class="div3">
-      <div class="content-head">
-        <div class="sender-avatar">
-          <img src="@/images/avatar.png" alt="发送人头像">
-        </div>
-        <div class="message-info">
-          <div class="sender-name">校社联</div>
-          <div class="send-time">2017年8月25日</div>
-        </div>
-        <div class="right-part">
-          <div class="delete">
-            <img src="@/images/delete_logo.png" alt="删除">
-            删除
-          </div>
-        </div>
-      </div>
-      <div class="content-body">
-        <div class="message-title">校社联管理系统建好啦</div>
-        <div class="message-content">
-          <pre>
-各位社长、成员、同学们：
-你们好！现在我们校社联管理系统已经建好，请各位填好自己的相关信息、并加入各自的社团。谢谢合作！
-          </pre>
-        </div>
-      </div>
-    </div>-->
     <SystemContent></SystemContent>
   </div>
 </template>

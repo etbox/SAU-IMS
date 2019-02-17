@@ -2,18 +2,48 @@
   <div class="root">
     <div class="nav-list">
       <ul>
-        <li v-for="(item, index) in items" :key="index" class="nav-item nav-current">{{item}}</li>
+        <li v-for="(item, index) in filter" :key="index" class="nav-item nav-current">{{item.name}}</li>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
+import store from "../store";
+
 export default {
   data() {
     return {
-      items: ["最新公告", "社团信息", "消息发布", "注册审核", "年度审核"]
+      items: [
+        {
+          name: "最新公告",
+          priority: -1
+        },
+        {
+          name: "社团信息",
+          priority: -1
+        },
+        {
+          name: "消息发布",
+          priority: 0
+        },
+        {
+          name: "注册审核",
+          priority: 0
+        },
+        {
+          name: "年度审核",
+          priority: 0
+        }
+      ]
     };
+  },
+  computed: {
+    filter() {
+      return this.items.filter(function(item) {
+        return store.getters.checkLogin > item.priority;
+      });
+    }
   }
 };
 </script>
