@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
+import store from './store'
 
 Vue.use(Router)
 
@@ -43,7 +44,15 @@ export default new Router({
     {
       path: '/system',
       name: 'system',
-      component: () => import('./views/System.vue')
+      component: () => import('./views/System.vue'),
+      beforeEnter: (to, from, next) => {
+        if (store.getters.checkLogin < 0) {
+          alert('您尚未登录！');
+          next('/');
+        } else {
+          next();
+        }
+      }
     },
   ]
 })
