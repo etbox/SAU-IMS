@@ -10,15 +10,20 @@
         <img src="@/images/refresh_logo.png" alt="刷新">
       </div>
       <div class="bottom-right">
-        <img src="@/images/add_logo.png" alt="新增">
-        <img src="@/images/delete_logo.png" alt="删除">
+        <img src="@/images/add_logo.png" alt="新增" v-show="isAdd">
+        <img src="@/images/delete_logo.png" alt="删除" v-show="isDelete">
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    isAdd: Boolean,
+    isDelete: Boolean
+  }
+};
 </script>
 
 <style lang="scss" scoped>
