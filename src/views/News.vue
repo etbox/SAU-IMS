@@ -3,10 +3,15 @@
     <div class="list-panal">
       <SystemListHead v-bind="{isAdd, isDelete}" v-on:refresh="refresh" v-on:search="search"></SystemListHead>
       <div class="list-body">
-        <SystemListItem v-for="item in items" :key="item.messageId" v-bind="{type, item}"></SystemListItem>
+        <SystemListItem
+          v-for="item in items"
+          :key="item.messageId"
+          v-bind="{type, item}"
+          v-on:show-details="showDetails"
+        ></SystemListItem>
       </div>
     </div>
-    <SystemContent></SystemContent>
+    <SystemContent v-bind="{detailContent}"></SystemContent>
   </div>
 </template>
 
@@ -28,7 +33,8 @@ export default {
       isDelete: true,
       type: "news",
       items: [],
-      offset: 1
+      offset: 1,
+      detailContent: {}
     };
   },
   created() {
@@ -52,9 +58,7 @@ export default {
           // this.offset++;
         }
       })
-      .catch(function(error) {
-        console.log(error);
-      });
+      .catch(error => console.log(error));
   },
   methods: {
     refresh() {
@@ -103,6 +107,20 @@ export default {
           const arr = response.data.data;
           for (let i = 0; i < arr.length; i++) {
             this.items.push(arr[i]);
+          }
+        })
+        .catch(error => console.log(error));
+    },
+    showDetails(messageId) {
+      const url = `/msg/${messageId}`;
+
+      axios
+        .get(url)
+        .then(response => {
+          if (response.data.code) {
+            alert(response.data.msg);
+          } else {
+            this.detailContent = response.data.data;
           }
         })
         .catch(error => console.log(error));

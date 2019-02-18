@@ -5,8 +5,10 @@
         <img src="@/images/avatar.png" alt="发送人头像">
       </div>
       <div class="message-info">
-        <div class="sender-name">校社联</div>
-        <div class="send-time">2017年8月25日</div>
+        <div class="sender-name">{{detailContent.releaseName}}</div>
+        <div
+          class="send-time"
+        >{{`${new Date(detailContent.releaseTime).getFullYear()}年${new Date(detailContent.releaseTime).getMonth()+1}月${new Date(detailContent.releaseTime).getDate()}日`}}</div>
       </div>
       <div class="right-part">
         <div class="delete">
@@ -16,19 +18,20 @@
       </div>
     </div>
     <div class="content-body">
-      <div class="message-title">校社联管理系统建好啦</div>
+      <div class="message-title">{{detailContent.messageTitle}}</div>
       <div class="message-content">
-        <pre>
-各位社长、成员、同学们：
-你们好！现在我们校社联管理系统已经建好，请各位填好自己的相关信息、并加入各自的社团。谢谢合作！
-          </pre>
+        <pre>{{detailContent.messageContent}}</pre>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  props: {
+    detailContent: Object
+  }
+};
 </script>
 
 <style lang="scss" scoped>
