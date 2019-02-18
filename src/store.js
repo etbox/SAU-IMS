@@ -3,7 +3,8 @@ import Vuex from 'vuex';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const mLogin = {
+  // namespaced: true,
   state: {
     loginState: -1
   },
@@ -27,5 +28,11 @@ export default new Vuex.Store({
     logout(context) {
       context.commit('LOGOUT');
     }
+  }
+};
+
+export default new Vuex.Store({
+  modules: {
+    mLogin
   }
 });

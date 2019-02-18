@@ -2,15 +2,11 @@
   <div class="list-item" v-if="type === 'news'">
     <div class="read-flag" :class="{'new-flag':!(item.readFlag)}"></div>
     <div class="list-item-left">
-      <!-- <div class="message-title">校社联管理系统做好啦</div> -->
       <div class="message-title">{{item.messageTitle}}</div>
-      <!-- <div class="sender-name">by 校社联</div> -->
       <div class="sender-name">{{item.releaseName}}</div>
     </div>
     <div class="list-item-right">
       <input type="checkbox" v-model="checkedItems" :value="item.messageId" @input="check">
-      <!-- <div class="send-time">2017/8/24</div> -->
-      <!-- <div class="send-time">{{new Date(item.releaseTime)}}</div> -->
       <div class="send-time">{{`${new Date(item.releaseTime).getFullYear()}/${new Date(item.releaseTime).getMonth()+1}/${new Date(item.releaseTime).getDate()}`}}</div>
     </div>
   </div>

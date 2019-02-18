@@ -41,7 +41,7 @@ export default {
   computed: {
     filter() {
       return this.items.filter(function(item) {
-        return store.getters.checkLogin > item.priority;
+        return store.getters["checkLogin"] > item.priority;
       });
     }
   }

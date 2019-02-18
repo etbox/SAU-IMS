@@ -92,7 +92,6 @@ export default {
               this.$router.push("system");
               this.vanish();
             }
-            // console.log(this.$store.getters.checkLogin);
           })
           .catch(function(error) {
             console.log(error);
