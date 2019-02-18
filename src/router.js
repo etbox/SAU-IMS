@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import store from './store'
+// import Cookies from 'js-cookie'
 
 Vue.use(Router)
 
@@ -48,6 +49,7 @@ export default new Router({
       component: () => import('./views/System.vue'),
       beforeEnter: (to, from, next) => {
         if (store.getters["checkLogin"] < 0) {
+          // if (Cookies.get('priority') < 0) {
           alert('您尚未登录！');
           next('/');
         } else {

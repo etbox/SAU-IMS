@@ -9,6 +9,7 @@
   "dependencies": {
     "axios": "^0.18.0",
     "echarts": "^4.2.0-rc.2",
+    "js-cookie": "^2.2.0",
     "resize-detector": "^0.1.10",
     "vue": "^2.5.21",
     "vue-echarts": "^4.0.1",

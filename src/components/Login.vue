@@ -37,6 +37,7 @@
 import InputInfo from "@/components/InputInfo.vue";
 import Panel from "@/components/Panel.vue";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 export default {
   name: "Login",
@@ -51,7 +52,8 @@ export default {
           captcha: this.captcha
         },
         url = `/login`,
-        isFilled = false;
+        isFilled = false,
+        expires = 1 / 48;
 
       // console.log(params);
 
@@ -89,6 +91,10 @@ export default {
               alert(res.data.msg);
             } else {
               this.$store.dispatch("login", Number(res.data.data));
+
+              Cookies.set("user", params.userName, { expires });
+              Cookies.set("priority", Number(res.data.data), { expires });
+
               this.$router.push("system");
               this.vanish();
             }

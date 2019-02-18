@@ -2,7 +2,7 @@
   <div class="list-item" v-if="type === 'news'">
     <div class="read-flag" :class="{'new-flag':!(item.readFlag)}"></div>
     <div class="list-item-left">
-      <div class="message-title">{{item.messageTitle}}</div>
+      <div class="message-title">{{`${item.messageTitle.slice(0,8)}...`}}</div>
       <div class="sender-name">{{item.releaseName}}</div>
     </div>
     <div class="list-item-right">

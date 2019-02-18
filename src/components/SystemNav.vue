@@ -10,6 +10,7 @@
 
 <script>
 import store from "@/store";
+// import Cookies from "js-cookie";
 
 export default {
   data() {
@@ -42,6 +43,7 @@ export default {
     filter() {
       return this.items.filter(function(item) {
         return store.getters["checkLogin"] > item.priority;
+        // return Cookies.get("priority") > item.priority;
       });
     }
   }

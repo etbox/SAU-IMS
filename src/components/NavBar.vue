@@ -7,6 +7,7 @@
       </router-link>
       <div class="nav">
         <div v-if="this.$store.getters['checkLogin'] < 0">
+          <!-- <div v-if="priority"> -->
           <button class="button button-primary button-rounded" @click="showLogin">登录</button>
           <router-link to="/signup">
             <button class="button button-primary button-rounded" @click="vanish">注册</button>
@@ -25,6 +26,7 @@
 
 <script>
 import axios from "axios";
+import Cookies from "js-cookie";
 
 export default {
   name: "NavBar",
@@ -39,7 +41,7 @@ export default {
       axios
         .get("/logout")
         .then(res => {
-          console.log(res.data);
+          // console.log(res.data);
 
           if (res.data.code === 2 && res.data.msg.search(/JDBC/) !== -1) {
             alert("数据库正在重新连接，请重试");
@@ -47,6 +49,10 @@ export default {
             alert(res.data.msg);
           } else {
             this.$store.dispatch("logout");
+
+            Cookies.remove("user");
+            Cookies.set("priority", -1);
+
             alert("登出成功");
             this.$router.push("/");
           }
@@ -54,6 +60,12 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
+    }
+  },
+  created() {
+    const priority = Number(Cookies.get("priority"));
+    if (priority > 0) {
+      this.$store.dispatch("login", priority);
     }
   }
 };
