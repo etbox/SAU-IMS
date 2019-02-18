@@ -81,6 +81,7 @@ $light: #91caf9;
   font-size: 14px;
   float: left;
   padding-left: 1rem;
+  clear: left;
 }
 
 .list-item-right {
