@@ -11,17 +11,31 @@
       </div>
       <div class="bottom-right">
         <img src="@/images/add_logo.png" alt="新增" v-show="isAdd">
-        <img src="@/images/delete_logo.png" alt="删除" v-show="isDelete">
+        <img src="@/images/delete_logo.png" alt="删除" v-show="isDelete" @click="clear">
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import store from "@/store";
+import axios from "axios";
+
 export default {
   props: {
     isAdd: Boolean,
     isDelete: Boolean
+  },
+  methods: {
+    clear() {
+      const url = "/msg",
+        params = { _method: "delete" };
+      axios
+        .delete()
+        .then(response => {})
+        .catch(error => console.log(error));
+      store.dispatch("clearCheckeds");
+    }
   }
 };
 </script>

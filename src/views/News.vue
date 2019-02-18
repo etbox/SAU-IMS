@@ -4,7 +4,6 @@
       <SystemListHead v-bind="{isAdd, isDelete}"></SystemListHead>
       <div class="list-body">
         <SystemListItem v-for="item in items" :key="item.messageId" v-bind="{type, item}"></SystemListItem>
-        <!-- <SystemListItem v-for="item in items" :key="item" v-bind="item"></SystemListItem> -->
       </div>
     </div>
     <SystemContent></SystemContent>
@@ -49,7 +48,7 @@ export default {
           for (let i = 0; i < arr.length && this.items.length < 10; i++) {
             this.items.push(arr[i]);
           }
-          console.log(this.items);
+          // console.log(this.items);
           // offset++;
         }
       })

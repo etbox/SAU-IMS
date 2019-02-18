@@ -53,7 +53,7 @@ export default {
         url = `/login`,
         isFilled = false;
 
-      console.log(params);
+      // console.log(params);
 
       for (const key in params) {
         if (params.hasOwnProperty(key)) {
@@ -76,7 +76,7 @@ export default {
             }
           })
           .then(res => {
-            console.log(res.data);
+            // console.log(res.data);
 
             // 想了想只需要重置验证码
             // this.userName = ``;
