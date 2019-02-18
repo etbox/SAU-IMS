@@ -1,17 +1,17 @@
 <template>
   <div class="list-head">
     <div class="list-head-left">
-      <input type="text">
+      <input type="text" v-model="keyword">
       <div class="list-title">历史发布</div>
     </div>
     <div class="list-head-right">
       <div class="top-right">
-        <img src="@/images/search_logo.png" alt="搜索">
-        <img src="@/images/refresh_logo.png" alt="刷新">
+        <img src="@/images/search_logo.png" alt="搜索" @click="search">
+        <img src="@/images/refresh_logo.png" alt="刷新" @click="refresh">
       </div>
       <div class="bottom-right">
-        <img src="@/images/add_logo.png" alt="新增" v-show="isAdd">
-        <img src="@/images/delete_logo.png" alt="删除" v-show="isDelete" @click="clear">
+        <img src="@/images/add_logo.png" alt="新增" v-if="isAdd">
+        <img src="@/images/delete_logo.png" alt="删除" v-if="isDelete" @click="clear">
       </div>
     </div>
   </div>
@@ -27,15 +27,29 @@ export default {
     isDelete: Boolean
   },
   methods: {
+    search() {
+      this.$emit("search", this.keyword);
+    },
+    refresh() {
+      this.$emit("refresh");
+    },
     clear() {
       const url = "/msg",
         params = { _method: "delete" };
       axios
         .delete()
-        .then(response => {})
+        .then(response => {
+          console.log(response);
+        })
         .catch(error => console.log(error));
       store.dispatch("clearCheckeds");
     }
+  },
+  data() {
+    return {
+      keyword: "",
+      offset: 1
+    };
   }
 };
 </script>
