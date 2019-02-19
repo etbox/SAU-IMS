@@ -57,9 +57,14 @@ export default new Router({
         }
       },
       children: [{
-        path: 'news',
-        component: () => import('./views/News.vue')
-      }]
+          path: 'news',
+          component: () => import('./views/SystemMain.vue')
+        },
+        {
+          path: 'messages',
+          component: () => import('./views/SystemMain.vue')
+        }
+      ]
     },
   ]
 })

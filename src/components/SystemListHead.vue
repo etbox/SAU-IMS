@@ -41,8 +41,7 @@ export default {
   },
   data() {
     return {
-      keyword: "",
-      offset: 1
+      keyword: ""
     };
   }
 };

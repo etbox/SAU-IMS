@@ -2,7 +2,9 @@
   <div class="root">
     <div class="nav-list">
       <ul>
-        <li v-for="(item, index) in filter" :key="index" class="nav-item nav-current">{{item.name}}</li>
+        <router-link :to="'/system/'+item.module" v-for="(item, index) in items" :key="index">
+          <li class="nav-item" :class="{'nav-current':item.isCurrent}">{{item.name}}</li>
+        </router-link>
       </ul>
     </div>
   </div>
@@ -12,35 +14,48 @@
 // import Cookies from "js-cookie";
 
 export default {
+  props: {
+    options: Object
+  },
   data() {
     return {
       items: [
         {
           name: "最新公告",
-          priority: -1
+          priority: -1,
+          module: "news",
+          isCurrent: false
         },
         {
           name: "社团信息",
-          priority: -1
+          priority: -1,
+          module: "",
+          isCurrent: false
         },
         {
           name: "消息发布",
-          priority: 0
+          priority: 0,
+          module: "messages",
+          isCurrent: false
         },
         {
           name: "注册审核",
-          priority: 0
+          priority: 0,
+          module: "",
+          isCurrent: false
         },
         {
           name: "年度审核",
-          priority: 0
+          priority: 0,
+          module: "",
+          isCurrent: false
         }
       ]
     };
   },
   computed: {
     filter() {
-      return this.items.filter(function(item) {
+      return this.items.filter(item => {
         return this.$store.getters["checkLogin"] > item.priority;
         // return Cookies.get("priority") > item.priority;
       });
@@ -82,5 +97,9 @@ ul {
 }
 .nav-current {
   background-color: $deep;
+}
+
+a {
+  color: black;
 }
 </style>

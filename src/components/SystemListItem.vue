@@ -1,5 +1,5 @@
 <template>
-  <div class="list-item" v-if="type === 'news'" @click="showDetails">
+  <div class="list-item" v-if="options.module === 'news'" @click="showDetails">
     <div class="read-flag" :class="{'new-flag':!(item.readFlag)}"></div>
     <div class="list-item-left">
       <div class="message-title">{{`${item.messageTitle.slice(0,8)}...`}}</div>
@@ -17,7 +17,7 @@
 <script>
 export default {
   props: {
-    type: String,
+    options: Object,
     item: Object
   },
   data() {

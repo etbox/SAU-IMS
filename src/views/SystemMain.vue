@@ -2,7 +2,7 @@
   <div class="root">
     <div class="list-panal">
       <SystemListHead
-        v-bind="{isAdd, isDelete}"
+        v-bind="{isAdd:options.isAdd, isDelete:options.isDelete}"
         v-on:refresh="refresh"
         v-on:search="search"
         v-on:clear="clear"
@@ -12,7 +12,7 @@
         <SystemListItem
           v-for="item in items"
           :key="item.messageId"
-          v-bind="{type, item}"
+          v-bind="{options, item}"
           v-on:show-details="showDetails"
         />
       </div>
@@ -34,7 +34,7 @@ export default {
     SystemListItem
   },
   props: {
-    type: String
+    options: Object
   },
   data() {
     return {
@@ -81,7 +81,7 @@ export default {
             alert(response.data.msg);
           } else {
             this.items = [];
-            console.log("news refresh");
+            console.log(`${url} refresh`);
 
             const arr = response.data.data;
             for (let i = 0; i < arr.length; i++) {
@@ -94,7 +94,7 @@ export default {
         });
     },
     search(keyword) {
-      const url = "/msg/search",
+      const url = `/msg/search`,
         limit = 10;
       let params = {
         findContent: keyword,
@@ -106,7 +106,7 @@ export default {
         .get(url, { params })
         .then(response => {
           this.items = [];
-          console.log("news search");
+          console.log(`${url} search`);
 
           const arr = response.data.data;
           for (let i = 0; i < arr.length; i++) {
@@ -124,6 +124,8 @@ export default {
           if (response.data.code) {
             alert(response.data.msg);
           } else {
+            console.log(`${url} show details`);
+
             this.detailContent = response.data.data;
           }
         })
