@@ -2,14 +2,18 @@
   <div class="root">
     <div class="content-head">
       <div class="sender-avatar">
-        <img src="@/images/avatar.png" alt="发送人头像" v-show="detailContent.releaseTime">
+        <img src="@/images/avatar.png" alt="发送人头像" v-if="detailContent.messageId">
       </div>
       <div class="message-info">
         <div class="sender-name">{{detailContent.releaseName}}</div>
         <div
           class="send-time"
-          v-show="detailContent.releaseTime"
+          v-if="detailContent.releaseTime"
         >{{`${new Date(detailContent.releaseTime).getFullYear()}年${new Date(detailContent.releaseTime).getMonth()+1}月${new Date(detailContent.releaseTime).getDate()}日`}}</div>
+        <div
+          class="send-time"
+          v-else-if="detailContent.sendTime"
+        >{{`${new Date(detailContent.sendTime).getFullYear()}年${new Date(detailContent.sendTime).getMonth()+1}月${new Date(detailContent.sendTime).getDate()}日`}}</div>
       </div>
       <div class="right-part">
         <div class="delete" v-show="detailContent.releaseTime">

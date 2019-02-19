@@ -45,27 +45,6 @@ export default {
       detailContent: {}
     };
   },
-  created() {
-    const limit = 10,
-      url = `/msg`;
-
-    axios
-      .get(url, {
-        offset: this.offset,
-        limit: limit
-      })
-      .then(response => {
-        if (response.data.code) {
-          alert(response.data.msg);
-        } else {
-          const arr = response.data.data;
-          for (let i = 0; i < arr.length && this.items.length < 10; i++) {
-            this.items.push(arr[i]);
-          }
-        }
-      })
-      .catch(error => console.log(error));
-  },
   methods: {
     refresh() {
       const limit = 10,
@@ -116,16 +95,17 @@ export default {
         .catch(error => console.log(error));
     },
     showDetails(messageId) {
-      const url = `/msg/${messageId}`;
+      const url = `${
+        this.options.module === "news" ? "" : this.options.identity
+      }/msg${this.options.module === "news" ? "" : "/old"}/${messageId}`;
 
+      // console.log(`${url} show details`);
       axios
         .get(url)
         .then(response => {
           if (response.data.code) {
             alert(response.data.msg);
           } else {
-            console.log(`${url} show details`);
-
             this.detailContent = response.data.data;
           }
         })
@@ -143,6 +123,58 @@ export default {
       store.dispatch("clearCheckeds");
     },
     add() {}
+  },
+  created() {
+    const limit = 10,
+      url = `/msg`;
+
+    axios
+      .get(url, {
+        offset: this.offset,
+        limit: limit
+      })
+      .then(response => {
+        if (response.data.code) {
+          alert(response.data.msg);
+        } else {
+          const arr = response.data.data;
+          for (let i = 0; i < arr.length && this.items.length < 10; i++) {
+            this.items.push(arr[i]);
+          }
+        }
+      })
+      .catch(error => console.log(error));
+  },
+  watch: {
+    "options.module"() {
+      // console.log("options changed!");
+      // console.log(this.options.module);
+      const limit = 10;
+      let url = ``;
+
+      switch (this.options.module) {
+        case "news":
+          url = `/msg`;
+          break;
+        case "messages":
+          url = `${this.options.identity}/msg/old`;
+          break;
+      }
+
+      axios
+        .get(url, {
+          offset: this.offset,
+          limit: limit
+        })
+        .then(response => {
+          if (response.data.code) {
+            alert(response.data.msg);
+          } else {
+            this.items = response.data.data;
+          }
+        })
+        .catch(error => console.log(error));
+    }
   }
 };
 </script>

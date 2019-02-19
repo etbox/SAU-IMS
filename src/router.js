@@ -63,7 +63,19 @@ export default new Router({
         {
           path: 'messages',
           component: () => import('./views/SystemMain.vue')
-        }
+        },
+        {
+          path: 'orgs',
+          component: () => import('./views/SystemMain.vue')
+        },
+        {
+          path: 'audit',
+          component: () => import('./views/SystemMain.vue')
+        },
+        {
+          path: 'annual',
+          component: () => import('./views/SystemMain.vue')
+        },
       ]
     },
   ]

@@ -3,7 +3,7 @@
     <div class="nav-list">
       <ul>
         <router-link :to="'/system/'+item.module" v-for="(item, index) in items" :key="index">
-          <li class="nav-item" :class="{'nav-current':item.isCurrent}">{{item.name}}</li>
+          <li class="nav-item" :class="{'nav-current':item.module === options.module}">{{item.name}}</li>
         </router-link>
       </ul>
     </div>
@@ -23,32 +23,27 @@ export default {
         {
           name: "最新公告",
           priority: -1,
-          module: "news",
-          isCurrent: false
+          module: "news"
         },
         {
           name: "社团信息",
           priority: -1,
-          module: "",
-          isCurrent: false
+          module: "orgs"
         },
         {
           name: "消息发布",
           priority: 0,
-          module: "messages",
-          isCurrent: false
+          module: "messages"
         },
         {
           name: "注册审核",
           priority: 0,
-          module: "",
-          isCurrent: false
+          module: "audit"
         },
         {
           name: "年度审核",
           priority: 0,
-          module: "",
-          isCurrent: false
+          module: "annual"
         }
       ]
     };
