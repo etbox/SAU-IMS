@@ -1,17 +1,23 @@
 <template>
   <div class="root">
     <div class="list-panal">
-      <SystemListHead v-bind="{isAdd, isDelete}" v-on:refresh="refresh" v-on:search="search"></SystemListHead>
+      <SystemListHead
+        v-bind="{isAdd, isDelete}"
+        v-on:refresh="refresh"
+        v-on:search="search"
+        v-on:clear="clear"
+        v-on:add="add"
+      />
       <div class="list-body">
         <SystemListItem
           v-for="item in items"
           :key="item.messageId"
           v-bind="{type, item}"
           v-on:show-details="showDetails"
-        ></SystemListItem>
+        />
       </div>
     </div>
-    <SystemContent v-bind="{detailContent}"></SystemContent>
+    <SystemContent v-bind="{detailContent}"/>
   </div>
 </template>
 
@@ -27,11 +33,13 @@ export default {
     SystemListHead,
     SystemListItem
   },
+  props: {
+    type: String
+  },
   data() {
     return {
       isAdd: false,
       isDelete: true,
-      type: "news",
       items: [],
       offset: 1,
       detailContent: {}
@@ -120,7 +128,19 @@ export default {
           }
         })
         .catch(error => console.log(error));
-    }
+    },
+    clear() {
+      const url = "/msg",
+        params = { _method: "delete" };
+      axios
+        .delete()
+        .then(response => {
+          console.log(response);
+        })
+        .catch(error => console.log(error));
+      store.dispatch("clearCheckeds");
+    },
+    add() {}
   }
 };
 </script>

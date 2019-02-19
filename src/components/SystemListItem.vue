@@ -15,28 +15,24 @@
 </template>
 
 <script>
-import store from "@/store";
-
 export default {
   props: {
     type: String,
     item: Object
   },
   data() {
-    return {
-      store
-    };
+    return {};
   },
   methods: {
     check(event) {
       // console.log(event.target.value);
       const value = event.target.value;
-      if (store.state.mCheck.checkedId.has(value)) {  
-        store.dispatch("deleteChecked", value);
+      if (this.$store.state.mCheck.checkedId.has(value)) {
+        this.$store.dispatch("deleteChecked", value);
       } else {
-        store.dispatch("addChecked", value);
+        this.$store.dispatch("addChecked", value);
       }
-      console.log([...store.state.mCheck.checkedId].join());
+      console.log([...this.$store.state.mCheck.checkedId].join());
     },
     showDetails() {
       this.$emit("show-details", this.item.messageId);

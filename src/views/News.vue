@@ -1,12 +1,12 @@
 <template>
-  <system/>
+  <system-main v-bind="{type: 'news'}"/>
 </template>
 
 <script>
-import System from "@/components/System.vue";
+import SystemMain from "@/components/SystemMain.vue";
 export default {
   components: {
-    System
+    SystemMain
   }
 };
 </script>

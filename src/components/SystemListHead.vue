@@ -10,7 +10,7 @@
         <img src="@/images/refresh_logo.png" alt="刷新" @click="refresh">
       </div>
       <div class="bottom-right">
-        <img src="@/images/add_logo.png" alt="新增" v-if="isAdd">
+        <img src="@/images/add_logo.png" alt="新增" v-if="isAdd" @click="add">
         <img src="@/images/delete_logo.png" alt="删除" v-if="isDelete" @click="clear">
       </div>
     </div>
@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import store from "@/store";
 import axios from "axios";
 
 export default {
@@ -34,15 +33,10 @@ export default {
       this.$emit("refresh");
     },
     clear() {
-      const url = "/msg",
-        params = { _method: "delete" };
-      axios
-        .delete()
-        .then(response => {
-          console.log(response);
-        })
-        .catch(error => console.log(error));
-      store.dispatch("clearCheckeds");
+      this.$emit("clear");
+    },
+    add() {
+      this.$emit("add");
     }
   },
   data() {

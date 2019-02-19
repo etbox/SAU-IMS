@@ -59,11 +59,18 @@ const mLogin = {
         context.commit('CLEAR_CHECKEDS');
       }
     }
+  },
+  mURL = {
+    state: {
+      identity: ['/member', '/club', '/sau'],
+      orgs: ['/org', '/other', '/club']
+    }
   };
 
 export default new Vuex.Store({
   modules: {
     mLogin,
-    mCheck
+    mCheck,
+    mURL
   }
 });
