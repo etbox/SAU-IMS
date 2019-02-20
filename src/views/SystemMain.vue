@@ -17,7 +17,7 @@
         />
       </div>
     </div>
-    <SystemContent v-bind="{detailContent}"/>
+    <SystemContent v-bind="{detailContent, contentType}" v-on:send="send"/>
   </div>
 </template>
 
@@ -42,14 +42,18 @@ export default {
       isDelete: true,
       items: [],
       offset: 1,
-      detailContent: {}
+      detailContent: {},
+      contentType: "show"
     };
   },
   methods: {
     refresh() {
       const limit = 10,
-        url = `/msg`;
+        url = `${
+          this.options.module === "news" ? "" : this.options.identity
+        }/msg${this.options.module === "news" ? "" : "/old"}`;
 
+      // console.log(`${url} refresh`);
       axios
         .get(url, {
           offset: this.offset,
@@ -59,13 +63,9 @@ export default {
           if (response.data.code) {
             alert(response.data.msg);
           } else {
-            this.items = [];
-            console.log(`${url} refresh`);
+            this.items = response.data.data;
 
-            const arr = response.data.data;
-            for (let i = 0; i < arr.length; i++) {
-              this.items.push(arr[i]);
-            }
+            // console.log(this.items);
           }
         })
         .catch(function(error) {
@@ -73,7 +73,9 @@ export default {
         });
     },
     search(keyword) {
-      const url = `/msg/search`,
+      const url = `${
+          this.options.module === "news" ? "" : this.options.identity
+        }/msg${this.options.module === "news" ? "" : "/old"}/search`,
         limit = 10;
       let params = {
         findContent: keyword,
@@ -81,20 +83,19 @@ export default {
         limit
       };
 
+      // console.log(`${url} search`);
       axios
         .get(url, { params })
         .then(response => {
-          this.items = [];
-          console.log(`${url} search`);
+          this.items = response.data.data;
 
-          const arr = response.data.data;
-          for (let i = 0; i < arr.length; i++) {
-            this.items.push(arr[i]);
-          }
+          // console.log(this.items);
         })
         .catch(error => console.log(error));
     },
     showDetails(messageId) {
+      this.contentType = "show";
+
       const url = `${
         this.options.module === "news" ? "" : this.options.identity
       }/msg${this.options.module === "news" ? "" : "/old"}/${messageId}`;
@@ -112,17 +113,53 @@ export default {
         .catch(error => console.log(error));
     },
     clear() {
-      const url = "/msg",
-        params = { _method: "delete" };
-      axios
-        .delete()
+      const url = `${
+          this.options.module === "news" ? "" : this.options.identity
+        }/msg${this.options.module === "news" ? "" : "/old"}`,
+        params = {
+          _method: "delete",
+          deleteMsgIds: [...this.$store.state.mCheck.checkedId].join()
+        };
+
+      console.log(`${url} ${params.deleteMsgIds}`);
+      // axios
+      //   .delete(url, params)
+      axios({
+        method: "delete",
+        url,
+        data: params
+      })
         .then(response => {
-          console.log(response);
+          if (response.data.code) {
+            alert(response.data.msg);
+          } else {
+            console.log("已删除");
+          }
         })
         .catch(error => console.log(error));
+
       store.dispatch("clearCheckeds");
     },
-    add() {}
+    add() {
+      this.contentType = "edit";
+    },
+    send(msgBody) {
+      this.contentType = "show";
+      this.detailContent = msgBody;
+
+      const url = `${this.options.identity}/msg/new/all`;
+
+      axios
+        .post(url, msgBody)
+        .then(response => {
+          if (response.data.code) {
+            alert(response.data.msg);
+          } else {
+            console.log("发送成功");
+          }
+        })
+        .catch(error => console.log(error));
+    }
   },
   created() {
     const limit = 10,
@@ -147,6 +184,8 @@ export default {
   },
   watch: {
     "options.module"() {
+      this.contentType = "show";
+
       // console.log("options changed!");
       // console.log(this.options.module);
       const limit = 10;
