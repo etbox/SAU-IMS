@@ -17,7 +17,7 @@
         />
       </div>
     </div>
-    <SystemContent v-bind="{detailContent, contentType}" v-on:send="send"/>
+    <SystemContent v-bind="{detailContent, contentType}" v-on:send="send" v-on:clear="clear"/>
   </div>
 </template>
 
@@ -121,7 +121,7 @@ export default {
           deleteMsgIds: [...this.$store.state.mCheck.checkedId].join()
         };
 
-      console.log(`${url} ${params.deleteMsgIds}`);
+      console.log(`删除路径：${url} 消息id：${params.deleteMsgIds}`);
       // axios
       //   .delete(url, params)
       axios({
@@ -134,11 +134,12 @@ export default {
             alert(response.data.msg);
           } else {
             console.log("已删除");
+            this.refresh();
           }
         })
         .catch(error => console.log(error));
 
-      store.dispatch("clearCheckeds");
+      this.$store.dispatch("clearCheckeds");
     },
     add() {
       this.contentType = "edit";
@@ -155,7 +156,7 @@ export default {
           if (response.data.code) {
             alert(response.data.msg);
           } else {
-            console.log("发送成功");
+            console.log("发送信息成功");
           }
         })
         .catch(error => console.log(error));

@@ -16,10 +16,10 @@
         >{{`${new Date(detailContent.sendTime).getFullYear()}年${new Date(detailContent.sendTime).getMonth()+1}月${new Date(detailContent.sendTime).getDate()}日`}}</div>
       </div>
       <div class="right-part">
-        <div class="delete" v-show="detailContent.releaseTime">
-          <img src="@/images/delete_logo.png" alt="删除">
+        <!-- <div class="delete" v-show="detailContent.releaseTime">
+          <img src="@/images/delete_logo.png" alt="删除" @click="clear">
           删除
-        </div>
+        </div>-->
       </div>
     </div>
     <div class="content-body">
@@ -70,6 +70,9 @@ export default {
     send() {
       this.msgBody.sendTime = new Date();
       this.$emit("send", this.msgBody);
+    },
+    clear() {
+      this.$emit("clear");
     }
   }
 };

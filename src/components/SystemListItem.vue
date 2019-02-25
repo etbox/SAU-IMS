@@ -41,7 +41,9 @@ export default {
       } else {
         this.$store.dispatch("addChecked", value);
       }
-      console.log([...this.$store.state.mCheck.checkedId].join());
+      console.log(
+        `删除队列：${[...this.$store.state.mCheck.checkedId].join()}`
+      );
     },
     showDetails() {
       this.$emit("show-details", this.item.messageId);
