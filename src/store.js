@@ -6,12 +6,12 @@ Vue.use(Vuex);
 const mLogin = {
     // namespaced: true,
     state: {
-      loginState: -1
+      loginState: -1,
     },
     getters: {
       checkLogin(state) {
         return state.loginState;
-      }
+      },
     },
     mutations: {
       LOGIN(state, payload) {
@@ -19,7 +19,7 @@ const mLogin = {
       },
       LOGOUT(state) {
         state.loginState = -1;
-      }
+      },
     },
     actions: {
       login(context, payload) {
@@ -27,16 +27,14 @@ const mLogin = {
       },
       logout(context) {
         context.commit('LOGOUT');
-      }
-    }
+      },
+    },
   },
   mCheck = {
     state: {
-      checkedId: new Set()
+      checkedId: new Set(),
     },
-    getters: {
-
-    },
+    getters: {},
     mutations: {
       ADD_CHECKED(state, payload) {
         state.checkedId.add(payload);
@@ -46,7 +44,7 @@ const mLogin = {
       },
       CLEAR_CHECKEDS(state) {
         state.checkedId.clear();
-      }
+      },
     },
     actions: {
       addChecked(context, payload) {
@@ -57,20 +55,20 @@ const mLogin = {
       },
       clearCheckeds(context) {
         context.commit('CLEAR_CHECKEDS');
-      }
-    }
+      },
+    },
   },
   mURL = {
     state: {
       identity: ['/member', '/club', '/sau'],
-      orgs: ['/org', '/other', '/club']
-    }
+      orgs: ['/org', '/other', '/club'],
+    },
   };
 
 export default new Vuex.Store({
   modules: {
     mLogin,
     mCheck,
-    mURL
-  }
+    mURL,
+  },
 });
