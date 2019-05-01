@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="list-body">
-      <IndexItem
+      <IndexClubItem
         v-for="item in items"
         :key="item.orgId"
         :orgId="item.orgId"
@@ -23,22 +23,20 @@
 </template>
 
 <script>
-import IndexItem from "./IndexItem.vue";
+import IndexClubItem from "./IndexClubItem.vue";
 import axios from "axios";
 
-let items = [];
-
 export default {
-  name: "ItemList",
+  name: "IndexClubList",
   props: {
     name: String
   },
   components: {
-    IndexItem
+    IndexClubItem
   },
   data() {
     return {
-      items
+      items: []
     };
   },
   created() {
@@ -50,11 +48,7 @@ export default {
       .then(res => {
         // console.log(res);
         const arr = res.data.data;
-        // console.log(items);
-        for (let i = 0; i < arr.length && items.length < 10; i++) {
-          items.push(arr[i]);
-        }
-        // console.log(items);
+        this.items = arr;
       })
       .catch(function(error) {
         console.log(error);

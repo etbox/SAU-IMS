@@ -2,8 +2,8 @@
   <div class="container" v-if="placeholder !== '验证码'">
     <div class="panel-input">
       <input
-        :type="type"
         class="input"
+        :type="type"
         :placeholder="placeholder"
         v-bind:value="value"
         v-on:input="$emit('input', $event.target.value)"
@@ -63,6 +63,7 @@ export default {
       this.isShowCaptcha = true;
     },
     refresh() {
+      // 防止浏览器缓存
       this.captchaImg = `/login/captcha?r=${Math.random()}`;
     },
     blur() {
@@ -73,13 +74,13 @@ export default {
   data() {
     return {
       isShowCaptcha: false,
+      // 防止浏览器缓存
       captchaImg: `/login/captcha?r=${Math.random()}`,
       myTrue: this.isTrue, // my开头的data用于双向绑定
       myFalse: this.isFalse,
       myMsg: this.msg
     };
-  },
-  watch: {}
+  }
 };
 </script>
 

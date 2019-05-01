@@ -2,7 +2,7 @@
   <div class="item-container">
     <router-link :to="'/club/'+orgId">
       <div class="img-container">
-        <img :src="view" :alt="orgName">
+        <img src="/resource/view/club/default_overview.png" :alt="orgName" class="img--club">
       </div>
       <div class="item-details">
         <div class="club-name">{{orgName}}</div>
@@ -20,7 +20,7 @@
 
 <script>
 export default {
-  name: "IndexItem",
+  name: "IndexClubItem",
   props: {
     orgName: String,
     orgId: Number,
@@ -50,19 +50,20 @@ export default {
   width: 180px;
   margin-bottom: 20px;
 }
+a {
+  color: #222;
+}
 
 .img-container {
   height: 105px;
-  img {
-    transform: scale(1);
-    transition: transform 0.2s;
-    z-index: -10;
-  }
 }
-.item-container:hover {
-  img {
-    transform: scale(1.05);
-  }
+.img--club {
+  height: 105px;
+  width: 178px;
+  padding-top: 1px;
+  // transform: scale(1);
+  // transition: transform 0.2s;
+  // z-index: -10;
 }
 
 .item-details {

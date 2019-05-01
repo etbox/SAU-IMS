@@ -4,7 +4,7 @@
       <div class="head-left">
         <div class="club-avatar">
           <!-- <img src="@/images/avatar.png" alt="社团头像"> -->
-          <img :src="details.logo" alt="社团头像">
+          <img src="/resource/logo/default_logo.jpg" alt="社团头像">
         </div>
         <div class="club-title">
           <div class="club-name">{{details.orgName}}</div>
@@ -165,8 +165,6 @@ export default {
         joinState: 0,
         likeClick: 2,
         members: 2,
-        logo: "default_logo.jpg",
-        view: "default_overview.png",
         firstGradeNum: 0,
         secondGradeNum: 0,
         threeGradeNum: 0,
@@ -196,6 +194,13 @@ export default {
       .catch(function(error) {
         console.log(error);
       });
+  },
+  mounted() {
+    this.options1.series[0].data[0].value = this.details.manNum;
+    this.options1.series[0].data[1].value = this.details.womanNum;
+    this.options2.series[0].data[0].value = this.details.firstGradeNum;
+    this.options2.series[0].data[1].value = this.details.secondGradeNum;
+    this.options2.series[0].data[2].value = this.details.threeGradeNum;
   }
 };
 </script>
@@ -250,7 +255,7 @@ $gray: #e4e8ec;
   align-items: center;
 }
 .found-time {
-  margin-right: 50px;
+  margin-right: 100px;
 }
 
 // 下半部分
@@ -264,6 +269,7 @@ $gray: #e4e8ec;
 
   flex: 3 0;
   display: flex;
+  justify-content: space-between;
 }
 .body-left {
   flex: 2 0;

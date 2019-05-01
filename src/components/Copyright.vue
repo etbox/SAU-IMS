@@ -6,7 +6,7 @@
 export default {
   data: function() {
     return {
-      copyright: `${new Date().toString().slice(11, 15)} @ 校社联管理系统`
+      copyright: `${new Date().getFullYear()} @ 校社联管理系统`
     };
   }
 };
