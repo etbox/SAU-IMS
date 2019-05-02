@@ -6,7 +6,8 @@
 <h4>校社联管理系统全部功能的接口文档在线地址</h4>
 <br/>
 公开接口文档(第二版)地址 
-<a target="_blank" href="">
+<a target="_blank" href="https://documenter.getpostman.com/view/3892535/S1LsXpZn">
+https://documenter.getpostman.com/view/3892535/S1LsXpZn
 </a>
 <br/>
 公开接口文档(第一版)地址（当前使用） 
