@@ -1,11 +1,24 @@
 # SAU-IMS
 大创项目：校社联管理系统<br/>
 
+项目地址： http://www.kanlon.ink
+
+添加新的接口文档，接口文档2.0地址：https://documenter.getpostman.com/view/3892535/S1LsXpZn
+
+
 <br/>
 该仓库是小组仓库的备份，是基于idea软件提交的仓库。
 <br/>
 
+
 工作进度:
+
+
+<h4>2019/5/1</h4>
+0. 升级pom依赖和修改properties统一为utf-8编码<br/>
+1. 添加spring mvc 参数校验功能<br/>
+2. 针对同步请求和异步请求分别做不同的权限处理<br/>
+
 
 <h4>2019/2/25</h4>
 0. 修复删除消息的bug<br/>

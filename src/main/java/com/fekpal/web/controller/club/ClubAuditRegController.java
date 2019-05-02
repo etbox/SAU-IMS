@@ -13,6 +13,8 @@ import com.fekpal.dao.model.User;
 import com.fekpal.web.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -28,9 +30,6 @@ public class ClubAuditRegController {
 
     @Autowired
     private OrgMemberService orgMemberService;
-
-    @Autowired
-    private ClubService clubService;
 
     @Autowired
     PersonService personService;
@@ -97,7 +96,8 @@ public class ClubAuditRegController {
      */
     @ResponseBody
     @RequestMapping(value = "/club/audit/join/{auditMsgId}", method = RequestMethod.PUT)
-    public JsonResult<String> sendAuditMsgResult(@PathVariable("auditMsgId") int auditMsgId, @RequestBody AuditResult auditResult) {
+    public JsonResult<String> sendAuditMsgResult(@PathVariable("auditMsgId") int auditMsgId,
+            @RequestBody @Validated AuditResult auditResult) {
         JsonResult<String> result = new JsonResult<>();
         if (auditResult == null) {
             result.setStateCode(ResponseCode.REQUEST_ERROR, "发送审核结果错误");
@@ -128,7 +128,7 @@ public class ClubAuditRegController {
             for (OrgMember orgMember : orgMemberList) {
                 ClubRegisterAuditListMsg audit = new ClubRegisterAuditListMsg();
                 audit.setAuditMsgId(orgMember.getId());
-                audit.setAuditState(orgMember.getMemberState());
+                audit.setAuditState(orgMember.getAvailable());
                 int personId = orgMember.getPersonId();
                 Person person = personService.selectByPrimaryKey(personId);
                 audit.setAuditTitle(person.getRealName());
