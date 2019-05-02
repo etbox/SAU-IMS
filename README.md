@@ -3,7 +3,11 @@
 
 ## 
 项目地址：http://kanlon.ink  <br/><br/>
-restful接口文档地址：https://documenter.getpostman.com/view/3892535/RWM8UC2C <br/>
+
+restful接口文档1.0地址：https://documenter.getpostman.com/view/3892535/RWM8UC2C <br/>
+
+
+添加新的接口文档，接口文档2.0地址：https://documenter.getpostman.com/view/3892535/S1LsXpZn
 
 ## 系统架构
 Spring MVC + Spring + mybatis + maven + redis + tomcat8 + JDK8
