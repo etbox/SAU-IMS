@@ -41,17 +41,12 @@ export default {
       axios
         .get("/logout")
         .then(res => {
-          // console.log(res.data);
-
           if (res.data.code === 2 && res.data.msg.search(/JDBC/) !== -1) {
             alert("数据库正在重新连接，请重试");
           } else if (res.data.code !== 0) {
             alert(res.data.msg);
           } else {
             this.$store.dispatch("logout");
-
-            Cookies.remove("user");
-            Cookies.set("priority", -1);
 
             alert("登出成功");
             this.$router.push("/");

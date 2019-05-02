@@ -51,10 +51,7 @@ export default {
           captcha: this.captcha
         },
         url = `/login`,
-        isFilled = false,
-        expires = 1 / 48;
-
-      // console.log(params);
+        isFilled = false;
 
       // 检测输入框是否为空
       for (const key in params) {
@@ -78,21 +75,17 @@ export default {
             }
           })
           .then(res => {
-            // console.log(res.data);
-
             // 想了想只需要重置验证码
             this.captcha = ``;
 
             if (res.data.code === 2 && res.data.msg.search(/JDBC/) !== -1) {
+              // TODO: 没办法自动刷新验证码
               alert("数据库正在重新连接，请重试");
             } else if (res.data.code !== 0) {
               alert(res.data.msg);
             } else {
-              // FIXME: 保存登录状态吗？那用cookie干啥？
+              // 登录状态由后端 session 储存，前端储存权限信息
               this.$store.dispatch("login", Number(res.data.data));
-
-              Cookies.set("user", params.userName, { expires });
-              Cookies.set("priority", Number(res.data.data), { expires });
 
               // 页面跳转
               this.$router.push("system");
