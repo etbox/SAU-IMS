@@ -10,6 +10,7 @@ export default function getUserInfo(store) {
     .get('/member/center/info')
     .then((res) => {
       const data = res.data.data;
+      localStorage.setItem('realName', data.realName);
       store.dispatch('modifyRealName', data.realName);
     })
     .catch((err) => console.log(err));

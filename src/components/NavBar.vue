@@ -27,7 +27,7 @@
 
 <script>
 import axios from "axios";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 export default {
   name: "NavBar",
@@ -48,6 +48,7 @@ export default {
             alert(res.data.msg);
           } else {
             this.$store.dispatch("logout");
+            localStorage.setItem("priority", -1);
 
             alert("登出成功");
             this.$router.push("/");
@@ -59,7 +60,10 @@ export default {
     }
   },
   created() {
-    const priority = Number(Cookies.get("priority"));
+    // const priority = Number(Cookies.get("priority")),
+    const priority = localStorage.getItem("priority"),
+      realName = localStorage.getItem("realName");
+
     if (priority > 0) {
       this.$store.dispatch("login", priority);
     }

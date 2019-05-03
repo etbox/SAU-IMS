@@ -35,6 +35,7 @@
         @focus.once="showCaptcha"
         v-bind:value="value"
         v-on:input="$emit('input', $event.target.value)"
+        @keyup.enter="login"
       >
     </div>
     <div class="panel-info">
@@ -69,6 +70,9 @@ export default {
     blur() {
       let self = this;
       this.$emit("blur", self);
+    },
+    login() {
+      this.$emit("login");
     }
   },
   data() {

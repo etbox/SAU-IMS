@@ -12,6 +12,7 @@
       <InputInfo
         v-bind="{isTrue:false, isFalse:false, type:'text', placeholder:'验证码'}"
         v-model="captcha"
+        @login="login"
       />
 
       <div class="login-options">
@@ -33,9 +34,11 @@
 </template>
 
 <script>
+import axios from "axios";
+// import Cookies from "js-cookie";
+
 import InputInfo from "@/components/InputInfo.vue";
 import Panel from "@/components/Panel.vue";
-import axios from "axios";
 import getUserInfo from "../util/getUserInfo.js";
 
 export default {
@@ -51,7 +54,8 @@ export default {
           captcha: this.captcha
         },
         url = `/login`,
-        isFilled = false;
+        isFilled = false,
+        expires = 1 / 48;
 
       // 检测输入框是否为空
       for (const key in params) {
@@ -87,8 +91,11 @@ export default {
               // 登录状态由后端 session 储存，前端储存权限信息
               this.$store.dispatch("login", Number(res.data.data));
 
-              // 页面跳转
-              this.$router.push("system");
+              // 在 cookie 中保存权限信息，使导航栏正确显示用户信息
+              // Cookies.set("priority", { expires });
+              localStorage.setItem("priority", Number(res.data.data)),
+                // 页面跳转
+                this.$router.push("system");
               this.vanish();
 
               // 获取用户信息并显示在顶部导航栏
