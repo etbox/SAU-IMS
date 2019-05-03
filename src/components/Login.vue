@@ -36,7 +36,7 @@
 import InputInfo from "@/components/InputInfo.vue";
 import Panel from "@/components/Panel.vue";
 import axios from "axios";
-import Cookies from "js-cookie";
+import getUserInfo from "../util/getUserInfo.js";
 
 export default {
   name: "Login",
@@ -90,6 +90,9 @@ export default {
               // 页面跳转
               this.$router.push("system");
               this.vanish();
+
+              // 获取用户信息并显示在顶部导航栏
+              getUserInfo(this.$store);
             }
           })
           .catch(function(error) {

@@ -2,7 +2,7 @@
   <div class="root">
     <div class="nav-list">
       <ul>
-        <router-link :to="'/system/'+item.module" v-for="(item, index) in items" :key="index">
+        <router-link :to="'/system/'+item.module" v-for="(item, index) in filter" :key="index">
           <li class="nav-item" :class="{'nav-current':item.module === options.module}">{{item.name}}</li>
         </router-link>
       </ul>
@@ -11,8 +11,6 @@
 </template>
 
 <script>
-// import Cookies from "js-cookie";
-
 export default {
   props: {
     options: Object
@@ -52,7 +50,6 @@ export default {
     filter() {
       return this.items.filter(item => {
         return this.$store.getters["checkLogin"] > item.priority;
-        // return Cookies.get("priority") > item.priority;
       });
     }
   }
@@ -63,10 +60,9 @@ export default {
 $deep: #5db1f8;
 $light: #91caf9;
 .root {
-  // background-color: skyblue;
   background-image: url("../images/left.png");
+  // 宽度由 flex 决定
   flex: 1;
-  display: flex;
   box-shadow: 3px 0 3px rgba(0, 0, 0, 0.3);
   z-index: 7;
 }
