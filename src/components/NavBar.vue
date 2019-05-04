@@ -13,10 +13,16 @@
           </router-link>
         </div>
         <div class="logined" v-else>
-          <button class="button button-primary button-rounded" @click="logout">登出</button>
           <div class="user-info">
+            <span>
+              <button class="button button-primary button-rounded logout" @click="logout">登出</button>
+            </span>
+            <!-- <div class="user--avatar"> -->
+            <router-link to="/system">
+              <button class="button button-primary button-rounded" @click="vanish">系统</button>
+            </router-link>
+            <!-- </div> -->
             <div class="user--realname">{{realName}}</div>
-            <div class="user--avatar"></div>
           </div>
           <div class="submenu"></div>
         </div>
@@ -111,7 +117,8 @@ header {
   height: $navBar-height;
 }
 
-nav {
+.unlogin,
+.logined {
   float: right;
   line-height: $navBar-height;
 }
@@ -133,9 +140,11 @@ nav {
   border-radius: 10px;
 }
 
-.user-info {
-  display: inline-block;
+.user-info > * {
+  float: right;
+  // display: inline-block;
 }
 .user--realname {
+  margin: 0 15px;
 }
 </style>

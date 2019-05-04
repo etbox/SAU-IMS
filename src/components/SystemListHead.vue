@@ -2,7 +2,10 @@
   <div class="list-head">
     <div class="list-head-left">
       <input type="text" v-model="keyword">
-      <div class="list-title">历史发布</div>
+      <div class="list-title">
+        <!-- {{listTitle}} -->
+        历史发布
+      </div>
     </div>
     <div class="list-head-right">
       <div class="top-right">
@@ -23,7 +26,8 @@ import axios from "axios";
 export default {
   props: {
     isAdd: Boolean,
-    isDelete: Boolean
+    isDelete: Boolean,
+    listTitle: String
   },
   methods: {
     search() {

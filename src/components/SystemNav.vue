@@ -3,7 +3,11 @@
     <div class="nav-list">
       <ul>
         <router-link :to="'/system/'+item.module" v-for="(item, index) in filter" :key="index">
-          <li class="nav-item" :class="{'nav-current':item.module === options.module}">{{item.name}}</li>
+          <li
+            class="nav-item"
+            :class="{'nav-current':item.module === options.module}"
+            @click="getUserInfo"
+          >{{item.name}}</li>
         </router-link>
       </ul>
     </div>
@@ -11,6 +15,8 @@
 </template>
 
 <script>
+import getUserInfo from "../util/getUserInfo.js";
+
 export default {
   props: {
     options: Object
@@ -51,6 +57,11 @@ export default {
       return this.items.filter(item => {
         return this.$store.getters["checkLogin"] > item.priority;
       });
+    }
+  },
+  methods: {
+    getUserInfo() {
+      return getUserInfo();
     }
   }
 };

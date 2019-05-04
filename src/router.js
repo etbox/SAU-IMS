@@ -1,7 +1,9 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
+
 import store from './store';
+import Home from './views/Home.vue';
+import SystemMain from './views/SystemMain.vue';
 
 Vue.use(Router);
 
@@ -59,23 +61,23 @@ export default new Router({
       children: [
         {
           path: 'news',
-          component: () => import('./views/SystemMain.vue'),
+          component: SystemMain,
         },
         {
           path: 'messages',
-          component: () => import('./views/SystemMain.vue'),
+          component: SystemMain,
         },
         {
           path: 'orgs',
-          component: () => import('./views/SystemMain.vue'),
+          component: SystemMain,
         },
         {
           path: 'audit',
-          component: () => import('./views/SystemMain.vue'),
+          component: SystemMain,
         },
         {
           path: 'annual',
-          component: () => import('./views/SystemMain.vue'),
+          component: SystemMain,
         },
       ],
     },
