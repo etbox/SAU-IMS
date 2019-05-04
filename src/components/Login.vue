@@ -100,7 +100,7 @@ export default {
               this.vanish();
 
               // 获取用户信息并显示在顶部导航栏
-              getUserInfo(this.$store);
+              getUserInfo(this.$store, this.$router);
             }
           })
           .catch(function(error) {

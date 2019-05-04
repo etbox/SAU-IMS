@@ -6,8 +6,7 @@
         <span @click="vanish">校社联 · 信息管理系统</span>
       </router-link>
       <nav>
-        <!-- <div class="unlogin" v-if="this.$store.getters['checkLogin'] < 0"> -->
-        <div class="unlogin" v-if="priority < 0">
+        <div class="unlogin" v-if="this.$store.getters['checkLogin'] < 0">
           <button class="button button-primary button-rounded" @click="showLogin">登录</button>
           <router-link to="/signup">
             <button class="button button-primary button-rounded" @click="vanish">注册</button>
@@ -28,7 +27,9 @@
 
 <script>
 import axios from "axios";
-// import Cookies from "js-cookie";
+import Cookies from "js-cookie";
+
+import getUserInfo from "../util/getUserInfo.js";
 
 export default {
   name: "NavBar",
@@ -48,8 +49,8 @@ export default {
           } else if (res.data.code !== 0) {
             alert(res.data.msg);
           } else {
+            Cookies.set("priority", -1);
             this.$store.dispatch("logout");
-            localStorage.setItem("priority", -1);
 
             alert("登出成功");
             this.$router.push("/");
@@ -61,30 +62,17 @@ export default {
     }
   },
   created() {
-    // const priority = Number(Cookies.get("priority")),
-    const priority = this.localPriority,
-      realName = localStorage.getItem("realName");
+    const priority = Cookies.get("priority"),
+      realName = Cookies.get("realName");
 
     if (priority > 0) {
       this.$store.dispatch("login", priority);
+      this.$store.dispatch("modifyRealName", realName);
     }
   },
   computed: {
     realName() {
       return this.$store.getters["getRealName"];
-    },
-    localPriority() {
-      return localStorage.getItem("priority");
-    }
-  },
-  data() {
-    return {
-      priority: localStorage.getItem("priority")
-    };
-  },
-  watch: {
-    priority(oldValue, newValue) {
-      this.priority = newValue;
     }
   }
 };
