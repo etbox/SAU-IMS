@@ -35,7 +35,7 @@
 
 <script>
 import axios from "axios";
-// import Cookies from "js-cookie";
+import Cookies from "js-cookie";
 
 import InputInfo from "@/components/InputInfo.vue";
 import Panel from "@/components/Panel.vue";
@@ -88,14 +88,15 @@ export default {
             } else if (res.data.code !== 0) {
               alert(res.data.msg);
             } else {
-              // 登录状态由后端 session 储存，前端储存权限信息
-              this.$store.dispatch("login", Number(res.data.data));
+              const priority = Number(res.data.data);
 
-              // 在 cookie 中保存权限信息，使导航栏正确显示用户信息
-              // Cookies.set("priority", { expires });
-              localStorage.setItem("priority", Number(res.data.data)),
-                // 页面跳转
-                this.$router.push("system");
+              // 在 cookie 中保存权限信息，使导航栏正确显示用户信息（因为 cookie 可以设过期时间）
+              Cookies.set("priority", priority, { expires });
+              // vuex 的数据在内存中，每次都要手动修改
+              this.$store.dispatch("login", priority);
+
+              // 页面跳转
+              this.$router.push("system");
               this.vanish();
 
               // 获取用户信息并显示在顶部导航栏

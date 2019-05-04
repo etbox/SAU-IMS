@@ -6,7 +6,8 @@
         <span @click="vanish">校社联 · 信息管理系统</span>
       </router-link>
       <nav>
-        <div class="unlogin" v-if="this.$store.getters['checkLogin'] < 0">
+        <!-- <div class="unlogin" v-if="this.$store.getters['checkLogin'] < 0"> -->
+        <div class="unlogin" v-if="priority < 0">
           <button class="button button-primary button-rounded" @click="showLogin">登录</button>
           <router-link to="/signup">
             <button class="button button-primary button-rounded" @click="vanish">注册</button>
@@ -61,7 +62,7 @@ export default {
   },
   created() {
     // const priority = Number(Cookies.get("priority")),
-    const priority = localStorage.getItem("priority"),
+    const priority = this.localPriority,
       realName = localStorage.getItem("realName");
 
     if (priority > 0) {
@@ -71,6 +72,19 @@ export default {
   computed: {
     realName() {
       return this.$store.getters["getRealName"];
+    },
+    localPriority() {
+      return localStorage.getItem("priority");
+    }
+  },
+  data() {
+    return {
+      priority: localStorage.getItem("priority")
+    };
+  },
+  watch: {
+    priority(oldValue, newValue) {
+      this.priority = newValue;
     }
   }
 };
