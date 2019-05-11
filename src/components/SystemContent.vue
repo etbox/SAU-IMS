@@ -48,6 +48,9 @@
       <textarea name id cols="30" rows="10" placeholder="内容" v-model="msgBody.messageContent"></textarea>
     </div>
   </div>
+  <div class="root" v-else-if="contentType === 'audit'">
+    <div class="content-head">123</div>
+  </div>
 </template>
 
 <script>

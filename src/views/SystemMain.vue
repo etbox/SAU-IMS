@@ -13,7 +13,8 @@
           v-for="item in items"
           :key="item.messageId"
           v-bind="{options, item}"
-          v-on:show-details="showDetails"
+          v-on:show-msg-details="showMsgDetails"
+          v-on:show-audit-details="showAuditDetails"
         />
       </div>
     </div>
@@ -93,7 +94,7 @@ export default {
         })
         .catch(error => console.log(error));
     },
-    showDetails(messageId) {
+    showMsgDetails(messageId) {
       this.contentType = "show";
 
       const url = `${
@@ -103,6 +104,20 @@ export default {
       // console.log(`${url} show details`);
       axios
         .get(url)
+        .then(response => {
+          if (response.data.code) {
+            alert(response.data.msg);
+          } else {
+            this.detailContent = response.data.data;
+          }
+        })
+        .catch(error => console.log(error));
+    },
+    showAuditDetails(auditMsgId) {
+      this.contentType = "audit";
+
+      axios
+        .get(`/club/audit/join/${auditMsgId}`)
         .then(response => {
           if (response.data.code) {
             alert(response.data.msg);
@@ -199,8 +214,12 @@ export default {
         case "messages":
           url = `${this.options.identity}/msg/old`;
           break;
+        case "audit":
+          url = `/club/audit/join`;
+          break;
       }
 
+      // TODO: 此处访问未完成的功能会保存
       axios
         .get(url, {
           offset: this.offset,

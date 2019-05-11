@@ -1,25 +1,49 @@
 <template>
-  <div
-    class="list-item"
-    v-if="options.module === 'news' || options.module === 'messages'"
-    @click="showDetails"
-  >
-    <div class="read-flag" :class="{'new-flag':!(item.readFlag)}" v-if="options.module === 'news'"></div>
-    <div class="list-item-left">
-      <div class="message-title">{{`${item.messageTitle.slice(0,8)}...`}}</div>
-      <div class="sender-name" v-if="options.module === 'news'">{{item.releaseName}}</div>
-    </div>
-    <div class="list-item-right">
-      <input type="checkbox" :value="item.messageId" @input="check">
+  <div class="choices">
+    <section
+      class="list-item"
+      v-if="options.module === 'news' || options.module === 'messages'"
+      @click="showMsgDetails"
+    >
       <div
-        class="send-time"
+        class="read-flag"
+        :class="{'new-flag':!(item.readFlag)}"
         v-if="options.module === 'news'"
-      >{{`${new Date(item.releaseTime).getFullYear()}/${new Date(item.releaseTime).getMonth()+1}/${new Date(item.releaseTime).getDate()}`}}</div>
-      <div
-        class="send-time"
-        v-else-if="options.module === 'messages'"
-      >{{`${new Date(item.sendTime).getFullYear()}/${new Date(item.sendTime).getMonth()+1}/${new Date(item.sendTime).getDate()}`}}</div>
-    </div>
+      ></div>
+      <div class="list-item-left">
+        <div class="message-title">{{`${item.messageTitle.slice(0,8)}...`}}</div>
+        <div class="sender-name" v-if="options.module === 'news'">{{item.releaseName}}</div>
+      </div>
+      <div class="list-item-right">
+        <input type="checkbox" :value="item.messageId" @input="check">
+        <div
+          class="send-time"
+          v-if="options.module === 'news'"
+        >{{`${new Date(item.releaseTime).getFullYear()}/${new Date(item.releaseTime).getMonth()+1}/${new Date(item.releaseTime).getDate()}`}}</div>
+        <div
+          class="send-time"
+          v-else-if="options.module === 'messages'"
+        >{{`${new Date(item.sendTime).getFullYear()}/${new Date(item.sendTime).getMonth()+1}/${new Date(item.sendTime).getDate()}`}}</div>
+      </div>
+    </section>
+
+    <section class="list-item" v-if="options.module === 'audit'" @click="showAuditDetails">
+      <div class="list-item-left">
+        <div class="message-title">{{`${item.auditTitle}`}}</div>
+        <div class="sender-name" v-if="options.module === 'news'">{{item.releaseName}}</div>
+      </div>
+      <div class="list-item-right">
+        <input type="checkbox" :value="item.messageId" @input="check">
+        <div
+          class="send-time"
+          v-if="options.module === 'news'"
+        >{{`${new Date(item.releaseTime).getFullYear()}/${new Date(item.releaseTime).getMonth()+1}/${new Date(item.releaseTime).getDate()}`}}</div>
+        <div
+          class="send-time"
+          v-else-if="options.module === 'messages'"
+        >{{`${new Date(item.sendTime).getFullYear()}/${new Date(item.sendTime).getMonth()+1}/${new Date(item.sendTime).getDate()}`}}</div>
+      </div>
+    </section>
   </div>
 </template>
 
@@ -45,8 +69,11 @@ export default {
         `删除队列：${[...this.$store.state.mCheck.checkedId].join()}`
       );
     },
-    showDetails() {
-      this.$emit("show-details", this.item.messageId);
+    showMsgDetails() {
+      this.$emit("show-msg-details", this.item.messageId);
+    },
+    showAuditDetails() {
+      this.$emit("show-audit-details", this.item.auditMsgId);
     }
   }
 };
