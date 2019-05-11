@@ -35,8 +35,6 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-import getUserInfo from "../util/getUserInfo.js";
-
 export default {
   name: "NavBar",
   methods: {

@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     getUserInfo() {
-      return getUserInfo();
+      return getUserInfo(this.$store, this.$router);
     }
   }
 };
