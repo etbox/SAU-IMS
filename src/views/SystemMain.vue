@@ -71,8 +71,6 @@ export default {
             alert(response.data.msg);
           } else {
             this.items = response.data.data;
-
-            // console.log(this.items);
           }
         })
         .catch(function(error) {
@@ -95,8 +93,6 @@ export default {
         .get(url, { params })
         .then(response => {
           this.items = response.data.data;
-
-          // console.log(this.items);
         })
         .catch(error => console.log(error));
     },
@@ -235,9 +231,15 @@ export default {
         case "audit":
           url = `/club/audit/join`;
           break;
+        case "annual":
+          url =
+            this.$store.getters["checkLogin"] === 1
+              ? `/club/ann`
+              : `/sau/audit/ann`;
+          break;
       }
 
-      // TODO: 此处访问未完成的功能会保存
+      // TODO: 此处访问未完成的功能会报错
       axios
         .get(url, {
           offset: this.offset,

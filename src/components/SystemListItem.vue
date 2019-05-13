@@ -31,7 +31,31 @@
     <section class="list-item" v-if="options.module === 'audit'" @click="showAuditDetails">
       <div class="list-item-left">
         <div class="message-title">{{`${item.auditTitle}`}}</div>
-        <div class="sender-name" v-if="options.module === 'news'">{{item.releaseName}}</div>
+        <div
+          class="sender-name"
+          v-if="options.module === 'audit'"
+        >{{(new Date(item.registerTime)).toLocaleDateString()}}</div>
+      </div>
+      <div class="list-item-right">
+        <input type="checkbox" :value="item.messageId" @input="check">
+        <div
+          class="send-time"
+          v-if="options.module === 'news'"
+        >{{`${new Date(item.releaseTime).getFullYear()}/${new Date(item.releaseTime).getMonth()+1}/${new Date(item.releaseTime).getDate()}`}}</div>
+        <div
+          class="send-time"
+          v-else-if="options.module === 'messages'"
+        >{{`${new Date(item.sendTime).getFullYear()}/${new Date(item.sendTime).getMonth()+1}/${new Date(item.sendTime).getDate()}`}}</div>
+      </div>
+    </section>
+
+    <section class="list-item" v-if="options.module === 'annual'" @click="showAuditDetails">
+      <div class="list-item-left">
+        <div class="message-title">{{`${item.registerTitle}`}}</div>
+        <div
+          class="sender-name"
+          v-if="options.module === 'annual'"
+        >{{(new Date(item.registerTime)).toLocaleDateString()}}</div>
       </div>
       <div class="list-item-right">
         <input type="checkbox" :value="item.messageId" @input="check">
