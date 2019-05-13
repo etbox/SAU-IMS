@@ -11,7 +11,8 @@
         v-if="options.module === 'news'"
       ></div>
       <div class="list-item-left">
-        <div class="message-title">{{`${item.messageTitle.slice(0,8)}...`}}</div>
+        <!-- 由于异步传输, undefined 没有 slice 方法 -->
+        <div class="message-title">{{`${String(item.messageTitle).slice(0,8)}...`}}</div>
         <div class="sender-name" v-if="options.module === 'news'">{{item.releaseName}}</div>
       </div>
       <div class="list-item-right">

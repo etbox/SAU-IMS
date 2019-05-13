@@ -18,7 +18,13 @@
         />
       </div>
     </div>
-    <SystemContent v-bind="{detailContent, contentType}" v-on:send="send" v-on:clear="clear"/>
+    <SystemContent
+      v-bind="{detailContent, contentType}"
+      v-on:send="send"
+      v-on:clear="clear"
+      @accept="accept"
+      @refuse="refuse"
+    />
   </div>
 </template>
 
@@ -175,6 +181,18 @@ export default {
           }
         })
         .catch(error => console.log(error));
+    },
+    accept(auditId) {
+      axios.put(`/club/audit/join/${auditId}`, {
+        auditState: 1,
+        auditResult: ""
+      });
+    },
+    refuse(auditId) {
+      axios.put(`/club/audit/join/${auditId}`, {
+        auditState: 0,
+        auditResult: ""
+      });
     }
   },
   created() {

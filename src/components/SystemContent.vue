@@ -9,11 +9,11 @@
         <div
           class="send-time"
           v-if="detailContent.releaseTime"
-        >{{`${new Date(detailContent.releaseTime).getFullYear()}年${new Date(detailContent.releaseTime).getMonth()+1}月${new Date(detailContent.releaseTime).getDate()}日`}}</div>
+        >{{`${new Date(detailContent.releaseTime).toLocaleDateString()}`}}</div>
         <div
           class="send-time"
           v-else-if="detailContent.sendTime"
-        >{{`${new Date(detailContent.sendTime).getFullYear()}年${new Date(detailContent.sendTime).getMonth()+1}月${new Date(detailContent.sendTime).getDate()}日`}}</div>
+        >{{`${new Date(detailContent.sendTime).toLocaleDateString()}`}}</div>
       </div>
       <div class="right-part">
         <!-- <div class="delete" v-show="detailContent.releaseTime">
@@ -49,7 +49,32 @@
     </div>
   </div>
   <div class="root" v-else-if="contentType === 'audit'">
-    <div class="content-head">123</div>
+    <div class="content-head">
+      <div class="sender-avatar">
+        <img src="@/images/avatar.png" alt="发送人头像" v-if="detailContent.auditId">
+      </div>
+      <div class="message-info">
+        <div class="sender-name">{{detailContent.userName}}</div>
+        <div
+          class="send-time"
+          v-if="detailContent.registerTime"
+        >{{`${new Date(detailContent.registerTime).toLocaleDateString()}`}}</div>
+      </div>
+    </div>
+    <div class="content-body">
+      <div class="message-content">
+        <p>性别：{{detailContent.gender}}</p>
+        <p>邮箱：{{detailContent.email}}</p>
+        <p>学号：{{detailContent.studentId}}</p>
+        <p>学院：{{detailContent.departmentName}}</p>
+        <p>专业：{{detailContent.majorName}}</p>
+        <p>宿舍：{{detailContent.address}}</p>
+        <p>生日：{{(new Date(detailContent.birthday)).toLocaleDateString()}}</p>
+        <p>手机：{{detailContent.phone}}</p>
+        <button @click="accept" style="margin-right: 20px">通过</button>
+        <button @click="refuse">驳回</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -76,6 +101,12 @@ export default {
     },
     clear() {
       this.$emit("clear");
+    },
+    accept() {
+      this.$emit("accept", this.detailContent.auditId);
+    },
+    refuse() {
+      this.$emit("refuse", this.detailContent.auditId);
     }
   }
 };
