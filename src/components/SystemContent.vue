@@ -55,10 +55,7 @@
       </div>
       <div class="message-info">
         <div class="sender-name">{{detailContent.userName}}</div>
-        <div
-          class="send-time"
-          v-if="detailContent.registerTime"
-        >{{`${new Date(detailContent.registerTime).toLocaleDateString()}`}}</div>
+        <div class="send-time">{{`${new Date(detailContent.registerTime).toLocaleDateString()}`}}</div>
       </div>
     </div>
     <div class="content-body">
@@ -73,6 +70,23 @@
         <p>手机：{{detailContent.phone}}</p>
         <button @click="accept" style="margin-right: 20px">通过</button>
         <button @click="refuse">驳回</button>
+      </div>
+    </div>
+  </div>
+  <div class="root" v-else-if="contentType === 'annual'">
+    <div class="content-head">
+      <div class="sender-avatar">
+        <img src="@/images/avatar.png" alt="发送人头像" v-if="detailContent.auditMsgId">
+      </div>
+      <div class="message-info">
+        <div class="sender-name">{{detailContent.adminName}}</div>
+        <div class="send-time">{{`${new Date(detailContent.submitTime).toLocaleDateString()}`}}</div>
+      </div>
+    </div>
+    <div class="content-body">
+      <div class="message-content">
+        <p>注册人：{{detailContent.adminName}}</p>
+        <p>注册内容：{{detailContent.description}}</p>
       </div>
     </div>
   </div>

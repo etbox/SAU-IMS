@@ -15,6 +15,7 @@
           v-bind="{options, item}"
           v-on:show-msg-details="showMsgDetails"
           v-on:show-audit-details="showAuditDetails"
+          v-on:show-annual-details="showAnnualDetails"
         />
       </div>
     </div>
@@ -120,6 +121,25 @@ export default {
 
       axios
         .get(`/club/audit/join/${auditMsgId}`)
+        .then(response => {
+          if (response.data.code) {
+            alert(response.data.msg);
+          } else {
+            this.detailContent = response.data.data;
+          }
+        })
+        .catch(error => console.log(error));
+    },
+    showAnnualDetails(auditMsgId) {
+      this.contentType = "annual";
+
+      const url =
+        this.$store.getters["checkLogin"] === 1
+          ? `/club/ann/${auditMsgId}`
+          : `/sau/audit/ann/${auditMsgId}`;
+
+      axios
+        .get(url)
         .then(response => {
           if (response.data.code) {
             alert(response.data.msg);
