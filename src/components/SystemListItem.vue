@@ -28,10 +28,21 @@
       </div>
     </section>
 
+    <section class="list-item" v-if="options.module === 'orgs'" @click="showOrgsDetails">
+      <div class="list-item-left">
+        <div class="message-title">{{`${item.orgName}`}}</div>
+        <!-- <div class="sender-name">{{item.orgName}}</div> -->
+      </div>
+      <div class="list-item-right">
+        <input type="checkbox" :value="item.messageId" @input="check">
+        <!-- <div class="send-time"></div> -->
+      </div>
+    </section>
+
     <section class="list-item" v-if="options.module === 'audit'" @click="showAuditDetails">
       <div class="list-item-left">
         <div class="message-title">{{`${item.auditTitle}`}}</div>
-        <div class="sender-name" v-if="options.module === 'audit'">{{item.userName}}</div>
+        <div class="sender-name">{{item.userName}}</div>
       </div>
       <div class="list-item-right">
         <input type="checkbox" :value="item.messageId" @input="check">
@@ -82,6 +93,9 @@ export default {
     },
     showAnnualDetails() {
       this.$emit("show-annual-details", this.item.auditMsgId);
+    },
+    showOrgsDetails() {
+      this.$emit("show-orgs-details", this.item.orgId);
     }
   }
 };

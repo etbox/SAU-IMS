@@ -48,6 +48,36 @@
       <textarea name id cols="30" rows="10" placeholder="内容" v-model="msgBody.messageContent"></textarea>
     </div>
   </div>
+  <div class="root" v-else-if="contentType === 'orgs'">
+    <div class="content-head">
+      <div class="sender-avatar">
+        <img src="@/images/avatar.png" alt="发送人头像" v-if="detailContent.orgId">
+      </div>
+      <div class="message-info">
+        <div class="sender-name">{{detailContent.adminName}}</div>
+        <div class="send-time">{{`${new Date(detailContent.foundTime).toLocaleDateString()}`}}</div>
+      </div>
+    </div>
+    <div class="content-body">
+      <div class="message-content">
+        <div class="body-left">
+          <div class="info-top">
+            <div class="admin-name">会长：{{detailContent.adminName}}</div>
+            <div class="admin-email">邮箱：{{detailContent.email}}</div>
+            <div class="admin-phone">手机：{{detailContent.phone}}</div>
+          </div>
+          <div class="info-bottom">
+            <div class="description-head">社团简介：</div>
+            <div class="description-body">{{detailContent.description}}</div>
+          </div>
+        </div>
+        <div class="body-right">
+          <v-chart class="echarts" :options="options1"></v-chart>
+          <v-chart class="echarts" :options="options2"></v-chart>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="root" v-else-if="contentType === 'audit'">
     <div class="content-head">
       <div class="sender-avatar">
@@ -93,7 +123,13 @@
 </template>
 
 <script>
+import ECharts from "vue-echarts";
+import "echarts/lib/chart/pie";
+
 export default {
+  components: {
+    "v-chart": ECharts
+  },
   props: {
     detailContent: Object,
     contentType: String
@@ -105,6 +141,106 @@ export default {
         messageContent: "在星期天有一个精英社的活动6，全体通知",
         sendTime: 1523266240332,
         publishedObject: ""
+      },
+      options1: {
+        color: ["#37a2fe", "#8dcaea", "#327aa7"],
+        tooltip: {
+          trigger: "item",
+          formatter: "{a} <br/>{b}: {c} ({d}%)"
+        },
+        legend: {
+          orient: "vertical",
+          x: "left",
+          data: ["男", "女"]
+        },
+        series: [
+          {
+            name: "男女比例",
+            type: "pie",
+            radius: ["50%", "70%"],
+            avoidLabelOverlap: false,
+            label: {
+              normal: {
+                show: false,
+                position: "center"
+              },
+              emphasis: {
+                show: true,
+                textStyle: {
+                  fontSize: "30",
+                  fontWeight: "bold"
+                }
+              }
+            },
+            labelLine: {
+              normal: {
+                show: false
+              }
+            },
+            data: [
+              {
+                value: 335,
+                name: "男"
+              },
+              {
+                value: 310,
+                name: "女"
+              }
+            ]
+          }
+        ]
+      },
+      options2: {
+        color: ["#37a2fe", "#8dcaea", "#327aa7"],
+        tooltip: {
+          trigger: "item",
+          formatter: "{a} <br/>{b}: {c} ({d}%)"
+        },
+        legend: {
+          orient: "vertical",
+          x: "left",
+          data: ["大一", "大二", "大三"]
+        },
+        series: [
+          {
+            name: "年级比例",
+            type: "pie",
+            radius: ["50%", "70%"],
+            avoidLabelOverlap: false,
+            label: {
+              normal: {
+                show: false,
+                position: "center"
+              },
+              emphasis: {
+                show: true,
+                textStyle: {
+                  fontSize: "30",
+                  fontWeight: "bold"
+                }
+              }
+            },
+            labelLine: {
+              normal: {
+                show: false
+              }
+            },
+            data: [
+              {
+                value: 335,
+                name: "大一"
+              },
+              {
+                value: 310,
+                name: "大二"
+              },
+              {
+                value: 310,
+                name: "大三"
+              }
+            ]
+          }
+        ]
       }
     };
   },
@@ -198,5 +334,11 @@ $gray: #e4e8ec;
 .send:hover {
   background-color: $light;
   cursor: pointer;
+}
+
+.echarts {
+  height: 200px;
+  width: 200px;
+  margin: 0 auto;
 }
 </style>

@@ -16,6 +16,7 @@
           v-on:show-msg-details="showMsgDetails"
           v-on:show-audit-details="showAuditDetails"
           v-on:show-annual-details="showAnnualDetails"
+          v-on:show-orgs-details="showOrgsDetails"
         />
       </div>
     </div>
@@ -149,6 +150,20 @@ export default {
         })
         .catch(error => console.log(error));
     },
+    showOrgsDetails(orgId) {
+      this.contentType = "orgs";
+
+      axios
+        .get(`/club/other/${orgId}`)
+        .then(response => {
+          if (response.data.code) {
+            alert(response.data.msg);
+          } else {
+            this.detailContent = response.data.data;
+          }
+        })
+        .catch(error => console.log(error));
+    },
     clear() {
       const url = `${
           this.options.module === "news" ? "" : this.options.identity
@@ -244,6 +259,9 @@ export default {
       switch (this.options.module) {
         case "news":
           url = `/msg`;
+          break;
+        case "orgs":
+          url = `/club/other`;
           break;
         case "messages":
           url = `${this.options.identity}/msg/old`;
